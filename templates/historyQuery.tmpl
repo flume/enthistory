@@ -5,6 +5,7 @@
 	{{/* Add the base header for the generated file */}}
 	{{ $pkg := base $.Config.Package }}
 	{{ template "header" $ }}
+import "github.com/frisbm/enthistory/_examples/ent/userhistory"
 
 	{{ range $n := $.Nodes }}
 	    {{ $name := $n.Name }}

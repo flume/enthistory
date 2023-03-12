@@ -14,5 +14,5 @@ fmt:
 # generate:
 #    Generate the examples code
 generate:
-	go generate ./examples/ent
+	go generate ./_examples/ent
 	$(MAKE) fmt
