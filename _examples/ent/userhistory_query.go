@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 
-	"github.com/frisbm/enthistory/examples/ent/predicate"
-	"github.com/frisbm/enthistory/examples/ent/userhistory"
+	"github.com/frisbm/enthistory/_examples/ent/predicate"
+	"github.com/frisbm/enthistory/_examples/ent/userhistory"
 )
 
 // UserHistoryQuery is the builder for querying UserHistory entities.

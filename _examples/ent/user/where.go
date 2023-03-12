@@ -7,7 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
-	"github.com/frisbm/enthistory/examples/ent/predicate"
+	"github.com/frisbm/enthistory/_examples/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

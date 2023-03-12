@@ -6,7 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
-	"github.com/frisbm/enthistory/examples/ent/schema/mixins"
+	"github.com/frisbm/enthistory/_examples/ent/schema/mixins"
 )
 
 // User holds the schema definition for the User entity.

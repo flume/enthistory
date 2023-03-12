@@ -13,9 +13,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/frisbm/enthistory"
-	"github.com/frisbm/enthistory/examples/ent/predicate"
-	"github.com/frisbm/enthistory/examples/ent/user"
-	"github.com/frisbm/enthistory/examples/ent/userhistory"
+	"github.com/frisbm/enthistory/_examples/ent/predicate"
+	"github.com/frisbm/enthistory/_examples/ent/user"
+	"github.com/frisbm/enthistory/_examples/ent/userhistory"
 )
 
 const (

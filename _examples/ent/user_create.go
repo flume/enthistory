@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 
-	"github.com/frisbm/enthistory/examples/ent/user"
+	"github.com/frisbm/enthistory/_examples/ent/user"
 )
 
 // UserCreate is the builder for creating a User entity.

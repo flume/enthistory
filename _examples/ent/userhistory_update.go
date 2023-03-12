@@ -13,8 +13,8 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/frisbm/enthistory"
-	"github.com/frisbm/enthistory/examples/ent/predicate"
-	"github.com/frisbm/enthistory/examples/ent/userhistory"
+	"github.com/frisbm/enthistory/_examples/ent/predicate"
+	"github.com/frisbm/enthistory/_examples/ent/userhistory"
 )
 
 // UserHistoryUpdate is the builder for updating UserHistory entities.

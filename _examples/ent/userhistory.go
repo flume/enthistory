@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/frisbm/enthistory"
-	"github.com/frisbm/enthistory/examples/ent/userhistory"
+	"github.com/frisbm/enthistory/_examples/ent/userhistory"
 )
 
 // UserHistory is the model entity for the UserHistory schema.

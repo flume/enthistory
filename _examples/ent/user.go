@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
-	"github.com/frisbm/enthistory/examples/ent/user"
+	"github.com/frisbm/enthistory/_examples/ent/user"
 )
 
 // User is the model entity for the User schema.

@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/frisbm/enthistory/examples/ent"
+	"github.com/frisbm/enthistory/_examples/ent"
 )
 
 // The UserFunc type is an adapter to allow the use of ordinary
