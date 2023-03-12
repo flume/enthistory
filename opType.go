@@ -18,9 +18,7 @@ var opTypes = []string{
 
 // Values provides list valid values for Enum.
 func (OpType) Values() (kinds []string) {
-	for _, s := range opTypes {
-		kinds = append(kinds, s)
-	}
+	kinds = append(kinds, opTypes...)
 	return
 }
 

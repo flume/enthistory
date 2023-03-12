@@ -2,7 +2,6 @@ package enthistory
 
 import (
 	"embed"
-	_ "embed"
 	"html/template"
 	"os"
 	"strings"
