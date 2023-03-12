@@ -70,7 +70,7 @@ func newFieldsFromField(fields []*load.Field) []*load.Field {
 	return newFields
 }
 
-func getHistoryFilePath(schema *load.Schema) (string, error) {
+func getHistorySchemaPath(schema *load.Schema) (string, error) {
 	dir, err := os.Getwd()
 	if err != nil {
 		return "", err
@@ -81,7 +81,7 @@ func getHistoryFilePath(schema *load.Schema) (string, error) {
 
 func removeOldGenerated(schemas []*load.Schema) error {
 	for _, schema := range schemas {
-		path, err := getHistoryFilePath(schema)
+		path, err := getHistorySchemaPath(schema)
 		if err != nil {
 			return err
 		}
