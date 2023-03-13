@@ -55,10 +55,10 @@ func (c *Client) WithHistory() {
         c.{{ $name }}.Use(hook)
     }
                 {{- end }}
-    c.historyActivated = true
             {{- end }}
         {{- end }}
 	{{- end }}
+	    c.historyActivated = true
 	}
 }
 
