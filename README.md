@@ -74,3 +74,24 @@ client.User.DeleteOne(user)
 userHistory, _ = user.History().All(ctx)
 fmt.Println(len(userHistory)) // 3
 ```
+
+## Caveats
+
+A few caveats to keep in mind when using enthistory
+
+### Enums
+If your ent schemas contain enum fields, you should be creating "enums" with Go and setting the `GoType` on the enum field.
+This is because ent will generate its a unique enum type for both your schema and the history table schema that won't play well together.
+
+Instead of `.Values()`
+```go
+field.Enum("action").
+    Values("PUSH", "PULL")
+```
+use `.GoType()`
+```go
+field.Enum("action").
+    GoType(types.Action(""))
+```
+
+See the [ent docs](https://entgo.io/docs/schema-fields#enum-fields) for more implementation info
