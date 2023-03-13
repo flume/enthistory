@@ -16,3 +16,9 @@ fmt:
 generate:
 	go generate ./_examples/ent
 	$(MAKE) fmt
+
+.PHONY: test
+# test:
+#    Run the tests
+test:
+	go test ./_examples/.
