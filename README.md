@@ -22,6 +22,7 @@ import (
 
 func main() {
 	if err := entc.Generate("./schema",
+		// userId key in context with the user's information, value should be a string
 		entc.Extensions(enthistory.NewHistoryExtension("userId")),
 	); err != nil {
 		log.Fatal("running ent codegen:", err)
@@ -49,6 +50,8 @@ If you manage migrations on manually, you will want to create/generate new migra
 
 Your newly generated code creates the history tables for you for every single table you have. It also hooks up the hooks to the ent client so that you can start tracking history right away.
 You can query the history tables directly, just like any other ent table, or you can query the history of a specific row using the `History()` method.
+
+enthistory will also track the user updating the row if you provide it a key when initializing. Store a user's id, email, IP address, etc. in context with the key you provide for it to be tracked in history. 
 
 For example, let's say we have a User table, and we got a user from the table just now. We can also pull the history for that user directly via enthistory.
 
