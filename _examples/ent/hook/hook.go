@@ -9,28 +9,52 @@ import (
 	"github.com/flume/enthistory/_examples/ent"
 )
 
-// The UserFunc type is an adapter to allow the use of ordinary
-// function as User mutator.
-type UserFunc func(context.Context, *ent.UserMutation) (ent.Value, error)
+// The CharacterFunc type is an adapter to allow the use of ordinary
+// function as Character mutator.
+type CharacterFunc func(context.Context, *ent.CharacterMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f UserFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.UserMutation); ok {
+func (f CharacterFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.CharacterMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CharacterMutation", m)
 }
 
-// The UserHistoryFunc type is an adapter to allow the use of ordinary
-// function as UserHistory mutator.
-type UserHistoryFunc func(context.Context, *ent.UserHistoryMutation) (ent.Value, error)
+// The CharacterHistoryFunc type is an adapter to allow the use of ordinary
+// function as CharacterHistory mutator.
+type CharacterHistoryFunc func(context.Context, *ent.CharacterHistoryMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f UserHistoryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.UserHistoryMutation); ok {
+func (f CharacterHistoryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.CharacterHistoryMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserHistoryMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CharacterHistoryMutation", m)
+}
+
+// The FriendshipFunc type is an adapter to allow the use of ordinary
+// function as Friendship mutator.
+type FriendshipFunc func(context.Context, *ent.FriendshipMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f FriendshipFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.FriendshipMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FriendshipMutation", m)
+}
+
+// The FriendshipHistoryFunc type is an adapter to allow the use of ordinary
+// function as FriendshipHistory mutator.
+type FriendshipHistoryFunc func(context.Context, *ent.FriendshipHistoryMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f FriendshipHistoryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.FriendshipHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FriendshipHistoryMutation", m)
 }
 
 // Condition is a hook condition function.

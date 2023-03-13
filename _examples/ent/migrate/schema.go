@@ -9,22 +9,22 @@ import (
 )
 
 var (
-	// UserColumns holds the columns for the "user" table.
-	UserColumns = []*schema.Column{
+	// CharacterColumns holds the columns for the "character" table.
+	CharacterColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "age", Type: field.TypeInt},
-		{Name: "name", Type: field.TypeString, Default: "unknown"},
+		{Name: "name", Type: field.TypeString},
 	}
-	// UserTable holds the schema information for the "user" table.
-	UserTable = &schema.Table{
-		Name:       "user",
-		Columns:    UserColumns,
-		PrimaryKey: []*schema.Column{UserColumns[0]},
+	// CharacterTable holds the schema information for the "character" table.
+	CharacterTable = &schema.Table{
+		Name:       "character",
+		Columns:    CharacterColumns,
+		PrimaryKey: []*schema.Column{CharacterColumns[0]},
 	}
-	// UserHistoryColumns holds the columns for the "user_history" table.
-	UserHistoryColumns = []*schema.Column{
+	// CharacterHistoryColumns holds the columns for the "character_history" table.
+	CharacterHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "ref", Type: field.TypeInt, Nullable: true},
@@ -33,26 +33,89 @@ var (
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "age", Type: field.TypeInt},
-		{Name: "name", Type: field.TypeString, Default: "unknown"},
+		{Name: "name", Type: field.TypeString},
 	}
-	// UserHistoryTable holds the schema information for the "user_history" table.
-	UserHistoryTable = &schema.Table{
-		Name:       "user_history",
-		Columns:    UserHistoryColumns,
-		PrimaryKey: []*schema.Column{UserHistoryColumns[0]},
+	// CharacterHistoryTable holds the schema information for the "character_history" table.
+	CharacterHistoryTable = &schema.Table{
+		Name:       "character_history",
+		Columns:    CharacterHistoryColumns,
+		PrimaryKey: []*schema.Column{CharacterHistoryColumns[0]},
+	}
+	// FriendshipColumns holds the columns for the "friendship" table.
+	FriendshipColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "character_id", Type: field.TypeInt},
+		{Name: "friend_id", Type: field.TypeInt},
+	}
+	// FriendshipTable holds the schema information for the "friendship" table.
+	FriendshipTable = &schema.Table{
+		Name:       "friendship",
+		Columns:    FriendshipColumns,
+		PrimaryKey: []*schema.Column{FriendshipColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "friendship_character_character",
+				Columns:    []*schema.Column{FriendshipColumns[3]},
+				RefColumns: []*schema.Column{CharacterColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "friendship_character_friend",
+				Columns:    []*schema.Column{FriendshipColumns[4]},
+				RefColumns: []*schema.Column{CharacterColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "friendship_character_id_friend_id",
+				Unique:  true,
+				Columns: []*schema.Column{FriendshipColumns[3], FriendshipColumns[4]},
+			},
+		},
+	}
+	// FriendshipHistoryColumns holds the columns for the "friendship_history" table.
+	FriendshipHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeInt, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "character_id", Type: field.TypeInt},
+		{Name: "friend_id", Type: field.TypeInt},
+	}
+	// FriendshipHistoryTable holds the schema information for the "friendship_history" table.
+	FriendshipHistoryTable = &schema.Table{
+		Name:       "friendship_history",
+		Columns:    FriendshipHistoryColumns,
+		PrimaryKey: []*schema.Column{FriendshipHistoryColumns[0]},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		UserTable,
-		UserHistoryTable,
+		CharacterTable,
+		CharacterHistoryTable,
+		FriendshipTable,
+		FriendshipHistoryTable,
 	}
 )
 
 func init() {
-	UserTable.Annotation = &entsql.Annotation{
-		Table: "user",
+	CharacterTable.Annotation = &entsql.Annotation{
+		Table: "character",
 	}
-	UserHistoryTable.Annotation = &entsql.Annotation{
-		Table: "user_history",
+	CharacterHistoryTable.Annotation = &entsql.Annotation{
+		Table: "character_history",
+	}
+	FriendshipTable.ForeignKeys[0].RefTable = CharacterTable
+	FriendshipTable.ForeignKeys[1].RefTable = CharacterTable
+	FriendshipTable.Annotation = &entsql.Annotation{
+		Table: "friendship",
+	}
+	FriendshipHistoryTable.Annotation = &entsql.Annotation{
+		Table: "friendship_history",
 	}
 }

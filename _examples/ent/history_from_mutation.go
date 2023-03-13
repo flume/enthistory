@@ -40,7 +40,7 @@ func rollback(tx *Tx, err error) error {
 	return err
 }
 
-func (m *UserMutation) CreateHistoryFromCreate(ctx context.Context) error {
+func (m *CharacterMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 	tx, err := m.Tx()
 	if err != nil {
@@ -54,9 +54,9 @@ func (m *UserMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return rollback(tx, idNotFoundError)
 	}
 
-	create := client.UserHistory.Create()
+	create := client.CharacterHistory.Create()
 	if tx != nil {
-		create = tx.UserHistory.Create()
+		create = tx.CharacterHistory.Create()
 	}
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -87,7 +87,7 @@ func (m *UserMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	return nil
 }
 
-func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+func (m *CharacterMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	client := m.Client()
 	tx, err := m.Tx()
 	if err != nil {
@@ -101,14 +101,14 @@ func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 		return rollback(tx, idNotFoundError)
 	}
 
-	user, err := client.User.Get(ctx, id)
+	character, err := client.Character.Get(ctx, id)
 	if err != nil {
 		return rollback(tx, err)
 	}
 
-	create := client.UserHistory.Create()
+	create := client.CharacterHistory.Create()
 	if tx != nil {
-		create = tx.UserHistory.Create()
+		create = tx.CharacterHistory.Create()
 	}
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -119,25 +119,25 @@ func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
 	} else {
-		create = create.SetCreatedAt(user.CreatedAt)
+		create = create.SetCreatedAt(character.CreatedAt)
 	}
 
 	if updatedAt, exists := m.UpdatedAt(); exists {
 		create = create.SetUpdatedAt(updatedAt)
 	} else {
-		create = create.SetUpdatedAt(user.UpdatedAt)
+		create = create.SetUpdatedAt(character.UpdatedAt)
 	}
 
 	if age, exists := m.Age(); exists {
 		create = create.SetAge(age)
 	} else {
-		create = create.SetAge(user.Age)
+		create = create.SetAge(character.Age)
 	}
 
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	} else {
-		create = create.SetName(user.Name)
+		create = create.SetName(character.Name)
 	}
 
 	_, err = create.Save(ctx)
@@ -147,7 +147,7 @@ func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	return nil
 }
 
-func (m *UserMutation) CreateHistoryFromDelete(ctx context.Context) error {
+func (m *CharacterMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	client := m.Client()
 	tx, err := m.Tx()
 	if err != nil {
@@ -161,24 +161,170 @@ func (m *UserMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		return rollback(tx, idNotFoundError)
 	}
 
-	user, err := client.User.Get(ctx, id)
+	character, err := client.Character.Get(ctx, id)
 	if err != nil {
 		return rollback(tx, err)
 	}
 
-	create := client.UserHistory.Create()
+	create := client.CharacterHistory.Create()
 	if tx != nil {
-		create = tx.UserHistory.Create()
+		create = tx.CharacterHistory.Create()
 	}
 	_, err = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id).
 		SetUpdatedBy(userId).
-		SetCreatedAt(user.CreatedAt).
-		SetUpdatedAt(user.UpdatedAt).
-		SetAge(user.Age).
-		SetName(user.Name).
+		SetCreatedAt(character.CreatedAt).
+		SetUpdatedAt(character.UpdatedAt).
+		SetAge(character.Age).
+		SetName(character.Name).
+		Save(ctx)
+	if err != nil {
+		rollback(tx, err)
+	}
+	return nil
+}
+
+func (m *FriendshipMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+	tx, err := m.Tx()
+	if err != nil {
+		tx = nil
+	}
+
+	userId, _ := ctx.Value("userId").(string)
+
+	id, ok := m.ID()
+	if !ok {
+		return rollback(tx, idNotFoundError)
+	}
+
+	create := client.FriendshipHistory.Create()
+	if tx != nil {
+		create = tx.FriendshipHistory.Create()
+	}
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id).
+		SetUpdatedBy(userId)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if characterID, exists := m.CharacterID(); exists {
+		create = create.SetCharacterID(characterID)
+	}
+
+	if friendID, exists := m.FriendID(); exists {
+		create = create.SetFriendID(friendID)
+	}
+
+	_, err = create.Save(ctx)
+	if err != nil {
+		rollback(tx, err)
+	}
+	return nil
+}
+
+func (m *FriendshipMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	client := m.Client()
+	tx, err := m.Tx()
+	if err != nil {
+		tx = nil
+	}
+
+	userId, _ := ctx.Value("userId").(string)
+
+	id, ok := m.ID()
+	if !ok {
+		return rollback(tx, idNotFoundError)
+	}
+
+	friendship, err := client.Friendship.Get(ctx, id)
+	if err != nil {
+		return rollback(tx, err)
+	}
+
+	create := client.FriendshipHistory.Create()
+	if tx != nil {
+		create = tx.FriendshipHistory.Create()
+	}
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id).
+		SetUpdatedBy(userId)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	} else {
+		create = create.SetCreatedAt(friendship.CreatedAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	} else {
+		create = create.SetUpdatedAt(friendship.UpdatedAt)
+	}
+
+	if characterID, exists := m.CharacterID(); exists {
+		create = create.SetCharacterID(characterID)
+	} else {
+		create = create.SetCharacterID(friendship.CharacterID)
+	}
+
+	if friendID, exists := m.FriendID(); exists {
+		create = create.SetFriendID(friendID)
+	} else {
+		create = create.SetFriendID(friendship.FriendID)
+	}
+
+	_, err = create.Save(ctx)
+	if err != nil {
+		rollback(tx, err)
+	}
+	return nil
+}
+
+func (m *FriendshipMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	client := m.Client()
+	tx, err := m.Tx()
+	if err != nil {
+		tx = nil
+	}
+
+	userId, _ := ctx.Value("userId").(string)
+
+	id, ok := m.ID()
+	if !ok {
+		return rollback(tx, idNotFoundError)
+	}
+
+	friendship, err := client.Friendship.Get(ctx, id)
+	if err != nil {
+		return rollback(tx, err)
+	}
+
+	create := client.FriendshipHistory.Create()
+	if tx != nil {
+		create = tx.FriendshipHistory.Create()
+	}
+	_, err = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id).
+		SetUpdatedBy(userId).
+		SetCreatedAt(friendship.CreatedAt).
+		SetUpdatedAt(friendship.UpdatedAt).
+		SetCharacterID(friendship.CharacterID).
+		SetFriendID(friendship.FriendID).
 		Save(ctx)
 	if err != nil {
 		rollback(tx, err)

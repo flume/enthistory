@@ -12,22 +12,22 @@ import (
 	"time"
 )
 
-// UserHistory holds the schema definition for the UserHistory entity.
-type UserHistory struct {
+// CharacterHistory holds the schema definition for the CharacterHistory entity.
+type CharacterHistory struct {
 	ent.Schema
 }
 
-// Annotations of the UserHistory.
-func (UserHistory) Annotations() []schema.Annotation {
+// Annotations of the CharacterHistory.
+func (CharacterHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{
-			Table: "user_history",
+			Table: "character_history",
 		},
 	}
 }
 
-// Fields of the UserHistory.
-func (UserHistory) Fields() []ent.Field {
+// Fields of the CharacterHistory.
+func (CharacterHistory) Fields() []ent.Field {
 	historyFields := []ent.Field{
 		field.Time("history_time").
 			Default(time.Now).
@@ -40,10 +40,10 @@ func (UserHistory) Fields() []ent.Field {
 		field.Enum("operation").GoType(enthistory.OpType("")),
 	}
 
-	return append(historyFields, User{}.Fields()...)
+	return append(historyFields, Character{}.Fields()...)
 }
 
-// Mixin of the UserHistory.
-func (UserHistory) Mixin() []ent.Mixin {
-	return User{}.Mixin()
+// Mixin of the CharacterHistory.
+func (CharacterHistory) Mixin() []ent.Mixin {
+	return Character{}.Mixin()
 }
