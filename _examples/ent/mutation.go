@@ -12,10 +12,10 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 
-	"github.com/frisbm/enthistory"
-	"github.com/frisbm/enthistory/_examples/ent/predicate"
-	"github.com/frisbm/enthistory/_examples/ent/user"
-	"github.com/frisbm/enthistory/_examples/ent/userhistory"
+	"github.com/flume/enthistory"
+	"github.com/flume/enthistory/_examples/ent/predicate"
+	"github.com/flume/enthistory/_examples/ent/user"
+	"github.com/flume/enthistory/_examples/ent/userhistory"
 )
 
 const (

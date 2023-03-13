@@ -4,7 +4,7 @@
 
 package ent
 
-import "github.com/frisbm/enthistory/_examples/ent/userhistory"
+import "github.com/flume/enthistory/_examples/ent/userhistory"
 
 func (u *User) History() *UserHistoryQuery {
 	history := (&UserHistoryClient{config: u.config})

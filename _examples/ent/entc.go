@@ -7,7 +7,7 @@ import (
 
 	"entgo.io/ent/entc/gen"
 
-	"github.com/frisbm/enthistory"
+	"github.com/flume/enthistory"
 
 	"entgo.io/ent/entc"
 )

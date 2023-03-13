@@ -5,9 +5,9 @@ package ent
 import (
 	"time"
 
-	"github.com/frisbm/enthistory/_examples/ent/schema"
-	"github.com/frisbm/enthistory/_examples/ent/user"
-	"github.com/frisbm/enthistory/_examples/ent/userhistory"
+	"github.com/flume/enthistory/_examples/ent/schema"
+	"github.com/flume/enthistory/_examples/ent/user"
+	"github.com/flume/enthistory/_examples/ent/userhistory"
 )
 
 // The init function reads all schema descriptors with runtime code

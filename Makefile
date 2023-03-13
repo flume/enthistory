@@ -8,7 +8,7 @@ help:
 # fmt:
 #    Format go code
 fmt:
-	goimports -local github.com/frisbm -w ./
+	goimports -local github.com/flume -w ./
 
 .PHONY: generate
 # generate:

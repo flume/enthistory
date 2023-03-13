@@ -7,7 +7,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
-	"github.com/frisbm/enthistory"
+	"github.com/flume/enthistory"
 
 	"time"
 )

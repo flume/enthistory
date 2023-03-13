@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
-	"github.com/frisbm/enthistory"
-	"github.com/frisbm/enthistory/_examples/ent/userhistory"
+	"github.com/flume/enthistory"
+	"github.com/flume/enthistory/_examples/ent/userhistory"
 )
 
 // UserHistory is the model entity for the UserHistory schema.

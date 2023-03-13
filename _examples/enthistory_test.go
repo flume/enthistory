@@ -5,9 +5,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/frisbm/enthistory/_examples/ent"
-	"github.com/frisbm/enthistory/_examples/ent/enttest"
-	"github.com/frisbm/enthistory/_examples/ent/migrate"
+	"github.com/flume/enthistory/_examples/ent"
+	"github.com/flume/enthistory/_examples/ent/enttest"
+	"github.com/flume/enthistory/_examples/ent/migrate"
 
 	_ "github.com/mattn/go-sqlite3"
 

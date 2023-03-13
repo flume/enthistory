@@ -1,4 +1,4 @@
-module github.com/frisbm/enthistory
+module github.com/flume/enthistory
 
 go 1.19
 

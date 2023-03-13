@@ -5,13 +5,13 @@ package enttest
 import (
 	"context"
 
-	"github.com/frisbm/enthistory/_examples/ent"
+	"github.com/flume/enthistory/_examples/ent"
 	// required by schema hooks.
-	_ "github.com/frisbm/enthistory/_examples/ent/runtime"
+	_ "github.com/flume/enthistory/_examples/ent/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
 
-	"github.com/frisbm/enthistory/_examples/ent/migrate"
+	"github.com/flume/enthistory/_examples/ent/migrate"
 )
 
 type (

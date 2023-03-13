@@ -12,9 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 
-	"github.com/frisbm/enthistory"
-	"github.com/frisbm/enthistory/_examples/ent/predicate"
-	"github.com/frisbm/enthistory/_examples/ent/userhistory"
+	"github.com/flume/enthistory"
+	"github.com/flume/enthistory/_examples/ent/predicate"
+	"github.com/flume/enthistory/_examples/ent/userhistory"
 )
 
 // UserHistoryUpdate is the builder for updating UserHistory entities.

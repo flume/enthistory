@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/frisbm/enthistory"
+	"github.com/flume/enthistory"
 )
 
 const (

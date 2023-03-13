@@ -4,7 +4,7 @@ enthistory is an extension to generate history tables with ent
 ## Install
 Install enthistory via `go get`
 ```shell
-go get github.com/frisbm/enthistory
+go get github.com/flume/enthistory
 ```
 and add it the extension to ent by creating two files in your `ent` directory `entc.go` and `generate.go`
 
@@ -16,7 +16,7 @@ package main
 
 import (
 	"log"
-	"github.com/frisbm/enthistory"
+	"github.com/flume/enthistory"
 	"entgo.io/ent/entc"
 )
 

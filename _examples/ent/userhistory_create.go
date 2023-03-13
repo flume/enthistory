@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 
-	"github.com/frisbm/enthistory"
-	"github.com/frisbm/enthistory/_examples/ent/userhistory"
+	"github.com/flume/enthistory"
+	"github.com/flume/enthistory/_examples/ent/userhistory"
 )
 
 // UserHistoryCreate is the builder for creating a UserHistory entity.

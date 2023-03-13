@@ -12,7 +12,7 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/frisbm/enthistory"
+	"github.com/flume/enthistory"
 )
 
 var (
