@@ -64,23 +64,16 @@ func (uhu *UserHistoryUpdate) ClearRef() *UserHistoryUpdate {
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (uhu *UserHistoryUpdate) SetUpdatedBy(i int) *UserHistoryUpdate {
-	uhu.mutation.ResetUpdatedBy()
-	uhu.mutation.SetUpdatedBy(i)
+func (uhu *UserHistoryUpdate) SetUpdatedBy(s string) *UserHistoryUpdate {
+	uhu.mutation.SetUpdatedBy(s)
 	return uhu
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (uhu *UserHistoryUpdate) SetNillableUpdatedBy(i *int) *UserHistoryUpdate {
-	if i != nil {
-		uhu.SetUpdatedBy(*i)
+func (uhu *UserHistoryUpdate) SetNillableUpdatedBy(s *string) *UserHistoryUpdate {
+	if s != nil {
+		uhu.SetUpdatedBy(*s)
 	}
-	return uhu
-}
-
-// AddUpdatedBy adds i to the "updated_by" field.
-func (uhu *UserHistoryUpdate) AddUpdatedBy(i int) *UserHistoryUpdate {
-	uhu.mutation.AddUpdatedBy(i)
 	return uhu
 }
 
@@ -232,13 +225,10 @@ func (uhu *UserHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(userhistory.FieldRef, field.TypeInt)
 	}
 	if value, ok := uhu.mutation.UpdatedBy(); ok {
-		_spec.SetField(userhistory.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if value, ok := uhu.mutation.AddedUpdatedBy(); ok {
-		_spec.AddField(userhistory.FieldUpdatedBy, field.TypeInt, value)
+		_spec.SetField(userhistory.FieldUpdatedBy, field.TypeString, value)
 	}
 	if uhu.mutation.UpdatedByCleared() {
-		_spec.ClearField(userhistory.FieldUpdatedBy, field.TypeInt)
+		_spec.ClearField(userhistory.FieldUpdatedBy, field.TypeString)
 	}
 	if value, ok := uhu.mutation.Operation(); ok {
 		_spec.SetField(userhistory.FieldOperation, field.TypeEnum, value)
@@ -312,23 +302,16 @@ func (uhuo *UserHistoryUpdateOne) ClearRef() *UserHistoryUpdateOne {
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (uhuo *UserHistoryUpdateOne) SetUpdatedBy(i int) *UserHistoryUpdateOne {
-	uhuo.mutation.ResetUpdatedBy()
-	uhuo.mutation.SetUpdatedBy(i)
+func (uhuo *UserHistoryUpdateOne) SetUpdatedBy(s string) *UserHistoryUpdateOne {
+	uhuo.mutation.SetUpdatedBy(s)
 	return uhuo
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (uhuo *UserHistoryUpdateOne) SetNillableUpdatedBy(i *int) *UserHistoryUpdateOne {
-	if i != nil {
-		uhuo.SetUpdatedBy(*i)
+func (uhuo *UserHistoryUpdateOne) SetNillableUpdatedBy(s *string) *UserHistoryUpdateOne {
+	if s != nil {
+		uhuo.SetUpdatedBy(*s)
 	}
-	return uhuo
-}
-
-// AddUpdatedBy adds i to the "updated_by" field.
-func (uhuo *UserHistoryUpdateOne) AddUpdatedBy(i int) *UserHistoryUpdateOne {
-	uhuo.mutation.AddUpdatedBy(i)
 	return uhuo
 }
 
@@ -510,13 +493,10 @@ func (uhuo *UserHistoryUpdateOne) sqlSave(ctx context.Context) (_node *UserHisto
 		_spec.ClearField(userhistory.FieldRef, field.TypeInt)
 	}
 	if value, ok := uhuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(userhistory.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if value, ok := uhuo.mutation.AddedUpdatedBy(); ok {
-		_spec.AddField(userhistory.FieldUpdatedBy, field.TypeInt, value)
+		_spec.SetField(userhistory.FieldUpdatedBy, field.TypeString, value)
 	}
 	if uhuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(userhistory.FieldUpdatedBy, field.TypeInt)
+		_spec.ClearField(userhistory.FieldUpdatedBy, field.TypeString)
 	}
 	if value, ok := uhuo.mutation.Operation(); ok {
 		_spec.SetField(userhistory.FieldOperation, field.TypeEnum, value)

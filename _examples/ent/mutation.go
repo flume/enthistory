@@ -564,8 +564,7 @@ type UserHistoryMutation struct {
 	history_time  *time.Time
 	ref           *int
 	addref        *int
-	updated_by    *int
-	addupdated_by *int
+	updated_by    *string
 	operation     *enthistory.OpType
 	created_at    *time.Time
 	updated_at    *time.Time
@@ -783,13 +782,12 @@ func (m *UserHistoryMutation) ResetRef() {
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (m *UserHistoryMutation) SetUpdatedBy(i int) {
-	m.updated_by = &i
-	m.addupdated_by = nil
+func (m *UserHistoryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
 }
 
 // UpdatedBy returns the value of the "updated_by" field in the mutation.
-func (m *UserHistoryMutation) UpdatedBy() (r int, exists bool) {
+func (m *UserHistoryMutation) UpdatedBy() (r string, exists bool) {
 	v := m.updated_by
 	if v == nil {
 		return
@@ -800,7 +798,7 @@ func (m *UserHistoryMutation) UpdatedBy() (r int, exists bool) {
 // OldUpdatedBy returns the old "updated_by" field's value of the UserHistory entity.
 // If the UserHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserHistoryMutation) OldUpdatedBy(ctx context.Context) (v int, err error) {
+func (m *UserHistoryMutation) OldUpdatedBy(ctx context.Context) (v *string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
 	}
@@ -814,28 +812,9 @@ func (m *UserHistoryMutation) OldUpdatedBy(ctx context.Context) (v int, err erro
 	return oldValue.UpdatedBy, nil
 }
 
-// AddUpdatedBy adds i to the "updated_by" field.
-func (m *UserHistoryMutation) AddUpdatedBy(i int) {
-	if m.addupdated_by != nil {
-		*m.addupdated_by += i
-	} else {
-		m.addupdated_by = &i
-	}
-}
-
-// AddedUpdatedBy returns the value that was added to the "updated_by" field in this mutation.
-func (m *UserHistoryMutation) AddedUpdatedBy() (r int, exists bool) {
-	v := m.addupdated_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (m *UserHistoryMutation) ClearUpdatedBy() {
 	m.updated_by = nil
-	m.addupdated_by = nil
 	m.clearedFields[userhistory.FieldUpdatedBy] = struct{}{}
 }
 
@@ -848,7 +827,6 @@ func (m *UserHistoryMutation) UpdatedByCleared() bool {
 // ResetUpdatedBy resets all changes to the "updated_by" field.
 func (m *UserHistoryMutation) ResetUpdatedBy() {
 	m.updated_by = nil
-	m.addupdated_by = nil
 	delete(m.clearedFields, userhistory.FieldUpdatedBy)
 }
 
@@ -1184,7 +1162,7 @@ func (m *UserHistoryMutation) SetField(name string, value ent.Value) error {
 		m.SetRef(v)
 		return nil
 	case userhistory.FieldUpdatedBy:
-		v, ok := value.(int)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -1236,9 +1214,6 @@ func (m *UserHistoryMutation) AddedFields() []string {
 	if m.addref != nil {
 		fields = append(fields, userhistory.FieldRef)
 	}
-	if m.addupdated_by != nil {
-		fields = append(fields, userhistory.FieldUpdatedBy)
-	}
 	if m.addage != nil {
 		fields = append(fields, userhistory.FieldAge)
 	}
@@ -1252,8 +1227,6 @@ func (m *UserHistoryMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case userhistory.FieldRef:
 		return m.AddedRef()
-	case userhistory.FieldUpdatedBy:
-		return m.AddedUpdatedBy()
 	case userhistory.FieldAge:
 		return m.AddedAge()
 	}
@@ -1271,13 +1244,6 @@ func (m *UserHistoryMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddRef(v)
-		return nil
-	case userhistory.FieldUpdatedBy:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddUpdatedBy(v)
 		return nil
 	case userhistory.FieldAge:
 		v, ok := value.(int)

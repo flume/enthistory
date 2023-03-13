@@ -67,7 +67,7 @@ func Ref(v int) predicate.UserHistory {
 }
 
 // UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
-func UpdatedBy(v int) predicate.UserHistory {
+func UpdatedBy(v string) predicate.UserHistory {
 	return predicate.UserHistory(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
@@ -182,43 +182,58 @@ func RefNotNil() predicate.UserHistory {
 }
 
 // UpdatedByEQ applies the EQ predicate on the "updated_by" field.
-func UpdatedByEQ(v int) predicate.UserHistory {
+func UpdatedByEQ(v string) predicate.UserHistory {
 	return predicate.UserHistory(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
 // UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
-func UpdatedByNEQ(v int) predicate.UserHistory {
+func UpdatedByNEQ(v string) predicate.UserHistory {
 	return predicate.UserHistory(sql.FieldNEQ(FieldUpdatedBy, v))
 }
 
 // UpdatedByIn applies the In predicate on the "updated_by" field.
-func UpdatedByIn(vs ...int) predicate.UserHistory {
+func UpdatedByIn(vs ...string) predicate.UserHistory {
 	return predicate.UserHistory(sql.FieldIn(FieldUpdatedBy, vs...))
 }
 
 // UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
-func UpdatedByNotIn(vs ...int) predicate.UserHistory {
+func UpdatedByNotIn(vs ...string) predicate.UserHistory {
 	return predicate.UserHistory(sql.FieldNotIn(FieldUpdatedBy, vs...))
 }
 
 // UpdatedByGT applies the GT predicate on the "updated_by" field.
-func UpdatedByGT(v int) predicate.UserHistory {
+func UpdatedByGT(v string) predicate.UserHistory {
 	return predicate.UserHistory(sql.FieldGT(FieldUpdatedBy, v))
 }
 
 // UpdatedByGTE applies the GTE predicate on the "updated_by" field.
-func UpdatedByGTE(v int) predicate.UserHistory {
+func UpdatedByGTE(v string) predicate.UserHistory {
 	return predicate.UserHistory(sql.FieldGTE(FieldUpdatedBy, v))
 }
 
 // UpdatedByLT applies the LT predicate on the "updated_by" field.
-func UpdatedByLT(v int) predicate.UserHistory {
+func UpdatedByLT(v string) predicate.UserHistory {
 	return predicate.UserHistory(sql.FieldLT(FieldUpdatedBy, v))
 }
 
 // UpdatedByLTE applies the LTE predicate on the "updated_by" field.
-func UpdatedByLTE(v int) predicate.UserHistory {
+func UpdatedByLTE(v string) predicate.UserHistory {
 	return predicate.UserHistory(sql.FieldLTE(FieldUpdatedBy, v))
+}
+
+// UpdatedByContains applies the Contains predicate on the "updated_by" field.
+func UpdatedByContains(v string) predicate.UserHistory {
+	return predicate.UserHistory(sql.FieldContains(FieldUpdatedBy, v))
+}
+
+// UpdatedByHasPrefix applies the HasPrefix predicate on the "updated_by" field.
+func UpdatedByHasPrefix(v string) predicate.UserHistory {
+	return predicate.UserHistory(sql.FieldHasPrefix(FieldUpdatedBy, v))
+}
+
+// UpdatedByHasSuffix applies the HasSuffix predicate on the "updated_by" field.
+func UpdatedByHasSuffix(v string) predicate.UserHistory {
+	return predicate.UserHistory(sql.FieldHasSuffix(FieldUpdatedBy, v))
 }
 
 // UpdatedByIsNil applies the IsNil predicate on the "updated_by" field.
@@ -229,6 +244,16 @@ func UpdatedByIsNil() predicate.UserHistory {
 // UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
 func UpdatedByNotNil() predicate.UserHistory {
 	return predicate.UserHistory(sql.FieldNotNull(FieldUpdatedBy))
+}
+
+// UpdatedByEqualFold applies the EqualFold predicate on the "updated_by" field.
+func UpdatedByEqualFold(v string) predicate.UserHistory {
+	return predicate.UserHistory(sql.FieldEqualFold(FieldUpdatedBy, v))
+}
+
+// UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
+func UpdatedByContainsFold(v string) predicate.UserHistory {
+	return predicate.UserHistory(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
 // OperationEQ applies the EQ predicate on the "operation" field.

@@ -45,7 +45,7 @@
                         }
 
                        {{ if not (isNil $.Annotations.UserIdKey) }}
-                       userId, _ := ctx.Value("{{ $.Annotations.UserIdKey }}").(int)
+                       userId, _ := ctx.Value("{{ $.Annotations.UserIdKey }}").(string)
                        {{ end }}
 
                         id, ok := m.ID()
@@ -87,7 +87,7 @@
                         }
 
                         {{ if not (isNil $.Annotations.UserIdKey) }}
-                        userId, _ := ctx.Value("{{ $.Annotations.UserIdKey }}").(int)
+                        userId, _ := ctx.Value("{{ $.Annotations.UserIdKey }}").(string)
                         {{ end }}
                         id, ok := m.ID()
                         if !ok {
@@ -135,7 +135,7 @@
                         }
 
                        {{ if not (isNil $.Annotations.UserIdKey) }}
-                       userId, _ := ctx.Value("{{ $.Annotations.UserIdKey }}").(int)
+                       userId, _ := ctx.Value("{{ $.Annotations.UserIdKey }}").(string)
                        {{ end }}
 
                         id, ok := m.ID()

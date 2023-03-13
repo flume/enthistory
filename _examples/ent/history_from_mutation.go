@@ -47,7 +47,7 @@ func (m *UserMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		tx = nil
 	}
 
-	userId, _ := ctx.Value("userId").(int)
+	userId, _ := ctx.Value("userId").(string)
 
 	id, ok := m.ID()
 	if !ok {
@@ -94,7 +94,7 @@ func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 		tx = nil
 	}
 
-	userId, _ := ctx.Value("userId").(int)
+	userId, _ := ctx.Value("userId").(string)
 
 	id, ok := m.ID()
 	if !ok {
@@ -154,7 +154,7 @@ func (m *UserMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		tx = nil
 	}
 
-	userId, _ := ctx.Value("userId").(int)
+	userId, _ := ctx.Value("userId").(string)
 
 	id, ok := m.ID()
 	if !ok {

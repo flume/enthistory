@@ -23,7 +23,7 @@ type UserHistory struct {
 	// Ref holds the value of the "ref" field.
 	Ref int `json:"ref,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy int `json:"updated_by,omitempty"`
+	UpdatedBy *string `json:"updated_by,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation enthistory.OpType `json:"operation,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
@@ -41,9 +41,9 @@ func (*UserHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case userhistory.FieldID, userhistory.FieldRef, userhistory.FieldUpdatedBy, userhistory.FieldAge:
+		case userhistory.FieldID, userhistory.FieldRef, userhistory.FieldAge:
 			values[i] = new(sql.NullInt64)
-		case userhistory.FieldOperation, userhistory.FieldName:
+		case userhistory.FieldUpdatedBy, userhistory.FieldOperation, userhistory.FieldName:
 			values[i] = new(sql.NullString)
 		case userhistory.FieldHistoryTime, userhistory.FieldCreatedAt, userhistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -81,10 +81,11 @@ func (uh *UserHistory) assignValues(columns []string, values []any) error {
 				uh.Ref = int(value.Int64)
 			}
 		case userhistory.FieldUpdatedBy:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				uh.UpdatedBy = int(value.Int64)
+				uh.UpdatedBy = new(string)
+				*uh.UpdatedBy = value.String
 			}
 		case userhistory.FieldOperation:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -150,8 +151,10 @@ func (uh *UserHistory) String() string {
 	builder.WriteString("ref=")
 	builder.WriteString(fmt.Sprintf("%v", uh.Ref))
 	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(fmt.Sprintf("%v", uh.UpdatedBy))
+	if v := uh.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", uh.Operation))

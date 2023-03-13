@@ -34,7 +34,9 @@ func (UserHistory) Fields() []ent.Field {
 			UpdateDefault(time.Now),
 		field.Int("ref").
 			Optional(),
-		field.Int("updated_by").Optional(),
+		field.String("updated_by").
+			Optional().
+			Nillable(),
 		field.Enum("operation").GoType(enthistory.OpType("")),
 	}
 

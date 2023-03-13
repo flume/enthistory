@@ -51,15 +51,15 @@ func (uhc *UserHistoryCreate) SetNillableRef(i *int) *UserHistoryCreate {
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (uhc *UserHistoryCreate) SetUpdatedBy(i int) *UserHistoryCreate {
-	uhc.mutation.SetUpdatedBy(i)
+func (uhc *UserHistoryCreate) SetUpdatedBy(s string) *UserHistoryCreate {
+	uhc.mutation.SetUpdatedBy(s)
 	return uhc
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (uhc *UserHistoryCreate) SetNillableUpdatedBy(i *int) *UserHistoryCreate {
-	if i != nil {
-		uhc.SetUpdatedBy(*i)
+func (uhc *UserHistoryCreate) SetNillableUpdatedBy(s *string) *UserHistoryCreate {
+	if s != nil {
+		uhc.SetUpdatedBy(*s)
 	}
 	return uhc
 }
@@ -236,8 +236,8 @@ func (uhc *UserHistoryCreate) createSpec() (*UserHistory, *sqlgraph.CreateSpec) 
 		_node.Ref = value
 	}
 	if value, ok := uhc.mutation.UpdatedBy(); ok {
-		_spec.SetField(userhistory.FieldUpdatedBy, field.TypeInt, value)
-		_node.UpdatedBy = value
+		_spec.SetField(userhistory.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = &value
 	}
 	if value, ok := uhc.mutation.Operation(); ok {
 		_spec.SetField(userhistory.FieldOperation, field.TypeEnum, value)
