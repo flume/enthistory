@@ -6,8 +6,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// User is the predicate function for user builders.
-type User func(*sql.Selector)
+// Character is the predicate function for character builders.
+type Character func(*sql.Selector)
 
-// UserHistory is the predicate function for userhistory builders.
-type UserHistory func(*sql.Selector)
+// CharacterHistory is the predicate function for characterhistory builders.
+type CharacterHistory func(*sql.Selector)
+
+// Friendship is the predicate function for friendship builders.
+type Friendship func(*sql.Selector)
+
+// FriendshipHistory is the predicate function for friendshiphistory builders.
+type FriendshipHistory func(*sql.Selector)

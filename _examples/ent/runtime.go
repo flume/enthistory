@@ -5,61 +5,87 @@ package ent
 import (
 	"time"
 
+	"github.com/flume/enthistory/_examples/ent/character"
+	"github.com/flume/enthistory/_examples/ent/characterhistory"
+	"github.com/flume/enthistory/_examples/ent/friendship"
+	"github.com/flume/enthistory/_examples/ent/friendshiphistory"
 	"github.com/flume/enthistory/_examples/ent/schema"
-	"github.com/flume/enthistory/_examples/ent/user"
-	"github.com/flume/enthistory/_examples/ent/userhistory"
 )
 
 // The init function reads all schema descriptors with runtime code
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
-	userMixin := schema.User{}.Mixin()
-	userMixinFields0 := userMixin[0].Fields()
-	_ = userMixinFields0
-	userFields := schema.User{}.Fields()
-	_ = userFields
-	// userDescCreatedAt is the schema descriptor for created_at field.
-	userDescCreatedAt := userMixinFields0[0].Descriptor()
-	// user.DefaultCreatedAt holds the default value on creation for the created_at field.
-	user.DefaultCreatedAt = userDescCreatedAt.Default.(func() time.Time)
-	// userDescUpdatedAt is the schema descriptor for updated_at field.
-	userDescUpdatedAt := userMixinFields0[1].Descriptor()
-	// user.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	user.DefaultUpdatedAt = userDescUpdatedAt.Default.(func() time.Time)
-	// userDescAge is the schema descriptor for age field.
-	userDescAge := userFields[0].Descriptor()
-	// user.AgeValidator is a validator for the "age" field. It is called by the builders before save.
-	user.AgeValidator = userDescAge.Validators[0].(func(int) error)
-	// userDescName is the schema descriptor for name field.
-	userDescName := userFields[1].Descriptor()
-	// user.DefaultName holds the default value on creation for the name field.
-	user.DefaultName = userDescName.Default.(string)
-	userhistoryMixin := schema.UserHistory{}.Mixin()
-	userhistoryMixinFields0 := userhistoryMixin[0].Fields()
-	_ = userhistoryMixinFields0
-	userhistoryFields := schema.UserHistory{}.Fields()
-	_ = userhistoryFields
-	// userhistoryDescHistoryTime is the schema descriptor for history_time field.
-	userhistoryDescHistoryTime := userhistoryFields[0].Descriptor()
-	// userhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
-	userhistory.DefaultHistoryTime = userhistoryDescHistoryTime.Default.(func() time.Time)
-	// userhistory.UpdateDefaultHistoryTime holds the default value on update for the history_time field.
-	userhistory.UpdateDefaultHistoryTime = userhistoryDescHistoryTime.UpdateDefault.(func() time.Time)
-	// userhistoryDescCreatedAt is the schema descriptor for created_at field.
-	userhistoryDescCreatedAt := userhistoryMixinFields0[0].Descriptor()
-	// userhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
-	userhistory.DefaultCreatedAt = userhistoryDescCreatedAt.Default.(func() time.Time)
-	// userhistoryDescUpdatedAt is the schema descriptor for updated_at field.
-	userhistoryDescUpdatedAt := userhistoryMixinFields0[1].Descriptor()
-	// userhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	userhistory.DefaultUpdatedAt = userhistoryDescUpdatedAt.Default.(func() time.Time)
-	// userhistoryDescAge is the schema descriptor for age field.
-	userhistoryDescAge := userhistoryFields[4].Descriptor()
-	// userhistory.AgeValidator is a validator for the "age" field. It is called by the builders before save.
-	userhistory.AgeValidator = userhistoryDescAge.Validators[0].(func(int) error)
-	// userhistoryDescName is the schema descriptor for name field.
-	userhistoryDescName := userhistoryFields[5].Descriptor()
-	// userhistory.DefaultName holds the default value on creation for the name field.
-	userhistory.DefaultName = userhistoryDescName.Default.(string)
+	characterMixin := schema.Character{}.Mixin()
+	characterMixinFields0 := characterMixin[0].Fields()
+	_ = characterMixinFields0
+	characterFields := schema.Character{}.Fields()
+	_ = characterFields
+	// characterDescCreatedAt is the schema descriptor for created_at field.
+	characterDescCreatedAt := characterMixinFields0[0].Descriptor()
+	// character.DefaultCreatedAt holds the default value on creation for the created_at field.
+	character.DefaultCreatedAt = characterDescCreatedAt.Default.(func() time.Time)
+	// characterDescUpdatedAt is the schema descriptor for updated_at field.
+	characterDescUpdatedAt := characterMixinFields0[1].Descriptor()
+	// character.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	character.DefaultUpdatedAt = characterDescUpdatedAt.Default.(func() time.Time)
+	// characterDescAge is the schema descriptor for age field.
+	characterDescAge := characterFields[0].Descriptor()
+	// character.AgeValidator is a validator for the "age" field. It is called by the builders before save.
+	character.AgeValidator = characterDescAge.Validators[0].(func(int) error)
+	characterhistoryMixin := schema.CharacterHistory{}.Mixin()
+	characterhistoryMixinFields0 := characterhistoryMixin[0].Fields()
+	_ = characterhistoryMixinFields0
+	characterhistoryFields := schema.CharacterHistory{}.Fields()
+	_ = characterhistoryFields
+	// characterhistoryDescHistoryTime is the schema descriptor for history_time field.
+	characterhistoryDescHistoryTime := characterhistoryFields[0].Descriptor()
+	// characterhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	characterhistory.DefaultHistoryTime = characterhistoryDescHistoryTime.Default.(func() time.Time)
+	// characterhistory.UpdateDefaultHistoryTime holds the default value on update for the history_time field.
+	characterhistory.UpdateDefaultHistoryTime = characterhistoryDescHistoryTime.UpdateDefault.(func() time.Time)
+	// characterhistoryDescCreatedAt is the schema descriptor for created_at field.
+	characterhistoryDescCreatedAt := characterhistoryMixinFields0[0].Descriptor()
+	// characterhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	characterhistory.DefaultCreatedAt = characterhistoryDescCreatedAt.Default.(func() time.Time)
+	// characterhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	characterhistoryDescUpdatedAt := characterhistoryMixinFields0[1].Descriptor()
+	// characterhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	characterhistory.DefaultUpdatedAt = characterhistoryDescUpdatedAt.Default.(func() time.Time)
+	// characterhistoryDescAge is the schema descriptor for age field.
+	characterhistoryDescAge := characterhistoryFields[4].Descriptor()
+	// characterhistory.AgeValidator is a validator for the "age" field. It is called by the builders before save.
+	characterhistory.AgeValidator = characterhistoryDescAge.Validators[0].(func(int) error)
+	friendshipMixin := schema.Friendship{}.Mixin()
+	friendshipMixinFields0 := friendshipMixin[0].Fields()
+	_ = friendshipMixinFields0
+	friendshipFields := schema.Friendship{}.Fields()
+	_ = friendshipFields
+	// friendshipDescCreatedAt is the schema descriptor for created_at field.
+	friendshipDescCreatedAt := friendshipMixinFields0[0].Descriptor()
+	// friendship.DefaultCreatedAt holds the default value on creation for the created_at field.
+	friendship.DefaultCreatedAt = friendshipDescCreatedAt.Default.(func() time.Time)
+	// friendshipDescUpdatedAt is the schema descriptor for updated_at field.
+	friendshipDescUpdatedAt := friendshipMixinFields0[1].Descriptor()
+	// friendship.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	friendship.DefaultUpdatedAt = friendshipDescUpdatedAt.Default.(func() time.Time)
+	friendshiphistoryMixin := schema.FriendshipHistory{}.Mixin()
+	friendshiphistoryMixinFields0 := friendshiphistoryMixin[0].Fields()
+	_ = friendshiphistoryMixinFields0
+	friendshiphistoryFields := schema.FriendshipHistory{}.Fields()
+	_ = friendshiphistoryFields
+	// friendshiphistoryDescHistoryTime is the schema descriptor for history_time field.
+	friendshiphistoryDescHistoryTime := friendshiphistoryFields[0].Descriptor()
+	// friendshiphistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	friendshiphistory.DefaultHistoryTime = friendshiphistoryDescHistoryTime.Default.(func() time.Time)
+	// friendshiphistory.UpdateDefaultHistoryTime holds the default value on update for the history_time field.
+	friendshiphistory.UpdateDefaultHistoryTime = friendshiphistoryDescHistoryTime.UpdateDefault.(func() time.Time)
+	// friendshiphistoryDescCreatedAt is the schema descriptor for created_at field.
+	friendshiphistoryDescCreatedAt := friendshiphistoryMixinFields0[0].Descriptor()
+	// friendshiphistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	friendshiphistory.DefaultCreatedAt = friendshiphistoryDescCreatedAt.Default.(func() time.Time)
+	// friendshiphistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	friendshiphistoryDescUpdatedAt := friendshiphistoryMixinFields0[1].Descriptor()
+	// friendshiphistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	friendshiphistory.DefaultUpdatedAt = friendshiphistoryDescUpdatedAt.Default.(func() time.Time)
 }

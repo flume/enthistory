@@ -12,8 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 
-	"github.com/flume/enthistory/_examples/ent/user"
-	"github.com/flume/enthistory/_examples/ent/userhistory"
+	"github.com/flume/enthistory/_examples/ent/character"
+	"github.com/flume/enthistory/_examples/ent/characterhistory"
+	"github.com/flume/enthistory/_examples/ent/friendship"
+	"github.com/flume/enthistory/_examples/ent/friendshiphistory"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -67,8 +69,10 @@ type OrderFunc func(*sql.Selector)
 // columnChecker returns a function indicates if the column exists in the given column.
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
-		user.Table:        user.ValidColumn,
-		userhistory.Table: userhistory.ValidColumn,
+		character.Table:         character.ValidColumn,
+		characterhistory.Table:  characterhistory.ValidColumn,
+		friendship.Table:        friendship.ValidColumn,
+		friendshiphistory.Table: friendshiphistory.ValidColumn,
 	}
 	check, ok := checks[table]
 	if !ok {

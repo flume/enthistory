@@ -53,35 +53,54 @@ You can query the history tables directly, just like any other ent table, or you
 
 enthistory will also track the user updating the row if you provide it a key when initializing. Store a user's id, email, IP address, etc. in context with the key you provide for it to be tracked in history. 
 
-For example, let's say we have a User table, and we got a user from the table just now. We can also pull the history for that user directly via enthistory.
+For example, let's say we have a Character table, and we got a character from the table just now. We can also pull the history for that character directly via enthistory.
 
 ```go
 // Create
 client := enttest.Open(t, "sqlite3", "file:ent?mode=memory&_fk=1")
 // Activate the history hooks on the client
 client.WithHistory()
-user, _ := client.User.Create().SetName("BMS").Save(ctx)
-userHistory, _ := user.History().All(ctx)
-fmt.Println(len(userHistory)) // 1
+character, _ := client.Character.Create().SetName("BMS").Save(ctx)
+characterHistory, _ := character.History().All(ctx)
+fmt.Println(len(characterHistory)) // 1
 
 // Update
-user, _ = user.Update().SetName("Marceline").Save(ctx)
-userHistory, _ = user.History().All(ctx)
-fmt.Println(len(userHistory)) // 2
+character, _ = character.Update().SetName("Marceline").Save(ctx)
+characterHistory, _ = character.History().All(ctx)
+fmt.Println(len(characterHistory)) // 2
 
 // Delete
-client.User.DeleteOne(user)
-userHistory, _ = user.History().All(ctx)
-fmt.Println(len(userHistory)) // 3
+client.Character.DeleteOne(character)
+characterHistory, _ = character.History().All(ctx)
+fmt.Println(len(characterHistory)) // 3
 ```
 
 ## Caveats
 
 A few caveats to keep in mind when using enthistory
 
+### Edges
+To track edges with history, you will need to manage your own through tables. There's no way to hook into the ent generated through tables following the ent guide, through tables are fairly easy to manage yourself.
+Note: You will not be able to track the history on these through tables if you use the setters for edges on the main schema tables. You must directly update the through tables with the information required.
+
+Instead of `.AddFriends()`
+```go
+finn, _ := client.Character.Create().SetName("Finn the Human").Save(ctx)
+jake, _ := client.Character.Create().SetName("Jake the Dog").Save(ctx)
+finn, _ = finn.Update().AddFriends(jake).Save(ctx)
+```
+Use the Friendship through table
+```go
+finn, _ := client.Character.Create().SetName("Finn the Human").Save(ctx)
+jake, _ := client.Character.Create().SetName("Jake the Dog").Save(ctx)
+friendship, _ := client.Friendship.Create().SetCharacterID(finn.ID).SetFriendID(jake.ID).Save(ctx)
+```
+
+See the [ent docs](https://entgo.io/docs/schema-edges#edge-schema) for more information on through tables and edges
+
 ### Enums
 If your ent schemas contain enum fields, you should be creating "enums" with Go and setting the `GoType` on the enum field.
-This is because ent will generate its a unique enum type for both your schema and the history table schema that won't play well together.
+This is because ent will generate a unique enum type for both your schema and the history table schema that won't play well together.
 
 Instead of `.Values()`
 ```go
@@ -94,4 +113,4 @@ field.Enum("action").
     GoType(types.Action(""))
 ```
 
-See the [ent docs](https://entgo.io/docs/schema-fields#enum-fields) for more implementation info
+See the [ent docs](https://entgo.io/docs/schema-fields#enum-fields) for more information on Enums

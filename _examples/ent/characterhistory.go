@@ -10,11 +10,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/ent/userhistory"
+	"github.com/flume/enthistory/_examples/ent/characterhistory"
 )
 
-// UserHistory is the model entity for the UserHistory schema.
-type UserHistory struct {
+// CharacterHistory is the model entity for the CharacterHistory schema.
+type CharacterHistory struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
@@ -37,142 +37,142 @@ type UserHistory struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*UserHistory) scanValues(columns []string) ([]any, error) {
+func (*CharacterHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case userhistory.FieldID, userhistory.FieldRef, userhistory.FieldAge:
+		case characterhistory.FieldID, characterhistory.FieldRef, characterhistory.FieldAge:
 			values[i] = new(sql.NullInt64)
-		case userhistory.FieldUpdatedBy, userhistory.FieldOperation, userhistory.FieldName:
+		case characterhistory.FieldUpdatedBy, characterhistory.FieldOperation, characterhistory.FieldName:
 			values[i] = new(sql.NullString)
-		case userhistory.FieldHistoryTime, userhistory.FieldCreatedAt, userhistory.FieldUpdatedAt:
+		case characterhistory.FieldHistoryTime, characterhistory.FieldCreatedAt, characterhistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type UserHistory", columns[i])
+			return nil, fmt.Errorf("unexpected column %q for type CharacterHistory", columns[i])
 		}
 	}
 	return values, nil
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the UserHistory fields.
-func (uh *UserHistory) assignValues(columns []string, values []any) error {
+// to the CharacterHistory fields.
+func (ch *CharacterHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case userhistory.FieldID:
+		case characterhistory.FieldID:
 			value, ok := values[i].(*sql.NullInt64)
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			uh.ID = int(value.Int64)
-		case userhistory.FieldHistoryTime:
+			ch.ID = int(value.Int64)
+		case characterhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				uh.HistoryTime = value.Time
+				ch.HistoryTime = value.Time
 			}
-		case userhistory.FieldRef:
+		case characterhistory.FieldRef:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
-				uh.Ref = int(value.Int64)
+				ch.Ref = int(value.Int64)
 			}
-		case userhistory.FieldUpdatedBy:
+		case characterhistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				uh.UpdatedBy = new(string)
-				*uh.UpdatedBy = value.String
+				ch.UpdatedBy = new(string)
+				*ch.UpdatedBy = value.String
 			}
-		case userhistory.FieldOperation:
+		case characterhistory.FieldOperation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value.Valid {
-				uh.Operation = enthistory.OpType(value.String)
+				ch.Operation = enthistory.OpType(value.String)
 			}
-		case userhistory.FieldCreatedAt:
+		case characterhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				uh.CreatedAt = value.Time
+				ch.CreatedAt = value.Time
 			}
-		case userhistory.FieldUpdatedAt:
+		case characterhistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				uh.UpdatedAt = value.Time
+				ch.UpdatedAt = value.Time
 			}
-		case userhistory.FieldAge:
+		case characterhistory.FieldAge:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field age", values[i])
 			} else if value.Valid {
-				uh.Age = int(value.Int64)
+				ch.Age = int(value.Int64)
 			}
-		case userhistory.FieldName:
+		case characterhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				uh.Name = value.String
+				ch.Name = value.String
 			}
 		}
 	}
 	return nil
 }
 
-// Update returns a builder for updating this UserHistory.
-// Note that you need to call UserHistory.Unwrap() before calling this method if this UserHistory
+// Update returns a builder for updating this CharacterHistory.
+// Note that you need to call CharacterHistory.Unwrap() before calling this method if this CharacterHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (uh *UserHistory) Update() *UserHistoryUpdateOne {
-	return NewUserHistoryClient(uh.config).UpdateOne(uh)
+func (ch *CharacterHistory) Update() *CharacterHistoryUpdateOne {
+	return NewCharacterHistoryClient(ch.config).UpdateOne(ch)
 }
 
-// Unwrap unwraps the UserHistory entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the CharacterHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (uh *UserHistory) Unwrap() *UserHistory {
-	_tx, ok := uh.config.driver.(*txDriver)
+func (ch *CharacterHistory) Unwrap() *CharacterHistory {
+	_tx, ok := ch.config.driver.(*txDriver)
 	if !ok {
-		panic("ent: UserHistory is not a transactional entity")
+		panic("ent: CharacterHistory is not a transactional entity")
 	}
-	uh.config.driver = _tx.drv
-	return uh
+	ch.config.driver = _tx.drv
+	return ch
 }
 
 // String implements the fmt.Stringer.
-func (uh *UserHistory) String() string {
+func (ch *CharacterHistory) String() string {
 	var builder strings.Builder
-	builder.WriteString("UserHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", uh.ID))
+	builder.WriteString("CharacterHistory(")
+	builder.WriteString(fmt.Sprintf("id=%v, ", ch.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(uh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(ch.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(fmt.Sprintf("%v", uh.Ref))
+	builder.WriteString(fmt.Sprintf("%v", ch.Ref))
 	builder.WriteString(", ")
-	if v := uh.UpdatedBy; v != nil {
+	if v := ch.UpdatedBy; v != nil {
 		builder.WriteString("updated_by=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", uh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", ch.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(uh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(ch.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(uh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(ch.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("age=")
-	builder.WriteString(fmt.Sprintf("%v", uh.Age))
+	builder.WriteString(fmt.Sprintf("%v", ch.Age))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(uh.Name)
+	builder.WriteString(ch.Name)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// UserHistories is a parsable slice of UserHistory.
-type UserHistories []*UserHistory
+// CharacterHistories is a parsable slice of CharacterHistory.
+type CharacterHistories []*CharacterHistory
