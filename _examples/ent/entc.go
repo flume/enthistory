@@ -15,7 +15,11 @@ import (
 func main() {
 	if err := entc.Generate("./schema",
 		&gen.Config{},
-		entc.Extensions(enthistory.NewHistoryExtension("userId")),
+		entc.Extensions(
+			enthistory.NewHistoryExtension(
+				enthistory.WithUpdatedByKey("userId"),
+			),
+		),
 	); err != nil {
 		log.Fatal("running ent codegen:", err)
 	}
