@@ -114,3 +114,8 @@ field.Enum("action").
 ```
 
 See the [ent docs](https://entgo.io/docs/schema-fields#enum-fields) for more information on Enums
+
+
+## Contributing
+
+Please see our [contributing](.github/CONTRIBUTING.md) and [code of conduct](.github/CODE_OF_CONDUCT.md) documentation
