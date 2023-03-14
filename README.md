@@ -66,12 +66,12 @@ For example, let's say we have a Character table, and we got a character from th
 client := enttest.Open(t, "sqlite3", "file:ent?mode=memory&_fk=1")
 // Activate the history hooks on the client
 client.WithHistory()
-character, _ := client.Character.Create().SetName("BMS").Save(ctx)
+character, _ := client.Character.Create().SetName("Marceline").Save(ctx)
 characterHistory, _ := character.History().All(ctx)
 fmt.Println(len(characterHistory)) // 1
 
 // Update
-character, _ = character.Update().SetName("Marceline").Save(ctx)
+character, _ = character.Update().SetName("Marshall Lee").Save(ctx)
 characterHistory, _ = character.History().All(ctx)
 fmt.Println(len(characterHistory)) // 2
 
