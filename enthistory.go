@@ -16,16 +16,26 @@ var (
 	_templates embed.FS
 )
 
+type ExtensionOption = func(*HistoryExtension)
+
 // HistoryExtension implements entc.Extension.
 type HistoryExtension struct {
 	entc.DefaultExtension
-	userIdKey UserIdKey
+	updatedByKey UpdatedByKey
 }
 
-func NewHistoryExtension(userIdKey UserIdKey) *HistoryExtension {
-	return &HistoryExtension{
-		userIdKey: userIdKey,
+func WithUpdatedByKey(updatedByKey UpdatedByKey) ExtensionOption {
+	return func(ex *HistoryExtension) {
+		ex.updatedByKey = updatedByKey
 	}
+}
+
+func NewHistoryExtension(opts ...ExtensionOption) *HistoryExtension {
+	extension := &HistoryExtension{}
+	for _, opt := range opts {
+		opt(extension)
+	}
+	return extension
 }
 
 type templateInfo struct {
@@ -51,7 +61,7 @@ func (*HistoryExtension) Hooks() []gen.Hook {
 
 func (s *HistoryExtension) Annotations() []entc.Annotation {
 	return []entc.Annotation{
-		s.userIdKey,
+		s.updatedByKey,
 	}
 }
 

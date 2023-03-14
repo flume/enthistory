@@ -44,8 +44,8 @@
                             tx = nil
                         }
 
-                       {{ if not (isNil $.Annotations.UserIdKey) }}
-                       userId, _ := ctx.Value("{{ $.Annotations.UserIdKey }}").(string)
+                       {{ if not (eq $.Annotations.UpdatedByKey "") }}
+                       updatedBy, _ := ctx.Value("{{ $.Annotations.UpdatedByKey }}").(string)
                        {{ end }}
 
                         id, ok := m.ID()
@@ -60,9 +60,9 @@
                         create = create.
                             SetOperation(EntOpToHistoryOp(m.Op())).
                             SetHistoryTime(time.Now()).
-                        {{ if not (isNil $.Annotations.UserIdKey) }}
+                        {{ if not (eq $.Annotations.UpdatedByKey "") }}
                             SetRef(id).
-                            SetUpdatedBy(userId)
+                            SetUpdatedBy(updatedBy)
                         {{ else }}
                             SetRef(id)
                         {{ end }}
@@ -86,8 +86,8 @@
                             tx = nil
                         }
 
-                        {{ if not (isNil $.Annotations.UserIdKey) }}
-                        userId, _ := ctx.Value("{{ $.Annotations.UserIdKey }}").(string)
+                        {{ if not (eq $.Annotations.UpdatedByKey "") }}
+                        updatedBy, _ := ctx.Value("{{ $.Annotations.UpdatedByKey }}").(string)
                         {{ end }}
                         id, ok := m.ID()
                         if !ok {
@@ -106,9 +106,9 @@
                         create = create.
                             SetOperation(EntOpToHistoryOp(m.Op())).
                             SetHistoryTime(time.Now()).
-                        {{ if not (isNil $.Annotations.UserIdKey) }}
+                        {{ if not (eq $.Annotations.UpdatedByKey "") }}
                             SetRef(id).
-                            SetUpdatedBy(userId)
+                            SetUpdatedBy(updatedBy)
                         {{ else }}
                             SetRef(id)
                         {{ end }}
@@ -134,8 +134,8 @@
                             tx = nil
                         }
 
-                       {{ if not (isNil $.Annotations.UserIdKey) }}
-                       userId, _ := ctx.Value("{{ $.Annotations.UserIdKey }}").(string)
+                       {{ if not (eq $.Annotations.UpdatedByKey "") }}
+                       updatedBy, _ := ctx.Value("{{ $.Annotations.UpdatedByKey }}").(string)
                        {{ end }}
 
                         id, ok := m.ID()
@@ -156,8 +156,8 @@
                             SetOperation(EntOpToHistoryOp(m.Op())).
                             SetHistoryTime(time.Now()).
                             SetRef(id).
-                        {{ if not (isNil $.Annotations.UserIdKey) }}
-                            SetUpdatedBy(userId).
+                        {{ if not (eq $.Annotations.UpdatedByKey "") }}
+                            SetUpdatedBy(updatedBy).
                         {{ end }}
                         {{ range $f := $n.Fields }}
                             Set{{ if $f.Nillable }}Nillable{{ end }}{{ $f.StructField }}({{ camel $name }}.{{ pascal $f.Name }}).

@@ -22,8 +22,14 @@ import (
 
 func main() {
 	if err := entc.Generate("./schema",
-		// userId key in context with the user's information, value should be a string
-		entc.Extensions(enthistory.NewHistoryExtension("userId")),
+		&gen.Config{},
+		entc.Extensions(
+			enthistory.NewHistoryExtension(
+				// Let enthistory know that the updatedBy field can derive 
+				// the value (a string) from the context with this key
+				enthistory.WithUpdatedByKey("userId"),
+			),
+		),
 	); err != nil {
 		log.Fatal("running ent codegen:", err)
 	}

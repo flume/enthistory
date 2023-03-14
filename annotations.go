@@ -1,9 +1,9 @@
 package enthistory
 
-type UserIdKey string
+type UpdatedByKey string
 
-func (UserIdKey) Name() string {
-	return "UserIdKey"
+func (UpdatedByKey) Name() string {
+	return "UpdatedByKey"
 }
 
 type HistoryAnnotation string
