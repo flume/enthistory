@@ -37,6 +37,8 @@ type HistoryExtension struct {
 
 type ExtensionOption = func(*HistoryExtension)
 
+// WithUpdatedBy sets the key and type for pulling updated_by from the context,
+// usually done via a middleware to track which users are making which changes
 func WithUpdatedBy(key string, valueType ValueType) ExtensionOption {
 	return func(ex *HistoryExtension) {
 		ex.config.UpdatedBy = UpdatedBy{
