@@ -25,9 +25,7 @@ func main() {
 		&gen.Config{},
 		entc.Extensions(
 			enthistory.NewHistoryExtension(
-				// Let enthistory know that the updatedBy field can derive 
-				// the value (a string) from the context with this key
-				enthistory.WithUpdatedByKey("userId"),
+				enthistory.WithUpdatedBy("userId", enthistory.ValueTypeInt),
 			),
 		),
 	); err != nil {
@@ -79,6 +77,22 @@ fmt.Println(len(characterHistory)) // 2
 client.Character.DeleteOne(character)
 characterHistory, _ = character.History().All(ctx)
 fmt.Println(len(characterHistory)) // 3
+```
+
+## Config Options
+
+### Updated By
+To track which users are making which changes to your tables, you can supply the `enthistory.NewExtension()` function with 
+the `enthistory.WithUpdatedBy()` Option. You choose your key name (string) and you can set either `enthistory.ValueTypeInt` (int) 
+or `enthistory.ValueTypeString` (string) for the type of the value. This value would need to get populated in the context using 
+`context.WithValue()`. You can leave out entirely if you don't plan on using this feature.
+
+```go
+// context.WithValue(ctx, "userId", 5)
+enthistory.WithUpdatedBy("userId", enthistory.ValueTypeInt)
+
+// context.WithValue(ctx, "userEmail", "test@test.com")
+enthistory.WithUpdatedBy("userId", enthistory.ValueTypeString)
 ```
 
 ## Caveats

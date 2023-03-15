@@ -16,22 +16,42 @@ var (
 	_templates embed.FS
 )
 
-type ExtensionOption = func(*HistoryExtension)
+type UpdatedBy struct {
+	key       string
+	valueType ValueType
+}
+
+type Config struct {
+	UpdatedBy UpdatedBy
+}
+
+func (c Config) Name() string {
+	return "HistoryConfig"
+}
 
 // HistoryExtension implements entc.Extension.
 type HistoryExtension struct {
 	entc.DefaultExtension
-	updatedByKey UpdatedByKey
+	config *Config
 }
 
-func WithUpdatedByKey(updatedByKey UpdatedByKey) ExtensionOption {
+type ExtensionOption = func(*HistoryExtension)
+
+// WithUpdatedBy sets the key and type for pulling updated_by from the context,
+// usually done via a middleware to track which users are making which changes
+func WithUpdatedBy(key string, valueType ValueType) ExtensionOption {
 	return func(ex *HistoryExtension) {
-		ex.updatedByKey = updatedByKey
+		ex.config.UpdatedBy = UpdatedBy{
+			key:       key,
+			valueType: valueType,
+		}
 	}
 }
 
 func NewHistoryExtension(opts ...ExtensionOption) *HistoryExtension {
-	extension := &HistoryExtension{}
+	extension := &HistoryExtension{
+		config: &Config{},
+	}
 	for _, opt := range opts {
 		opt(extension)
 	}
@@ -39,9 +59,10 @@ func NewHistoryExtension(opts ...ExtensionOption) *HistoryExtension {
 }
 
 type templateInfo struct {
-	Schema            *load.Schema
-	TableName         string
-	OriginalTableName string
+	Schema             *load.Schema
+	TableName          string
+	OriginalTableName  string
+	UpdatedByValueType string
 }
 
 func (*HistoryExtension) Templates() []*gen.Template {
@@ -53,15 +74,15 @@ func (*HistoryExtension) Templates() []*gen.Template {
 }
 
 // Hooks of the HistoryExtension.
-func (*HistoryExtension) Hooks() []gen.Hook {
+func (h *HistoryExtension) Hooks() []gen.Hook {
 	return []gen.Hook{
-		generateHistorySchemas,
+		h.generateHistorySchemas,
 	}
 }
 
-func (s *HistoryExtension) Annotations() []entc.Annotation {
+func (h *HistoryExtension) Annotations() []entc.Annotation {
 	return []entc.Annotation{
-		s.updatedByKey,
+		h.config,
 	}
 }
 
@@ -69,7 +90,7 @@ var (
 	schemaTemplate = template.Must(template.ParseFS(_templates, "templates/schema.tmpl"))
 )
 
-func generateHistorySchemas(next gen.Generator) gen.Generator {
+func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Generator {
 	return gen.GenerateFunc(func(g *gen.Graph) error {
 		err := removeOldGenerated(g.Schemas)
 		if err != nil {
@@ -83,11 +104,25 @@ func generateHistorySchemas(next gen.Generator) gen.Generator {
 				continue
 			}
 
+			updatedByValueType := "String"
+			if h.config != nil {
+				if h.config.UpdatedBy.valueType == ValueTypeInt {
+					updatedByValueType = "Int"
+				}
+			}
+
 			// Load new base history schema
 			historySchema, err := loadHistorySchema()
 			if err != nil {
 				return err
 			}
+
+			updatedByField, err := getUpdatedByField(updatedByValueType)
+			if err != nil {
+				return err
+			}
+
+			historySchema.Fields = append(historySchema.Fields, updatedByField)
 
 			// merge the original schema onto the history schema
 			tableName := mergeSchemaAndHistorySchema(historySchema, schema)
@@ -105,9 +140,10 @@ func generateHistorySchemas(next gen.Generator) gen.Generator {
 			defer create.Close()
 
 			templateInfo := templateInfo{
-				Schema:            historySchema,
-				TableName:         tableName,
-				OriginalTableName: schema.Name,
+				Schema:             historySchema,
+				TableName:          tableName,
+				OriginalTableName:  schema.Name,
+				UpdatedByValueType: updatedByValueType,
 			}
 			// execute schemaTemplate at the history schema path
 			if err = schemaTemplate.Execute(create, templateInfo); err != nil {

@@ -47,7 +47,7 @@ func (m *CharacterMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		tx = nil
 	}
 
-	updatedBy, _ := ctx.Value("userId").(string)
+	updatedBy, _ := ctx.Value("userId").(int)
 
 	id, ok := m.ID()
 	if !ok {
@@ -61,8 +61,10 @@ func (m *CharacterMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
-		SetRef(id).
-		SetUpdatedBy(updatedBy)
+		SetRef(id)
+	if updatedBy != 0 {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -94,7 +96,7 @@ func (m *CharacterMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 		tx = nil
 	}
 
-	updatedBy, _ := ctx.Value("userId").(string)
+	updatedBy, _ := ctx.Value("userId").(int)
 
 	id, ok := m.ID()
 	if !ok {
@@ -113,8 +115,10 @@ func (m *CharacterMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
-		SetRef(id).
-		SetUpdatedBy(updatedBy)
+		SetRef(id)
+	if updatedBy != 0 {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -154,7 +158,7 @@ func (m *CharacterMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		tx = nil
 	}
 
-	updatedBy, _ := ctx.Value("userId").(string)
+	updatedBy, _ := ctx.Value("userId").(int)
 
 	id, ok := m.ID()
 	if !ok {
@@ -170,11 +174,14 @@ func (m *CharacterMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	if tx != nil {
 		create = tx.CharacterHistory.Create()
 	}
+	if updatedBy != 0 {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
 	_, err = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id).
-		SetUpdatedBy(updatedBy).
 		SetCreatedAt(character.CreatedAt).
 		SetUpdatedAt(character.UpdatedAt).
 		SetAge(character.Age).
@@ -193,7 +200,7 @@ func (m *FriendshipMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		tx = nil
 	}
 
-	updatedBy, _ := ctx.Value("userId").(string)
+	updatedBy, _ := ctx.Value("userId").(int)
 
 	id, ok := m.ID()
 	if !ok {
@@ -207,8 +214,10 @@ func (m *FriendshipMutation) CreateHistoryFromCreate(ctx context.Context) error 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
-		SetRef(id).
-		SetUpdatedBy(updatedBy)
+		SetRef(id)
+	if updatedBy != 0 {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -240,7 +249,7 @@ func (m *FriendshipMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 		tx = nil
 	}
 
-	updatedBy, _ := ctx.Value("userId").(string)
+	updatedBy, _ := ctx.Value("userId").(int)
 
 	id, ok := m.ID()
 	if !ok {
@@ -259,8 +268,10 @@ func (m *FriendshipMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
-		SetRef(id).
-		SetUpdatedBy(updatedBy)
+		SetRef(id)
+	if updatedBy != 0 {
+		create = create.SetUpdatedBy(updatedBy)
+	}
 
 	if createdAt, exists := m.CreatedAt(); exists {
 		create = create.SetCreatedAt(createdAt)
@@ -300,7 +311,7 @@ func (m *FriendshipMutation) CreateHistoryFromDelete(ctx context.Context) error 
 		tx = nil
 	}
 
-	updatedBy, _ := ctx.Value("userId").(string)
+	updatedBy, _ := ctx.Value("userId").(int)
 
 	id, ok := m.ID()
 	if !ok {
@@ -316,11 +327,14 @@ func (m *FriendshipMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	if tx != nil {
 		create = tx.FriendshipHistory.Create()
 	}
+	if updatedBy != 0 {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
 	_, err = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id).
-		SetUpdatedBy(updatedBy).
 		SetCreatedAt(friendship.CreatedAt).
 		SetUpdatedAt(friendship.UpdatedAt).
 		SetCharacterID(friendship.CharacterID).

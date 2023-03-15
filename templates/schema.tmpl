@@ -37,7 +37,7 @@ func ({{ $name }}) Fields() []ent.Field {
             UpdateDefault(time.Now),
         field.Int("ref").
             Optional(),
-		field.String("updated_by").
+		field.{{ $.UpdatedByValueType }}("updated_by").
 			Optional().
 			Nillable(),
         field.Enum("operation").GoType(enthistory.OpType("")),

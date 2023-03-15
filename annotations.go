@@ -1,13 +1,12 @@
 package enthistory
 
-type UpdatedByKey string
+const (
+	ValueTypeInt ValueType = iota
+	ValueTypeString
+)
 
-func (UpdatedByKey) Name() string {
-	return "UpdatedByKey"
-}
+type ValueType uint
 
-type HistoryAnnotation string
-
-func (HistoryAnnotation) Name() string {
-	return "HistoryAnnotation"
+func (ValueType) ValueType() string {
+	return "ValueType"
 }

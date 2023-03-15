@@ -120,6 +120,32 @@ func TestEntHistory(t *testing.T) {
 				assert.Equal(t, 1, len(allFriendshipHistory))
 			},
 		},
+		{
+			name: "Handles setting updatedBy from context",
+			runner: func(t *testing.T, client *ent.Client) {
+				userId := 75
+				ctx := context.WithValue(context.Background(), "userId", userId)
+
+				finn, err := client.Character.Create().SetAge(14).SetName("Finn the Human").Save(ctx)
+				assert.NoError(t, err)
+
+				history := finn.History().FirstX(ctx)
+				assert.NotNil(t, history.UpdatedBy)
+				assert.Equal(t, userId, *history.UpdatedBy)
+			},
+		},
+		{
+			name: "Is Nil when context missing value",
+			runner: func(t *testing.T, client *ent.Client) {
+				ctx := context.Background()
+
+				finn, err := client.Character.Create().SetAge(14).SetName("Finn the Human").Save(ctx)
+				assert.NoError(t, err)
+
+				history := finn.History().FirstX(ctx)
+				assert.Empty(t, history.UpdatedBy)
+			},
+		},
 	}
 	for _, tt := range tests {
 		opts := []enttest.Option{

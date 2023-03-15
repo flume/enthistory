@@ -22,10 +22,10 @@ type FriendshipHistory struct {
 	HistoryTime time.Time `json:"history_time,omitempty"`
 	// Ref holds the value of the "ref" field.
 	Ref int `json:"ref,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy *string `json:"updated_by,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation enthistory.OpType `json:"operation,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy *int `json:"updated_by,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -41,9 +41,9 @@ func (*FriendshipHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case friendshiphistory.FieldID, friendshiphistory.FieldRef, friendshiphistory.FieldCharacterID, friendshiphistory.FieldFriendID:
+		case friendshiphistory.FieldID, friendshiphistory.FieldRef, friendshiphistory.FieldUpdatedBy, friendshiphistory.FieldCharacterID, friendshiphistory.FieldFriendID:
 			values[i] = new(sql.NullInt64)
-		case friendshiphistory.FieldUpdatedBy, friendshiphistory.FieldOperation:
+		case friendshiphistory.FieldOperation:
 			values[i] = new(sql.NullString)
 		case friendshiphistory.FieldHistoryTime, friendshiphistory.FieldCreatedAt, friendshiphistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -80,18 +80,18 @@ func (fh *FriendshipHistory) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				fh.Ref = int(value.Int64)
 			}
-		case friendshiphistory.FieldUpdatedBy:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
-			} else if value.Valid {
-				fh.UpdatedBy = new(string)
-				*fh.UpdatedBy = value.String
-			}
 		case friendshiphistory.FieldOperation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value.Valid {
 				fh.Operation = enthistory.OpType(value.String)
+			}
+		case friendshiphistory.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				fh.UpdatedBy = new(int)
+				*fh.UpdatedBy = int(value.Int64)
 			}
 		case friendshiphistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -151,13 +151,13 @@ func (fh *FriendshipHistory) String() string {
 	builder.WriteString("ref=")
 	builder.WriteString(fmt.Sprintf("%v", fh.Ref))
 	builder.WriteString(", ")
-	if v := fh.UpdatedBy; v != nil {
-		builder.WriteString("updated_by=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", fh.Operation))
+	builder.WriteString(", ")
+	if v := fh.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(fh.CreatedAt.Format(time.ANSIC))
