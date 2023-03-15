@@ -118,6 +118,9 @@ func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Genera
 			}
 
 			updatedByField, err := getUpdatedByField(updatedByValueType)
+			if err != nil {
+				return err
+			}
 
 			historySchema.Fields = append(historySchema.Fields, updatedByField)
 
