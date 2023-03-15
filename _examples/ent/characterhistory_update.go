@@ -63,29 +63,36 @@ func (chu *CharacterHistoryUpdate) ClearRef() *CharacterHistoryUpdate {
 	return chu
 }
 
+// SetOperation sets the "operation" field.
+func (chu *CharacterHistoryUpdate) SetOperation(et enthistory.OpType) *CharacterHistoryUpdate {
+	chu.mutation.SetOperation(et)
+	return chu
+}
+
 // SetUpdatedBy sets the "updated_by" field.
-func (chu *CharacterHistoryUpdate) SetUpdatedBy(s string) *CharacterHistoryUpdate {
-	chu.mutation.SetUpdatedBy(s)
+func (chu *CharacterHistoryUpdate) SetUpdatedBy(i int) *CharacterHistoryUpdate {
+	chu.mutation.ResetUpdatedBy()
+	chu.mutation.SetUpdatedBy(i)
 	return chu
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (chu *CharacterHistoryUpdate) SetNillableUpdatedBy(s *string) *CharacterHistoryUpdate {
-	if s != nil {
-		chu.SetUpdatedBy(*s)
+func (chu *CharacterHistoryUpdate) SetNillableUpdatedBy(i *int) *CharacterHistoryUpdate {
+	if i != nil {
+		chu.SetUpdatedBy(*i)
 	}
+	return chu
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (chu *CharacterHistoryUpdate) AddUpdatedBy(i int) *CharacterHistoryUpdate {
+	chu.mutation.AddUpdatedBy(i)
 	return chu
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (chu *CharacterHistoryUpdate) ClearUpdatedBy() *CharacterHistoryUpdate {
 	chu.mutation.ClearUpdatedBy()
-	return chu
-}
-
-// SetOperation sets the "operation" field.
-func (chu *CharacterHistoryUpdate) SetOperation(et enthistory.OpType) *CharacterHistoryUpdate {
-	chu.mutation.SetOperation(et)
 	return chu
 }
 
@@ -216,14 +223,17 @@ func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if chu.mutation.RefCleared() {
 		_spec.ClearField(characterhistory.FieldRef, field.TypeInt)
 	}
-	if value, ok := chu.mutation.UpdatedBy(); ok {
-		_spec.SetField(characterhistory.FieldUpdatedBy, field.TypeString, value)
-	}
-	if chu.mutation.UpdatedByCleared() {
-		_spec.ClearField(characterhistory.FieldUpdatedBy, field.TypeString)
-	}
 	if value, ok := chu.mutation.Operation(); ok {
 		_spec.SetField(characterhistory.FieldOperation, field.TypeEnum, value)
+	}
+	if value, ok := chu.mutation.UpdatedBy(); ok {
+		_spec.SetField(characterhistory.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if value, ok := chu.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(characterhistory.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if chu.mutation.UpdatedByCleared() {
+		_spec.ClearField(characterhistory.FieldUpdatedBy, field.TypeInt)
 	}
 	if value, ok := chu.mutation.CreatedAt(); ok {
 		_spec.SetField(characterhistory.FieldCreatedAt, field.TypeTime, value)
@@ -293,29 +303,36 @@ func (chuo *CharacterHistoryUpdateOne) ClearRef() *CharacterHistoryUpdateOne {
 	return chuo
 }
 
+// SetOperation sets the "operation" field.
+func (chuo *CharacterHistoryUpdateOne) SetOperation(et enthistory.OpType) *CharacterHistoryUpdateOne {
+	chuo.mutation.SetOperation(et)
+	return chuo
+}
+
 // SetUpdatedBy sets the "updated_by" field.
-func (chuo *CharacterHistoryUpdateOne) SetUpdatedBy(s string) *CharacterHistoryUpdateOne {
-	chuo.mutation.SetUpdatedBy(s)
+func (chuo *CharacterHistoryUpdateOne) SetUpdatedBy(i int) *CharacterHistoryUpdateOne {
+	chuo.mutation.ResetUpdatedBy()
+	chuo.mutation.SetUpdatedBy(i)
 	return chuo
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (chuo *CharacterHistoryUpdateOne) SetNillableUpdatedBy(s *string) *CharacterHistoryUpdateOne {
-	if s != nil {
-		chuo.SetUpdatedBy(*s)
+func (chuo *CharacterHistoryUpdateOne) SetNillableUpdatedBy(i *int) *CharacterHistoryUpdateOne {
+	if i != nil {
+		chuo.SetUpdatedBy(*i)
 	}
+	return chuo
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (chuo *CharacterHistoryUpdateOne) AddUpdatedBy(i int) *CharacterHistoryUpdateOne {
+	chuo.mutation.AddUpdatedBy(i)
 	return chuo
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (chuo *CharacterHistoryUpdateOne) ClearUpdatedBy() *CharacterHistoryUpdateOne {
 	chuo.mutation.ClearUpdatedBy()
-	return chuo
-}
-
-// SetOperation sets the "operation" field.
-func (chuo *CharacterHistoryUpdateOne) SetOperation(et enthistory.OpType) *CharacterHistoryUpdateOne {
-	chuo.mutation.SetOperation(et)
 	return chuo
 }
 
@@ -476,14 +493,17 @@ func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Char
 	if chuo.mutation.RefCleared() {
 		_spec.ClearField(characterhistory.FieldRef, field.TypeInt)
 	}
-	if value, ok := chuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(characterhistory.FieldUpdatedBy, field.TypeString, value)
-	}
-	if chuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(characterhistory.FieldUpdatedBy, field.TypeString)
-	}
 	if value, ok := chuo.mutation.Operation(); ok {
 		_spec.SetField(characterhistory.FieldOperation, field.TypeEnum, value)
+	}
+	if value, ok := chuo.mutation.UpdatedBy(); ok {
+		_spec.SetField(characterhistory.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if value, ok := chuo.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(characterhistory.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if chuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(characterhistory.FieldUpdatedBy, field.TypeInt)
 	}
 	if value, ok := chuo.mutation.CreatedAt(); ok {
 		_spec.SetField(characterhistory.FieldCreatedAt, field.TypeTime, value)

@@ -63,29 +63,36 @@ func (fhu *FriendshipHistoryUpdate) ClearRef() *FriendshipHistoryUpdate {
 	return fhu
 }
 
+// SetOperation sets the "operation" field.
+func (fhu *FriendshipHistoryUpdate) SetOperation(et enthistory.OpType) *FriendshipHistoryUpdate {
+	fhu.mutation.SetOperation(et)
+	return fhu
+}
+
 // SetUpdatedBy sets the "updated_by" field.
-func (fhu *FriendshipHistoryUpdate) SetUpdatedBy(s string) *FriendshipHistoryUpdate {
-	fhu.mutation.SetUpdatedBy(s)
+func (fhu *FriendshipHistoryUpdate) SetUpdatedBy(i int) *FriendshipHistoryUpdate {
+	fhu.mutation.ResetUpdatedBy()
+	fhu.mutation.SetUpdatedBy(i)
 	return fhu
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (fhu *FriendshipHistoryUpdate) SetNillableUpdatedBy(s *string) *FriendshipHistoryUpdate {
-	if s != nil {
-		fhu.SetUpdatedBy(*s)
+func (fhu *FriendshipHistoryUpdate) SetNillableUpdatedBy(i *int) *FriendshipHistoryUpdate {
+	if i != nil {
+		fhu.SetUpdatedBy(*i)
 	}
+	return fhu
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (fhu *FriendshipHistoryUpdate) AddUpdatedBy(i int) *FriendshipHistoryUpdate {
+	fhu.mutation.AddUpdatedBy(i)
 	return fhu
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (fhu *FriendshipHistoryUpdate) ClearUpdatedBy() *FriendshipHistoryUpdate {
 	fhu.mutation.ClearUpdatedBy()
-	return fhu
-}
-
-// SetOperation sets the "operation" field.
-func (fhu *FriendshipHistoryUpdate) SetOperation(et enthistory.OpType) *FriendshipHistoryUpdate {
-	fhu.mutation.SetOperation(et)
 	return fhu
 }
 
@@ -218,14 +225,17 @@ func (fhu *FriendshipHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 	if fhu.mutation.RefCleared() {
 		_spec.ClearField(friendshiphistory.FieldRef, field.TypeInt)
 	}
-	if value, ok := fhu.mutation.UpdatedBy(); ok {
-		_spec.SetField(friendshiphistory.FieldUpdatedBy, field.TypeString, value)
-	}
-	if fhu.mutation.UpdatedByCleared() {
-		_spec.ClearField(friendshiphistory.FieldUpdatedBy, field.TypeString)
-	}
 	if value, ok := fhu.mutation.Operation(); ok {
 		_spec.SetField(friendshiphistory.FieldOperation, field.TypeEnum, value)
+	}
+	if value, ok := fhu.mutation.UpdatedBy(); ok {
+		_spec.SetField(friendshiphistory.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if value, ok := fhu.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(friendshiphistory.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if fhu.mutation.UpdatedByCleared() {
+		_spec.ClearField(friendshiphistory.FieldUpdatedBy, field.TypeInt)
 	}
 	if value, ok := fhu.mutation.CreatedAt(); ok {
 		_spec.SetField(friendshiphistory.FieldCreatedAt, field.TypeTime, value)
@@ -298,29 +308,36 @@ func (fhuo *FriendshipHistoryUpdateOne) ClearRef() *FriendshipHistoryUpdateOne {
 	return fhuo
 }
 
+// SetOperation sets the "operation" field.
+func (fhuo *FriendshipHistoryUpdateOne) SetOperation(et enthistory.OpType) *FriendshipHistoryUpdateOne {
+	fhuo.mutation.SetOperation(et)
+	return fhuo
+}
+
 // SetUpdatedBy sets the "updated_by" field.
-func (fhuo *FriendshipHistoryUpdateOne) SetUpdatedBy(s string) *FriendshipHistoryUpdateOne {
-	fhuo.mutation.SetUpdatedBy(s)
+func (fhuo *FriendshipHistoryUpdateOne) SetUpdatedBy(i int) *FriendshipHistoryUpdateOne {
+	fhuo.mutation.ResetUpdatedBy()
+	fhuo.mutation.SetUpdatedBy(i)
 	return fhuo
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (fhuo *FriendshipHistoryUpdateOne) SetNillableUpdatedBy(s *string) *FriendshipHistoryUpdateOne {
-	if s != nil {
-		fhuo.SetUpdatedBy(*s)
+func (fhuo *FriendshipHistoryUpdateOne) SetNillableUpdatedBy(i *int) *FriendshipHistoryUpdateOne {
+	if i != nil {
+		fhuo.SetUpdatedBy(*i)
 	}
+	return fhuo
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (fhuo *FriendshipHistoryUpdateOne) AddUpdatedBy(i int) *FriendshipHistoryUpdateOne {
+	fhuo.mutation.AddUpdatedBy(i)
 	return fhuo
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (fhuo *FriendshipHistoryUpdateOne) ClearUpdatedBy() *FriendshipHistoryUpdateOne {
 	fhuo.mutation.ClearUpdatedBy()
-	return fhuo
-}
-
-// SetOperation sets the "operation" field.
-func (fhuo *FriendshipHistoryUpdateOne) SetOperation(et enthistory.OpType) *FriendshipHistoryUpdateOne {
-	fhuo.mutation.SetOperation(et)
 	return fhuo
 }
 
@@ -483,14 +500,17 @@ func (fhuo *FriendshipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Fri
 	if fhuo.mutation.RefCleared() {
 		_spec.ClearField(friendshiphistory.FieldRef, field.TypeInt)
 	}
-	if value, ok := fhuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(friendshiphistory.FieldUpdatedBy, field.TypeString, value)
-	}
-	if fhuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(friendshiphistory.FieldUpdatedBy, field.TypeString)
-	}
 	if value, ok := fhuo.mutation.Operation(); ok {
 		_spec.SetField(friendshiphistory.FieldOperation, field.TypeEnum, value)
+	}
+	if value, ok := fhuo.mutation.UpdatedBy(); ok {
+		_spec.SetField(friendshiphistory.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if value, ok := fhuo.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(friendshiphistory.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if fhuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(friendshiphistory.FieldUpdatedBy, field.TypeInt)
 	}
 	if value, ok := fhuo.mutation.CreatedAt(); ok {
 		_spec.SetField(friendshiphistory.FieldCreatedAt, field.TypeTime, value)

@@ -18,10 +18,10 @@ const (
 	FieldHistoryTime = "history_time"
 	// FieldRef holds the string denoting the ref field in the database.
 	FieldRef = "ref"
-	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
-	FieldUpdatedBy = "updated_by"
 	// FieldOperation holds the string denoting the operation field in the database.
 	FieldOperation = "operation"
+	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
+	FieldUpdatedBy = "updated_by"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -39,8 +39,8 @@ var Columns = []string{
 	FieldID,
 	FieldHistoryTime,
 	FieldRef,
-	FieldUpdatedBy,
 	FieldOperation,
+	FieldUpdatedBy,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 	FieldCharacterID,

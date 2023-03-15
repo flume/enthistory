@@ -34,7 +34,7 @@ func (CharacterHistory) Fields() []ent.Field {
 			UpdateDefault(time.Now),
 		field.Int("ref").
 			Optional(),
-		field.String("updated_by").
+		field.Int("updated_by").
 			Optional().
 			Nillable(),
 		field.Enum("operation").GoType(enthistory.OpType("")),

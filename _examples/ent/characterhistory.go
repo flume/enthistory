@@ -22,10 +22,10 @@ type CharacterHistory struct {
 	HistoryTime time.Time `json:"history_time,omitempty"`
 	// Ref holds the value of the "ref" field.
 	Ref int `json:"ref,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy *string `json:"updated_by,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation enthistory.OpType `json:"operation,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy *int `json:"updated_by,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -41,9 +41,9 @@ func (*CharacterHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case characterhistory.FieldID, characterhistory.FieldRef, characterhistory.FieldAge:
+		case characterhistory.FieldID, characterhistory.FieldRef, characterhistory.FieldUpdatedBy, characterhistory.FieldAge:
 			values[i] = new(sql.NullInt64)
-		case characterhistory.FieldUpdatedBy, characterhistory.FieldOperation, characterhistory.FieldName:
+		case characterhistory.FieldOperation, characterhistory.FieldName:
 			values[i] = new(sql.NullString)
 		case characterhistory.FieldHistoryTime, characterhistory.FieldCreatedAt, characterhistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -80,18 +80,18 @@ func (ch *CharacterHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ch.Ref = int(value.Int64)
 			}
-		case characterhistory.FieldUpdatedBy:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
-			} else if value.Valid {
-				ch.UpdatedBy = new(string)
-				*ch.UpdatedBy = value.String
-			}
 		case characterhistory.FieldOperation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value.Valid {
 				ch.Operation = enthistory.OpType(value.String)
+			}
+		case characterhistory.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				ch.UpdatedBy = new(int)
+				*ch.UpdatedBy = int(value.Int64)
 			}
 		case characterhistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -151,13 +151,13 @@ func (ch *CharacterHistory) String() string {
 	builder.WriteString("ref=")
 	builder.WriteString(fmt.Sprintf("%v", ch.Ref))
 	builder.WriteString(", ")
-	if v := ch.UpdatedBy; v != nil {
-		builder.WriteString("updated_by=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", ch.Operation))
+	builder.WriteString(", ")
+	if v := ch.UpdatedBy; v != nil {
+		builder.WriteString("updated_by=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(ch.CreatedAt.Format(time.ANSIC))

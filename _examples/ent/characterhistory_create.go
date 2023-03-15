@@ -50,23 +50,23 @@ func (chc *CharacterHistoryCreate) SetNillableRef(i *int) *CharacterHistoryCreat
 	return chc
 }
 
+// SetOperation sets the "operation" field.
+func (chc *CharacterHistoryCreate) SetOperation(et enthistory.OpType) *CharacterHistoryCreate {
+	chc.mutation.SetOperation(et)
+	return chc
+}
+
 // SetUpdatedBy sets the "updated_by" field.
-func (chc *CharacterHistoryCreate) SetUpdatedBy(s string) *CharacterHistoryCreate {
-	chc.mutation.SetUpdatedBy(s)
+func (chc *CharacterHistoryCreate) SetUpdatedBy(i int) *CharacterHistoryCreate {
+	chc.mutation.SetUpdatedBy(i)
 	return chc
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (chc *CharacterHistoryCreate) SetNillableUpdatedBy(s *string) *CharacterHistoryCreate {
-	if s != nil {
-		chc.SetUpdatedBy(*s)
+func (chc *CharacterHistoryCreate) SetNillableUpdatedBy(i *int) *CharacterHistoryCreate {
+	if i != nil {
+		chc.SetUpdatedBy(*i)
 	}
-	return chc
-}
-
-// SetOperation sets the "operation" field.
-func (chc *CharacterHistoryCreate) SetOperation(et enthistory.OpType) *CharacterHistoryCreate {
-	chc.mutation.SetOperation(et)
 	return chc
 }
 
@@ -223,13 +223,13 @@ func (chc *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cr
 		_spec.SetField(characterhistory.FieldRef, field.TypeInt, value)
 		_node.Ref = value
 	}
-	if value, ok := chc.mutation.UpdatedBy(); ok {
-		_spec.SetField(characterhistory.FieldUpdatedBy, field.TypeString, value)
-		_node.UpdatedBy = &value
-	}
 	if value, ok := chc.mutation.Operation(); ok {
 		_spec.SetField(characterhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
+	}
+	if value, ok := chc.mutation.UpdatedBy(); ok {
+		_spec.SetField(characterhistory.FieldUpdatedBy, field.TypeInt, value)
+		_node.UpdatedBy = &value
 	}
 	if value, ok := chc.mutation.CreatedAt(); ok {
 		_spec.SetField(characterhistory.FieldCreatedAt, field.TypeTime, value)
