@@ -17,7 +17,7 @@ func main() {
 		&gen.Config{},
 		entc.Extensions(
 			enthistory.NewHistoryExtension(
-				enthistory.WithUpdatedByKey("userId"),
+				enthistory.WithUpdatedBy("userId", enthistory.ValueTypeInt),
 			),
 		),
 	); err != nil {

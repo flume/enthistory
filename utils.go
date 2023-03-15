@@ -1,17 +1,50 @@
 package enthistory
 
 import (
+	"errors"
 	"fmt"
+	"html/template"
 	"os"
 	"regexp"
 	"strings"
+
+	"entgo.io/ent/schema/field"
 
 	"entgo.io/ent/entc/gen"
 	"entgo.io/ent/entc/load"
 )
 
+func extractUpdatedByKey(val any) string {
+	updatedBy, ok := val.(UpdatedBy)
+	if !ok {
+		return ""
+	}
+	return updatedBy.key
+}
+
+func extractUpdatedByValueType(val any) string {
+	updatedBy, ok := val.(UpdatedBy)
+	if !ok {
+		return ""
+	}
+
+	switch updatedBy.valueType {
+	case ValueTypeInt:
+		return "int"
+	case ValueTypeString:
+		return "string"
+	default:
+		return ""
+	}
+}
+
 func parseTemplate(name, path string) *gen.Template {
-	return gen.MustParse(gen.NewTemplate(name).ParseFS(_templates, path))
+	t := gen.NewTemplate(name)
+	t.Funcs(template.FuncMap{
+		"extractUpdatedByKey":       extractUpdatedByKey,
+		"extractUpdatedByValueType": extractUpdatedByValueType,
+	})
+	return gen.MustParse(t.ParseFS(_templates, path))
 }
 
 var matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
@@ -105,6 +138,16 @@ func loadHistorySchema() (*load.Schema, error) {
 		return nil, err
 	}
 	return historySchema, nil
+}
+
+func getUpdatedByField(updatedByValueType string) (*load.Field, error) {
+	if updatedByValueType == "String" {
+		return load.NewField(field.String("updated_by").Optional().Nillable().Descriptor())
+	}
+	if updatedByValueType == "Int" {
+		return load.NewField(field.Int("updated_by").Optional().Nillable().Descriptor())
+	}
+	return nil, errors.New("improper value type must be 'String' or 'Int'")
 }
 
 func mergeSchemaAndHistorySchema(historySchema, schema *load.Schema) string {
