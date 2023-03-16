@@ -176,6 +176,76 @@ func TestEntHistory(t *testing.T) {
 				assert.Equal(t, 3, len(character.History().AllX(ctx)))
 			},
 		},
+		{
+			name: "Can get earliest history",
+			runner: func(t *testing.T, client *ent.Client) {
+				ctx := context.Background()
+
+				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").Save(ctx)
+				assert.NoError(t, err)
+
+				iceking, err := simon.Update().SetName("Ice King").Save(ctx)
+				assert.NoError(t, err)
+
+				icekingHistory, err := iceking.History().Order(ent.Asc(characterhistory.FieldHistoryTime)).First(ctx)
+				assert.NoError(t, err)
+
+				// Get earliest history from func
+				icekingHistoryFromFunc, err := iceking.EarliestHistory(ctx)
+				assert.NoError(t, err)
+
+				assert.Equal(t, icekingHistory.ID, icekingHistoryFromFunc.ID)
+				assert.Equal(t, icekingHistory.HistoryTime, icekingHistoryFromFunc.HistoryTime)
+			},
+		},
+		{
+			name: "Can get latest history",
+			runner: func(t *testing.T, client *ent.Client) {
+				ctx := context.Background()
+
+				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").Save(ctx)
+				assert.NoError(t, err)
+
+				iceking, err := simon.Update().SetName("Ice King").Save(ctx)
+				assert.NoError(t, err)
+
+				icekingHistory, err := iceking.History().Order(ent.Desc(characterhistory.FieldHistoryTime)).First(ctx)
+				assert.NoError(t, err)
+
+				// Get earliest history from func
+				icekingHistoryFromFunc, err := iceking.LatestHistory(ctx)
+				assert.NoError(t, err)
+
+				assert.Equal(t, icekingHistory.ID, icekingHistoryFromFunc.ID)
+				assert.Equal(t, icekingHistory.HistoryTime, icekingHistoryFromFunc.HistoryTime)
+			},
+		},
+		{
+			name: "Can get history from a point in time",
+			runner: func(t *testing.T, client *ent.Client) {
+				ctx := context.Background()
+
+				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").Save(ctx)
+				assert.NoError(t, err)
+
+				firstHistory, err := simon.LatestHistory(ctx)
+				assert.NoError(t, err)
+
+				simon, err = simon.Update().SetName("Ice King").Save(ctx)
+				assert.NoError(t, err)
+
+				secondHistory, err := simon.LatestHistory(ctx)
+				assert.NoError(t, err)
+
+				at, err := simon.HistoryAt(ctx, firstHistory.HistoryTime)
+				assert.NoError(t, err)
+				assert.Equal(t, firstHistory.ID, at.ID)
+
+				at, err = simon.HistoryAt(ctx, secondHistory.HistoryTime)
+				assert.NoError(t, err)
+				assert.Equal(t, secondHistory.ID, at.ID)
+			},
+		},
 	}
 	for _, tt := range tests {
 		opts := []enttest.Option{

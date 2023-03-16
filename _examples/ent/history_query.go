@@ -5,6 +5,7 @@ package ent
 
 import (
 	"context"
+	"time"
 
 	"github.com/flume/enthistory/_examples/ent/characterhistory"
 	"github.com/flume/enthistory/_examples/ent/friendshiphistory"
@@ -26,6 +27,33 @@ func (c *Character) History() *CharacterHistoryQuery {
 	return historyClient.Query().Where(characterhistory.Ref(c.ID))
 }
 
+func (c *Character) EarliestHistory(ctx context.Context) (*CharacterHistory, error) {
+	historyClient := NewCharacterHistoryClient(c.config)
+	return historyClient.Query().
+		Where(characterhistory.Ref(c.ID)).
+		Order(Asc(characterhistory.FieldHistoryTime)).
+		First(ctx)
+}
+
+func (c *Character) LatestHistory(ctx context.Context) (*CharacterHistory, error) {
+	historyClient := NewCharacterHistoryClient(c.config)
+	return historyClient.Query().
+		Where(characterhistory.Ref(c.ID)).
+		Order(Desc(characterhistory.FieldHistoryTime)).
+		First(ctx)
+}
+
+func (c *Character) HistoryAt(ctx context.Context, time time.Time) (*CharacterHistory, error) {
+	historyClient := NewCharacterHistoryClient(c.config)
+	return historyClient.Query().
+		Where(
+			characterhistory.Ref(c.ID),
+			characterhistory.HistoryTimeLTE(time),
+		).
+		Order(Desc(characterhistory.FieldHistoryTime)).
+		First(ctx)
+}
+
 func (fh *FriendshipHistory) Restore(ctx context.Context) (*Friendship, error) {
 	client := NewFriendshipClient(fh.config)
 	return client.
@@ -40,4 +68,31 @@ func (fh *FriendshipHistory) Restore(ctx context.Context) (*Friendship, error) {
 func (f *Friendship) History() *FriendshipHistoryQuery {
 	historyClient := NewFriendshipHistoryClient(f.config)
 	return historyClient.Query().Where(friendshiphistory.Ref(f.ID))
+}
+
+func (f *Friendship) EarliestHistory(ctx context.Context) (*FriendshipHistory, error) {
+	historyClient := NewFriendshipHistoryClient(f.config)
+	return historyClient.Query().
+		Where(friendshiphistory.Ref(f.ID)).
+		Order(Asc(friendshiphistory.FieldHistoryTime)).
+		First(ctx)
+}
+
+func (f *Friendship) LatestHistory(ctx context.Context) (*FriendshipHistory, error) {
+	historyClient := NewFriendshipHistoryClient(f.config)
+	return historyClient.Query().
+		Where(friendshiphistory.Ref(f.ID)).
+		Order(Desc(friendshiphistory.FieldHistoryTime)).
+		First(ctx)
+}
+
+func (f *Friendship) HistoryAt(ctx context.Context, time time.Time) (*FriendshipHistory, error) {
+	historyClient := NewFriendshipHistoryClient(f.config)
+	return historyClient.Query().
+		Where(
+			friendshiphistory.Ref(f.ID),
+			friendshiphistory.HistoryTimeLTE(time),
+		).
+		Order(Desc(friendshiphistory.FieldHistoryTime)).
+		First(ctx)
 }

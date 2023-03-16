@@ -52,6 +52,7 @@ If you manage migrations on manually, you will want to create/generate new migra
 
 ## Usage
 
+### Querying History
 Your newly generated code creates the history tables for you for every single table you have. It also hooks up the hooks to the ent client so that you can start tracking history right away.
 You can query the history tables directly, just like any other ent table, or you can query the history of a specific row using the `History()` method.
 
@@ -77,6 +78,23 @@ fmt.Println(len(characterHistory)) // 2
 client.Character.DeleteOne(character)
 characterHistory, _ = character.History().All(ctx)
 fmt.Println(len(characterHistory)) // 3
+```
+
+A couple common history queries include the earliest history, the latest history, and the history of a row at a given point in time.
+Since these queries come up often, we added in functions for them directly.
+
+```go
+character, _ := client.Character.Query().First(ctx)
+
+// Get the earliest history for this character (i.e. when the character was created)
+earliest, _ := character.EasliestHistory(ctx)
+
+// Get the latest history for this character (i.e. the current state of the actual character)
+latest, _ := character.LatestHistory(ctx)
+
+// Get the history for this character as it was at a given point in time 
+// (i.e. the state of the actual character at the given point in time)
+historyAt, _ := character.HistoryAt(ctx, time.Now())
 ```
 
 ### Restoring History
