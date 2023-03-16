@@ -10,6 +10,12 @@ help:
 fmt:
 	goimports -local github.com/flume -w ./
 
+.PHONY: lint
+# lint:
+#    lint the code
+lint:
+	golangci-lint run
+
 .PHONY: generate
 # generate:
 #    Generate the examples code
