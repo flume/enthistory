@@ -95,6 +95,22 @@ enthistory.WithUpdatedBy("userId", enthistory.ValueTypeInt)
 enthistory.WithUpdatedBy("userId", enthistory.ValueTypeString)
 ```
 
+### Excluding History on a Schema
+`enthistory` has an always on philosophy but in instances you would like to not generate the history tables for a schema
+you can apply annotations to the schema like so:
+
+```go
+func (Character) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		enthistory.Annotations{
+			// Tells enthistory to exclude history tables for this schema
+			Exclude: true,
+		},
+	}
+}
+```
+
+
 ## Caveats
 
 A few caveats to keep in mind when using enthistory

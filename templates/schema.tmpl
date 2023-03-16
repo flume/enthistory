@@ -26,6 +26,10 @@ func ({{ $name }}) Annotations() []schema.Annotation {
 		entsql.Annotation{
 			Table: "{{ .TableName }}",
 		},
+        enthistory.Annotations{
+            IsHistory: true,
+            Exclude: true,
+        },
 	}
 }
 

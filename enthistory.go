@@ -4,7 +4,6 @@ import (
 	"embed"
 	"html/template"
 	"os"
-	"strings"
 
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
@@ -99,8 +98,12 @@ func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Genera
 
 		var schemas []*load.Schema
 		for _, schema := range g.Schemas {
-			// Old history schemas should be skipped
-			if strings.HasSuffix(schema.Name, "History") {
+			annotations := getHistoryAnnotations(schema)
+
+			if annotations.Exclude {
+				if !annotations.IsHistory {
+					schemas = append(schemas, schema)
+				}
 				continue
 			}
 

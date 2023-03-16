@@ -23,6 +23,10 @@ func (CharacterHistory) Annotations() []schema.Annotation {
 		entsql.Annotation{
 			Table: "character_history",
 		},
+		enthistory.Annotations{
+			IsHistory: true,
+			Exclude:   true,
+		},
 	}
 }
 

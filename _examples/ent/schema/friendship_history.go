@@ -23,6 +23,10 @@ func (FriendshipHistory) Annotations() []schema.Annotation {
 		entsql.Annotation{
 			Table: "friendship_history",
 		},
+		enthistory.Annotations{
+			IsHistory: true,
+			Exclude:   true,
+		},
 	}
 }
 

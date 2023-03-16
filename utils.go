@@ -150,6 +150,19 @@ func getUpdatedByField(updatedByValueType string) (*load.Field, error) {
 	return nil, errors.New("improper value type must be 'String' or 'Int'")
 }
 
+func getHistoryAnnotations(schema *load.Schema) Annotations {
+	annotations := Annotations{}
+	if historyAnnotations, ok := schema.Annotations["History"].(map[string]any); ok {
+		if exclude, ok := historyAnnotations["exclude"].(bool); ok {
+			annotations.Exclude = exclude
+		}
+		if isHistory, ok := historyAnnotations["isHistory"].(bool); ok {
+			annotations.IsHistory = isHistory
+		}
+	}
+	return annotations
+}
+
 func mergeSchemaAndHistorySchema(historySchema, schema *load.Schema) string {
 	historySchema.Name = fmt.Sprintf("%vHistory", schema.Name)
 
