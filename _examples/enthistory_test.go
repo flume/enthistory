@@ -5,6 +5,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/flume/enthistory/_examples/ent/characterhistory"
+
 	"github.com/flume/enthistory/_examples/ent"
 	"github.com/flume/enthistory/_examples/ent/enttest"
 	"github.com/flume/enthistory/_examples/ent/migrate"
@@ -144,6 +146,34 @@ func TestEntHistory(t *testing.T) {
 
 				history := finn.History().FirstX(ctx)
 				assert.Empty(t, history.UpdatedBy)
+			},
+		},
+		{
+			name: "Can restore history back to the original row",
+			runner: func(t *testing.T, client *ent.Client) {
+				ctx := context.Background()
+
+				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").Save(ctx)
+				assert.NoError(t, err)
+
+				iceking, err := simon.Update().SetName("Ice King").Save(ctx)
+				assert.NoError(t, err)
+
+				// Get first history value
+				icekingHistory, err := iceking.History().Order(ent.Asc(characterhistory.FieldHistoryTime)).First(ctx)
+				assert.NoError(t, err)
+
+				_, err = icekingHistory.Restore(ctx)
+				assert.NoError(t, err)
+
+				character, err := client.Character.Get(ctx, iceking.ID)
+				assert.NoError(t, err)
+
+				assert.Equal(t, simon.ID, character.ID)
+				assert.Equal(t, simon.Name, character.Name)
+
+				// assert the restoration is tracked in the history
+				assert.Equal(t, 3, len(character.History().AllX(ctx)))
 			},
 		},
 	}

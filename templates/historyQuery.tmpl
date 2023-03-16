@@ -5,6 +5,8 @@
 	{{- $pkg := base $.Config.Package }}
 	{{- template "header" $ }}
 import (
+    "context"
+
     {{- range $n := $.Nodes }}
         {{- $name := $n.Name }}
         {{- $history := hasSuffix $name "History" }}
@@ -21,12 +23,21 @@ import (
 	    {{ if $history }}
 	    {{ else }}
             {{ range $h := $.Nodes }}
-                {{ $sameNodeType := hasPrefix $h.Name (printf "%sHistory" $name) }}
+                {{ $sameNodeType := hasPrefix $h.Name (printf "%sHistory" $n.Name) }}
                 {{ if $sameNodeType }}
-                    {{ $client := print $h.Name "Client" }}
-                    func ({{ $n.Receiver }} *{{ $name }}) History() *{{ $h.QueryName }}  {
-                        history := (&{{ $client }}{config: {{ $n.Receiver }}.config})
-                        return history.Query().Where({{ lower $h.Name }}.Ref({{ $n.Receiver }}.ID))
+                    func ({{ $h.Receiver }} *{{ $h.Name }}) Restore(ctx context.Context) (*{{ $n.Name }}, error) {
+                        client := New{{ $n.Name }}Client({{ $h.Receiver }}.config)
+                        return client.
+                            UpdateOneID({{ $h.Receiver }}.Ref).
+                        {{ range $f := $n.Fields }}
+                            Set{{ if $f.Nillable }}Nillable{{ end }}{{ $f.StructField }}({{ $h.Receiver }}.{{ pascal $f.Name }}).
+                        {{ end }}
+                            Save(ctx)
+                    }
+
+                    func ({{ $n.Receiver }} *{{ $n.Name }}) History() *{{ $h.QueryName }}  {
+                        historyClient := New{{ $h.Name }}Client({{ $n.Receiver }}.config)
+                        return historyClient.Query().Where({{ lower $h.Name }}.Ref({{ $n.Receiver }}.ID))
                     }
                 {{ end }}
             {{ end }}

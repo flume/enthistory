@@ -79,6 +79,28 @@ characterHistory, _ = character.History().All(ctx)
 fmt.Println(len(characterHistory)) // 3
 ```
 
+### Restoring History
+In the event you want to rollback a row in the database to a particular history row, you can use the `.Restore()` function
+to do accomplish that.
+
+```go
+// Let's say we create this character
+simon, _ := client.Character.Create().SetName("Simon Petrikov").Save(ctx)
+// And we update the character's name
+iceking, _ := simon.Update().SetName("Ice King").Save(ctx)
+// We can find the exact point in history we want to restore, in this case the oldest history row
+icekingHistory, _ := iceking.History().Order(ent.Asc(characterhistory.FieldHistoryTime)).First(ctx)
+// And we can restore value back to the original table
+restored, _ = icekingHistory.Restore(ctx)
+
+fmt.Println(simon.ID == restored.ID) // true
+fmt.Println(simon.Name == restored.Name) // true
+// The restoration is also tracked in history
+simonHistory, _ := restored.History().All(ctx)
+fmt.Println(len(simonHistory)) // 3
+```
+
+
 ## Config Options
 
 ### Updated By

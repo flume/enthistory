@@ -4,16 +4,40 @@
 package ent
 
 import (
+	"context"
+
 	"github.com/flume/enthistory/_examples/ent/characterhistory"
 	"github.com/flume/enthistory/_examples/ent/friendshiphistory"
 )
 
+func (ch *CharacterHistory) Restore(ctx context.Context) (*Character, error) {
+	client := NewCharacterClient(ch.config)
+	return client.
+		UpdateOneID(ch.Ref).
+		SetCreatedAt(ch.CreatedAt).
+		SetUpdatedAt(ch.UpdatedAt).
+		SetAge(ch.Age).
+		SetName(ch.Name).
+		Save(ctx)
+}
+
 func (c *Character) History() *CharacterHistoryQuery {
-	history := (&CharacterHistoryClient{config: c.config})
-	return history.Query().Where(characterhistory.Ref(c.ID))
+	historyClient := NewCharacterHistoryClient(c.config)
+	return historyClient.Query().Where(characterhistory.Ref(c.ID))
+}
+
+func (fh *FriendshipHistory) Restore(ctx context.Context) (*Friendship, error) {
+	client := NewFriendshipClient(fh.config)
+	return client.
+		UpdateOneID(fh.Ref).
+		SetCreatedAt(fh.CreatedAt).
+		SetUpdatedAt(fh.UpdatedAt).
+		SetCharacterID(fh.CharacterID).
+		SetFriendID(fh.FriendID).
+		Save(ctx)
 }
 
 func (f *Friendship) History() *FriendshipHistoryQuery {
-	history := (&FriendshipHistoryClient{config: f.config})
-	return history.Query().Where(friendshiphistory.Ref(f.ID))
+	historyClient := NewFriendshipHistoryClient(f.config)
+	return historyClient.Query().Where(friendshiphistory.Ref(f.ID))
 }
