@@ -2,6 +2,7 @@ package enthistory
 
 import (
 	"embed"
+	"fmt"
 	"html/template"
 	"os"
 
@@ -90,6 +91,67 @@ var (
 	schemaTemplate = template.Must(template.ParseFS(_templates, "templates/schema.tmpl"))
 )
 
+func (h *HistoryExtension) generateHistorySchema(schema *load.Schema) (*load.Schema, error) {
+	templateInfo := templateInfo{
+		TableName:         fmt.Sprintf("%v_history", getSchemaTableName(schema)),
+		OriginalTableName: schema.Name,
+	}
+
+	if h.config != nil {
+		if h.config.UpdatedBy != nil {
+			valueType := h.config.UpdatedBy.valueType
+			if valueType == ValueTypeInt {
+				templateInfo.UpdatedByValueType = "Int"
+			} else if valueType == ValueTypeString {
+				templateInfo.UpdatedByValueType = "String"
+			}
+			templateInfo.WithUpdatedBy = true
+		}
+	}
+
+	// Load new base history schema
+	historySchema, err := loadHistorySchema()
+	if err != nil {
+		return nil, err
+	}
+
+	updatedByField, err := getUpdatedByField(templateInfo.UpdatedByValueType)
+	if err != nil {
+		return nil, err
+	}
+
+	if updatedByField != nil {
+		historySchema.Fields = append(historySchema.Fields, updatedByField)
+	}
+
+	// merge the original schema onto the history schema
+	historySchema.Name = fmt.Sprintf("%vHistory", schema.Name)
+	historySchema.Fields = append(historySchema.Fields, createHistoryFields(schema.Fields)...)
+	historySchema.Annotations = map[string]any{
+		"EntSQL": map[string]any{
+			"table": templateInfo.TableName,
+		},
+	}
+
+	templateInfo.Schema = historySchema
+	// Get path to write new history schema file
+	path, err := getHistorySchemaPath(schema)
+	if err != nil {
+		return nil, err
+	}
+	// Create history schema file
+	create, err := os.Create(path)
+	if err != nil {
+		return nil, err
+	}
+	defer create.Close()
+	// execute schemaTemplate at the history schema path
+	if err = schemaTemplate.Execute(create, templateInfo); err != nil {
+		return nil, err
+	}
+	return historySchema, nil
+}
+
 func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Generator {
 	return gen.GenerateFunc(func(g *gen.Graph) error {
 		err := removeOldGenerated(g.Schemas)
@@ -108,59 +170,8 @@ func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Genera
 				continue
 			}
 
-			updatedByValueType := ""
-			withUpdatedBy := false
-			if h.config != nil {
-				if h.config.UpdatedBy != nil {
-					valueType := h.config.UpdatedBy.valueType
-					if valueType == ValueTypeInt {
-						updatedByValueType = "Int"
-					} else if valueType == ValueTypeString {
-						updatedByValueType = "String"
-					}
-					withUpdatedBy = true
-				}
-			}
-
-			// Load new base history schema
-			historySchema, err := loadHistorySchema()
+			historySchema, err := h.generateHistorySchema(schema)
 			if err != nil {
-				return err
-			}
-
-			updatedByField, err := getUpdatedByField(updatedByValueType)
-			if err != nil {
-				return err
-			}
-
-			if updatedByField != nil {
-				historySchema.Fields = append(historySchema.Fields, updatedByField)
-			}
-
-			// merge the original schema onto the history schema
-			tableName := mergeSchemaAndHistorySchema(historySchema, schema)
-
-			// Get path to write new history schema file
-			path, err := getHistorySchemaPath(schema)
-			if err != nil {
-				return err
-			}
-			// Create history schema file
-			create, err := os.Create(path)
-			if err != nil {
-				return err
-			}
-			defer create.Close()
-
-			templateInfo := templateInfo{
-				Schema:             historySchema,
-				TableName:          tableName,
-				OriginalTableName:  schema.Name,
-				WithUpdatedBy:      withUpdatedBy,
-				UpdatedByValueType: updatedByValueType,
-			}
-			// execute schemaTemplate at the history schema path
-			if err = schemaTemplate.Execute(create, templateInfo); err != nil {
 				return err
 			}
 

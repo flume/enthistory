@@ -2,54 +2,19 @@ package enthistory
 
 import (
 	"fmt"
-	"html/template"
 	"os"
 	"regexp"
 	"strings"
 
 	"entgo.io/ent/schema/field"
 
-	"entgo.io/ent/entc/gen"
 	"entgo.io/ent/entc/load"
 )
-
-func extractUpdatedByKey(val any) string {
-	updatedBy, ok := val.(*UpdatedBy)
-	if !ok || updatedBy == nil {
-		return ""
-	}
-	return updatedBy.key
-}
-
-func extractUpdatedByValueType(val any) string {
-	updatedBy, ok := val.(*UpdatedBy)
-	if !ok || updatedBy == nil {
-		return ""
-	}
-
-	switch updatedBy.valueType {
-	case ValueTypeInt:
-		return "int"
-	case ValueTypeString:
-		return "string"
-	default:
-		return ""
-	}
-}
-
-func parseTemplate(name, path string) *gen.Template {
-	t := gen.NewTemplate(name)
-	t.Funcs(template.FuncMap{
-		"extractUpdatedByKey":       extractUpdatedByKey,
-		"extractUpdatedByValueType": extractUpdatedByValueType,
-	})
-	return gen.MustParse(t.ParseFS(_templates, path))
-}
 
 var matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
 var matchAllCap = regexp.MustCompile("([a-z0-9])([A-Z])")
 
-func ToSnakeCase(str string) string {
+func toSnakeCase(str string) string {
 	snake := matchFirstCap.ReplaceAllString(str, "${1}_${2}")
 	snake = matchAllCap.ReplaceAllString(snake, "${1}_${2}")
 	return strings.ToLower(snake)
@@ -63,10 +28,10 @@ func copyRef[T any](ref *T) *T {
 	return &val
 }
 
-func newFieldsFromField(fields []*load.Field) []*load.Field {
-	newFields := make([]*load.Field, len(fields))
+func createHistoryFields(schemaFields []*load.Field) []*load.Field {
+	historyFields := make([]*load.Field, len(schemaFields))
 	i := 4
-	for j, field := range fields {
+	for j, field := range schemaFields {
 		newField := load.Field{
 			Name:          field.Name,
 			Info:          copyRef(field.Info),
@@ -97,9 +62,9 @@ func newFieldsFromField(fields []*load.Field) []*load.Field {
 			}
 			i += 1
 		}
-		newFields[j] = &newField
+		historyFields[j] = &newField
 	}
-	return newFields
+	return historyFields
 }
 
 func getHistorySchemaPath(schema *load.Schema) (string, error) {
@@ -162,24 +127,11 @@ func getHistoryAnnotations(schema *load.Schema) Annotations {
 	return annotations
 }
 
-func mergeSchemaAndHistorySchema(historySchema, schema *load.Schema) string {
-	historySchema.Name = fmt.Sprintf("%vHistory", schema.Name)
-
-	historySchema.Fields = append(historySchema.Fields, newFieldsFromField(schema.Fields)...)
-
-	tableName := fmt.Sprintf("%v", ToSnakeCase(historySchema.Name))
-
+func getSchemaTableName(schema *load.Schema) string {
 	if entSqlMap, ok := schema.Annotations["EntSQL"].(map[string]any); ok {
 		if table, ok := entSqlMap["table"].(string); ok {
-			tableName = fmt.Sprintf("%v_history", table)
+			return table
 		}
 	}
-
-	historySchema.Annotations = map[string]any{
-		"EntSQL": map[string]any{
-			"table": tableName,
-		},
-	}
-
-	return tableName
+	return toSnakeCase(schema.Name)
 }
