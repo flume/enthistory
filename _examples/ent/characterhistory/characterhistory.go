@@ -60,8 +60,6 @@ func ValidColumn(column string) bool {
 var (
 	// DefaultHistoryTime holds the default value on creation for the "history_time" field.
 	DefaultHistoryTime func() time.Time
-	// UpdateDefaultHistoryTime holds the default value on update for the "history_time" field.
-	UpdateDefaultHistoryTime func() time.Time
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.

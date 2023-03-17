@@ -30,20 +30,6 @@ func (fu *FriendshipUpdate) Where(ps ...predicate.Friendship) *FriendshipUpdate 
 	return fu
 }
 
-// SetCreatedAt sets the "created_at" field.
-func (fu *FriendshipUpdate) SetCreatedAt(t time.Time) *FriendshipUpdate {
-	fu.mutation.SetCreatedAt(t)
-	return fu
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (fu *FriendshipUpdate) SetNillableCreatedAt(t *time.Time) *FriendshipUpdate {
-	if t != nil {
-		fu.SetCreatedAt(*t)
-	}
-	return fu
-}
-
 // SetUpdatedAt sets the "updated_at" field.
 func (fu *FriendshipUpdate) SetUpdatedAt(t time.Time) *FriendshipUpdate {
 	fu.mutation.SetUpdatedAt(t)
@@ -147,9 +133,6 @@ func (fu *FriendshipUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := fu.mutation.CreatedAt(); ok {
-		_spec.SetField(friendship.FieldCreatedAt, field.TypeTime, value)
-	}
 	if value, ok := fu.mutation.UpdatedAt(); ok {
 		_spec.SetField(friendship.FieldUpdatedAt, field.TypeTime, value)
 	}
@@ -241,20 +224,6 @@ type FriendshipUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *FriendshipMutation
-}
-
-// SetCreatedAt sets the "created_at" field.
-func (fuo *FriendshipUpdateOne) SetCreatedAt(t time.Time) *FriendshipUpdateOne {
-	fuo.mutation.SetCreatedAt(t)
-	return fuo
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (fuo *FriendshipUpdateOne) SetNillableCreatedAt(t *time.Time) *FriendshipUpdateOne {
-	if t != nil {
-		fuo.SetCreatedAt(*t)
-	}
-	return fuo
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -389,9 +358,6 @@ func (fuo *FriendshipUpdateOne) sqlSave(ctx context.Context) (_node *Friendship,
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := fuo.mutation.CreatedAt(); ok {
-		_spec.SetField(friendship.FieldCreatedAt, field.TypeTime, value)
 	}
 	if value, ok := fuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(friendship.FieldUpdatedAt, field.TypeTime, value)

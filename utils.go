@@ -1,7 +1,6 @@
 package enthistory
 
 import (
-	"errors"
 	"fmt"
 	"html/template"
 	"os"
@@ -15,16 +14,16 @@ import (
 )
 
 func extractUpdatedByKey(val any) string {
-	updatedBy, ok := val.(UpdatedBy)
-	if !ok {
+	updatedBy, ok := val.(*UpdatedBy)
+	if !ok || updatedBy == nil {
 		return ""
 	}
 	return updatedBy.key
 }
 
 func extractUpdatedByValueType(val any) string {
-	updatedBy, ok := val.(UpdatedBy)
-	if !ok {
+	updatedBy, ok := val.(*UpdatedBy)
+	if !ok || updatedBy == nil {
 		return ""
 	}
 
@@ -142,12 +141,12 @@ func loadHistorySchema() (*load.Schema, error) {
 
 func getUpdatedByField(updatedByValueType string) (*load.Field, error) {
 	if updatedByValueType == "String" {
-		return load.NewField(field.String("updated_by").Optional().Nillable().Descriptor())
+		return load.NewField(field.String("updated_by").Optional().Nillable().Immutable().Descriptor())
 	}
 	if updatedByValueType == "Int" {
-		return load.NewField(field.Int("updated_by").Optional().Nillable().Descriptor())
+		return load.NewField(field.Int("updated_by").Optional().Nillable().Immutable().Descriptor())
 	}
-	return nil, errors.New("improper value type must be 'String' or 'Int'")
+	return nil, nil
 }
 
 func getHistoryAnnotations(schema *load.Schema) Annotations {

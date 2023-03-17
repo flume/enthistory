@@ -30,20 +30,6 @@ func (cu *CharacterUpdate) Where(ps ...predicate.Character) *CharacterUpdate {
 	return cu
 }
 
-// SetCreatedAt sets the "created_at" field.
-func (cu *CharacterUpdate) SetCreatedAt(t time.Time) *CharacterUpdate {
-	cu.mutation.SetCreatedAt(t)
-	return cu
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (cu *CharacterUpdate) SetNillableCreatedAt(t *time.Time) *CharacterUpdate {
-	if t != nil {
-		cu.SetCreatedAt(*t)
-	}
-	return cu
-}
-
 // SetUpdatedAt sets the "updated_at" field.
 func (cu *CharacterUpdate) SetUpdatedAt(t time.Time) *CharacterUpdate {
 	cu.mutation.SetUpdatedAt(t)
@@ -203,9 +189,6 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := cu.mutation.CreatedAt(); ok {
-		_spec.SetField(character.FieldCreatedAt, field.TypeTime, value)
-	}
 	if value, ok := cu.mutation.UpdatedAt(); ok {
 		_spec.SetField(character.FieldUpdatedAt, field.TypeTime, value)
 	}
@@ -356,20 +339,6 @@ type CharacterUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *CharacterMutation
-}
-
-// SetCreatedAt sets the "created_at" field.
-func (cuo *CharacterUpdateOne) SetCreatedAt(t time.Time) *CharacterUpdateOne {
-	cuo.mutation.SetCreatedAt(t)
-	return cuo
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (cuo *CharacterUpdateOne) SetNillableCreatedAt(t *time.Time) *CharacterUpdateOne {
-	if t != nil {
-		cuo.SetCreatedAt(*t)
-	}
-	return cuo
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -560,9 +529,6 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := cuo.mutation.CreatedAt(); ok {
-		_spec.SetField(character.FieldCreatedAt, field.TypeTime, value)
 	}
 	if value, ok := cuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(character.FieldUpdatedAt, field.TypeTime, value)

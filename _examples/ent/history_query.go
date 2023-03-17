@@ -15,7 +15,6 @@ func (ch *CharacterHistory) Restore(ctx context.Context) (*Character, error) {
 	client := NewCharacterClient(ch.config)
 	return client.
 		UpdateOneID(ch.Ref).
-		SetCreatedAt(ch.CreatedAt).
 		SetUpdatedAt(ch.UpdatedAt).
 		SetAge(ch.Age).
 		SetName(ch.Name).
@@ -58,7 +57,6 @@ func (fh *FriendshipHistory) Restore(ctx context.Context) (*Friendship, error) {
 	client := NewFriendshipClient(fh.config)
 	return client.
 		UpdateOneID(fh.Ref).
-		SetCreatedAt(fh.CreatedAt).
 		SetUpdatedAt(fh.UpdatedAt).
 		SetCharacterID(fh.CharacterID).
 		SetFriendID(fh.FriendID).

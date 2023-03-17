@@ -30,9 +30,11 @@ import (
                         client := New{{ $n.Name }}Client({{ $h.Receiver }}.config)
                         return client.
                             UpdateOneID({{ $h.Receiver }}.Ref).
-                        {{ range $f := $n.Fields }}
+                        {{- range $f := $n.Fields }}
+                        {{- if not $f.Immutable }}
                             Set{{ if $f.Nillable }}Nillable{{ end }}{{ $f.StructField }}({{ $h.Receiver }}.{{ pascal $f.Name }}).
-                        {{ end }}
+                        {{- end }}
+                        {{- end }}
                             Save(ctx)
                     }
 

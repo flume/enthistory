@@ -21,7 +21,7 @@ type UpdatedBy struct {
 }
 
 type Config struct {
-	UpdatedBy UpdatedBy
+	UpdatedBy *UpdatedBy
 }
 
 func (c Config) Name() string {
@@ -40,7 +40,7 @@ type ExtensionOption = func(*HistoryExtension)
 // usually done via a middleware to track which users are making which changes
 func WithUpdatedBy(key string, valueType ValueType) ExtensionOption {
 	return func(ex *HistoryExtension) {
-		ex.config.UpdatedBy = UpdatedBy{
+		ex.config.UpdatedBy = &UpdatedBy{
 			key:       key,
 			valueType: valueType,
 		}
@@ -61,6 +61,7 @@ type templateInfo struct {
 	Schema             *load.Schema
 	TableName          string
 	OriginalTableName  string
+	WithUpdatedBy      bool
 	UpdatedByValueType string
 }
 
@@ -107,10 +108,17 @@ func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Genera
 				continue
 			}
 
-			updatedByValueType := "String"
+			updatedByValueType := ""
+			withUpdatedBy := false
 			if h.config != nil {
-				if h.config.UpdatedBy.valueType == ValueTypeInt {
-					updatedByValueType = "Int"
+				if h.config.UpdatedBy != nil {
+					valueType := h.config.UpdatedBy.valueType
+					if valueType == ValueTypeInt {
+						updatedByValueType = "Int"
+					} else if valueType == ValueTypeString {
+						updatedByValueType = "String"
+					}
+					withUpdatedBy = true
 				}
 			}
 
@@ -125,7 +133,9 @@ func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Genera
 				return err
 			}
 
-			historySchema.Fields = append(historySchema.Fields, updatedByField)
+			if updatedByField != nil {
+				historySchema.Fields = append(historySchema.Fields, updatedByField)
+			}
 
 			// merge the original schema onto the history schema
 			tableName := mergeSchemaAndHistorySchema(historySchema, schema)
@@ -146,6 +156,7 @@ func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Genera
 				Schema:             historySchema,
 				TableName:          tableName,
 				OriginalTableName:  schema.Name,
+				WithUpdatedBy:      withUpdatedBy,
 				UpdatedByValueType: updatedByValueType,
 			}
 			// execute schemaTemplate at the history schema path

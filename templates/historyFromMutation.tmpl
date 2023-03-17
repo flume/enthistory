@@ -182,9 +182,9 @@
                             SetOperation(EntOpToHistoryOp(m.Op())).
                             SetHistoryTime(time.Now()).
                             SetRef(id).
-                        {{ range $f := $n.Fields }}
+                        {{- range $f := $n.Fields }}
                             Set{{ if $f.Nillable }}Nillable{{ end }}{{ $f.StructField }}({{ camel $name }}.{{ pascal $f.Name }}).
-                        {{ end }}
+                        {{- end }}
                             Save(ctx)
                         if err != nil {
                             rollback(tx, err)

@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 
-	"github.com/flume/enthistory"
 	"github.com/flume/enthistory/_examples/ent/characterhistory"
 	"github.com/flume/enthistory/_examples/ent/predicate"
 )
@@ -27,86 +26,6 @@ type CharacterHistoryUpdate struct {
 // Where appends a list predicates to the CharacterHistoryUpdate builder.
 func (chu *CharacterHistoryUpdate) Where(ps ...predicate.CharacterHistory) *CharacterHistoryUpdate {
 	chu.mutation.Where(ps...)
-	return chu
-}
-
-// SetHistoryTime sets the "history_time" field.
-func (chu *CharacterHistoryUpdate) SetHistoryTime(t time.Time) *CharacterHistoryUpdate {
-	chu.mutation.SetHistoryTime(t)
-	return chu
-}
-
-// SetRef sets the "ref" field.
-func (chu *CharacterHistoryUpdate) SetRef(i int) *CharacterHistoryUpdate {
-	chu.mutation.ResetRef()
-	chu.mutation.SetRef(i)
-	return chu
-}
-
-// SetNillableRef sets the "ref" field if the given value is not nil.
-func (chu *CharacterHistoryUpdate) SetNillableRef(i *int) *CharacterHistoryUpdate {
-	if i != nil {
-		chu.SetRef(*i)
-	}
-	return chu
-}
-
-// AddRef adds i to the "ref" field.
-func (chu *CharacterHistoryUpdate) AddRef(i int) *CharacterHistoryUpdate {
-	chu.mutation.AddRef(i)
-	return chu
-}
-
-// ClearRef clears the value of the "ref" field.
-func (chu *CharacterHistoryUpdate) ClearRef() *CharacterHistoryUpdate {
-	chu.mutation.ClearRef()
-	return chu
-}
-
-// SetOperation sets the "operation" field.
-func (chu *CharacterHistoryUpdate) SetOperation(et enthistory.OpType) *CharacterHistoryUpdate {
-	chu.mutation.SetOperation(et)
-	return chu
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (chu *CharacterHistoryUpdate) SetUpdatedBy(i int) *CharacterHistoryUpdate {
-	chu.mutation.ResetUpdatedBy()
-	chu.mutation.SetUpdatedBy(i)
-	return chu
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (chu *CharacterHistoryUpdate) SetNillableUpdatedBy(i *int) *CharacterHistoryUpdate {
-	if i != nil {
-		chu.SetUpdatedBy(*i)
-	}
-	return chu
-}
-
-// AddUpdatedBy adds i to the "updated_by" field.
-func (chu *CharacterHistoryUpdate) AddUpdatedBy(i int) *CharacterHistoryUpdate {
-	chu.mutation.AddUpdatedBy(i)
-	return chu
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (chu *CharacterHistoryUpdate) ClearUpdatedBy() *CharacterHistoryUpdate {
-	chu.mutation.ClearUpdatedBy()
-	return chu
-}
-
-// SetCreatedAt sets the "created_at" field.
-func (chu *CharacterHistoryUpdate) SetCreatedAt(t time.Time) *CharacterHistoryUpdate {
-	chu.mutation.SetCreatedAt(t)
-	return chu
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (chu *CharacterHistoryUpdate) SetNillableCreatedAt(t *time.Time) *CharacterHistoryUpdate {
-	if t != nil {
-		chu.SetCreatedAt(*t)
-	}
 	return chu
 }
 
@@ -150,7 +69,6 @@ func (chu *CharacterHistoryUpdate) Mutation() *CharacterHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (chu *CharacterHistoryUpdate) Save(ctx context.Context) (int, error) {
-	chu.defaults()
 	return withHooks[int, CharacterHistoryMutation](ctx, chu.sqlSave, chu.mutation, chu.hooks)
 }
 
@@ -176,21 +94,8 @@ func (chu *CharacterHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (chu *CharacterHistoryUpdate) defaults() {
-	if _, ok := chu.mutation.HistoryTime(); !ok {
-		v := characterhistory.UpdateDefaultHistoryTime()
-		chu.mutation.SetHistoryTime(v)
-	}
-}
-
 // check runs all checks and user-defined validators on the builder.
 func (chu *CharacterHistoryUpdate) check() error {
-	if v, ok := chu.mutation.Operation(); ok {
-		if err := characterhistory.OperationValidator(v); err != nil {
-			return &ValidationError{Name: "operation", err: fmt.Errorf(`ent: validator failed for field "CharacterHistory.operation": %w`, err)}
-		}
-	}
 	if v, ok := chu.mutation.Age(); ok {
 		if err := characterhistory.AgeValidator(v); err != nil {
 			return &ValidationError{Name: "age", err: fmt.Errorf(`ent: validator failed for field "CharacterHistory.age": %w`, err)}
@@ -211,32 +116,11 @@ func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 			}
 		}
 	}
-	if value, ok := chu.mutation.HistoryTime(); ok {
-		_spec.SetField(characterhistory.FieldHistoryTime, field.TypeTime, value)
-	}
-	if value, ok := chu.mutation.Ref(); ok {
-		_spec.SetField(characterhistory.FieldRef, field.TypeInt, value)
-	}
-	if value, ok := chu.mutation.AddedRef(); ok {
-		_spec.AddField(characterhistory.FieldRef, field.TypeInt, value)
-	}
 	if chu.mutation.RefCleared() {
 		_spec.ClearField(characterhistory.FieldRef, field.TypeInt)
 	}
-	if value, ok := chu.mutation.Operation(); ok {
-		_spec.SetField(characterhistory.FieldOperation, field.TypeEnum, value)
-	}
-	if value, ok := chu.mutation.UpdatedBy(); ok {
-		_spec.SetField(characterhistory.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if value, ok := chu.mutation.AddedUpdatedBy(); ok {
-		_spec.AddField(characterhistory.FieldUpdatedBy, field.TypeInt, value)
-	}
 	if chu.mutation.UpdatedByCleared() {
 		_spec.ClearField(characterhistory.FieldUpdatedBy, field.TypeInt)
-	}
-	if value, ok := chu.mutation.CreatedAt(); ok {
-		_spec.SetField(characterhistory.FieldCreatedAt, field.TypeTime, value)
 	}
 	if value, ok := chu.mutation.UpdatedAt(); ok {
 		_spec.SetField(characterhistory.FieldUpdatedAt, field.TypeTime, value)
@@ -268,86 +152,6 @@ type CharacterHistoryUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *CharacterHistoryMutation
-}
-
-// SetHistoryTime sets the "history_time" field.
-func (chuo *CharacterHistoryUpdateOne) SetHistoryTime(t time.Time) *CharacterHistoryUpdateOne {
-	chuo.mutation.SetHistoryTime(t)
-	return chuo
-}
-
-// SetRef sets the "ref" field.
-func (chuo *CharacterHistoryUpdateOne) SetRef(i int) *CharacterHistoryUpdateOne {
-	chuo.mutation.ResetRef()
-	chuo.mutation.SetRef(i)
-	return chuo
-}
-
-// SetNillableRef sets the "ref" field if the given value is not nil.
-func (chuo *CharacterHistoryUpdateOne) SetNillableRef(i *int) *CharacterHistoryUpdateOne {
-	if i != nil {
-		chuo.SetRef(*i)
-	}
-	return chuo
-}
-
-// AddRef adds i to the "ref" field.
-func (chuo *CharacterHistoryUpdateOne) AddRef(i int) *CharacterHistoryUpdateOne {
-	chuo.mutation.AddRef(i)
-	return chuo
-}
-
-// ClearRef clears the value of the "ref" field.
-func (chuo *CharacterHistoryUpdateOne) ClearRef() *CharacterHistoryUpdateOne {
-	chuo.mutation.ClearRef()
-	return chuo
-}
-
-// SetOperation sets the "operation" field.
-func (chuo *CharacterHistoryUpdateOne) SetOperation(et enthistory.OpType) *CharacterHistoryUpdateOne {
-	chuo.mutation.SetOperation(et)
-	return chuo
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (chuo *CharacterHistoryUpdateOne) SetUpdatedBy(i int) *CharacterHistoryUpdateOne {
-	chuo.mutation.ResetUpdatedBy()
-	chuo.mutation.SetUpdatedBy(i)
-	return chuo
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (chuo *CharacterHistoryUpdateOne) SetNillableUpdatedBy(i *int) *CharacterHistoryUpdateOne {
-	if i != nil {
-		chuo.SetUpdatedBy(*i)
-	}
-	return chuo
-}
-
-// AddUpdatedBy adds i to the "updated_by" field.
-func (chuo *CharacterHistoryUpdateOne) AddUpdatedBy(i int) *CharacterHistoryUpdateOne {
-	chuo.mutation.AddUpdatedBy(i)
-	return chuo
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (chuo *CharacterHistoryUpdateOne) ClearUpdatedBy() *CharacterHistoryUpdateOne {
-	chuo.mutation.ClearUpdatedBy()
-	return chuo
-}
-
-// SetCreatedAt sets the "created_at" field.
-func (chuo *CharacterHistoryUpdateOne) SetCreatedAt(t time.Time) *CharacterHistoryUpdateOne {
-	chuo.mutation.SetCreatedAt(t)
-	return chuo
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (chuo *CharacterHistoryUpdateOne) SetNillableCreatedAt(t *time.Time) *CharacterHistoryUpdateOne {
-	if t != nil {
-		chuo.SetCreatedAt(*t)
-	}
-	return chuo
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -403,7 +207,6 @@ func (chuo *CharacterHistoryUpdateOne) Select(field string, fields ...string) *C
 
 // Save executes the query and returns the updated CharacterHistory entity.
 func (chuo *CharacterHistoryUpdateOne) Save(ctx context.Context) (*CharacterHistory, error) {
-	chuo.defaults()
 	return withHooks[*CharacterHistory, CharacterHistoryMutation](ctx, chuo.sqlSave, chuo.mutation, chuo.hooks)
 }
 
@@ -429,21 +232,8 @@ func (chuo *CharacterHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (chuo *CharacterHistoryUpdateOne) defaults() {
-	if _, ok := chuo.mutation.HistoryTime(); !ok {
-		v := characterhistory.UpdateDefaultHistoryTime()
-		chuo.mutation.SetHistoryTime(v)
-	}
-}
-
 // check runs all checks and user-defined validators on the builder.
 func (chuo *CharacterHistoryUpdateOne) check() error {
-	if v, ok := chuo.mutation.Operation(); ok {
-		if err := characterhistory.OperationValidator(v); err != nil {
-			return &ValidationError{Name: "operation", err: fmt.Errorf(`ent: validator failed for field "CharacterHistory.operation": %w`, err)}
-		}
-	}
 	if v, ok := chuo.mutation.Age(); ok {
 		if err := characterhistory.AgeValidator(v); err != nil {
 			return &ValidationError{Name: "age", err: fmt.Errorf(`ent: validator failed for field "CharacterHistory.age": %w`, err)}
@@ -481,32 +271,11 @@ func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Char
 			}
 		}
 	}
-	if value, ok := chuo.mutation.HistoryTime(); ok {
-		_spec.SetField(characterhistory.FieldHistoryTime, field.TypeTime, value)
-	}
-	if value, ok := chuo.mutation.Ref(); ok {
-		_spec.SetField(characterhistory.FieldRef, field.TypeInt, value)
-	}
-	if value, ok := chuo.mutation.AddedRef(); ok {
-		_spec.AddField(characterhistory.FieldRef, field.TypeInt, value)
-	}
 	if chuo.mutation.RefCleared() {
 		_spec.ClearField(characterhistory.FieldRef, field.TypeInt)
 	}
-	if value, ok := chuo.mutation.Operation(); ok {
-		_spec.SetField(characterhistory.FieldOperation, field.TypeEnum, value)
-	}
-	if value, ok := chuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(characterhistory.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if value, ok := chuo.mutation.AddedUpdatedBy(); ok {
-		_spec.AddField(characterhistory.FieldUpdatedBy, field.TypeInt, value)
-	}
 	if chuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(characterhistory.FieldUpdatedBy, field.TypeInt)
-	}
-	if value, ok := chuo.mutation.CreatedAt(); ok {
-		_spec.SetField(characterhistory.FieldCreatedAt, field.TypeTime, value)
 	}
 	if value, ok := chuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(characterhistory.FieldUpdatedAt, field.TypeTime, value)

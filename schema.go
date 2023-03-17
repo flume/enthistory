@@ -15,9 +15,12 @@ func (history) Fields() []ent.Field {
 	return []ent.Field{
 		field.Time("history_time").
 			Default(time.Now).
-			UpdateDefault(time.Now),
+			Immutable(),
 		field.Int("ref").
+			Immutable().
 			Optional(),
-		field.Enum("operation").GoType(OpType("")),
+		field.Enum("operation").
+			GoType(OpType("")).
+			Immutable(),
 	}
 }

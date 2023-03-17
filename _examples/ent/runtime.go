@@ -42,8 +42,6 @@ func init() {
 	characterhistoryDescHistoryTime := characterhistoryFields[0].Descriptor()
 	// characterhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
 	characterhistory.DefaultHistoryTime = characterhistoryDescHistoryTime.Default.(func() time.Time)
-	// characterhistory.UpdateDefaultHistoryTime holds the default value on update for the history_time field.
-	characterhistory.UpdateDefaultHistoryTime = characterhistoryDescHistoryTime.UpdateDefault.(func() time.Time)
 	// characterhistoryDescCreatedAt is the schema descriptor for created_at field.
 	characterhistoryDescCreatedAt := characterhistoryMixinFields0[0].Descriptor()
 	// characterhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
@@ -78,8 +76,6 @@ func init() {
 	friendshiphistoryDescHistoryTime := friendshiphistoryFields[0].Descriptor()
 	// friendshiphistory.DefaultHistoryTime holds the default value on creation for the history_time field.
 	friendshiphistory.DefaultHistoryTime = friendshiphistoryDescHistoryTime.Default.(func() time.Time)
-	// friendshiphistory.UpdateDefaultHistoryTime holds the default value on update for the history_time field.
-	friendshiphistory.UpdateDefaultHistoryTime = friendshiphistoryDescHistoryTime.UpdateDefault.(func() time.Time)
 	// friendshiphistoryDescCreatedAt is the schema descriptor for created_at field.
 	friendshiphistoryDescCreatedAt := friendshiphistoryMixinFields0[0].Descriptor()
 	// friendshiphistory.DefaultCreatedAt holds the default value on creation for the created_at field.

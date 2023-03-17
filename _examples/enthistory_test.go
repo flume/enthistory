@@ -13,6 +13,8 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 
+	_ "github.com/flume/enthistory/_examples/ent/runtime"
+
 	"testing"
 )
 

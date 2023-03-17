@@ -35,13 +35,17 @@ func (FriendshipHistory) Fields() []ent.Field {
 	historyFields := []ent.Field{
 		field.Time("history_time").
 			Default(time.Now).
-			UpdateDefault(time.Now),
+			Immutable(),
 		field.Int("ref").
+			Immutable().
 			Optional(),
+		field.Enum("operation").
+			GoType(enthistory.OpType("")).
+			Immutable(),
 		field.Int("updated_by").
 			Optional().
+			Immutable().
 			Nillable(),
-		field.Enum("operation").GoType(enthistory.OpType("")),
 	}
 
 	return append(historyFields, Friendship{}.Fields()...)
