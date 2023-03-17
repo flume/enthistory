@@ -1,5 +1,27 @@
 # Changelog
 
+### [v0.3.0](https://github.com/flume/enthistory/compare/v0.2.0...v0.3.0) (2023-03-16)
+
+* Introduce `enthistory.Annotations` for better configurability on schemas, with ability to exclude
+schemas from history tracking altogether. Also use annotations to mark history schemas instead of relying
+on naming conventions.
+* Introduce `Restore()` method on history models. Allows a user to restore a history row back to the actual
+row in the original table. 
+* Introduce common history query functions:
+  * `LatestHistory()` - Returns the most recent history row for a tracked model
+  * `EarliestHistory()` - Returns the first history row for a tracked model
+  * `HistoryAt()` - given a time, will return the state of this model at that time via 
+  the history_time field
+
+### [v0.2.0](https://github.com/flume/enthistory/compare/v0.1.4...v0.2.0) (2023-03-16)
+
+* Create `UpdatedBy()` option for configuring enthistory, when not supplied, no updated_by
+field is tracked in history. Can specify type of the value (either int or string).
+
+### [v0.1.4](https://github.com/flume/enthistory/compare/v0.1.3...v0.1.4) (2023-03-15)
+
+* Variadic options when creating a new extension
+
 ### [v0.1.3](https://github.com/flume/enthistory/compare/v0.1.2...v0.1.3) (2023-03-13)
 
 * Create Templates and Workflow (#1)

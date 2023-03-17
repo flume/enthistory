@@ -132,7 +132,7 @@ or `enthistory.ValueTypeString` (string) for the type of the value. This value w
 enthistory.WithUpdatedBy("userId", enthistory.ValueTypeInt)
 
 // context.WithValue(ctx, "userEmail", "test@test.com")
-enthistory.WithUpdatedBy("userId", enthistory.ValueTypeString)
+enthistory.WithUpdatedBy("userEmail", enthistory.ValueTypeString)
 ```
 
 ### Excluding History on a Schema
