@@ -2,6 +2,7 @@ package enthistory
 
 import (
 	"entgo.io/ent/entc/gen"
+	"text/template"
 )
 
 func extractUpdatedByKey(val any) string {
@@ -30,9 +31,9 @@ func extractUpdatedByValueType(val any) string {
 
 func parseTemplate(name, path string) *gen.Template {
 	t := gen.NewTemplate(name)
-	funcMap := gen.Funcs
-	funcMap["extractUpdatedByKey"] = extractUpdatedByKey
-	funcMap["extractUpdatedByValueType"] = extractUpdatedByValueType
-	t.Funcs(funcMap)
+	t.Funcs(template.FuncMap{
+		"extractUpdatedByKey":       extractUpdatedByKey,
+		"extractUpdatedByValueType": extractUpdatedByValueType,
+	})
 	return gen.MustParse(t.ParseFS(_templates, path))
 }

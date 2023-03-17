@@ -3,8 +3,8 @@ package enthistory
 import (
 	"embed"
 	"fmt"
-	"html/template"
 	"os"
+	"text/template"
 
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
