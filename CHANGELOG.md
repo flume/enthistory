@@ -1,5 +1,10 @@
 # Changelog
 
+### [v0.3.2](https://github.com/flume/enthistory/compare/v0.3.1...v0.3.2) (2023-03-17)
+
+* Fix bug introduced in v0.3.1 where func maps on templates were incorrect
+* General code clean up
+
 ### [v0.3.1](https://github.com/flume/enthistory/compare/v0.3.0...v0.3.1) (2023-03-17)
 
 * Handle Immutable Fields correctly in code generation & set them on appropriate history fields
