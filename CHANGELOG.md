@@ -1,5 +1,9 @@
 # Changelog
 
+### [v0.3.1](https://github.com/flume/enthistory/compare/v0.3.0...v0.3.1) (2023-03-17)
+
+* Handle Immutable Fields correctly in code generation & set them on appropriate history fields
+
 ### [v0.3.0](https://github.com/flume/enthistory/compare/v0.2.0...v0.3.0) (2023-03-16)
 
 * Introduce `enthistory.Annotations` for better configurability on schemas, with ability to exclude
