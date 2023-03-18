@@ -193,7 +193,7 @@ func TestEntHistory(t *testing.T) {
 				assert.NoError(t, err)
 
 				// Get earliest history from func
-				icekingHistoryFromFunc, err := iceking.EarliestHistory(ctx)
+				icekingHistoryFromFunc, err := iceking.History().Earliest(ctx)
 				assert.NoError(t, err)
 
 				assert.Equal(t, icekingHistory.ID, icekingHistoryFromFunc.ID)
@@ -214,8 +214,8 @@ func TestEntHistory(t *testing.T) {
 				icekingHistory, err := iceking.History().Order(ent.Desc(characterhistory.FieldHistoryTime)).First(ctx)
 				assert.NoError(t, err)
 
-				// Get earliest history from func
-				icekingHistoryFromFunc, err := iceking.LatestHistory(ctx)
+				// Get latest history from func
+				icekingHistoryFromFunc, err := iceking.History().Latest(ctx)
 				assert.NoError(t, err)
 
 				assert.Equal(t, icekingHistory.ID, icekingHistoryFromFunc.ID)
@@ -230,13 +230,13 @@ func TestEntHistory(t *testing.T) {
 				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").Save(ctx)
 				assert.NoError(t, err)
 
-				firstHistory, err := simon.LatestHistory(ctx)
+				firstHistory, err := simon.History().Earliest(ctx)
 				assert.NoError(t, err)
 
 				simon, err = simon.Update().SetName("Ice King").Save(ctx)
 				assert.NoError(t, err)
 
-				secondHistory, err := simon.LatestHistory(ctx)
+				secondHistory, err := simon.History().Latest(ctx)
 				assert.NoError(t, err)
 
 				at, err := simon.HistoryAt(ctx, firstHistory.HistoryTime)
@@ -257,15 +257,11 @@ func TestEntHistory(t *testing.T) {
 
 		client := enttest.Open(t, "sqlite3", "file:entdb?mode=memory&_fk=1", opts...)
 		client.WithHistory()
-		_ = client.Schema.Create(context.Background())
+		err := client.Schema.Create(context.Background())
+		assert.NoError(t, err)
 		defer client.Close()
-		t.Run(tt.name, func(t *testing.T) {
-			ctx := context.Background()
-			client.Character.Delete().Exec(ctx)
-			client.CharacterHistory.Delete().Exec(ctx)
-			client.Friendship.Delete().Exec(ctx)
-			client.FriendshipHistory.Delete().Exec(ctx)
 
+		t.Run(tt.name, func(t *testing.T) {
 			tt.runner(t, client)
 		})
 	}

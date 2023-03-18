@@ -1,8 +1,9 @@
 package enthistory
 
 import (
-	"entgo.io/ent/entc/gen"
 	"text/template"
+
+	"entgo.io/ent/entc/gen"
 )
 
 func extractUpdatedByKey(val any) string {

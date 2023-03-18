@@ -43,18 +43,14 @@ import (
                         return historyClient.Query().Where({{ lower $h.Name }}.Ref({{ $n.Receiver }}.ID))
                     }
 
-                    func ({{ $n.Receiver }} *{{ $n.Name }}) EarliestHistory(ctx context.Context) (*{{ $h.Name }}, error)  {
-                        historyClient := New{{ $h.Name }}Client({{ $n.Receiver }}.config)
-                        return historyClient.Query().
-                                    Where({{ lower $h.Name }}.Ref({{ $n.Receiver }}.ID)).
+                    func ({{ receiver $h.QueryName }} *{{ $h.QueryName }}) Earliest(ctx context.Context) (*{{ $h.Name }}, error)  {
+                        return {{ receiver $h.QueryName }}.
                                     Order(Asc({{ lower $h.Name }}.FieldHistoryTime)).
                                     First(ctx)
                     }
 
-                    func ({{ $n.Receiver }} *{{ $n.Name }}) LatestHistory(ctx context.Context) (*{{ $h.Name }}, error)  {
-                        historyClient := New{{ $h.Name }}Client({{ $n.Receiver }}.config)
-                        return historyClient.Query().
-                                    Where({{ lower $h.Name }}.Ref({{ $n.Receiver }}.ID)).
+                    func ({{ receiver $h.QueryName }} *{{ $h.QueryName }}) Latest(ctx context.Context) (*{{ $h.Name }}, error)  {
+                        return {{ receiver $h.QueryName }}.
                                     Order(Desc({{ lower $h.Name }}.FieldHistoryTime)).
                                     First(ctx)
                     }

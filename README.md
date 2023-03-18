@@ -87,10 +87,10 @@ Since these queries come up often, we added in functions for them directly.
 character, _ := client.Character.Query().First(ctx)
 
 // Get the earliest history for this character (i.e. when the character was created)
-earliest, _ := character.EasliestHistory(ctx)
+earliest, _ := character.History().Earliest(ctx)
 
 // Get the latest history for this character (i.e. the current state of the actual character)
-latest, _ := character.LatestHistory(ctx)
+latest, _ := character.History().Latest(ctx)
 
 // Get the history for this character as it was at a given point in time 
 // (i.e. the state of the actual character at the given point in time)

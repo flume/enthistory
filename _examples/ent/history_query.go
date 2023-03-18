@@ -26,18 +26,14 @@ func (c *Character) History() *CharacterHistoryQuery {
 	return historyClient.Query().Where(characterhistory.Ref(c.ID))
 }
 
-func (c *Character) EarliestHistory(ctx context.Context) (*CharacterHistory, error) {
-	historyClient := NewCharacterHistoryClient(c.config)
-	return historyClient.Query().
-		Where(characterhistory.Ref(c.ID)).
+func (chq *CharacterHistoryQuery) Earliest(ctx context.Context) (*CharacterHistory, error) {
+	return chq.
 		Order(Asc(characterhistory.FieldHistoryTime)).
 		First(ctx)
 }
 
-func (c *Character) LatestHistory(ctx context.Context) (*CharacterHistory, error) {
-	historyClient := NewCharacterHistoryClient(c.config)
-	return historyClient.Query().
-		Where(characterhistory.Ref(c.ID)).
+func (chq *CharacterHistoryQuery) Latest(ctx context.Context) (*CharacterHistory, error) {
+	return chq.
 		Order(Desc(characterhistory.FieldHistoryTime)).
 		First(ctx)
 }
@@ -68,18 +64,14 @@ func (f *Friendship) History() *FriendshipHistoryQuery {
 	return historyClient.Query().Where(friendshiphistory.Ref(f.ID))
 }
 
-func (f *Friendship) EarliestHistory(ctx context.Context) (*FriendshipHistory, error) {
-	historyClient := NewFriendshipHistoryClient(f.config)
-	return historyClient.Query().
-		Where(friendshiphistory.Ref(f.ID)).
+func (fhq *FriendshipHistoryQuery) Earliest(ctx context.Context) (*FriendshipHistory, error) {
+	return fhq.
 		Order(Asc(friendshiphistory.FieldHistoryTime)).
 		First(ctx)
 }
 
-func (f *Friendship) LatestHistory(ctx context.Context) (*FriendshipHistory, error) {
-	historyClient := NewFriendshipHistoryClient(f.config)
-	return historyClient.Query().
-		Where(friendshiphistory.Ref(f.ID)).
+func (fhq *FriendshipHistoryQuery) Latest(ctx context.Context) (*FriendshipHistory, error) {
+	return fhq.
 		Order(Desc(friendshiphistory.FieldHistoryTime)).
 		First(ctx)
 }
