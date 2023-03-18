@@ -248,6 +248,58 @@ func TestEntHistory(t *testing.T) {
 				assert.Equal(t, secondHistory.ID, at.ID)
 			},
 		},
+		{
+			name: "Can get next history",
+			runner: func(t *testing.T, client *ent.Client) {
+				ctx := context.Background()
+
+				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").Save(ctx)
+				assert.NoError(t, err)
+
+				firstHistory, err := simon.History().Earliest(ctx)
+				assert.NoError(t, err)
+
+				simon, err = simon.Update().SetName("Ice King").Save(ctx)
+				assert.NoError(t, err)
+
+				secondHistory, err := simon.History().Latest(ctx)
+				assert.NoError(t, err)
+
+				next, err := firstHistory.Next(ctx)
+				assert.NoError(t, err)
+				assert.Equal(t, secondHistory.ID, next.ID)
+
+				next, err = next.Next(ctx)
+				assert.True(t, ent.IsNotFound(err))
+				assert.Empty(t, next)
+			},
+		},
+		{
+			name: "Can get previous history",
+			runner: func(t *testing.T, client *ent.Client) {
+				ctx := context.Background()
+
+				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").Save(ctx)
+				assert.NoError(t, err)
+
+				firstHistory, err := simon.History().Earliest(ctx)
+				assert.NoError(t, err)
+
+				simon, err = simon.Update().SetName("Ice King").Save(ctx)
+				assert.NoError(t, err)
+
+				secondHistory, err := simon.History().Latest(ctx)
+				assert.NoError(t, err)
+
+				prev, err := secondHistory.Prev(ctx)
+				assert.NoError(t, err)
+				assert.Equal(t, firstHistory.ID, prev.ID)
+
+				prev, err = prev.Prev(ctx)
+				assert.True(t, ent.IsNotFound(err))
+				assert.Empty(t, prev)
+			},
+		},
 	}
 	for _, tt := range tests {
 		opts := []enttest.Option{

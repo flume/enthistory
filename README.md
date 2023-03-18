@@ -97,6 +97,23 @@ latest, _ := character.History().Latest(ctx)
 historyNow, _ := character.History().AsOf(ctx, time.Now())
 ```
 
+Once you have a history model, you can also use `.Next()` and `.Prev()` to pull the next/previous history in time.
+```go
+character, _ := client.Character.Query().First(ctx)
+
+// Get the earliest history for this character (i.e. when the character was created)
+earliest, _ := character.History().Earliest(ctx)
+
+// Get the next history after the earliest history
+next, _ := earliest.Next(ctx)
+
+// Get the previous history before the next history
+prev, _ := next.Prev(ctx)
+
+// prev would now be the earliest history once again
+fmt.Println(prev.ID == earliest.ID) // true
+```
+
 ### Restoring History
 In the event you want to rollback a row in the database to a particular history row, you can use the `.Restore()` function
 to do accomplish that.

@@ -11,19 +11,31 @@ import (
 	"github.com/flume/enthistory/_examples/ent/friendshiphistory"
 )
 
-func (ch *CharacterHistory) Restore(ctx context.Context) (*Character, error) {
-	client := NewCharacterClient(ch.config)
-	return client.
-		UpdateOneID(ch.Ref).
-		SetUpdatedAt(ch.UpdatedAt).
-		SetAge(ch.Age).
-		SetName(ch.Name).
-		Save(ctx)
-}
-
 func (c *Character) History() *CharacterHistoryQuery {
 	historyClient := NewCharacterHistoryClient(c.config)
 	return historyClient.Query().Where(characterhistory.Ref(c.ID))
+}
+
+func (ch *CharacterHistory) Next(ctx context.Context) (*CharacterHistory, error) {
+	client := NewCharacterHistoryClient(ch.config)
+	return client.Query().
+		Where(
+			characterhistory.Ref(ch.Ref),
+			characterhistory.HistoryTimeGT(ch.HistoryTime),
+		).
+		Order(Asc(characterhistory.FieldHistoryTime)).
+		First(ctx)
+}
+
+func (ch *CharacterHistory) Prev(ctx context.Context) (*CharacterHistory, error) {
+	client := NewCharacterHistoryClient(ch.config)
+	return client.Query().
+		Where(
+			characterhistory.Ref(ch.Ref),
+			characterhistory.HistoryTimeLT(ch.HistoryTime),
+		).
+		Order(Desc(characterhistory.FieldHistoryTime)).
+		First(ctx)
 }
 
 func (chq *CharacterHistoryQuery) Earliest(ctx context.Context) (*CharacterHistory, error) {
@@ -45,19 +57,41 @@ func (chq *CharacterHistoryQuery) AsOf(ctx context.Context, time time.Time) (*Ch
 		First(ctx)
 }
 
-func (fh *FriendshipHistory) Restore(ctx context.Context) (*Friendship, error) {
-	client := NewFriendshipClient(fh.config)
+func (ch *CharacterHistory) Restore(ctx context.Context) (*Character, error) {
+	client := NewCharacterClient(ch.config)
 	return client.
-		UpdateOneID(fh.Ref).
-		SetUpdatedAt(fh.UpdatedAt).
-		SetCharacterID(fh.CharacterID).
-		SetFriendID(fh.FriendID).
+		UpdateOneID(ch.Ref).
+		SetUpdatedAt(ch.UpdatedAt).
+		SetAge(ch.Age).
+		SetName(ch.Name).
 		Save(ctx)
 }
 
 func (f *Friendship) History() *FriendshipHistoryQuery {
 	historyClient := NewFriendshipHistoryClient(f.config)
 	return historyClient.Query().Where(friendshiphistory.Ref(f.ID))
+}
+
+func (fh *FriendshipHistory) Next(ctx context.Context) (*FriendshipHistory, error) {
+	client := NewFriendshipHistoryClient(fh.config)
+	return client.Query().
+		Where(
+			friendshiphistory.Ref(fh.Ref),
+			friendshiphistory.HistoryTimeGT(fh.HistoryTime),
+		).
+		Order(Asc(friendshiphistory.FieldHistoryTime)).
+		First(ctx)
+}
+
+func (fh *FriendshipHistory) Prev(ctx context.Context) (*FriendshipHistory, error) {
+	client := NewFriendshipHistoryClient(fh.config)
+	return client.Query().
+		Where(
+			friendshiphistory.Ref(fh.Ref),
+			friendshiphistory.HistoryTimeLT(fh.HistoryTime),
+		).
+		Order(Desc(friendshiphistory.FieldHistoryTime)).
+		First(ctx)
 }
 
 func (fhq *FriendshipHistoryQuery) Earliest(ctx context.Context) (*FriendshipHistory, error) {
@@ -77,4 +111,14 @@ func (fhq *FriendshipHistoryQuery) AsOf(ctx context.Context, time time.Time) (*F
 		Where(friendshiphistory.HistoryTimeLTE(time)).
 		Order(Desc(friendshiphistory.FieldHistoryTime)).
 		First(ctx)
+}
+
+func (fh *FriendshipHistory) Restore(ctx context.Context) (*Friendship, error) {
+	client := NewFriendshipClient(fh.config)
+	return client.
+		UpdateOneID(fh.Ref).
+		SetUpdatedAt(fh.UpdatedAt).
+		SetCharacterID(fh.CharacterID).
+		SetFriendID(fh.FriendID).
+		Save(ctx)
 }
