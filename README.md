@@ -135,6 +135,38 @@ simonHistory, _ := restored.History().All(ctx)
 fmt.Println(len(simonHistory)) // 3
 ```
 
+### Auditing
+
+Another common use for history tables is for auditing, so `enthistory` has some helpful tools for maintaining/reviewing 
+audits of the history tables. The largest of which is the `Audit()` method, which builds an audit log of the history tables
+for you to export as a file, upload to S3, or simply inspect on your own. 
+
+```go
+// returns the audit log as a .csv file encoded as []byte
+bytes, _ = client.Audit(ctx)
+
+fmt.Println(string(bytes))
+```
+
+The audit log has 6 columns when user tracking is turned on. An example audit log might look like this:
+
+|Table            | Ref Id |History Time            |Operation| Changes                               |Updated By|
+|-----------------|--------|------------------------|---------|---------------------------------------|----------|
+|CharacterHistory | 1      |Sat Mar 18 16:31:31 2023|INSERT   | age: 47 name: "Simon Petrikov"        |75        |
+|CharacterHistory | 1      |Sat Mar 18 16:31:31 2023|UPDATE   | name: "Simon Petrikov" -> "Ice King"  |75        |
+|CharacterHistory | 1      |Sat Mar 18 16:31:31 2023|DELETE   | age: 47 name: "Ice King"              |75        |
+
+
+The provided Audit log is obviously opinionated and if you want/need something different you can also build your own using
+the `.Diff()` method on history models.
+
+The History diff returned has the older history, the newer history, and the changes to fields when comparing the newer history
+to the older history.
+```go
+...
+nextHistory, _ := prismoHistory.Next(ctx)
+diff, _ := prismoHistory.Diff(nextHistory)
+```
 
 ## Config Options
 

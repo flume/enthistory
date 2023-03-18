@@ -349,6 +349,40 @@ func TestEntHistory(t *testing.T) {
 				assert.Equal(t, diff.Changes[0].New, diff.New.Name)
 			},
 		},
+		{
+			name: "Can create audit",
+			runner: func(t *testing.T, client *ent.Client) {
+				userId := 75
+				ctx := context.WithValue(context.Background(), "userId", userId)
+
+				gunter, err := client.Character.Create().SetAge(10000).SetName("Gunter").Save(ctx)
+				assert.NoError(t, err)
+				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").Save(ctx)
+				assert.NoError(t, err)
+
+				friendship, err := client.Friendship.Create().SetCharacterID(gunter.ID).SetFriendID(simon.ID).Save(ctx)
+				assert.NoError(t, err)
+
+				gunter, err = gunter.Update().SetAge(20).Save(ctx)
+				assert.NoError(t, err)
+				simon, err = simon.Update().SetName("Ice King").Save(ctx)
+				assert.NoError(t, err)
+
+				err = client.Friendship.DeleteOne(friendship).Exec(ctx)
+				assert.NoError(t, err)
+
+				err = client.Character.DeleteOne(gunter).Exec(ctx)
+				assert.NoError(t, err)
+
+				err = client.Character.DeleteOne(simon).Exec(ctx)
+				assert.NoError(t, err)
+
+				bytes, err := client.Audit(ctx)
+				assert.NoError(t, err)
+
+				assert.Contains(t, string(bytes), "Simon Petrikov")
+			},
+		},
 	}
 	for _, tt := range tests {
 		opts := []enttest.Option{

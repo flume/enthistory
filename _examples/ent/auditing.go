@@ -4,8 +4,15 @@
 package ent
 
 import (
+	"bytes"
+	"context"
+	"encoding/csv"
+	"encoding/json"
 	"errors"
+	"fmt"
+	"time"
 
+	"github.com/flume/enthistory"
 	"github.com/flume/enthistory/_examples/ent/characterhistory"
 	"github.com/flume/enthistory/_examples/ent/friendshiphistory"
 )
@@ -21,6 +28,34 @@ func NewChange(fieldName string, old, new any) Change {
 		FieldName: fieldName,
 		Old:       old,
 		New:       new,
+	}
+}
+
+func (c Change) String(op enthistory.OpType) string {
+	var newstr, oldstr string
+	if c.New != nil {
+		val, err := json.Marshal(c.New)
+		if err != nil {
+			newstr = fmt.Sprintf("%#v", c.New)
+		} else {
+			newstr = string(val)
+		}
+	}
+	if c.Old != nil {
+		val, err := json.Marshal(c.Old)
+		if err != nil {
+			oldstr = fmt.Sprintf("%#v", c.Old)
+		} else {
+			oldstr = string(val)
+		}
+	}
+	switch op {
+	case enthistory.OpTypeInsert:
+		return fmt.Sprintf("%s: %#s", c.FieldName, newstr)
+	case enthistory.OpTypeDelete:
+		return fmt.Sprintf("%s: %#s", c.FieldName, oldstr)
+	default:
+		return fmt.Sprintf("%s: %#s -> %#s", c.FieldName, oldstr, newstr)
 	}
 }
 
@@ -117,4 +152,169 @@ func (fh *FriendshipHistory) Diff(history *FriendshipHistory) (*HistoryDiff[Frie
 		}, nil
 	}
 	return nil, IdenticalHistoryError
+}
+
+func (c *Client) Audit(ctx context.Context) ([]byte, error) {
+	records := [][]string{
+		{"Table", "Ref Id", "History Time", "Operation", "Changes", "Updated By"},
+	}
+	chRecords, err := auditCharacterHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, chRecords...)
+
+	fhRecords, err := auditFriendshipHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, fhRecords...)
+
+	return bytesFromRecords(records)
+}
+
+func bytesFromRecords(records [][]string) ([]byte, error) {
+	var buf bytes.Buffer
+
+	csvWriter := csv.NewWriter(&buf)
+	err := csvWriter.WriteAll(records)
+	if err != nil {
+		return nil, err
+	}
+	csvWriter.Flush()
+	if err := csvWriter.Error(); err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
+}
+
+type record struct {
+	Table       string
+	RefId       int
+	HistoryTime time.Time
+	Operation   enthistory.OpType
+	Changes     []Change
+	UpdatedBy   *int
+}
+
+func (r *record) toRow() []string {
+	row := make([]string, 6)
+
+	row[0] = r.Table
+	row[1] = fmt.Sprintf("%v", r.RefId)
+	row[2] = r.HistoryTime.Format(time.ANSIC)
+	row[3] = r.Operation.String()
+	for i, change := range r.Changes {
+		if i == 0 {
+			row[4] = change.String(r.Operation)
+			continue
+		}
+		row[4] = fmt.Sprintf("%s\n%s", row[4], change.String(r.Operation))
+	}
+	if r.UpdatedBy != nil {
+		row[5] = fmt.Sprintf("%v", *r.UpdatedBy)
+	}
+	return row
+}
+
+type ref struct {
+	Ref int
+}
+
+func auditCharacterHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []ref
+	client := NewCharacterHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(Asc(characterhistory.FieldRef)).
+		Select(characterhistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(characterhistory.Ref(currRef.Ref)).
+			Order(Asc(characterhistory.FieldHistoryTime)).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "CharacterHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case enthistory.OpTypeInsert:
+				record.Changes = (&CharacterHistory{}).changes(curr)
+			case enthistory.OpTypeDelete:
+				record.Changes = curr.changes(&CharacterHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&CharacterHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+func auditFriendshipHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []ref
+	client := NewFriendshipHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(Asc(friendshiphistory.FieldRef)).
+		Select(friendshiphistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(friendshiphistory.Ref(currRef.Ref)).
+			Order(Asc(friendshiphistory.FieldHistoryTime)).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "FriendshipHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case enthistory.OpTypeInsert:
+				record.Changes = (&FriendshipHistory{}).changes(curr)
+			case enthistory.OpTypeDelete:
+				record.Changes = curr.changes(&FriendshipHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&FriendshipHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
 }

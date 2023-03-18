@@ -5,6 +5,15 @@
 	{{- $pkg := base $.Config.Package }}
 	{{- template "header" $ }}
 import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"encoding/csv"
+	"errors"
+	"fmt"
+	"time"
+
+    "github.com/flume/enthistory"
     {{- range $n := $.Nodes }}
         {{- $name := $n.Name }}
         {{- $history := hasSuffix $name "History" }}
@@ -13,6 +22,9 @@ import (
         {{- end }}
     {{- end }}
 )
+
+{{ $updatedByKey := extractUpdatedByKey $.Annotations.HistoryConfig.UpdatedBy }}
+{{ $updatedByValueType := extractUpdatedByValueType $.Annotations.HistoryConfig.UpdatedBy }}
 
 type Change struct {
     FieldName string
@@ -26,6 +38,34 @@ func NewChange(fieldName string, old, new any) Change {
         Old:       old,
         New:       new,
     }
+}
+
+func (c Change) String(op enthistory.OpType) string {
+	var newstr, oldstr string
+	if c.New != nil {
+		val, err := json.Marshal(c.New)
+		if err != nil {
+			newstr = fmt.Sprintf("%#v", c.New)
+		} else {
+			newstr = string(val)
+		}
+	}
+	if c.Old != nil {
+		val, err := json.Marshal(c.Old)
+		if err != nil {
+			oldstr = fmt.Sprintf("%#v", c.Old)
+		} else {
+			oldstr = string(val)
+		}
+	}
+	switch op {
+	case enthistory.OpTypeInsert:
+		return fmt.Sprintf("%s: %#s", c.FieldName, newstr)
+	case enthistory.OpTypeDelete:
+		return fmt.Sprintf("%s: %#s", c.FieldName, oldstr)
+	default:
+		return fmt.Sprintf("%s: %#s -> %#s", c.FieldName, oldstr, newstr)
+	}
 }
 
 type HistoryDiff[T any] struct {
@@ -90,4 +130,132 @@ func ({{ $h.Receiver }} *{{ $h.Name }}) Diff(history *{{ $h.Name }}) (*HistoryDi
             {{ end }}
         {{ end }}
 	{{ end }}
+
+func (c *Client) Audit(ctx context.Context) ([]byte, error) {
+	records := [][]string{
+		{"Table", "Ref Id", "History Time", "Operation", "Changes"{{ if not (eq $updatedByKey "") }}, "Updated By" {{ end }}},
+	}
+	{{- range $n := $.Nodes }}
+    {{- if (hasSuffix $n.Name "History") }}
+	{{ $n.Receiver }}Records, err := audit{{ $n.Name }}(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, {{ $n.Receiver }}Records...)
+    {{ end }}
+	{{- end }}
+
+	return bytesFromRecords(records)
+}
+
+func bytesFromRecords(records [][]string) ([]byte, error) {
+	var buf bytes.Buffer
+
+	csvWriter := csv.NewWriter(&buf)
+	err := csvWriter.WriteAll(records)
+	if err != nil {
+		return nil, err
+	}
+	csvWriter.Flush()
+	if err := csvWriter.Error(); err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
+}
+
+type record struct {
+	Table       string
+	RefId       int
+	HistoryTime time.Time
+	Operation   enthistory.OpType
+	Changes     []Change
+	{{- if not (eq $updatedByKey "") }}
+	UpdatedBy   *{{ $updatedByValueType }}
+	{{- end }}
+}
+
+func (r *record) toRow() []string {
+    {{- if not (eq $updatedByKey "") }}
+	row := make([]string, 6)
+    {{- else }}
+    row := make([]string, 5)
+    {{- end }}
+
+	row[0] = r.Table
+	row[1] = fmt.Sprintf("%v", r.RefId)
+	row[2] = r.HistoryTime.Format(time.ANSIC)
+	row[3] = r.Operation.String()
+	for i, change := range r.Changes {
+		if i == 0 {
+			row[4] = change.String(r.Operation)
+			continue
+		}
+		row[4] = fmt.Sprintf("%s\n%s", row[4], change.String(r.Operation))
+	}
+	{{- if not (eq $updatedByKey "") }}
+	if r.UpdatedBy != nil {
+        row[5] = fmt.Sprintf("%v", *r.UpdatedBy)
+    }
+	{{- end }}
+	return row
+}
+
+type ref struct {
+	Ref int
+}
+
+{{- range $n := $.Nodes }}
+{{- if (hasSuffix $n.Name "History") }}
+func audit{{ $n.Name }}(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []ref
+	client := New{{ $n.Name }}Client(config)
+	err := client.Query().
+		Unique(true).
+		Order(Asc({{ lower $n.Name }}.FieldRef)).
+		Select({{ lower $n.Name }}.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where({{ lower $n.Name }}.Ref(currRef.Ref)).
+			Order(Asc({{ lower $n.Name }}.FieldHistoryTime)).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "{{ $n.Name }}",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				{{- if not (eq $updatedByKey "") }}
+				UpdatedBy:   curr.UpdatedBy,
+                {{- end }}
+			}
+			switch curr.Operation {
+			case enthistory.OpTypeInsert:
+				record.Changes = (&{{ $n.Name }}{}).changes(curr)
+			case enthistory.OpTypeDelete:
+				record.Changes = curr.changes(&{{ $n.Name }}{})
+			default:
+				if i == 0 {
+					record.Changes = (&{{ $n.Name }}{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+{{ end }}
+{{- end }}
 {{ end }}
