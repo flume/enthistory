@@ -1,5 +1,13 @@
 # Changelog
 
+### [v0.4.0](https://github.com/flume/enthistory/compare/v0.3.2...v0.4.0) (2023-03-18)
+
+* Drop `.EarliestHistory()`, `.LatestHistory()`, & `.HistoryAt()` and introduce normalized functions in their place on the HistoryQuery
+  `.Latest()`, `.Earliest()`, & `.AsOf()`
+* Introduce `.Next()` & `.Prev()` functions for getting the next/prev history before/after the current history.
+* Introduce `.Diff()` function for diffing two histories of the same type and ref to identify the changes
+* Introduce `.Audit()` function for creating an opinion audit log of the history tables
+
 ### [v0.3.2](https://github.com/flume/enthistory/compare/v0.3.1...v0.3.2) (2023-03-17)
 
 * Fix bug introduced in v0.3.1 where func maps on templates were incorrect
