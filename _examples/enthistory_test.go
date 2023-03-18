@@ -239,11 +239,11 @@ func TestEntHistory(t *testing.T) {
 				secondHistory, err := simon.History().Latest(ctx)
 				assert.NoError(t, err)
 
-				at, err := simon.HistoryAt(ctx, firstHistory.HistoryTime)
+				at, err := simon.History().AsOf(ctx, firstHistory.HistoryTime)
 				assert.NoError(t, err)
 				assert.Equal(t, firstHistory.ID, at.ID)
 
-				at, err = simon.HistoryAt(ctx, secondHistory.HistoryTime)
+				at, err = simon.History().AsOf(ctx, secondHistory.HistoryTime)
 				assert.NoError(t, err)
 				assert.Equal(t, secondHistory.ID, at.ID)
 			},

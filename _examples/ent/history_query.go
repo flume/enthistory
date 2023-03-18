@@ -38,13 +38,9 @@ func (chq *CharacterHistoryQuery) Latest(ctx context.Context) (*CharacterHistory
 		First(ctx)
 }
 
-func (c *Character) HistoryAt(ctx context.Context, time time.Time) (*CharacterHistory, error) {
-	historyClient := NewCharacterHistoryClient(c.config)
-	return historyClient.Query().
-		Where(
-			characterhistory.Ref(c.ID),
-			characterhistory.HistoryTimeLTE(time),
-		).
+func (chq *CharacterHistoryQuery) AsOf(ctx context.Context, time time.Time) (*CharacterHistory, error) {
+	return chq.
+		Where(characterhistory.HistoryTimeLTE(time)).
 		Order(Desc(characterhistory.FieldHistoryTime)).
 		First(ctx)
 }
@@ -76,13 +72,9 @@ func (fhq *FriendshipHistoryQuery) Latest(ctx context.Context) (*FriendshipHisto
 		First(ctx)
 }
 
-func (f *Friendship) HistoryAt(ctx context.Context, time time.Time) (*FriendshipHistory, error) {
-	historyClient := NewFriendshipHistoryClient(f.config)
-	return historyClient.Query().
-		Where(
-			friendshiphistory.Ref(f.ID),
-			friendshiphistory.HistoryTimeLTE(time),
-		).
+func (fhq *FriendshipHistoryQuery) AsOf(ctx context.Context, time time.Time) (*FriendshipHistory, error) {
+	return fhq.
+		Where(friendshiphistory.HistoryTimeLTE(time)).
 		Order(Desc(friendshiphistory.FieldHistoryTime)).
 		First(ctx)
 }

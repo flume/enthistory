@@ -94,7 +94,7 @@ latest, _ := character.History().Latest(ctx)
 
 // Get the history for this character as it was at a given point in time 
 // (i.e. the state of the actual character at the given point in time)
-historyAt, _ := character.HistoryAt(ctx, time.Now())
+historyNow, _ := character.History().AsOf(ctx, time.Now())
 ```
 
 ### Restoring History
