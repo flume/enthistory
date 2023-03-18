@@ -70,6 +70,7 @@ func (*HistoryExtension) Templates() []*gen.Template {
 	return []*gen.Template{
 		parseTemplate("historyFromMutation", "templates/historyFromMutation.tmpl"),
 		parseTemplate("historyQuery", "templates/historyQuery.tmpl"),
+		parseTemplate("auditing", "templates/auditing.tmpl"),
 		parseTemplate("client", "templates/client.tmpl"),
 	}
 }

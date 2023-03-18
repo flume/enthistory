@@ -300,6 +300,55 @@ func TestEntHistory(t *testing.T) {
 				assert.Empty(t, prev)
 			},
 		},
+		{
+			name: "Can diff histories",
+			runner: func(t *testing.T, client *ent.Client) {
+				ctx := context.Background()
+
+				gunter, err := client.Character.Create().SetAge(10000).SetName("Gunter").Save(ctx)
+				assert.NoError(t, err)
+				gunterHistory, err := gunter.History().Earliest(ctx)
+				assert.NoError(t, err)
+
+				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").Save(ctx)
+				assert.NoError(t, err)
+				simon, err = simon.Update().SetName("Ice King").Save(ctx)
+				assert.NoError(t, err)
+				simonHistory, err := simon.History().Earliest(ctx)
+				assert.NoError(t, err)
+
+				diff, err := simonHistory.Diff(gunterHistory)
+				assert.ErrorIs(t, err, ent.MismatchedRefError)
+				assert.Empty(t, diff)
+
+				diff, err = simonHistory.Diff(simonHistory)
+				assert.ErrorIs(t, err, ent.IdenticalHistoryError)
+				assert.Empty(t, diff)
+
+				next, err := simonHistory.Next(ctx)
+				assert.NoError(t, err)
+
+				// check diff of next on simonHistory
+				diff, err = simonHistory.Diff(next)
+				assert.NoError(t, err)
+
+				assert.Equal(t, diff.Old, simonHistory)
+				assert.Equal(t, diff.New, next)
+				assert.Equal(t, 1, len(diff.Changes))
+				assert.Equal(t, diff.Changes[0].Old, diff.Old.Name)
+				assert.Equal(t, diff.Changes[0].New, diff.New.Name)
+
+				// check diff of simonHistory on next, should yield same as above
+				diff, err = next.Diff(simonHistory)
+				assert.NoError(t, err)
+
+				assert.Equal(t, diff.Old, simonHistory)
+				assert.Equal(t, diff.New, next)
+				assert.Equal(t, 1, len(diff.Changes))
+				assert.Equal(t, diff.Changes[0].Old, diff.Old.Name)
+				assert.Equal(t, diff.Changes[0].New, diff.New.Name)
+			},
+		},
 	}
 	for _, tt := range tests {
 		opts := []enttest.Option{
