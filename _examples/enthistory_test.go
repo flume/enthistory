@@ -377,10 +377,12 @@ func TestEntHistory(t *testing.T) {
 				err = client.Character.DeleteOne(simon).Exec(ctx)
 				assert.NoError(t, err)
 
-				bytes, err := client.Audit(ctx)
+				auditTable, err := client.Audit(ctx)
 				assert.NoError(t, err)
 
-				assert.Contains(t, string(bytes), "Simon Petrikov")
+				assert.Equal(t, 9, len(auditTable))
+				assert.Equal(t, 6, len(auditTable[0]))
+				assert.Equal(t, "age: 10000 -> 20", auditTable[2][4])
 			},
 		},
 	}

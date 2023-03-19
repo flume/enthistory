@@ -5,15 +5,18 @@
 	{{- $pkg := base $.Config.Package }}
 	{{- template "header" $ }}
 import (
-	"bytes"
-	"context"
-	"encoding/json"
-	"encoding/csv"
+    {{- if $.Annotations.HistoryConfig.Auditing }}
+    "context"
+    "encoding/json"
+    {{- end }}
 	"errors"
+    {{- if $.Annotations.HistoryConfig.Auditing }}
 	"fmt"
 	"time"
 
-    "github.com/flume/enthistory"
+	"github.com/flume/enthistory"
+    {{- end }}
+
     {{- range $n := $.Nodes }}
         {{- $name := $n.Name }}
         {{- $history := hasSuffix $name "History" }}
@@ -38,34 +41,6 @@ func NewChange(fieldName string, old, new any) Change {
         Old:       old,
         New:       new,
     }
-}
-
-func (c Change) String(op enthistory.OpType) string {
-	var newstr, oldstr string
-	if c.New != nil {
-		val, err := json.Marshal(c.New)
-		if err != nil {
-			newstr = fmt.Sprintf("%#v", c.New)
-		} else {
-			newstr = string(val)
-		}
-	}
-	if c.Old != nil {
-		val, err := json.Marshal(c.Old)
-		if err != nil {
-			oldstr = fmt.Sprintf("%#v", c.Old)
-		} else {
-			oldstr = string(val)
-		}
-	}
-	switch op {
-	case enthistory.OpTypeInsert:
-		return fmt.Sprintf("%s: %#s", c.FieldName, newstr)
-	case enthistory.OpTypeDelete:
-		return fmt.Sprintf("%s: %#s", c.FieldName, oldstr)
-	default:
-		return fmt.Sprintf("%s: %#s -> %#s", c.FieldName, oldstr, newstr)
-	}
 }
 
 type HistoryDiff[T any] struct {
@@ -131,7 +106,36 @@ func ({{ $h.Receiver }} *{{ $h.Name }}) Diff(history *{{ $h.Name }}) (*HistoryDi
         {{ end }}
 	{{ end }}
 
-func (c *Client) Audit(ctx context.Context) ([]byte, error) {
+{{ if $.Annotations.HistoryConfig.Auditing }}
+func (c Change) String(op enthistory.OpType) string {
+	var newstr, oldstr string
+	if c.New != nil {
+		val, err := json.Marshal(c.New)
+		if err != nil {
+			newstr = fmt.Sprintf("%#v", c.New)
+		} else {
+			newstr = string(val)
+		}
+	}
+	if c.Old != nil {
+		val, err := json.Marshal(c.Old)
+		if err != nil {
+			oldstr = fmt.Sprintf("%#v", c.Old)
+		} else {
+			oldstr = string(val)
+		}
+	}
+	switch op {
+	case enthistory.OpTypeInsert:
+		return fmt.Sprintf("%s: %#s", c.FieldName, newstr)
+	case enthistory.OpTypeDelete:
+		return fmt.Sprintf("%s: %#s", c.FieldName, oldstr)
+	default:
+		return fmt.Sprintf("%s: %#s -> %#s", c.FieldName, oldstr, newstr)
+	}
+}
+
+func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	records := [][]string{
 		{"Table", "Ref Id", "History Time", "Operation", "Changes"{{ if not (eq $updatedByKey "") }}, "Updated By" {{ end }}},
 	}
@@ -145,22 +149,7 @@ func (c *Client) Audit(ctx context.Context) ([]byte, error) {
     {{ end }}
 	{{- end }}
 
-	return bytesFromRecords(records)
-}
-
-func bytesFromRecords(records [][]string) ([]byte, error) {
-	var buf bytes.Buffer
-
-	csvWriter := csv.NewWriter(&buf)
-	err := csvWriter.WriteAll(records)
-	if err != nil {
-		return nil, err
-	}
-	csvWriter.Flush()
-	if err := csvWriter.Error(); err != nil {
-		return nil, err
-	}
-	return buf.Bytes(), nil
+	return records, nil
 }
 
 type record struct {
@@ -256,6 +245,8 @@ func audit{{ $n.Name }}(ctx context.Context, config config) ([][]string, error) 
 	}
 	return records, nil
 }
-{{ end }}
+
+{{- end }}
+{{- end }}
 {{- end }}
 {{ end }}

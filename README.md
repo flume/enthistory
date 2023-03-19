@@ -26,6 +26,7 @@ func main() {
 		entc.Extensions(
 			enthistory.NewHistoryExtension(
 				enthistory.WithUpdatedBy("userId", enthistory.ValueTypeInt),
+				enthistory.WithAuditing(),
 			),
 		),
 	); err != nil {
@@ -140,6 +141,8 @@ fmt.Println(len(simonHistory)) // 3
 Another common use for history tables is for auditing, so `enthistory` has some helpful tools for maintaining/reviewing 
 audits of the history tables. The largest of which is the `Audit()` method, which builds an audit log of the history tables
 for you to export as a file, upload to S3, or simply inspect on your own. 
+
+Auditing can be turned on by passing in the `enthistory.WithAuditing()` option to the `NewExtension()` Method
 
 ```go
 // returns the audit log as a .csv file encoded as []byte

@@ -18,6 +18,7 @@ func main() {
 		entc.Extensions(
 			enthistory.NewHistoryExtension(
 				enthistory.WithUpdatedBy("userId", enthistory.ValueTypeInt),
+				enthistory.WithAuditing(),
 			),
 		),
 	); err != nil {

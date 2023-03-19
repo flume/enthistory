@@ -23,6 +23,7 @@ type UpdatedBy struct {
 
 type Config struct {
 	UpdatedBy *UpdatedBy
+	Auditing  bool
 }
 
 func (c Config) Name() string {
@@ -45,6 +46,13 @@ func WithUpdatedBy(key string, valueType ValueType) ExtensionOption {
 			key:       key,
 			valueType: valueType,
 		}
+	}
+}
+
+// WithAuditing allows you to turn on the code generation for the `.Audit()` method
+func WithAuditing() ExtensionOption {
+	return func(ex *HistoryExtension) {
+		ex.config.Auditing = true
 	}
 }
 

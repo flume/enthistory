@@ -4,9 +4,7 @@
 package ent
 
 import (
-	"bytes"
 	"context"
-	"encoding/csv"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -28,34 +26,6 @@ func NewChange(fieldName string, old, new any) Change {
 		FieldName: fieldName,
 		Old:       old,
 		New:       new,
-	}
-}
-
-func (c Change) String(op enthistory.OpType) string {
-	var newstr, oldstr string
-	if c.New != nil {
-		val, err := json.Marshal(c.New)
-		if err != nil {
-			newstr = fmt.Sprintf("%#v", c.New)
-		} else {
-			newstr = string(val)
-		}
-	}
-	if c.Old != nil {
-		val, err := json.Marshal(c.Old)
-		if err != nil {
-			oldstr = fmt.Sprintf("%#v", c.Old)
-		} else {
-			oldstr = string(val)
-		}
-	}
-	switch op {
-	case enthistory.OpTypeInsert:
-		return fmt.Sprintf("%s: %#s", c.FieldName, newstr)
-	case enthistory.OpTypeDelete:
-		return fmt.Sprintf("%s: %#s", c.FieldName, oldstr)
-	default:
-		return fmt.Sprintf("%s: %#s -> %#s", c.FieldName, oldstr, newstr)
 	}
 }
 
@@ -154,7 +124,35 @@ func (fh *FriendshipHistory) Diff(history *FriendshipHistory) (*HistoryDiff[Frie
 	return nil, IdenticalHistoryError
 }
 
-func (c *Client) Audit(ctx context.Context) ([]byte, error) {
+func (c Change) String(op enthistory.OpType) string {
+	var newstr, oldstr string
+	if c.New != nil {
+		val, err := json.Marshal(c.New)
+		if err != nil {
+			newstr = fmt.Sprintf("%#v", c.New)
+		} else {
+			newstr = string(val)
+		}
+	}
+	if c.Old != nil {
+		val, err := json.Marshal(c.Old)
+		if err != nil {
+			oldstr = fmt.Sprintf("%#v", c.Old)
+		} else {
+			oldstr = string(val)
+		}
+	}
+	switch op {
+	case enthistory.OpTypeInsert:
+		return fmt.Sprintf("%s: %#s", c.FieldName, newstr)
+	case enthistory.OpTypeDelete:
+		return fmt.Sprintf("%s: %#s", c.FieldName, oldstr)
+	default:
+		return fmt.Sprintf("%s: %#s -> %#s", c.FieldName, oldstr, newstr)
+	}
+}
+
+func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	records := [][]string{
 		{"Table", "Ref Id", "History Time", "Operation", "Changes", "Updated By"},
 	}
@@ -170,22 +168,7 @@ func (c *Client) Audit(ctx context.Context) ([]byte, error) {
 	}
 	records = append(records, fhRecords...)
 
-	return bytesFromRecords(records)
-}
-
-func bytesFromRecords(records [][]string) ([]byte, error) {
-	var buf bytes.Buffer
-
-	csvWriter := csv.NewWriter(&buf)
-	err := csvWriter.WriteAll(records)
-	if err != nil {
-		return nil, err
-	}
-	csvWriter.Flush()
-	if err := csvWriter.Error(); err != nil {
-		return nil, err
-	}
-	return buf.Bytes(), nil
+	return records, nil
 }
 
 type record struct {
@@ -269,7 +252,6 @@ func auditCharacterHistory(ctx context.Context, config config) ([][]string, erro
 	}
 	return records, nil
 }
-
 func auditFriendshipHistory(ctx context.Context, config config) ([][]string, error) {
 	var records = [][]string{}
 	var refs []ref
