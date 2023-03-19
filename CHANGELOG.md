@@ -1,5 +1,10 @@
 # Changelog
 
+### [v0.4.1](https://github.com/flume/enthistory/compare/v0.4.0...v0.4.1) (2023-03-19)
+
+* Change the auditing function to be off by default, able to turn on with `enthistory.WithAudit()`.
+* Change `.Audit()` to return [][]string instead of bytes so less constraint for users
+
 ### [v0.4.0](https://github.com/flume/enthistory/compare/v0.3.2...v0.4.0) (2023-03-18)
 
 * Drop `.EarliestHistory()`, `.LatestHistory()`, & `.HistoryAt()` and introduce normalized functions in their place on the HistoryQuery
