@@ -146,9 +146,7 @@ Auditing can be turned on by passing in the `enthistory.WithAuditing()` option t
 
 ```go
 // returns the audit log as a .csv file encoded as []byte
-bytes, _ = client.Audit(ctx)
-
-fmt.Println(string(bytes))
+auditTable, _ = client.Audit(ctx)
 ```
 
 The audit log has 6 columns when user tracking is turned on. An example audit log might look like this:
@@ -177,7 +175,7 @@ diff, _ := prismoHistory.Diff(nextHistory)
 To track which users are making which changes to your tables, you can supply the `enthistory.NewExtension()` function with 
 the `enthistory.WithUpdatedBy()` Option. You choose your key name (string) and you can set either `enthistory.ValueTypeInt` (int) 
 or `enthistory.ValueTypeString` (string) for the type of the value. This value would need to get populated in the context using 
-`context.WithValue()`. You can leave out entirely if you don't plan on using this feature.
+`context.WithValue()`. You can leave it out entirely if you don't plan on using this feature.
 
 ```go
 // context.WithValue(ctx, "userId", 5)
@@ -186,6 +184,15 @@ enthistory.WithUpdatedBy("userId", enthistory.ValueTypeInt)
 // context.WithValue(ctx, "userEmail", "test@test.com")
 enthistory.WithUpdatedBy("userEmail", enthistory.ValueTypeString)
 ```
+
+### Auditing
+Mentioned above, but you can turn on the ability to export an "audit" of the enthistory tables by setting the `enthistory.WithAudit()` 
+config option when initializing the extension.
+
+```go
+enthistory.NewHistoryExtension((enthistory.WithAuditing())
+```
+
 
 ### Excluding History on a Schema
 `enthistory` has an always on philosophy but in instances you would like to not generate the history tables for a schema
