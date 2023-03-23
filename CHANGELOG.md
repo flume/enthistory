@@ -1,5 +1,11 @@
 # Changelog
 
+### [v0.4.2](https://github.com/flume/enthistory/compare/v0.4.1...v0.4.2) (2023-03-23)
+
+* Dependency version updates
+* Wrap generic type in hooks with `any()` to prevent linter errors. 
+  See https://github.com/ent/ent/pull/3360 for more info
+
 ### [v0.4.1](https://github.com/flume/enthistory/compare/v0.4.0...v0.4.1) (2023-03-19)
 
 * Change the auditing function to be off by default, able to turn on with `enthistory.WithAudit()`.
