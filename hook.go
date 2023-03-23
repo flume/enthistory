@@ -29,7 +29,7 @@ func HistoryHooks[T Mutation]() []ent.Hook {
 }
 
 func getTypedMutation[T Mutation](m ent.Mutation) (T, error) {
-	f, ok := m.(T)
+	f, ok := any(m).(T)
 	if !ok {
 		return f, fmt.Errorf("expected appropriately typed mutation in schema hook, got: %+v", m)
 	}
