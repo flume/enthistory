@@ -179,10 +179,7 @@ func (fc *FriendshipCreate) createSpec() (*Friendship, *sqlgraph.CreateSpec) {
 			Columns: []string{friendship.CharacterColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: character.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -199,10 +196,7 @@ func (fc *FriendshipCreate) createSpec() (*Friendship, *sqlgraph.CreateSpec) {
 			Columns: []string{friendship.FriendColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: character.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

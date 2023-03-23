@@ -206,10 +206,7 @@ func (cc *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
 			Columns: character.FriendsPrimaryKey,
 			Bidi:    true,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: character.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -229,10 +226,7 @@ func (cc *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
 			Columns: []string{character.FriendshipsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: friendship.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
