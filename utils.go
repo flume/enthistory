@@ -1,8 +1,6 @@
 package enthistory
 
 import (
-	"fmt"
-	"os"
 	"regexp"
 	"strings"
 
@@ -65,30 +63,6 @@ func createHistoryFields(schemaFields []*load.Field) []*load.Field {
 		historyFields[j] = &newField
 	}
 	return historyFields
-}
-
-func getHistorySchemaPath(schema *load.Schema) (string, error) {
-	dir, err := os.Getwd()
-	if err != nil {
-		return "", err
-	}
-	path := fmt.Sprintf("%v/schema/%v.go", dir, fmt.Sprintf("%s_history", strings.ToLower(schema.Name)))
-	return path, nil
-}
-
-func removeOldGenerated(schemas []*load.Schema) error {
-	for _, schema := range schemas {
-		path, err := getHistorySchemaPath(schema)
-		if err != nil {
-			return err
-		}
-
-		err = os.RemoveAll(path)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 func loadHistorySchema() (*load.Schema, error) {
