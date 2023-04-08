@@ -139,13 +139,16 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	records := [][]string{
 		{"Table", "Ref Id", "History Time", "Operation", "Changes"{{ if not (eq $updatedByKey "") }}, "Updated By" {{ end }}},
 	}
+	var record [][]string
+	var err error
+	
 	{{- range $n := $.Nodes }}
     {{- if (hasSuffix $n.Name "History") }}
-	{{ $n.Receiver }}Records, err := audit{{ $n.Name }}(ctx, c.config)
+	record, err = audit{{ $n.Name }}(ctx, c.config)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, {{ $n.Receiver }}Records...)
+	records = append(records, record...)
     {{ end }}
 	{{- end }}
 
