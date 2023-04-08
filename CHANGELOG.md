@@ -1,5 +1,10 @@
 # Changelog
 
+### [v0.5.0](https://github.com/flume/enthistory/compare/v0.4.2...v0.5.0) (2023-04-08)
+
+* Implemented WithSchemaPath() allowing alternative schema locations (#9)
+  Thanks to @MatthewBehnke
+
 ### [v0.4.2](https://github.com/flume/enthistory/compare/v0.4.1...v0.4.2) (2023-03-23)
 
 * Dependency version updates
