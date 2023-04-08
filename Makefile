@@ -21,7 +21,8 @@ lint:
 # generate:
 #    Generate the examples code
 generate:
-	go generate ./_examples/ent
+	go generate ./_examples/basic/ent
+	go generate ./_examples/custompaths/ent
 	$(MAKE) fmt
 
 .PHONY: test

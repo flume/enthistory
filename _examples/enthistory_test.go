@@ -5,15 +5,15 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/flume/enthistory/_examples/ent/characterhistory"
+	"github.com/flume/enthistory/_examples/basic/ent/characterhistory"
 
-	"github.com/flume/enthistory/_examples/ent"
-	"github.com/flume/enthistory/_examples/ent/enttest"
-	"github.com/flume/enthistory/_examples/ent/migrate"
+	"github.com/flume/enthistory/_examples/basic/ent"
+	"github.com/flume/enthistory/_examples/basic/ent/enttest"
+	"github.com/flume/enthistory/_examples/basic/ent/migrate"
 
 	_ "github.com/mattn/go-sqlite3"
 
-	_ "github.com/flume/enthistory/_examples/ent/runtime"
+	_ "github.com/flume/enthistory/_examples/basic/ent/runtime"
 
 	"testing"
 )

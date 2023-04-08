@@ -4,6 +4,8 @@ import (
 	"embed"
 	"fmt"
 	"os"
+	"path/filepath"
+	"strings"
 	"text/template"
 
 	"entgo.io/ent/entc"
@@ -22,8 +24,9 @@ type UpdatedBy struct {
 }
 
 type Config struct {
-	UpdatedBy *UpdatedBy
-	Auditing  bool
+	UpdatedBy  *UpdatedBy
+	Auditing   bool
+	SchemaPath string
 }
 
 func (c Config) Name() string {
@@ -56,18 +59,31 @@ func WithAuditing() ExtensionOption {
 	}
 }
 
+// WithSchemaPath allows you to set an alternative schemaPath
+// Defaults to "./schema"
+func WithSchemaPath(schemaPath string) ExtensionOption {
+	return func(ex *HistoryExtension) {
+		ex.config.SchemaPath = schemaPath
+	}
+}
+
 func NewHistoryExtension(opts ...ExtensionOption) *HistoryExtension {
 	extension := &HistoryExtension{
-		config: &Config{},
+		// Set configuration defaults that can get overridden with ExtensionOption
+		config: &Config{
+			SchemaPath: "./schema",
+		},
 	}
 	for _, opt := range opts {
 		opt(extension)
 	}
+
 	return extension
 }
 
 type templateInfo struct {
 	Schema             *load.Schema
+	SchemaPkg          string
 	TableName          string
 	OriginalTableName  string
 	WithUpdatedBy      bool
@@ -101,9 +117,14 @@ var (
 )
 
 func (h *HistoryExtension) generateHistorySchema(schema *load.Schema) (*load.Schema, error) {
+	pkg, err := getPkgFromSchemaPath(h.config.SchemaPath)
+	if err != nil {
+		return nil, err
+	}
 	templateInfo := templateInfo{
 		TableName:         fmt.Sprintf("%v_history", getSchemaTableName(schema)),
 		OriginalTableName: schema.Name,
+		SchemaPkg:         pkg,
 	}
 
 	if h.config != nil {
@@ -144,7 +165,7 @@ func (h *HistoryExtension) generateHistorySchema(schema *load.Schema) (*load.Sch
 
 	templateInfo.Schema = historySchema
 	// Get path to write new history schema file
-	path, err := getHistorySchemaPath(schema)
+	path, err := h.getHistorySchemaPath(schema)
 	if err != nil {
 		return nil, err
 	}
@@ -163,7 +184,7 @@ func (h *HistoryExtension) generateHistorySchema(schema *load.Schema) (*load.Sch
 
 func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Generator {
 	return gen.GenerateFunc(func(g *gen.Graph) error {
-		err := removeOldGenerated(g.Schemas)
+		err := h.removeOldGenerated(g.Schemas)
 		if err != nil {
 			return err
 		}
@@ -195,4 +216,29 @@ func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Genera
 		}
 		return next.Generate(graph)
 	})
+}
+
+func (h *HistoryExtension) getHistorySchemaPath(schema *load.Schema) (string, error) {
+	abs, err := filepath.Abs(h.config.SchemaPath)
+	if err != nil {
+		return "", err
+	}
+
+	path := fmt.Sprintf("%v/%v.go", abs, fmt.Sprintf("%s_history", strings.ToLower(schema.Name)))
+	return path, nil
+}
+
+func (h *HistoryExtension) removeOldGenerated(schemas []*load.Schema) error {
+	for _, schema := range schemas {
+		path, err := h.getHistorySchemaPath(schema)
+		if err != nil {
+			return err
+		}
+
+		err = os.RemoveAll(path)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
