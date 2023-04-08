@@ -1,6 +1,7 @@
 package enthistory
 
 import (
+	"errors"
 	"regexp"
 	"strings"
 
@@ -108,4 +109,13 @@ func getSchemaTableName(schema *load.Schema) string {
 		}
 	}
 	return toSnakeCase(schema.Name)
+}
+
+func getPkgFromSchemaPath(schemaPath string) (string, error) {
+	parts := strings.Split(schemaPath, "/")
+	lastPart := parts[len(parts)-1]
+	if len(lastPart) == 0 {
+		return "", errors.New("invalid schema path, unable to find package name in path")
+	}
+	return lastPart, nil
 }

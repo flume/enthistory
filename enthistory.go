@@ -83,6 +83,7 @@ func NewHistoryExtension(opts ...ExtensionOption) *HistoryExtension {
 
 type templateInfo struct {
 	Schema             *load.Schema
+	SchemaPkg          string
 	TableName          string
 	OriginalTableName  string
 	WithUpdatedBy      bool
@@ -116,9 +117,14 @@ var (
 )
 
 func (h *HistoryExtension) generateHistorySchema(schema *load.Schema) (*load.Schema, error) {
+	pkg, err := getPkgFromSchemaPath(h.config.SchemaPath)
+	if err != nil {
+		return nil, err
+	}
 	templateInfo := templateInfo{
 		TableName:         fmt.Sprintf("%v_history", getSchemaTableName(schema)),
 		OriginalTableName: schema.Name,
+		SchemaPkg:         pkg,
 	}
 
 	if h.config != nil {
