@@ -156,17 +156,19 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	records := [][]string{
 		{"Table", "Ref Id", "History Time", "Operation", "Changes", "Updated By"},
 	}
-	chRecords, err := auditCharacterHistory(ctx, c.config)
+	var record [][]string
+	var err error
+	record, err = auditCharacterHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, chRecords...)
+	records = append(records, record...)
 
-	fhRecords, err := auditFriendshipHistory(ctx, c.config)
+	record, err = auditFriendshipHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, fhRecords...)
+	records = append(records, record...)
 
 	return records, nil
 }
