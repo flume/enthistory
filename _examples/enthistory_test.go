@@ -1,4 +1,4 @@
-package basic
+package _examples
 
 import (
 	"context"

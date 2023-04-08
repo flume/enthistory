@@ -29,4 +29,4 @@ generate:
 # test:
 #    Run the tests
 test:
-	go test ./_examples/basic
+	go test ./_examples/.
