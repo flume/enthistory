@@ -15,7 +15,7 @@ fmt:
 #    lint the code
 lint:
 	golangci-lint run
-	golangci-lint run ./_examples/basic/.
+	golangci-lint run ./_examples/.
 
 .PHONY: generate
 # generate:
