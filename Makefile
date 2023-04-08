@@ -15,17 +15,18 @@ fmt:
 #    lint the code
 lint:
 	golangci-lint run
-	golangci-lint run ./_examples/.
+	golangci-lint run ./_examples/basic/.
 
 .PHONY: generate
 # generate:
 #    Generate the examples code
 generate:
-	go generate ./_examples/ent
+	go generate ./_examples/basic/ent
+	go generate ./_examples/custompaths/ent
 	$(MAKE) fmt
 
 .PHONY: test
 # test:
 #    Run the tests
 test:
-	go test ./_examples/.
+	go test ./_examples/basic
