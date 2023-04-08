@@ -210,8 +210,8 @@ func (Character) Annotations() []schema.Annotation {
 ```
 ### Setting a schema path
 To allow setting an alternative schema location other than `ent/schema` you can supply the `enthistory.NewExtension()` function with 
-the `enthistory.WithUpdatedBy()` Option. You choose your schema path (string) which should be the same as the schema path set in the `entc.Generate` function
-otherwise the extension will be unable to locate the schemas. You can leave the `enthistory.WithUpdatedBy()` function entirely if you don't plan on setting an alternative
+the `enthistory.WithSchemaPath()` Option. You choose your schema path (string) which should be the same as the schema path set in the `entc.Generate` function
+otherwise the extension will be unable to locate the schemas. You can omit the `enthistory.WithSchemaPath()` function if you don't plan on setting an alternative
 schema location than `ent/schema`.
 
 ```go
@@ -226,6 +226,8 @@ func main() {
 	)
 }
 ```
+
+See the [custompaths](./_examples/custompaths/ent/entc.go) example for a full example of how you can use this functional option.
 
 ## Caveats
 
