@@ -5,17 +5,13 @@
 	{{- $pkg := base $.Config.Package }}
 	{{- template "header" $ }}
 import (
-    {{- if $.Annotations.HistoryConfig.Auditing }}
     "context"
     "encoding/json"
-    {{- end }}
 	"errors"
-    {{- if $.Annotations.HistoryConfig.Auditing }}
 	"fmt"
 	"time"
 
 	"github.com/flume/enthistory"
-    {{- end }}
 
     {{- range $n := $.Nodes }}
         {{- $name := $n.Name }}
@@ -28,6 +24,19 @@ import (
 
 {{ $updatedByKey := extractUpdatedByKey $.Annotations.HistoryConfig.UpdatedBy }}
 {{ $updatedByValueType := extractUpdatedByValueType $.Annotations.HistoryConfig.UpdatedBy }}
+
+// slicesEqual pulled from golang.org/x/exp to reduce direct dependencies required
+func slicesEqual[E comparable](s1, s2 []E) bool {
+	if len(s1) != len(s2) {
+		return false
+	}
+	for i := range s1 {
+		if s1[i] != s2[i] {
+			return false
+		}
+	}
+	return true
+}
 
 type Change struct {
     FieldName string
@@ -65,15 +74,36 @@ var (
                 {{ if $sameNodeType }}
 func ({{ $h.Receiver }} *{{ $h.Name }}) changes(new *{{ $h.Name }}) []Change {
     var changes []Change
-    {{- range $f := $n.Fields }}
-    {{- if (eq $f.Type.String "time.Time") }}
-    if !{{ $h.Receiver }}.{{ $f.StructField }}.Equal(new.{{ $f.StructField }}) {
-    {{- else }}
-    if {{ $h.Receiver }}.{{ $f.StructField }} != new.{{ $f.StructField }} {
-    {{- end }}
+{{- range $f := $n.Fields }}
+    {{- if (isSlice $f.Type.String) }}
+    if !slicesEqual({{ $h.Receiver }}.{{ $f.StructField }}, new.{{ $f.StructField }}) {
         changes = append(changes, NewChange({{ lower $h.Name }}.Field{{ $f.StructField }} , {{ $h.Receiver }}.{{ $f.StructField }}, new.{{ $f.StructField }}))
     }
+    {{- else }}
+        {{- if (eq $f.Type.String "time.Time") }}
+            {{- if $f.Nillable }}
+    if {{ $h.Receiver }}.{{ $f.StructField }} != new.{{ $f.StructField }} {
+        if {{ $h.Receiver }}.{{ $f.StructField }} != nil && new.{{ $f.StructField }} != nil {
+            if !{{ $h.Receiver }}.{{ $f.StructField }}.Equal(*new.{{ $f.StructField }}) {
+                changes = append(changes, NewChange({{ lower $h.Name }}.Field{{ $f.StructField }} , {{ $h.Receiver }}.{{ $f.StructField }}, new.{{ $f.StructField }}))
+            }
+        } else {
+            changes = append(changes, NewChange({{ lower $h.Name }}.Field{{ $f.StructField }} , {{ $h.Receiver }}.{{ $f.StructField }}, new.{{ $f.StructField }}))
+        }
+    }
+
+            {{- else }}
+    if !{{ $h.Receiver }}.{{ $f.StructField }}.Equal(new.{{ $f.StructField }}) {
+            changes = append(changes, NewChange({{ lower $h.Name }}.Field{{ $f.StructField }} , {{ $h.Receiver }}.{{ $f.StructField }}, new.{{ $f.StructField }}))
+    }
+            {{- end }}
+        {{- else }}
+    if {{ $h.Receiver }}.{{ $f.StructField }} != new.{{ $f.StructField }} {
+        changes = append(changes, NewChange({{ lower $h.Name }}.Field{{ $f.StructField }} , {{ $h.Receiver }}.{{ $f.StructField }}, new.{{ $f.StructField }}))
+    }
+        {{- end }}
     {{- end }}
+{{- end }}
     return changes
 }
 
@@ -106,7 +136,6 @@ func ({{ $h.Receiver }} *{{ $h.Name }}) Diff(history *{{ $h.Name }}) (*HistoryDi
         {{ end }}
 	{{ end }}
 
-{{ if $.Annotations.HistoryConfig.Auditing }}
 func (c Change) String(op enthistory.OpType) string {
 	var newstr, oldstr string
 	if c.New != nil {
@@ -249,7 +278,6 @@ func audit{{ $n.Name }}(ctx context.Context, config config) ([][]string, error) 
 	return records, nil
 }
 
-{{- end }}
 {{- end }}
 {{- end }}
 {{ end }}
