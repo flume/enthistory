@@ -2,7 +2,7 @@
 
 ### [v0.5.1](https://github.com/flume/enthistory/compare/v0.5.0...v0.5.1) (2023-04-09)
 
-* Add Missing Type Checks in Changes Calculations (slices, ptrs on time.Time)
+* Add Missing Type Checks in Changes Calculations (slices, ptrs on time.Time)(#11)
 * Fixed a bug where duplicate schema initials caused invalid code generation (#10)
   Thanks to @MatthewBehnke
 
