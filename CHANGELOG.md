@@ -1,5 +1,11 @@
 # Changelog
 
+### [v0.5.1](https://github.com/flume/enthistory/compare/v0.5.0...v0.5.1) (2023-04-09)
+
+* Add Missing Type Checks in Changes Calculations (slices, ptrs on time.Time)
+* Fixed a bug where duplicate schema initials caused invalid code generation (#10)
+  Thanks to @MatthewBehnke
+
 ### [v0.5.0](https://github.com/flume/enthistory/compare/v0.4.2...v0.5.0) (2023-04-08)
 
 * Implemented WithSchemaPath() allowing alternative schema locations (#9)
