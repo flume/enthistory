@@ -1,6 +1,7 @@
 package enthistory
 
 import (
+	"strings"
 	"text/template"
 
 	"entgo.io/ent/entc/gen"
@@ -30,11 +31,16 @@ func extractUpdatedByValueType(val any) string {
 	}
 }
 
+func isSlice(typeString string) bool {
+	return strings.HasPrefix(typeString, "[]")
+}
+
 func parseTemplate(name, path string) *gen.Template {
 	t := gen.NewTemplate(name)
 	t.Funcs(template.FuncMap{
 		"extractUpdatedByKey":       extractUpdatedByKey,
 		"extractUpdatedByValueType": extractUpdatedByValueType,
+		"isSlice":                   isSlice,
 	})
 	return gen.MustParse(t.ParseFS(_templates, path))
 }

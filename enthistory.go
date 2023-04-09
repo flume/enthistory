@@ -72,6 +72,7 @@ func NewHistoryExtension(opts ...ExtensionOption) *HistoryExtension {
 		// Set configuration defaults that can get overridden with ExtensionOption
 		config: &Config{
 			SchemaPath: "./schema",
+			Auditing:   false,
 		},
 	}
 	for _, opt := range opts {
@@ -90,13 +91,16 @@ type templateInfo struct {
 	UpdatedByValueType string
 }
 
-func (*HistoryExtension) Templates() []*gen.Template {
-	return []*gen.Template{
+func (h *HistoryExtension) Templates() []*gen.Template {
+	templates := []*gen.Template{
 		parseTemplate("historyFromMutation", "templates/historyFromMutation.tmpl"),
 		parseTemplate("historyQuery", "templates/historyQuery.tmpl"),
-		parseTemplate("auditing", "templates/auditing.tmpl"),
 		parseTemplate("client", "templates/client.tmpl"),
 	}
+	if h.config.Auditing {
+		templates = append(templates, parseTemplate("auditing", "templates/auditing.tmpl"))
+	}
+	return templates
 }
 
 // Hooks of the HistoryExtension.

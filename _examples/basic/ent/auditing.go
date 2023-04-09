@@ -15,6 +15,19 @@ import (
 	"github.com/flume/enthistory/_examples/basic/ent/friendshiphistory"
 )
 
+// slicesEqual pulled from golang.org/x/exp to reduce direct dependencies required
+func slicesEqual[E comparable](s1, s2 []E) bool {
+	if len(s1) != len(s2) {
+		return false
+	}
+	for i := range s1 {
+		if s1[i] != s2[i] {
+			return false
+		}
+	}
+	return true
+}
+
 type Change struct {
 	FieldName string
 	Old       any
