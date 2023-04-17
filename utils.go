@@ -27,45 +27,6 @@ func copyRef[T any](ref *T) *T {
 	return &val
 }
 
-func createHistoryFields(schemaFields []*load.Field) []*load.Field {
-	historyFields := make([]*load.Field, len(schemaFields))
-	i := 4
-	for j, field := range schemaFields {
-		newField := load.Field{
-			Name:          field.Name,
-			Info:          copyRef(field.Info),
-			Tag:           field.Tag,
-			Size:          copyRef(field.Size),
-			Enums:         field.Enums,
-			Unique:        field.Unique,
-			Nillable:      field.Nillable,
-			Optional:      field.Optional,
-			Default:       field.Default,
-			DefaultValue:  field.DefaultValue,
-			DefaultKind:   field.DefaultKind,
-			UpdateDefault: field.UpdateDefault,
-			Immutable:     field.Immutable,
-			Validators:    field.Validators,
-			StorageKey:    field.StorageKey,
-			Position:      copyRef(field.Position),
-			Sensitive:     field.Sensitive,
-			SchemaType:    field.SchemaType,
-			Annotations:   field.Annotations,
-			Comment:       field.Comment,
-		}
-		if !field.Position.MixedIn {
-			newField.Position = &load.Position{
-				Index:      i,
-				MixedIn:    false,
-				MixinIndex: 0,
-			}
-			i += 1
-		}
-		historyFields[j] = &newField
-	}
-	return historyFields
-}
-
 func loadHistorySchema() (*load.Schema, error) {
 	bytes, err := load.MarshalSchema(history{})
 	if err != nil {

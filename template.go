@@ -31,8 +31,21 @@ func extractUpdatedByValueType(val any) string {
 	}
 }
 
+func fieldPropertiesNillable(config Config) bool {
+	return config.FieldProperties != nil && config.FieldProperties.Nillable
+}
+
 func isSlice(typeString string) bool {
 	return strings.HasPrefix(typeString, "[]")
+}
+
+func in(str string, list []string) bool {
+	for _, item := range list {
+		if item == str {
+			return true
+		}
+	}
+	return false
 }
 
 func parseTemplate(name, path string) *gen.Template {
@@ -40,7 +53,9 @@ func parseTemplate(name, path string) *gen.Template {
 	t.Funcs(template.FuncMap{
 		"extractUpdatedByKey":       extractUpdatedByKey,
 		"extractUpdatedByValueType": extractUpdatedByValueType,
+		"fieldPropertiesNillable":   fieldPropertiesNillable,
 		"isSlice":                   isSlice,
+		"in":                        in,
 	})
 	return gen.MustParse(t.ParseFS(_templates, path))
 }

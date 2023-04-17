@@ -23,10 +23,16 @@ type UpdatedBy struct {
 	valueType ValueType
 }
 
+type FieldProperties struct {
+	Nillable  bool
+	Immutable bool
+}
+
 type Config struct {
-	UpdatedBy  *UpdatedBy
-	Auditing   bool
-	SchemaPath string
+	UpdatedBy       *UpdatedBy
+	Auditing        bool
+	SchemaPath      string
+	FieldProperties *FieldProperties
 }
 
 func (c Config) Name() string {
@@ -67,12 +73,28 @@ func WithSchemaPath(schemaPath string) ExtensionOption {
 	}
 }
 
+// WithFieldsNillable allows you to set all tracked fields in history to Nillable
+// except enthistory managed fields (history_time, ref, operation, & updated_by)
+func WithFieldsNillable() ExtensionOption {
+	return func(ex *HistoryExtension) {
+		ex.config.FieldProperties.Nillable = true
+	}
+}
+
+// WithFieldsImmutable allows you to set all tracked fields in history to Immutable
+func WithFieldsImmutable() ExtensionOption {
+	return func(ex *HistoryExtension) {
+		ex.config.FieldProperties.Immutable = true
+	}
+}
+
 func NewHistoryExtension(opts ...ExtensionOption) *HistoryExtension {
 	extension := &HistoryExtension{
 		// Set configuration defaults that can get overridden with ExtensionOption
 		config: &Config{
-			SchemaPath: "./schema",
-			Auditing:   false,
+			SchemaPath:      "./schema",
+			Auditing:        false,
+			FieldProperties: &FieldProperties{},
 		},
 	}
 	for _, opt := range opts {
@@ -160,7 +182,7 @@ func (h *HistoryExtension) generateHistorySchema(schema *load.Schema) (*load.Sch
 
 	// merge the original schema onto the history schema
 	historySchema.Name = fmt.Sprintf("%vHistory", schema.Name)
-	historySchema.Fields = append(historySchema.Fields, createHistoryFields(schema.Fields)...)
+	historySchema.Fields = append(historySchema.Fields, h.createHistoryFields(schema.Fields)...)
 	historySchema.Annotations = map[string]any{
 		"EntSQL": map[string]any{
 			"table": templateInfo.TableName,
@@ -245,4 +267,51 @@ func (h *HistoryExtension) removeOldGenerated(schemas []*load.Schema) error {
 		}
 	}
 	return nil
+}
+
+func (h *HistoryExtension) createHistoryFields(schemaFields []*load.Field) []*load.Field {
+	historyFields := make([]*load.Field, len(schemaFields))
+	fieldPropertiesSet := h.config.FieldProperties != nil
+	i := 4
+	for j, field := range schemaFields {
+		nillable := field.Nillable
+		immutable := field.Immutable
+		if fieldPropertiesSet {
+			nillable = h.config.FieldProperties.Nillable || nillable
+			immutable = h.config.FieldProperties.Immutable || immutable
+		}
+
+		newField := load.Field{
+			Name:          field.Name,
+			Info:          copyRef(field.Info),
+			Tag:           field.Tag,
+			Size:          copyRef(field.Size),
+			Enums:         field.Enums,
+			Unique:        field.Unique,
+			Nillable:      nillable,
+			Optional:      field.Optional,
+			Default:       field.Default,
+			DefaultValue:  field.DefaultValue,
+			DefaultKind:   field.DefaultKind,
+			UpdateDefault: field.UpdateDefault,
+			Immutable:     immutable,
+			Validators:    field.Validators,
+			StorageKey:    field.StorageKey,
+			Position:      copyRef(field.Position),
+			Sensitive:     field.Sensitive,
+			SchemaType:    field.SchemaType,
+			Annotations:   field.Annotations,
+			Comment:       field.Comment,
+		}
+		if !field.Position.MixedIn {
+			newField.Position = &load.Position{
+				Index:      i,
+				MixedIn:    false,
+				MixinIndex: 0,
+			}
+			i += 1
+		}
+		historyFields[j] = &newField
+	}
+	return historyFields
 }
