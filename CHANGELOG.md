@@ -1,5 +1,9 @@
 # Changelog
 
+### [v0.6.0](https://github.com/flume/enthistory/compare/v0.5.1...v0.6.0) (2023-04-17)
+
+* New Config Options - Set all tracked fields Nillable or Immutable (#13)
+
 ### [v0.5.1](https://github.com/flume/enthistory/compare/v0.5.0...v0.5.1) (2023-04-09)
 
 * Add Missing Type Checks in Changes Calculations (slices, ptrs on time.Time)(#11)
