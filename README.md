@@ -175,9 +175,9 @@ diff, _ := prismoHistory.Diff(nextHistory)
 By default `enthistory` does not modify the columns in the history tables that are being tracked from your
 original tables, it simply copies their state from `ent` when loading them. However, may want to set all tracked fields 
 in the history tables as either `Nillable` or `Immutable` for a variety of reasons. If that is the case you can use the
-`enthistory.WithFieldsNillable()` to set them all as `Nillable` or `enthistory.WithFieldsImmutable()` to set them all as `Immutable`.
+`enthistory.WithNillableFields()` to set them all as `Nillable` or `enthistory.WithImmutableFields()` to set them all as `Immutable`.
 
-**WARNING:** Setting `enthistory.WithFieldsNillable()` will remove the ability to call the `Restore()` function on a history object. 
+**WARNING:** Setting `enthistory.WithNillableFields()` will remove the ability to call the `Restore()` function on a history object. 
 Setting all fields to `Nillable` causes the history tables to diverge from the original tables and the unpredictability 
 of that means the `Restore()` function cannot be generated.
 

@@ -73,16 +73,16 @@ func WithSchemaPath(schemaPath string) ExtensionOption {
 	}
 }
 
-// WithFieldsNillable allows you to set all tracked fields in history to Nillable
+// WithNillableFields allows you to set all tracked fields in history to Nillable
 // except enthistory managed fields (history_time, ref, operation, & updated_by)
-func WithFieldsNillable() ExtensionOption {
+func WithNillableFields() ExtensionOption {
 	return func(ex *HistoryExtension) {
 		ex.config.FieldProperties.Nillable = true
 	}
 }
 
-// WithFieldsImmutable allows you to set all tracked fields in history to Immutable
-func WithFieldsImmutable() ExtensionOption {
+// WithImmutableFields allows you to set all tracked fields in history to Immutable
+func WithImmutableFields() ExtensionOption {
 	return func(ex *HistoryExtension) {
 		ex.config.FieldProperties.Immutable = true
 	}
