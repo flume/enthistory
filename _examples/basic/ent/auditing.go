@@ -28,6 +28,22 @@ func slicesEqual[E comparable](s1, s2 []E) bool {
 	return true
 }
 
+// ptrsEqual check if two comparable pointers are equal
+func ptrsEqual[T comparable](ptr1, ptr2 *T) bool {
+	if ptr1 == nil || ptr2 == nil {
+		return ptr1 == ptr2
+	}
+	return *ptr1 == *ptr2
+}
+
+// ptrsEqual check if two time.Time pointers are equal
+func timePtrsEqual(ptr1, ptr2 *time.Time) bool {
+	if ptr1 == nil || ptr2 == nil {
+		return ptr1 == ptr2
+	}
+	return ptr1.Equal(*ptr2)
+}
+
 type Change struct {
 	FieldName string
 	Old       any

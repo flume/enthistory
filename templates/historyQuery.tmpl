@@ -72,6 +72,7 @@ import (
                                     First(ctx)
                     }
 
+                    {{ if not (fieldPropertiesNillable $.Annotations.HistoryConfig) }}
                     func ({{ $h.Receiver }} *{{ $h.Name }}) Restore(ctx context.Context) (*{{ $n.Name }}, error) {
                         client := New{{ $n.Name }}Client({{ $h.Receiver }}.config)
                         return client.
@@ -83,6 +84,7 @@ import (
                         {{- end }}
                             Save(ctx)
                     }
+                    {{ end }}
                 {{ end }}
             {{ end }}
         {{ end }}
