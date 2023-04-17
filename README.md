@@ -171,6 +171,17 @@ diff, _ := prismoHistory.Diff(nextHistory)
 
 ## Config Options
 
+### Setting all tracked fields as Nillable and/or Immutable
+By default `enthistory` does not modify the columns in the history tables that are being tracked from your
+original tables, it simply copies their state from `ent` when loading them. However, may want to set all tracked fields 
+in the history tables as either `Nillable` or `Immutable` for a variety of reasons. If that is the case you can use the
+`enthistory.WithFieldsNillable()` to set them all as `Nillable` or `enthistory.WithFieldsImmutable()` to set them all as `Immutable`.
+
+**WARNING:** Setting `enthistory.WithFieldsNillable()` will remove the ability to call the `Restore()` function on a history object. 
+Setting all fields to `Nillable` causes the history tables to diverge from the original tables and the unpredictability 
+of that means the `Restore()` function cannot be generated.
+
+
 ### Updated By
 To track which users are making which changes to your tables, you can supply the `enthistory.NewExtension()` function with 
 the `enthistory.WithUpdatedBy()` Option. You choose your key name (string) and you can set either `enthistory.ValueTypeInt` (int) 
@@ -208,6 +219,8 @@ func (Character) Annotations() []schema.Annotation {
 	}
 }
 ```
+
+
 ### Setting a schema path
 To allow setting an alternative schema location other than `ent/schema` you can supply the `enthistory.NewExtension()` function with 
 the `enthistory.WithSchemaPath()` Option. You choose your schema path (string) which should be the same as the schema path set in the `entc.Generate` function
