@@ -276,8 +276,10 @@ func (h *HistoryExtension) createHistoryFields(schemaFields []*load.Field) []*lo
 	for j, field := range schemaFields {
 		nillable := field.Nillable
 		immutable := field.Immutable
+		optional := field.Optional
 		if fieldPropertiesSet {
 			nillable = h.config.FieldProperties.Nillable || nillable
+			optional = h.config.FieldProperties.Nillable || optional
 			immutable = h.config.FieldProperties.Immutable || immutable
 		}
 
@@ -289,7 +291,7 @@ func (h *HistoryExtension) createHistoryFields(schemaFields []*load.Field) []*lo
 			Enums:         field.Enums,
 			Unique:        field.Unique,
 			Nillable:      nillable,
-			Optional:      field.Optional,
+			Optional:      optional,
 			Default:       field.Default,
 			DefaultValue:  field.DefaultValue,
 			DefaultKind:   field.DefaultKind,
