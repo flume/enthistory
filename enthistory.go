@@ -277,7 +277,7 @@ func (h *HistoryExtension) createHistoryFields(schemaFields []*load.Field) []*lo
 		nillable := field.Nillable
 		immutable := field.Immutable
 		optional := field.Optional
-		if fieldPropertiesSet {
+		if fieldPropertiesSet && field.Name != "id" {
 			nillable = h.config.FieldProperties.Nillable || nillable
 			optional = h.config.FieldProperties.Nillable || optional
 			immutable = h.config.FieldProperties.Immutable || immutable
