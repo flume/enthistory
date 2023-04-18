@@ -289,7 +289,7 @@ func (h *HistoryExtension) createHistoryFields(schemaFields []*load.Field) []*lo
 			Tag:           field.Tag,
 			Size:          copyRef(field.Size),
 			Enums:         field.Enums,
-			Unique:        field.Unique,
+			Unique:        false,
 			Nillable:      nillable,
 			Optional:      optional,
 			Default:       field.Default,
