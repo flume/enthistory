@@ -241,7 +241,7 @@ func auditCharacterHistory(ctx context.Context, config config) ([][]string, erro
 	client := NewCharacterHistoryClient(config)
 	err := client.Query().
 		Unique(true).
-		Order(Asc(characterhistory.FieldRef)).
+		Order(characterhistory.ByRef()).
 		Select(characterhistory.FieldRef).
 		Scan(ctx, &refs)
 
@@ -251,7 +251,7 @@ func auditCharacterHistory(ctx context.Context, config config) ([][]string, erro
 	for _, currRef := range refs {
 		histories, err := client.Query().
 			Where(characterhistory.Ref(currRef.Ref)).
-			Order(Asc(characterhistory.FieldHistoryTime)).
+			Order(characterhistory.ByHistoryTime()).
 			All(ctx)
 		if err != nil {
 			return nil, err
@@ -289,7 +289,7 @@ func auditFriendshipHistory(ctx context.Context, config config) ([][]string, err
 	client := NewFriendshipHistoryClient(config)
 	err := client.Query().
 		Unique(true).
-		Order(Asc(friendshiphistory.FieldRef)).
+		Order(friendshiphistory.ByRef()).
 		Select(friendshiphistory.FieldRef).
 		Scan(ctx, &refs)
 
@@ -299,7 +299,7 @@ func auditFriendshipHistory(ctx context.Context, config config) ([][]string, err
 	for _, currRef := range refs {
 		histories, err := client.Query().
 			Where(friendshiphistory.Ref(currRef.Ref)).
-			Order(Asc(friendshiphistory.FieldHistoryTime)).
+			Order(friendshiphistory.ByHistoryTime()).
 			All(ctx)
 		if err != nil {
 			return nil, err

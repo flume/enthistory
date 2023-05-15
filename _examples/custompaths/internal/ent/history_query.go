@@ -7,6 +7,8 @@ import (
 	"context"
 	"time"
 
+	"entgo.io/ent/dialect/sql"
+
 	"github.com/flume/enthistory/_examples/custompaths/internal/ent/characterhistory"
 	"github.com/flume/enthistory/_examples/custompaths/internal/ent/friendshiphistory"
 )
@@ -23,7 +25,7 @@ func (ch *CharacterHistory) Next(ctx context.Context) (*CharacterHistory, error)
 			characterhistory.Ref(ch.Ref),
 			characterhistory.HistoryTimeGT(ch.HistoryTime),
 		).
-		Order(Asc(characterhistory.FieldHistoryTime)).
+		Order(characterhistory.ByHistoryTime()).
 		First(ctx)
 }
 
@@ -34,26 +36,26 @@ func (ch *CharacterHistory) Prev(ctx context.Context) (*CharacterHistory, error)
 			characterhistory.Ref(ch.Ref),
 			characterhistory.HistoryTimeLT(ch.HistoryTime),
 		).
-		Order(Desc(characterhistory.FieldHistoryTime)).
+		Order(characterhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 
 func (chq *CharacterHistoryQuery) Earliest(ctx context.Context) (*CharacterHistory, error) {
 	return chq.
-		Order(Asc(characterhistory.FieldHistoryTime)).
+		Order(characterhistory.ByHistoryTime()).
 		First(ctx)
 }
 
 func (chq *CharacterHistoryQuery) Latest(ctx context.Context) (*CharacterHistory, error) {
 	return chq.
-		Order(Desc(characterhistory.FieldHistoryTime)).
+		Order(characterhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 
 func (chq *CharacterHistoryQuery) AsOf(ctx context.Context, time time.Time) (*CharacterHistory, error) {
 	return chq.
 		Where(characterhistory.HistoryTimeLTE(time)).
-		Order(Desc(characterhistory.FieldHistoryTime)).
+		Order(characterhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 
@@ -78,7 +80,7 @@ func (fh *FriendshipHistory) Next(ctx context.Context) (*FriendshipHistory, erro
 			friendshiphistory.Ref(fh.Ref),
 			friendshiphistory.HistoryTimeGT(fh.HistoryTime),
 		).
-		Order(Asc(friendshiphistory.FieldHistoryTime)).
+		Order(friendshiphistory.ByHistoryTime()).
 		First(ctx)
 }
 
@@ -89,26 +91,26 @@ func (fh *FriendshipHistory) Prev(ctx context.Context) (*FriendshipHistory, erro
 			friendshiphistory.Ref(fh.Ref),
 			friendshiphistory.HistoryTimeLT(fh.HistoryTime),
 		).
-		Order(Desc(friendshiphistory.FieldHistoryTime)).
+		Order(friendshiphistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 
 func (fhq *FriendshipHistoryQuery) Earliest(ctx context.Context) (*FriendshipHistory, error) {
 	return fhq.
-		Order(Asc(friendshiphistory.FieldHistoryTime)).
+		Order(friendshiphistory.ByHistoryTime()).
 		First(ctx)
 }
 
 func (fhq *FriendshipHistoryQuery) Latest(ctx context.Context) (*FriendshipHistory, error) {
 	return fhq.
-		Order(Desc(friendshiphistory.FieldHistoryTime)).
+		Order(friendshiphistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 
 func (fhq *FriendshipHistoryQuery) AsOf(ctx context.Context, time time.Time) (*FriendshipHistory, error) {
 	return fhq.
 		Where(friendshiphistory.HistoryTimeLTE(time)).
-		Order(Desc(friendshiphistory.FieldHistoryTime)).
+		Order(friendshiphistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 
