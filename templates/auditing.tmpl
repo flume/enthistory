@@ -248,7 +248,7 @@ func audit{{ $n.Name }}(ctx context.Context, config config) ([][]string, error) 
 	client := New{{ $n.Name }}Client(config)
 	err := client.Query().
 		Unique(true).
-		Order(Asc({{ lower $n.Name }}.FieldRef)).
+		Order({{ lower $n.Name }}.ByRef()).
 		Select({{ lower $n.Name }}.FieldRef).
 		Scan(ctx, &refs)
 
@@ -258,7 +258,7 @@ func audit{{ $n.Name }}(ctx context.Context, config config) ([][]string, error) 
 	for _, currRef := range refs {
 		histories, err := client.Query().
 			Where({{ lower $n.Name }}.Ref(currRef.Ref)).
-			Order(Asc({{ lower $n.Name }}.FieldHistoryTime)).
+			Order({{ lower $n.Name }}.ByHistoryTime()).
 			All(ctx)
 		if err != nil {
 			return nil, err
