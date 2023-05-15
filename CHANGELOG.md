@@ -1,5 +1,9 @@
 # Changelog
 
+### [v0.7.0](https://github.com/flume/enthistory/compare/v0.6.1...v0.7.0) (2023-05-15)
+
+* Add WithHistoryTimeIndex Option (#15)
+
 ### [v0.6.1](https://github.com/flume/enthistory/compare/v0.6.0...v0.6.1) (2023-04-18)
 
 * Tracked Fields Never Unique (#14)
