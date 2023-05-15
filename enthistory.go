@@ -29,10 +29,11 @@ type FieldProperties struct {
 }
 
 type Config struct {
-	UpdatedBy       *UpdatedBy
-	Auditing        bool
-	SchemaPath      string
-	FieldProperties *FieldProperties
+	UpdatedBy        *UpdatedBy
+	Auditing         bool
+	SchemaPath       string
+	FieldProperties  *FieldProperties
+	HistoryTimeIndex bool
 }
 
 func (c Config) Name() string {
@@ -88,6 +89,13 @@ func WithImmutableFields() ExtensionOption {
 	}
 }
 
+// WithHistoryTimeIndex allows you to add an index to the "history_time" fields
+func WithHistoryTimeIndex() ExtensionOption {
+	return func(ex *HistoryExtension) {
+		ex.config.HistoryTimeIndex = true
+	}
+}
+
 func NewHistoryExtension(opts ...ExtensionOption) *HistoryExtension {
 	extension := &HistoryExtension{
 		// Set configuration defaults that can get overridden with ExtensionOption
@@ -105,12 +113,13 @@ func NewHistoryExtension(opts ...ExtensionOption) *HistoryExtension {
 }
 
 type templateInfo struct {
-	Schema             *load.Schema
-	SchemaPkg          string
-	TableName          string
-	OriginalTableName  string
-	WithUpdatedBy      bool
-	UpdatedByValueType string
+	Schema               *load.Schema
+	SchemaPkg            string
+	TableName            string
+	OriginalTableName    string
+	WithUpdatedBy        bool
+	UpdatedByValueType   string
+	WithHistoryTimeIndex bool
 }
 
 func (h *HistoryExtension) Templates() []*gen.Template {
@@ -163,6 +172,7 @@ func (h *HistoryExtension) generateHistorySchema(schema *load.Schema) (*load.Sch
 			}
 			templateInfo.WithUpdatedBy = true
 		}
+		templateInfo.WithHistoryTimeIndex = h.config.HistoryTimeIndex
 	}
 
 	// Load new base history schema

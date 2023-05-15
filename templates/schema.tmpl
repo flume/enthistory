@@ -6,6 +6,9 @@ import (
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	{{- if $.WithHistoryTimeIndex }}
+	"entgo.io/ent/schema/index"
+	{{- end }}
 
 	"github.com/flume/enthistory"
 
@@ -60,3 +63,11 @@ func ({{ $name }}) Fields() []ent.Field {
 func ({{ $name }}) Mixin() []ent.Mixin {
 	return {{ .OriginalTableName }}{}.Mixin()
 }
+
+{{- if $.WithHistoryTimeIndex }}
+func ({{ $name }}) Indexes() []ent.Index {
+	return []ent.Index{
+        index.Fields("history_time"),
+	}
+}
+{{- end }}

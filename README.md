@@ -182,6 +182,12 @@ Setting all fields to `Nillable` causes the history tables to diverge from the o
 of that means the `Restore()` function cannot be generated.
 
 
+### History Time Indexing
+An index on the `history_time` field is not placed by default, but if you would like to turn it on you can use the
+`enthistory.WithHistoryTimeIndex()` config option. We opted for this to be optional to give more control to users given
+the trade-offs that come with/without an index on a field such as `history_time`
+
+
 ### Updated By
 To track which users are making which changes to your tables, you can supply the `enthistory.NewExtension()` function with 
 the `enthistory.WithUpdatedBy()` Option. You choose your key name (string) and you can set either `enthistory.ValueTypeInt` (int) 
