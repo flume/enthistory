@@ -190,6 +190,10 @@ func (h *HistoryExtension) generateHistorySchema(schema *load.Schema) (*load.Sch
 		historySchema.Fields = append(historySchema.Fields, updatedByField)
 	}
 
+	if templateInfo.WithHistoryTimeIndex {
+		historySchema.Indexes = append(historySchema.Indexes, &load.Index{Fields: []string{"history_time"}})
+	}
+
 	// merge the original schema onto the history schema
 	historySchema.Name = fmt.Sprintf("%vHistory", schema.Name)
 	historySchema.Fields = append(historySchema.Fields, h.createHistoryFields(schema.Fields)...)
