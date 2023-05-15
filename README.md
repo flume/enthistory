@@ -8,6 +8,10 @@ go get github.com/flume/enthistory
 ```
 and add it the extension to ent by creating two files in your `ent` directory `entc.go` and `generate.go`
 
+> enthistory `v0.8.0` and on requires ent `v0.12.x` or greater, if you are on an older version of ent install enthistory
+> like `go get github.com/flume/enthistory@v0.7.0`
+
+
 your entc.go should contain:
 ```go
 //go:build ignore
