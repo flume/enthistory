@@ -21,7 +21,7 @@ import (
 type CharacterQuery struct {
 	config
 	ctx             *QueryContext
-	order           []OrderFunc
+	order           []character.OrderOption
 	inters          []Interceptor
 	predicates      []predicate.Character
 	withFriends     *CharacterQuery
@@ -57,7 +57,7 @@ func (cq *CharacterQuery) Unique(unique bool) *CharacterQuery {
 }
 
 // Order specifies how the records should be ordered.
-func (cq *CharacterQuery) Order(o ...OrderFunc) *CharacterQuery {
+func (cq *CharacterQuery) Order(o ...character.OrderOption) *CharacterQuery {
 	cq.order = append(cq.order, o...)
 	return cq
 }
@@ -295,7 +295,7 @@ func (cq *CharacterQuery) Clone() *CharacterQuery {
 	return &CharacterQuery{
 		config:          cq.config,
 		ctx:             cq.ctx.Clone(),
-		order:           append([]OrderFunc{}, cq.order...),
+		order:           append([]character.OrderOption{}, cq.order...),
 		inters:          append([]Interceptor{}, cq.inters...),
 		predicates:      append([]predicate.Character{}, cq.predicates...),
 		withFriends:     cq.withFriends.Clone(),
@@ -517,8 +517,11 @@ func (cq *CharacterQuery) loadFriendships(ctx context.Context, query *Friendship
 			init(nodes[i])
 		}
 	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(friendship.FieldCharacterID)
+	}
 	query.Where(predicate.Friendship(func(s *sql.Selector) {
-		s.Where(sql.InValues(character.FriendshipsColumn, fks...))
+		s.Where(sql.InValues(s.C(character.FriendshipsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -528,7 +531,7 @@ func (cq *CharacterQuery) loadFriendships(ctx context.Context, query *Friendship
 		fk := n.CharacterID
 		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "character_id" returned %v for node %v`, fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "character_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}

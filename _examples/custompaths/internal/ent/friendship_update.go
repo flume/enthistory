@@ -70,7 +70,7 @@ func (fu *FriendshipUpdate) ClearFriend() *FriendshipUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (fu *FriendshipUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks[int, FriendshipMutation](ctx, fu.sqlSave, fu.mutation, fu.hooks)
+	return withHooks(ctx, fu.sqlSave, fu.mutation, fu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -250,7 +250,7 @@ func (fuo *FriendshipUpdateOne) Select(field string, fields ...string) *Friendsh
 
 // Save executes the query and returns the updated Friendship entity.
 func (fuo *FriendshipUpdateOne) Save(ctx context.Context) (*Friendship, error) {
-	return withHooks[*Friendship, FriendshipMutation](ctx, fuo.sqlSave, fuo.mutation, fuo.hooks)
+	return withHooks(ctx, fuo.sqlSave, fuo.mutation, fuo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.

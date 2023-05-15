@@ -19,7 +19,7 @@ import (
 type FriendshipHistoryQuery struct {
 	config
 	ctx        *QueryContext
-	order      []OrderFunc
+	order      []friendshiphistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.FriendshipHistory
 	// intermediate query (i.e. traversal path).
@@ -53,7 +53,7 @@ func (fhq *FriendshipHistoryQuery) Unique(unique bool) *FriendshipHistoryQuery {
 }
 
 // Order specifies how the records should be ordered.
-func (fhq *FriendshipHistoryQuery) Order(o ...OrderFunc) *FriendshipHistoryQuery {
+func (fhq *FriendshipHistoryQuery) Order(o ...friendshiphistory.OrderOption) *FriendshipHistoryQuery {
 	fhq.order = append(fhq.order, o...)
 	return fhq
 }
@@ -247,7 +247,7 @@ func (fhq *FriendshipHistoryQuery) Clone() *FriendshipHistoryQuery {
 	return &FriendshipHistoryQuery{
 		config:     fhq.config,
 		ctx:        fhq.ctx.Clone(),
-		order:      append([]OrderFunc{}, fhq.order...),
+		order:      append([]friendshiphistory.OrderOption{}, fhq.order...),
 		inters:     append([]Interceptor{}, fhq.inters...),
 		predicates: append([]predicate.FriendshipHistory{}, fhq.predicates...),
 		// clone intermediate query.

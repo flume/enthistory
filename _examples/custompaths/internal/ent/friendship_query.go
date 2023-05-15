@@ -20,7 +20,7 @@ import (
 type FriendshipQuery struct {
 	config
 	ctx           *QueryContext
-	order         []OrderFunc
+	order         []friendship.OrderOption
 	inters        []Interceptor
 	predicates    []predicate.Friendship
 	withCharacter *CharacterQuery
@@ -56,7 +56,7 @@ func (fq *FriendshipQuery) Unique(unique bool) *FriendshipQuery {
 }
 
 // Order specifies how the records should be ordered.
-func (fq *FriendshipQuery) Order(o ...OrderFunc) *FriendshipQuery {
+func (fq *FriendshipQuery) Order(o ...friendship.OrderOption) *FriendshipQuery {
 	fq.order = append(fq.order, o...)
 	return fq
 }
@@ -294,7 +294,7 @@ func (fq *FriendshipQuery) Clone() *FriendshipQuery {
 	return &FriendshipQuery{
 		config:        fq.config,
 		ctx:           fq.ctx.Clone(),
-		order:         append([]OrderFunc{}, fq.order...),
+		order:         append([]friendship.OrderOption{}, fq.order...),
 		inters:        append([]Interceptor{}, fq.inters...),
 		predicates:    append([]predicate.Friendship{}, fq.predicates...),
 		withCharacter: fq.withCharacter.Clone(),
@@ -526,6 +526,12 @@ func (fq *FriendshipQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != friendship.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if fq.withCharacter != nil {
+			_spec.Node.AddColumnOnce(friendship.FieldCharacterID)
+		}
+		if fq.withFriend != nil {
+			_spec.Node.AddColumnOnce(friendship.FieldFriendID)
 		}
 	}
 	if ps := fq.predicates; len(ps) > 0 {

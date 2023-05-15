@@ -28,7 +28,7 @@ func (fhd *FriendshipHistoryDelete) Where(ps ...predicate.FriendshipHistory) *Fr
 
 // Exec executes the deletion query and returns how many vertices were deleted.
 func (fhd *FriendshipHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks[int, FriendshipHistoryMutation](ctx, fhd.sqlExec, fhd.mutation, fhd.hooks)
+	return withHooks(ctx, fhd.sqlExec, fhd.mutation, fhd.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.

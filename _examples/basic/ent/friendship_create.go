@@ -80,7 +80,7 @@ func (fc *FriendshipCreate) Mutation() *FriendshipMutation {
 // Save creates the Friendship in the database.
 func (fc *FriendshipCreate) Save(ctx context.Context) (*Friendship, error) {
 	fc.defaults()
-	return withHooks[*Friendship, FriendshipMutation](ctx, fc.sqlSave, fc.mutation, fc.hooks)
+	return withHooks(ctx, fc.sqlSave, fc.mutation, fc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -232,8 +232,8 @@ func (fcb *FriendshipCreateBulk) Save(ctx context.Context) ([]*Friendship, error
 					return nil, err
 				}
 				builder.mutation = mutation
-				nodes[i], specs[i] = builder.createSpec()
 				var err error
+				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
 					_, err = mutators[i+1].Mutate(root, fcb.builders[i+1].mutation)
 				} else {

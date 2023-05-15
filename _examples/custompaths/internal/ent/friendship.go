@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/flume/enthistory/_examples/custompaths/internal/ent/character"
@@ -23,7 +24,8 @@ type Friendship struct {
 	FriendID int `json:"friend_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FriendshipQuery when eager-loading is set.
-	Edges FriendshipEdges `json:"edges"`
+	Edges        FriendshipEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // FriendshipEdges holds the relations/edges for other nodes in the graph.
@@ -71,7 +73,7 @@ func (*Friendship) scanValues(columns []string) ([]any, error) {
 		case friendship.FieldID, friendship.FieldCharacterID, friendship.FieldFriendID:
 			values[i] = new(sql.NullInt64)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type Friendship", columns[i])
+			values[i] = new(sql.UnknownType)
 		}
 	}
 	return values, nil
@@ -103,9 +105,17 @@ func (f *Friendship) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				f.FriendID = int(value.Int64)
 			}
+		default:
+			f.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
+}
+
+// Value returns the ent.Value that was dynamically selected and assigned to the Friendship.
+// This includes values selected through modifiers, order, etc.
+func (f *Friendship) Value(name string) (ent.Value, error) {
+	return f.selectValues.Get(name)
 }
 
 // QueryCharacter queries the "character" edge of the Friendship entity.

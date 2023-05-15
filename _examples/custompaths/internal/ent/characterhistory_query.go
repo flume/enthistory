@@ -19,7 +19,7 @@ import (
 type CharacterHistoryQuery struct {
 	config
 	ctx        *QueryContext
-	order      []OrderFunc
+	order      []characterhistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.CharacterHistory
 	// intermediate query (i.e. traversal path).
@@ -53,7 +53,7 @@ func (chq *CharacterHistoryQuery) Unique(unique bool) *CharacterHistoryQuery {
 }
 
 // Order specifies how the records should be ordered.
-func (chq *CharacterHistoryQuery) Order(o ...OrderFunc) *CharacterHistoryQuery {
+func (chq *CharacterHistoryQuery) Order(o ...characterhistory.OrderOption) *CharacterHistoryQuery {
 	chq.order = append(chq.order, o...)
 	return chq
 }
@@ -247,7 +247,7 @@ func (chq *CharacterHistoryQuery) Clone() *CharacterHistoryQuery {
 	return &CharacterHistoryQuery{
 		config:     chq.config,
 		ctx:        chq.ctx.Clone(),
-		order:      append([]OrderFunc{}, chq.order...),
+		order:      append([]characterhistory.OrderOption{}, chq.order...),
 		inters:     append([]Interceptor{}, chq.inters...),
 		predicates: append([]predicate.CharacterHistory{}, chq.predicates...),
 		// clone intermediate query.
