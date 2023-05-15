@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 
 	"github.com/flume/enthistory"
 
@@ -54,4 +55,9 @@ func (CharacterHistory) Fields() []ent.Field {
 // Mixin of the CharacterHistory.
 func (CharacterHistory) Mixin() []ent.Mixin {
 	return Character{}.Mixin()
+}
+func (CharacterHistory) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("history_time"),
+	}
 }
