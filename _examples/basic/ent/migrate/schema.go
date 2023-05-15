@@ -40,6 +40,13 @@ var (
 		Name:       "character_history",
 		Columns:    CharacterHistoryColumns,
 		PrimaryKey: []*schema.Column{CharacterHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "characterhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{CharacterHistoryColumns[1]},
+			},
+		},
 	}
 	// FriendshipColumns holds the columns for the "friendship" table.
 	FriendshipColumns = []*schema.Column{
@@ -93,6 +100,13 @@ var (
 		Name:       "friendship_history",
 		Columns:    FriendshipHistoryColumns,
 		PrimaryKey: []*schema.Column{FriendshipHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "friendshiphistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{FriendshipHistoryColumns[1]},
+			},
+		},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
