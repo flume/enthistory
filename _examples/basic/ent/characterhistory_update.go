@@ -69,7 +69,7 @@ func (chu *CharacterHistoryUpdate) Mutation() *CharacterHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (chu *CharacterHistoryUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks[int, CharacterHistoryMutation](ctx, chu.sqlSave, chu.mutation, chu.hooks)
+	return withHooks(ctx, chu.sqlSave, chu.mutation, chu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -207,7 +207,7 @@ func (chuo *CharacterHistoryUpdateOne) Select(field string, fields ...string) *C
 
 // Save executes the query and returns the updated CharacterHistory entity.
 func (chuo *CharacterHistoryUpdateOne) Save(ctx context.Context) (*CharacterHistory, error) {
-	return withHooks[*CharacterHistory, CharacterHistoryMutation](ctx, chuo.sqlSave, chuo.mutation, chuo.hooks)
+	return withHooks(ctx, chuo.sqlSave, chuo.mutation, chuo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.

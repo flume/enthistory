@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/flume/enthistory/_examples/custompaths/internal/ent/character"
@@ -22,7 +23,8 @@ type Character struct {
 	Name string `json:"name,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CharacterQuery when eager-loading is set.
-	Edges CharacterEdges `json:"edges"`
+	Edges        CharacterEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // CharacterEdges holds the relations/edges for other nodes in the graph.
@@ -64,7 +66,7 @@ func (*Character) scanValues(columns []string) ([]any, error) {
 		case character.FieldName:
 			values[i] = new(sql.NullString)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type Character", columns[i])
+			values[i] = new(sql.UnknownType)
 		}
 	}
 	return values, nil
@@ -96,9 +98,17 @@ func (c *Character) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.Name = value.String
 			}
+		default:
+			c.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
+}
+
+// Value returns the ent.Value that was dynamically selected and assigned to the Character.
+// This includes values selected through modifiers, order, etc.
+func (c *Character) Value(name string) (ent.Value, error) {
+	return c.selectValues.Get(name)
 }
 
 // QueryFriends queries the "friends" edge of the Character entity.

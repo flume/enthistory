@@ -8,6 +8,8 @@ import (
     "context"
     "time"
 
+    "entgo.io/ent/dialect/sql"
+
     {{- range $n := $.Nodes }}
         {{- $name := $n.Name }}
         {{- $history := hasSuffix $name "History" }}
@@ -38,7 +40,7 @@ import (
                     			{{ lower $h.Name }}.Ref({{ $h.Receiver }}.Ref),
                     			{{ lower $h.Name }}.HistoryTimeGT({{ $h.Receiver }}.HistoryTime),
                     		).
-                    		Order(Asc({{ lower $h.Name }}.FieldHistoryTime)).
+                    		Order({{ lower $h.Name }}.ByHistoryTime()).
                     		First(ctx)
                     }
 
@@ -49,26 +51,26 @@ import (
                                 {{ lower $h.Name }}.Ref({{ $h.Receiver }}.Ref),
                                 {{ lower $h.Name }}.HistoryTimeLT({{ $h.Receiver }}.HistoryTime),
                             ).
-                            Order(Desc({{ lower $h.Name }}.FieldHistoryTime)).
+                            Order({{ lower $h.Name }}.ByHistoryTime(sql.OrderDesc())).
                             First(ctx)
                     }
 
                     func ({{ receiver $h.QueryName }} *{{ $h.QueryName }}) Earliest(ctx context.Context) (*{{ $h.Name }}, error)  {
                         return {{ receiver $h.QueryName }}.
-                                    Order(Asc({{ lower $h.Name }}.FieldHistoryTime)).
+                                    Order({{ lower $h.Name }}.ByHistoryTime()).
                                     First(ctx)
                     }
 
                     func ({{ receiver $h.QueryName }} *{{ $h.QueryName }}) Latest(ctx context.Context) (*{{ $h.Name }}, error)  {
                         return {{ receiver $h.QueryName }}.
-                                    Order(Desc({{ lower $h.Name }}.FieldHistoryTime)).
+                                    Order({{ lower $h.Name }}.ByHistoryTime(sql.OrderDesc())).
                                     First(ctx)
                     }
 
                     func ({{ receiver $h.QueryName }} *{{ $h.QueryName }}) AsOf(ctx context.Context, time time.Time) (*{{ $h.Name }}, error)  {
                         return {{ receiver $h.QueryName }}.
                                     Where({{ lower $h.Name }}.HistoryTimeLTE(time)).
-                                    Order(Desc({{ lower $h.Name }}.FieldHistoryTime)).
+                                    Order({{ lower $h.Name }}.ByHistoryTime(sql.OrderDesc())).
                                     First(ctx)
                     }
 

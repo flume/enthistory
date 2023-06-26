@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"entgo.io/ent"
-	"entgo.io/ent/entc/integration/ent/hook"
 )
 
 type Mutation interface {
@@ -20,11 +19,23 @@ type Mutator interface {
 	Mutate(context.Context, Mutation) (ent.Value, error)
 }
 
+func On(hk ent.Hook, op ent.Op) ent.Hook {
+	return func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			hasOp := m.Op().Is(op)
+			if hasOp {
+				return hk(next).Mutate(ctx, m)
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+}
+
 func HistoryHooks[T Mutation]() []ent.Hook {
 	return []ent.Hook{
-		hook.On(historyHookCreate[T](), ent.OpCreate),
-		hook.On(historyHookUpdate[T](), ent.OpUpdate|ent.OpUpdateOne),
-		hook.On(historyHookDelete[T](), ent.OpDelete|ent.OpDeleteOne),
+		On(historyHookCreate[T](), ent.OpCreate),
+		On(historyHookUpdate[T](), ent.OpUpdate|ent.OpUpdateOne),
+		On(historyHookDelete[T](), ent.OpDelete|ent.OpDeleteOne),
 	}
 }
 

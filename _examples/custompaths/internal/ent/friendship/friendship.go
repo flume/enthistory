@@ -2,6 +2,11 @@
 
 package friendship
 
+import (
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+)
+
 const (
 	// Label holds the string label denoting the friendship type in the database.
 	Label = "friendship"
@@ -48,4 +53,50 @@ func ValidColumn(column string) bool {
 		}
 	}
 	return false
+}
+
+// OrderOption defines the ordering options for the Friendship queries.
+type OrderOption func(*sql.Selector)
+
+// ByID orders the results by the id field.
+func ByID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByCharacterID orders the results by the character_id field.
+func ByCharacterID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCharacterID, opts...).ToFunc()
+}
+
+// ByFriendID orders the results by the friend_id field.
+func ByFriendID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFriendID, opts...).ToFunc()
+}
+
+// ByCharacterField orders the results by character field.
+func ByCharacterField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCharacterStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByFriendField orders the results by friend field.
+func ByFriendField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFriendStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newCharacterStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CharacterInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, CharacterTable, CharacterColumn),
+	)
+}
+func newFriendStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FriendInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, FriendTable, FriendColumn),
+	)
 }

@@ -76,7 +76,7 @@ func (fhu *FriendshipHistoryUpdate) Mutation() *FriendshipHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (fhu *FriendshipHistoryUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks[int, FriendshipHistoryMutation](ctx, fhu.sqlSave, fhu.mutation, fhu.hooks)
+	return withHooks(ctx, fhu.sqlSave, fhu.mutation, fhu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -211,7 +211,7 @@ func (fhuo *FriendshipHistoryUpdateOne) Select(field string, fields ...string) *
 
 // Save executes the query and returns the updated FriendshipHistory entity.
 func (fhuo *FriendshipHistoryUpdateOne) Save(ctx context.Context) (*FriendshipHistory, error) {
-	return withHooks[*FriendshipHistory, FriendshipHistoryMutation](ctx, fhuo.sqlSave, fhuo.mutation, fhuo.hooks)
+	return withHooks(ctx, fhuo.sqlSave, fhuo.mutation, fhuo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.

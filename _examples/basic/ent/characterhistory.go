@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/flume/enthistory"
@@ -33,7 +34,8 @@ type CharacterHistory struct {
 	// Age holds the value of the "age" field.
 	Age int `json:"age,omitempty"`
 	// Name holds the value of the "name" field.
-	Name string `json:"name,omitempty"`
+	Name         string `json:"name,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -48,7 +50,7 @@ func (*CharacterHistory) scanValues(columns []string) ([]any, error) {
 		case characterhistory.FieldHistoryTime, characterhistory.FieldCreatedAt, characterhistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type CharacterHistory", columns[i])
+			values[i] = new(sql.UnknownType)
 		}
 	}
 	return values, nil
@@ -117,9 +119,17 @@ func (ch *CharacterHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ch.Name = value.String
 			}
+		default:
+			ch.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
+}
+
+// Value returns the ent.Value that was dynamically selected and assigned to the CharacterHistory.
+// This includes values selected through modifiers, order, etc.
+func (ch *CharacterHistory) Value(name string) (ent.Value, error) {
+	return ch.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this CharacterHistory.

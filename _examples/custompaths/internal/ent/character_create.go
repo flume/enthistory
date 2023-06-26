@@ -70,7 +70,7 @@ func (cc *CharacterCreate) Mutation() *CharacterMutation {
 
 // Save creates the Character in the database.
 func (cc *CharacterCreate) Save(ctx context.Context) (*Character, error) {
-	return withHooks[*Character, CharacterMutation](ctx, cc.sqlSave, cc.mutation, cc.hooks)
+	return withHooks(ctx, cc.sqlSave, cc.mutation, cc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -200,8 +200,8 @@ func (ccb *CharacterCreateBulk) Save(ctx context.Context) ([]*Character, error) 
 					return nil, err
 				}
 				builder.mutation = mutation
-				nodes[i], specs[i] = builder.createSpec()
 				var err error
+				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
 					_, err = mutators[i+1].Mutate(root, ccb.builders[i+1].mutation)
 				} else {

@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"time"
 
+	"entgo.io/ent/dialect/sql"
+
 	"github.com/flume/enthistory"
 )
 
@@ -76,4 +78,52 @@ func OperationValidator(o enthistory.OpType) error {
 	default:
 		return fmt.Errorf("characterhistory: invalid enum value for operation field: %q", o)
 	}
+}
+
+// OrderOption defines the ordering options for the CharacterHistory queries.
+type OrderOption func(*sql.Selector)
+
+// ByID orders the results by the id field.
+func ByID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByHistoryTime orders the results by the history_time field.
+func ByHistoryTime(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHistoryTime, opts...).ToFunc()
+}
+
+// ByRef orders the results by the ref field.
+func ByRef(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRef, opts...).ToFunc()
+}
+
+// ByOperation orders the results by the operation field.
+func ByOperation(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOperation, opts...).ToFunc()
+}
+
+// ByUpdatedBy orders the results by the updated_by field.
+func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
+}
+
+// ByCreatedAt orders the results by the created_at field.
+func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
+}
+
+// ByUpdatedAt orders the results by the updated_at field.
+func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByAge orders the results by the age field.
+func ByAge(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAge, opts...).ToFunc()
+}
+
+// ByName orders the results by the name field.
+func ByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
