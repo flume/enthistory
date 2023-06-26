@@ -1,5 +1,9 @@
 # Changelog
 
+### [v0.8.0](https://github.com/flume/enthistory/compare/v0.7.0...v0.8.0) (2023-06-23)
+
+* Upgrade ent to v0.12.3 (#17)
+
 ### [v0.7.0](https://github.com/flume/enthistory/compare/v0.6.1...v0.7.0) (2023-05-15)
 
 * Add WithHistoryTimeIndex Option (#15)
