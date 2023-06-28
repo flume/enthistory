@@ -29,11 +29,13 @@ type FieldProperties struct {
 }
 
 type Config struct {
-	UpdatedBy        *UpdatedBy
-	Auditing         bool
-	SchemaPath       string
-	FieldProperties  *FieldProperties
-	HistoryTimeIndex bool
+	UpdatedBy           *UpdatedBy
+	Auditing            bool
+	OriginSchemaPath    string
+	HisotrySchemaPath   string
+	OriginSchemaFullPkg string
+	FieldProperties     *FieldProperties
+	HistoryTimeIndex    bool
 }
 
 func (c Config) Name() string {
@@ -70,7 +72,27 @@ func WithAuditing() ExtensionOption {
 // Defaults to "./schema"
 func WithSchemaPath(schemaPath string) ExtensionOption {
 	return func(ex *HistoryExtension) {
-		ex.config.SchemaPath = schemaPath
+		ex.config.OriginSchemaPath = schemaPath
+	}
+}
+
+func WithOriginSchemaPath(schemaPath string) ExtensionOption {
+	return func(ex *HistoryExtension) {
+		ex.config.OriginSchemaPath = schemaPath
+	}
+}
+
+// WithHistorySchemaPath allows you to set an alternative for history schemaPath
+// Defaults to "./schema"
+func WithHisotrySchemaPath(schemaPath string) ExtensionOption {
+	return func(ex *HistoryExtension) {
+		ex.config.HisotrySchemaPath = schemaPath
+	}
+}
+
+func WithOriginSchemaFullPkg(schemaPkg string) ExtensionOption {
+	return func(ex *HistoryExtension) {
+		ex.config.OriginSchemaFullPkg = schemaPkg
 	}
 }
 
@@ -100,9 +122,10 @@ func NewHistoryExtension(opts ...ExtensionOption) *HistoryExtension {
 	extension := &HistoryExtension{
 		// Set configuration defaults that can get overridden with ExtensionOption
 		config: &Config{
-			SchemaPath:      "./schema",
-			Auditing:        false,
-			FieldProperties: &FieldProperties{},
+			OriginSchemaPath:  "./schema",
+			HisotrySchemaPath: "./schema",
+			Auditing:          false,
+			FieldProperties:   &FieldProperties{},
 		},
 	}
 	for _, opt := range opts {
@@ -114,7 +137,9 @@ func NewHistoryExtension(opts ...ExtensionOption) *HistoryExtension {
 
 type templateInfo struct {
 	Schema               *load.Schema
+	OriginSchemaPath     string
 	SchemaPkg            string
+	OriginSchemaFullPkg  string
 	TableName            string
 	OriginalTableName    string
 	WithUpdatedBy        bool
@@ -152,14 +177,26 @@ var (
 )
 
 func (h *HistoryExtension) generateHistorySchema(schema *load.Schema) (*load.Schema, error) {
-	pkg, err := getPkgFromSchemaPath(h.config.SchemaPath)
+	pkg, err := getPkgFromSchemaPath(h.config.HisotrySchemaPath)
 	if err != nil {
 		return nil, err
 	}
+	origin_pkg, err := getPkgFromSchemaPath(h.config.OriginSchemaPath)
+	if err != nil {
+		return nil, err
+	}
+
 	templateInfo := templateInfo{
 		TableName:         fmt.Sprintf("%v_history", getSchemaTableName(schema)),
 		OriginalTableName: schema.Name,
 		SchemaPkg:         pkg,
+	}
+
+	if h.config.HisotrySchemaPath != h.config.OriginSchemaPath {
+		otablename := fmt.Sprintf("%s.%s", origin_pkg, schema.Name)
+		templateInfo.OriginalTableName = otablename
+		templateInfo.OriginSchemaPath = h.config.OriginSchemaPath
+		templateInfo.OriginSchemaFullPkg = h.config.OriginSchemaFullPkg
 	}
 
 	if h.config != nil {
@@ -173,6 +210,7 @@ func (h *HistoryExtension) generateHistorySchema(schema *load.Schema) (*load.Sch
 			templateInfo.WithUpdatedBy = true
 		}
 		templateInfo.WithHistoryTimeIndex = h.config.HistoryTimeIndex
+
 	}
 
 	// Load new base history schema
@@ -259,7 +297,7 @@ func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Genera
 }
 
 func (h *HistoryExtension) getHistorySchemaPath(schema *load.Schema) (string, error) {
-	abs, err := filepath.Abs(h.config.SchemaPath)
+	abs, err := filepath.Abs(h.config.HisotrySchemaPath)
 	if err != nil {
 		return "", err
 	}

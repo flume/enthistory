@@ -13,6 +13,10 @@ import (
 	"github.com/flume/enthistory"
 
 	"time"
+
+    {{- if $.OriginSchemaFullPkg }}
+    "{{ .OriginSchemaFullPkg }}"
+    {{- end }}
 )
 {{- $schema := .Schema }}
 {{- $name := $schema.Name }}

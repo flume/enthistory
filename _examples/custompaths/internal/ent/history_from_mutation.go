@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"entgo.io/ent"
-
 	"github.com/flume/enthistory"
 )
 
