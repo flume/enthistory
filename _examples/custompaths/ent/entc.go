@@ -13,11 +13,12 @@ import (
 )
 
 const (
-	schemaPath = "./some/otherschema"
+	schemaOriginPath  = "./some/otherschema"
+	schemaHistoryPath = "./some/history"
 )
 
 func main() {
-	if err := entc.Generate(schemaPath,
+	if err := entc.Generate(schemaOriginPath,
 		&gen.Config{
 			Target:  "../internal/ent",
 			Schema:  "github.com/flume/enthistory/_examples/custompaths/ent/some/path",
@@ -25,7 +26,9 @@ func main() {
 		},
 		entc.Extensions(
 			enthistory.NewHistoryExtension(
-				enthistory.WithSchemaPath(schemaPath),
+				enthistory.WithOriginSchemaPath(schemaOriginPath),
+				enthistory.WithHisotrySchemaPath(schemaHistoryPath),
+				enthistory.WithOriginSchemaFullPkg("github.com/flume/enthistory/_examples/custompaths/ent/some/otherschema"),
 			),
 		),
 	); err != nil {
