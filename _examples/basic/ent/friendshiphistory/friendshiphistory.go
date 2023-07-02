@@ -18,10 +18,10 @@ const (
 	FieldID = "id"
 	// FieldHistoryTime holds the string denoting the history_time field in the database.
 	FieldHistoryTime = "history_time"
-	// FieldRef holds the string denoting the ref field in the database.
-	FieldRef = "ref"
 	// FieldOperation holds the string denoting the operation field in the database.
 	FieldOperation = "operation"
+	// FieldRef holds the string denoting the ref field in the database.
+	FieldRef = "ref"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
@@ -40,8 +40,8 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldHistoryTime,
-	FieldRef,
 	FieldOperation,
+	FieldRef,
 	FieldUpdatedBy,
 	FieldCreatedAt,
 	FieldUpdatedAt,
@@ -91,14 +91,14 @@ func ByHistoryTime(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldHistoryTime, opts...).ToFunc()
 }
 
-// ByRef orders the results by the ref field.
-func ByRef(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRef, opts...).ToFunc()
-}
-
 // ByOperation orders the results by the operation field.
 func ByOperation(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOperation, opts...).ToFunc()
+}
+
+// ByRef orders the results by the ref field.
+func ByRef(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRef, opts...).ToFunc()
 }
 
 // ByUpdatedBy orders the results by the updated_by field.

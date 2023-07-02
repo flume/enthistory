@@ -111,7 +111,7 @@ func (fhu *FriendshipHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 		}
 	}
 	if fhu.mutation.RefCleared() {
-		_spec.ClearField(friendshiphistory.FieldRef, field.TypeInt)
+		_spec.ClearField(friendshiphistory.FieldRef, field.TypeString)
 	}
 	if fhu.mutation.UpdatedByCleared() {
 		_spec.ClearField(friendshiphistory.FieldUpdatedBy, field.TypeInt)
@@ -263,7 +263,7 @@ func (fhuo *FriendshipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Fri
 		}
 	}
 	if fhuo.mutation.RefCleared() {
-		_spec.ClearField(friendshiphistory.FieldRef, field.TypeInt)
+		_spec.ClearField(friendshiphistory.FieldRef, field.TypeString)
 	}
 	if fhuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(friendshiphistory.FieldUpdatedBy, field.TypeInt)

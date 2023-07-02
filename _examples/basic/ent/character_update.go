@@ -79,14 +79,14 @@ func (cu *CharacterUpdate) AddFriends(c ...*Character) *CharacterUpdate {
 }
 
 // AddFriendshipIDs adds the "friendships" edge to the Friendship entity by IDs.
-func (cu *CharacterUpdate) AddFriendshipIDs(ids ...int) *CharacterUpdate {
+func (cu *CharacterUpdate) AddFriendshipIDs(ids ...string) *CharacterUpdate {
 	cu.mutation.AddFriendshipIDs(ids...)
 	return cu
 }
 
 // AddFriendships adds the "friendships" edges to the Friendship entity.
 func (cu *CharacterUpdate) AddFriendships(f ...*Friendship) *CharacterUpdate {
-	ids := make([]int, len(f))
+	ids := make([]string, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
 	}
@@ -126,14 +126,14 @@ func (cu *CharacterUpdate) ClearFriendships() *CharacterUpdate {
 }
 
 // RemoveFriendshipIDs removes the "friendships" edge to Friendship entities by IDs.
-func (cu *CharacterUpdate) RemoveFriendshipIDs(ids ...int) *CharacterUpdate {
+func (cu *CharacterUpdate) RemoveFriendshipIDs(ids ...string) *CharacterUpdate {
 	cu.mutation.RemoveFriendshipIDs(ids...)
 	return cu
 }
 
 // RemoveFriendships removes "friendships" edges to Friendship entities.
 func (cu *CharacterUpdate) RemoveFriendships(f ...*Friendship) *CharacterUpdate {
-	ids := make([]int, len(f))
+	ids := make([]string, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
 	}
@@ -266,7 +266,7 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{character.FriendshipsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -279,7 +279,7 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{character.FriendshipsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -295,7 +295,7 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{character.FriendshipsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -372,14 +372,14 @@ func (cuo *CharacterUpdateOne) AddFriends(c ...*Character) *CharacterUpdateOne {
 }
 
 // AddFriendshipIDs adds the "friendships" edge to the Friendship entity by IDs.
-func (cuo *CharacterUpdateOne) AddFriendshipIDs(ids ...int) *CharacterUpdateOne {
+func (cuo *CharacterUpdateOne) AddFriendshipIDs(ids ...string) *CharacterUpdateOne {
 	cuo.mutation.AddFriendshipIDs(ids...)
 	return cuo
 }
 
 // AddFriendships adds the "friendships" edges to the Friendship entity.
 func (cuo *CharacterUpdateOne) AddFriendships(f ...*Friendship) *CharacterUpdateOne {
-	ids := make([]int, len(f))
+	ids := make([]string, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
 	}
@@ -419,14 +419,14 @@ func (cuo *CharacterUpdateOne) ClearFriendships() *CharacterUpdateOne {
 }
 
 // RemoveFriendshipIDs removes the "friendships" edge to Friendship entities by IDs.
-func (cuo *CharacterUpdateOne) RemoveFriendshipIDs(ids ...int) *CharacterUpdateOne {
+func (cuo *CharacterUpdateOne) RemoveFriendshipIDs(ids ...string) *CharacterUpdateOne {
 	cuo.mutation.RemoveFriendshipIDs(ids...)
 	return cuo
 }
 
 // RemoveFriendships removes "friendships" edges to Friendship entities.
 func (cuo *CharacterUpdateOne) RemoveFriendships(f ...*Friendship) *CharacterUpdateOne {
-	ids := make([]int, len(f))
+	ids := make([]string, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
 	}
@@ -589,7 +589,7 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 			Columns: []string{character.FriendshipsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -602,7 +602,7 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 			Columns: []string{character.FriendshipsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -618,7 +618,7 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 			Columns: []string{character.FriendshipsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

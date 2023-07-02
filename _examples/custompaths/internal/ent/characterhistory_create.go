@@ -36,6 +36,12 @@ func (chc *CharacterHistoryCreate) SetNillableHistoryTime(t *time.Time) *Charact
 	return chc
 }
 
+// SetOperation sets the "operation" field.
+func (chc *CharacterHistoryCreate) SetOperation(et enthistory.OpType) *CharacterHistoryCreate {
+	chc.mutation.SetOperation(et)
+	return chc
+}
+
 // SetRef sets the "ref" field.
 func (chc *CharacterHistoryCreate) SetRef(i int) *CharacterHistoryCreate {
 	chc.mutation.SetRef(i)
@@ -47,12 +53,6 @@ func (chc *CharacterHistoryCreate) SetNillableRef(i *int) *CharacterHistoryCreat
 	if i != nil {
 		chc.SetRef(*i)
 	}
-	return chc
-}
-
-// SetOperation sets the "operation" field.
-func (chc *CharacterHistoryCreate) SetOperation(et enthistory.OpType) *CharacterHistoryCreate {
-	chc.mutation.SetOperation(et)
 	return chc
 }
 
@@ -163,13 +163,13 @@ func (chc *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cr
 		_spec.SetField(characterhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := chc.mutation.Ref(); ok {
-		_spec.SetField(characterhistory.FieldRef, field.TypeInt, value)
-		_node.Ref = value
-	}
 	if value, ok := chc.mutation.Operation(); ok {
 		_spec.SetField(characterhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
+	}
+	if value, ok := chc.mutation.Ref(); ok {
+		_spec.SetField(characterhistory.FieldRef, field.TypeInt, value)
+		_node.Ref = value
 	}
 	if value, ok := chc.mutation.Age(); ok {
 		_spec.SetField(characterhistory.FieldAge, field.TypeInt, value)

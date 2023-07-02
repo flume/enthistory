@@ -21,10 +21,10 @@ type FriendshipHistory struct {
 	ID int `json:"id,omitempty"`
 	// HistoryTime holds the value of the "history_time" field.
 	HistoryTime time.Time `json:"history_time,omitempty"`
-	// Ref holds the value of the "ref" field.
-	Ref int `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation enthistory.OpType `json:"operation,omitempty"`
+	// Ref holds the value of the "ref" field.
+	Ref int `json:"ref,omitempty"`
 	// CharacterID holds the value of the "character_id" field.
 	CharacterID int `json:"character_id,omitempty"`
 	// FriendID holds the value of the "friend_id" field.
@@ -70,17 +70,17 @@ func (fh *FriendshipHistory) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				fh.HistoryTime = value.Time
 			}
-		case friendshiphistory.FieldRef:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field ref", values[i])
-			} else if value.Valid {
-				fh.Ref = int(value.Int64)
-			}
 		case friendshiphistory.FieldOperation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value.Valid {
 				fh.Operation = enthistory.OpType(value.String)
+			}
+		case friendshiphistory.FieldRef:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field ref", values[i])
+			} else if value.Valid {
+				fh.Ref = int(value.Int64)
 			}
 		case friendshiphistory.FieldCharacterID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -133,11 +133,11 @@ func (fh *FriendshipHistory) String() string {
 	builder.WriteString("history_time=")
 	builder.WriteString(fh.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("ref=")
-	builder.WriteString(fmt.Sprintf("%v", fh.Ref))
-	builder.WriteString(", ")
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", fh.Operation))
+	builder.WriteString(", ")
+	builder.WriteString("ref=")
+	builder.WriteString(fmt.Sprintf("%v", fh.Ref))
 	builder.WriteString(", ")
 	builder.WriteString("character_id=")
 	builder.WriteString(fmt.Sprintf("%v", fh.CharacterID))

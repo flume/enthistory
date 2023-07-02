@@ -204,7 +204,7 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 
 type record struct {
 	Table       string
-	RefId       int
+	RefId       any
 	HistoryTime time.Time
 	Operation   enthistory.OpType
 	Changes     []Change
@@ -231,13 +231,13 @@ func (r *record) toRow() []string {
 	return row
 }
 
-type ref struct {
+type characterhistoryref struct {
 	Ref int
 }
 
 func auditCharacterHistory(ctx context.Context, config config) ([][]string, error) {
 	var records = [][]string{}
-	var refs []ref
+	var refs []characterhistoryref
 	client := NewCharacterHistoryClient(config)
 	err := client.Query().
 		Unique(true).
@@ -283,9 +283,14 @@ func auditCharacterHistory(ctx context.Context, config config) ([][]string, erro
 	}
 	return records, nil
 }
+
+type friendshiphistoryref struct {
+	Ref string
+}
+
 func auditFriendshipHistory(ctx context.Context, config config) ([][]string, error) {
 	var records = [][]string{}
-	var refs []ref
+	var refs []friendshiphistoryref
 	client := NewFriendshipHistoryClient(config)
 	err := client.Query().
 		Unique(true).

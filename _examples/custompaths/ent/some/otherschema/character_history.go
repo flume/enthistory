@@ -44,7 +44,14 @@ func (CharacterHistory) Fields() []ent.Field {
 			Immutable(),
 	}
 
-	return append(historyFields, Character{}.Fields()...)
+	original := Character{}
+	for _, field := range original.Fields() {
+		if field.Descriptor().Name != "id" {
+			historyFields = append(historyFields, field)
+		}
+	}
+
+	return historyFields
 }
 
 // Mixin of the CharacterHistory.

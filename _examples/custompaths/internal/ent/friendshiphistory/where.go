@@ -116,6 +116,26 @@ func HistoryTimeLTE(v time.Time) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldLTE(FieldHistoryTime, v))
 }
 
+// OperationEQ applies the EQ predicate on the "operation" field.
+func OperationEQ(v enthistory.OpType) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldEQ(FieldOperation, v))
+}
+
+// OperationNEQ applies the NEQ predicate on the "operation" field.
+func OperationNEQ(v enthistory.OpType) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldNEQ(FieldOperation, v))
+}
+
+// OperationIn applies the In predicate on the "operation" field.
+func OperationIn(vs ...enthistory.OpType) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldIn(FieldOperation, vs...))
+}
+
+// OperationNotIn applies the NotIn predicate on the "operation" field.
+func OperationNotIn(vs ...enthistory.OpType) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldNotIn(FieldOperation, vs...))
+}
+
 // RefEQ applies the EQ predicate on the "ref" field.
 func RefEQ(v int) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldEQ(FieldRef, v))
@@ -164,26 +184,6 @@ func RefIsNil() predicate.FriendshipHistory {
 // RefNotNil applies the NotNil predicate on the "ref" field.
 func RefNotNil() predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldNotNull(FieldRef))
-}
-
-// OperationEQ applies the EQ predicate on the "operation" field.
-func OperationEQ(v enthistory.OpType) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldEQ(FieldOperation, v))
-}
-
-// OperationNEQ applies the NEQ predicate on the "operation" field.
-func OperationNEQ(v enthistory.OpType) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldNEQ(FieldOperation, v))
-}
-
-// OperationIn applies the In predicate on the "operation" field.
-func OperationIn(vs ...enthistory.OpType) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldIn(FieldOperation, vs...))
-}
-
-// OperationNotIn applies the NotIn predicate on the "operation" field.
-func OperationNotIn(vs ...enthistory.OpType) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldNotIn(FieldOperation, vs...))
 }
 
 // CharacterIDEQ applies the EQ predicate on the "character_id" field.
