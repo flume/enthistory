@@ -2,6 +2,7 @@ package _examples
 
 import (
 	"context"
+	"os"
 
 	"github.com/stretchr/testify/assert"
 
@@ -114,7 +115,7 @@ func TestEntHistory(t *testing.T) {
 				assert.NoError(t, err)
 
 				// create friendship
-				friendship, err := client.Friendship.Create().SetCharacterID(finn.ID).SetFriendID(jake.ID).Save(ctx)
+				friendship, err := client.Friendship.Create().SetID("brothers").SetCharacterID(finn.ID).SetFriendID(jake.ID).Save(ctx)
 				assert.NoError(t, err)
 				friendships, err := friendship.History().All(ctx)
 				assert.NoError(t, err)
@@ -360,7 +361,7 @@ func TestEntHistory(t *testing.T) {
 				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").Save(ctx)
 				assert.NoError(t, err)
 
-				friendship, err := client.Friendship.Create().SetCharacterID(gunter.ID).SetFriendID(simon.ID).Save(ctx)
+				friendship, err := client.Friendship.Create().SetID("Ice Kingdom").SetCharacterID(gunter.ID).SetFriendID(simon.ID).Save(ctx)
 				assert.NoError(t, err)
 
 				gunter, err = gunter.Update().SetAge(20).Save(ctx)
