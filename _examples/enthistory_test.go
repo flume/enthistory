@@ -387,16 +387,24 @@ func TestEntHistory(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
+		err := os.Remove("entdb")
+		assert.NoError(t, err)
+
 		opts := []enttest.Option{
 			enttest.WithOptions(ent.Log(t.Log)),
 			enttest.WithMigrateOptions(migrate.WithGlobalUniqueID(true)),
 		}
 
-		client := enttest.Open(t, "sqlite3", "file:entdb?mode=memory&_fk=1", opts...)
+		client := enttest.Open(t, "sqlite3", "file:entdb?_fk=1", opts...)
 		client.WithHistory()
-		err := client.Schema.Create(context.Background())
+
+		err = client.Schema.Create(context.Background())
 		assert.NoError(t, err)
-		defer client.Close()
+
+		defer func(client *ent.Client) {
+			err = client.Close()
+			assert.NoError(t, err)
+		}(client)
 
 		t.Run(tt.name, func(t *testing.T) {
 			tt.runner(t, client)
