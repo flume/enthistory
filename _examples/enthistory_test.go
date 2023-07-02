@@ -388,8 +388,7 @@ func TestEntHistory(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		err := os.Remove("entdb")
-		assert.NoError(t, err)
+		os.Remove("entdb")
 
 		opts := []enttest.Option{
 			enttest.WithOptions(ent.Log(t.Log)),
@@ -399,7 +398,7 @@ func TestEntHistory(t *testing.T) {
 		client := enttest.Open(t, "sqlite3", "file:entdb?_fk=1", opts...)
 		client.WithHistory()
 
-		err = client.Schema.Create(context.Background())
+		err := client.Schema.Create(context.Background())
 		assert.NoError(t, err)
 
 		defer func(client *ent.Client) {
