@@ -42,7 +42,7 @@ func ({{ $name }}) Fields() []ent.Field {
         field.Time("history_time").
             Default(time.Now).
             Immutable(),
-        field.Int("ref").
+        field.{{ .IdType }}("ref").
             Immutable().
             Optional(),
         field.Enum("operation").
@@ -56,7 +56,15 @@ func ({{ $name }}) Fields() []ent.Field {
         {{- end }}
     }
 
-    return append(historyFields, {{ .OriginalTableName }}{}.Fields()...)
+
+    original := {{ .OriginalTableName }}{}
+    for _, field := range original.Fields() {
+        if field.Descriptor().Name != "id" {
+            historyFields = append(historyFields, field)
+        }
+    }
+
+    return historyFields
 }
 
 // Mixin of the {{ $name }}.

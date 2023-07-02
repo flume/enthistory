@@ -27,8 +27,19 @@ func copyRef[T any](ref *T) *T {
 	return &val
 }
 
-func loadHistorySchema() (*load.Schema, error) {
-	bytes, err := load.MarshalSchema(history{})
+func loadHistorySchema(IdType string) (*load.Schema, error) {
+	schema := history{}
+
+	switch IdType {
+	case "int":
+		schema.ref = field.Int("ref").Immutable().Optional()
+	case "string":
+		schema.ref = field.String("ref").Immutable().Optional()
+	default:
+		return nil, errors.New("only id and string are supported id types right now")
+	}
+
+	bytes, err := load.MarshalSchema(schema)
 	if err != nil {
 		return nil, err
 	}
@@ -37,6 +48,7 @@ func loadHistorySchema() (*load.Schema, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return historySchema, nil
 }
 

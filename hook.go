@@ -8,7 +8,6 @@ import (
 )
 
 type Mutation interface {
-	ID() (id int, exists bool)
 	Op() ent.Op
 	CreateHistoryFromCreate(ctx context.Context) error
 	CreateHistoryFromUpdate(ctx context.Context) error
