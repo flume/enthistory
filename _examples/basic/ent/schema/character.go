@@ -30,6 +30,10 @@ func (Character) Fields() []ent.Field {
 		field.Int("age").
 			Positive(),
 		field.String("name"),
+		field.JSON("nicknames", []string{}).
+			Optional(),
+		field.JSON("info", map[string]any{}).
+			Optional(),
 	}
 }
 
