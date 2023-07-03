@@ -83,6 +83,12 @@ func (ch *CharacterHistory) changes(new *CharacterHistory) []Change {
 	if ch.Name != new.Name {
 		changes = append(changes, NewChange(characterhistory.FieldName, ch.Name, new.Name))
 	}
+	if !slicesEqual(ch.Nicknames, new.Nicknames) {
+		changes = append(changes, NewChange(characterhistory.FieldNicknames, ch.Nicknames, new.Nicknames))
+	}
+	if ch.Info != new.Info {
+		changes = append(changes, NewChange(characterhistory.FieldInfo, ch.Info, new.Info))
+	}
 	return changes
 }
 

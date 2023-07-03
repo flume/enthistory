@@ -261,6 +261,26 @@ func NameContainsFold(v string) predicate.Character {
 	return predicate.Character(sql.FieldContainsFold(FieldName, v))
 }
 
+// NicknamesIsNil applies the IsNil predicate on the "nicknames" field.
+func NicknamesIsNil() predicate.Character {
+	return predicate.Character(sql.FieldIsNull(FieldNicknames))
+}
+
+// NicknamesNotNil applies the NotNil predicate on the "nicknames" field.
+func NicknamesNotNil() predicate.Character {
+	return predicate.Character(sql.FieldNotNull(FieldNicknames))
+}
+
+// InfoIsNil applies the IsNil predicate on the "info" field.
+func InfoIsNil() predicate.Character {
+	return predicate.Character(sql.FieldIsNull(FieldInfo))
+}
+
+// InfoNotNil applies the NotNil predicate on the "info" field.
+func InfoNotNil() predicate.Character {
+	return predicate.Character(sql.FieldNotNull(FieldInfo))
+}
+
 // HasFriends applies the HasEdge predicate on the "friends" edge.
 func HasFriends() predicate.Character {
 	return predicate.Character(func(s *sql.Selector) {

@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 
 	"github.com/flume/enthistory/_examples/basic/ent/characterhistory"
@@ -59,6 +60,36 @@ func (chu *CharacterHistoryUpdate) AddAge(i int) *CharacterHistoryUpdate {
 // SetName sets the "name" field.
 func (chu *CharacterHistoryUpdate) SetName(s string) *CharacterHistoryUpdate {
 	chu.mutation.SetName(s)
+	return chu
+}
+
+// SetNicknames sets the "nicknames" field.
+func (chu *CharacterHistoryUpdate) SetNicknames(s []string) *CharacterHistoryUpdate {
+	chu.mutation.SetNicknames(s)
+	return chu
+}
+
+// AppendNicknames appends s to the "nicknames" field.
+func (chu *CharacterHistoryUpdate) AppendNicknames(s []string) *CharacterHistoryUpdate {
+	chu.mutation.AppendNicknames(s)
+	return chu
+}
+
+// ClearNicknames clears the value of the "nicknames" field.
+func (chu *CharacterHistoryUpdate) ClearNicknames() *CharacterHistoryUpdate {
+	chu.mutation.ClearNicknames()
+	return chu
+}
+
+// SetInfo sets the "info" field.
+func (chu *CharacterHistoryUpdate) SetInfo(m map[string]interface{}) *CharacterHistoryUpdate {
+	chu.mutation.SetInfo(m)
+	return chu
+}
+
+// ClearInfo clears the value of the "info" field.
+func (chu *CharacterHistoryUpdate) ClearInfo() *CharacterHistoryUpdate {
+	chu.mutation.ClearInfo()
 	return chu
 }
 
@@ -134,6 +165,23 @@ func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if value, ok := chu.mutation.Name(); ok {
 		_spec.SetField(characterhistory.FieldName, field.TypeString, value)
 	}
+	if value, ok := chu.mutation.Nicknames(); ok {
+		_spec.SetField(characterhistory.FieldNicknames, field.TypeJSON, value)
+	}
+	if value, ok := chu.mutation.AppendedNicknames(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, characterhistory.FieldNicknames, value)
+		})
+	}
+	if chu.mutation.NicknamesCleared() {
+		_spec.ClearField(characterhistory.FieldNicknames, field.TypeJSON)
+	}
+	if value, ok := chu.mutation.Info(); ok {
+		_spec.SetField(characterhistory.FieldInfo, field.TypeJSON, value)
+	}
+	if chu.mutation.InfoCleared() {
+		_spec.ClearField(characterhistory.FieldInfo, field.TypeJSON)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, chu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{characterhistory.Label}
@@ -184,6 +232,36 @@ func (chuo *CharacterHistoryUpdateOne) AddAge(i int) *CharacterHistoryUpdateOne 
 // SetName sets the "name" field.
 func (chuo *CharacterHistoryUpdateOne) SetName(s string) *CharacterHistoryUpdateOne {
 	chuo.mutation.SetName(s)
+	return chuo
+}
+
+// SetNicknames sets the "nicknames" field.
+func (chuo *CharacterHistoryUpdateOne) SetNicknames(s []string) *CharacterHistoryUpdateOne {
+	chuo.mutation.SetNicknames(s)
+	return chuo
+}
+
+// AppendNicknames appends s to the "nicknames" field.
+func (chuo *CharacterHistoryUpdateOne) AppendNicknames(s []string) *CharacterHistoryUpdateOne {
+	chuo.mutation.AppendNicknames(s)
+	return chuo
+}
+
+// ClearNicknames clears the value of the "nicknames" field.
+func (chuo *CharacterHistoryUpdateOne) ClearNicknames() *CharacterHistoryUpdateOne {
+	chuo.mutation.ClearNicknames()
+	return chuo
+}
+
+// SetInfo sets the "info" field.
+func (chuo *CharacterHistoryUpdateOne) SetInfo(m map[string]interface{}) *CharacterHistoryUpdateOne {
+	chuo.mutation.SetInfo(m)
+	return chuo
+}
+
+// ClearInfo clears the value of the "info" field.
+func (chuo *CharacterHistoryUpdateOne) ClearInfo() *CharacterHistoryUpdateOne {
+	chuo.mutation.ClearInfo()
 	return chuo
 }
 
@@ -288,6 +366,23 @@ func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Char
 	}
 	if value, ok := chuo.mutation.Name(); ok {
 		_spec.SetField(characterhistory.FieldName, field.TypeString, value)
+	}
+	if value, ok := chuo.mutation.Nicknames(); ok {
+		_spec.SetField(characterhistory.FieldNicknames, field.TypeJSON, value)
+	}
+	if value, ok := chuo.mutation.AppendedNicknames(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, characterhistory.FieldNicknames, value)
+		})
+	}
+	if chuo.mutation.NicknamesCleared() {
+		_spec.ClearField(characterhistory.FieldNicknames, field.TypeJSON)
+	}
+	if value, ok := chuo.mutation.Info(); ok {
+		_spec.SetField(characterhistory.FieldInfo, field.TypeJSON, value)
+	}
+	if chuo.mutation.InfoCleared() {
+		_spec.ClearField(characterhistory.FieldInfo, field.TypeJSON)
 	}
 	_node = &CharacterHistory{config: chuo.config}
 	_spec.Assign = _node.assignValues
