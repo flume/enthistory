@@ -9,6 +9,7 @@ import (
     "encoding/json"
 	"errors"
 	"fmt"
+	"reflect"
 	"time"
 
 	"github.com/flume/enthistory"
@@ -24,35 +25,6 @@ import (
 
 {{ $updatedByKey := extractUpdatedByKey $.Annotations.HistoryConfig.UpdatedBy }}
 {{ $updatedByValueType := extractUpdatedByValueType $.Annotations.HistoryConfig.UpdatedBy }}
-
-// slicesEqual pulled from golang.org/x/exp to reduce direct dependencies required
-func slicesEqual[E comparable](s1, s2 []E) bool {
-	if len(s1) != len(s2) {
-		return false
-	}
-	for i := range s1 {
-		if s1[i] != s2[i] {
-			return false
-		}
-	}
-	return true
-}
-
-// ptrsEqual check if two comparable pointers are equal
-func ptrsEqual[T comparable](ptr1, ptr2 *T) bool {
-	if ptr1 == nil || ptr2 == nil {
-		return ptr1 == ptr2
-	}
-	return *ptr1 == *ptr2
-}
-
-// ptrsEqual check if two time.Time pointers are equal
-func timePtrsEqual(ptr1, ptr2 *time.Time) bool {
-	if ptr1 == nil || ptr2 == nil {
-		return ptr1 == ptr2
-	}
-	return ptr1.Equal(*ptr2)
-}
 
 type Change struct {
     FieldName string
@@ -92,31 +64,9 @@ func ({{ $h.Receiver }} *{{ $h.Name }}) changes(new *{{ $h.Name }}) []Change {
     var changes []Change
 {{- range $f := $h.Fields }}
     {{- if not (in $f.StructField (slist "Ref" "HistoryTime" "Operation" "UpdatedBy")) }}
-        {{- if $f.Nillable }}
-            {{- if (eq $f.Type.String "time.Time") }}
-                if !timePtrsEqual({{ $h.Receiver }}.{{ $f.StructField }}, new.{{ $f.StructField }}) {
-                    changes = append(changes, NewChange({{ lower $h.Name }}.Field{{ $f.StructField }} , {{ $h.Receiver }}.{{ $f.StructField }}, new.{{ $f.StructField }}))
-                }
-            {{- else }}
-                if !ptrsEqual({{ $h.Receiver }}.{{ $f.StructField }}, new.{{ $f.StructField }}) {
-                    changes = append(changes, NewChange({{ lower $h.Name }}.Field{{ $f.StructField }} , {{ $h.Receiver }}.{{ $f.StructField }}, new.{{ $f.StructField }}))
-                }
-            {{- end }}
-        {{- else }}
-            {{- if (isSlice $f.Type.String) }}
-                if !slicesEqual({{ $h.Receiver }}.{{ $f.StructField }}, new.{{ $f.StructField }}) {
-                    changes = append(changes, NewChange({{ lower $h.Name }}.Field{{ $f.StructField }} , {{ $h.Receiver }}.{{ $f.StructField }}, new.{{ $f.StructField }}))
-                }
-            {{- else if (eq $f.Type.String "time.Time") }}
-                if !{{ $h.Receiver }}.{{ $f.StructField }}.Equal(new.{{ $f.StructField }}) {
-                    changes = append(changes, NewChange({{ lower $h.Name }}.Field{{ $f.StructField }} , {{ $h.Receiver }}.{{ $f.StructField }}, new.{{ $f.StructField }}))
-                }
-            {{- else }}
-                if {{ $h.Receiver }}.{{ $f.StructField }} != new.{{ $f.StructField }} {
-                    changes = append(changes, NewChange({{ lower $h.Name }}.Field{{ $f.StructField }} , {{ $h.Receiver }}.{{ $f.StructField }}, new.{{ $f.StructField }}))
-                }
-            {{- end }}
-        {{- end }}
+        if !reflect.DeepEqual({{ $h.Receiver }}.{{ $f.StructField }}, new.{{ $f.StructField }}) {
+            changes = append(changes, NewChange({{ lower $h.Name }}.Field{{ $f.StructField }} , {{ $h.Receiver }}.{{ $f.StructField }}, new.{{ $f.StructField }}))
+        }
     {{- end }}
 {{- end }}
     return changes

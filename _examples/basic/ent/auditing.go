@@ -8,41 +8,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"reflect"
 	"time"
 
 	"github.com/flume/enthistory"
 	"github.com/flume/enthistory/_examples/basic/ent/characterhistory"
 	"github.com/flume/enthistory/_examples/basic/ent/friendshiphistory"
 )
-
-// slicesEqual pulled from golang.org/x/exp to reduce direct dependencies required
-func slicesEqual[E comparable](s1, s2 []E) bool {
-	if len(s1) != len(s2) {
-		return false
-	}
-	for i := range s1 {
-		if s1[i] != s2[i] {
-			return false
-		}
-	}
-	return true
-}
-
-// ptrsEqual check if two comparable pointers are equal
-func ptrsEqual[T comparable](ptr1, ptr2 *T) bool {
-	if ptr1 == nil || ptr2 == nil {
-		return ptr1 == ptr2
-	}
-	return *ptr1 == *ptr2
-}
-
-// ptrsEqual check if two time.Time pointers are equal
-func timePtrsEqual(ptr1, ptr2 *time.Time) bool {
-	if ptr1 == nil || ptr2 == nil {
-		return ptr1 == ptr2
-	}
-	return ptr1.Equal(*ptr2)
-}
 
 type Change struct {
 	FieldName string
@@ -71,22 +43,22 @@ var (
 
 func (ch *CharacterHistory) changes(new *CharacterHistory) []Change {
 	var changes []Change
-	if !ch.CreatedAt.Equal(new.CreatedAt) {
+	if !reflect.DeepEqual(ch.CreatedAt, new.CreatedAt) {
 		changes = append(changes, NewChange(characterhistory.FieldCreatedAt, ch.CreatedAt, new.CreatedAt))
 	}
-	if !ch.UpdatedAt.Equal(new.UpdatedAt) {
+	if !reflect.DeepEqual(ch.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(characterhistory.FieldUpdatedAt, ch.UpdatedAt, new.UpdatedAt))
 	}
-	if ch.Age != new.Age {
+	if !reflect.DeepEqual(ch.Age, new.Age) {
 		changes = append(changes, NewChange(characterhistory.FieldAge, ch.Age, new.Age))
 	}
-	if ch.Name != new.Name {
+	if !reflect.DeepEqual(ch.Name, new.Name) {
 		changes = append(changes, NewChange(characterhistory.FieldName, ch.Name, new.Name))
 	}
-	if !slicesEqual(ch.Nicknames, new.Nicknames) {
+	if !reflect.DeepEqual(ch.Nicknames, new.Nicknames) {
 		changes = append(changes, NewChange(characterhistory.FieldNicknames, ch.Nicknames, new.Nicknames))
 	}
-	if ch.Info != new.Info {
+	if !reflect.DeepEqual(ch.Info, new.Info) {
 		changes = append(changes, NewChange(characterhistory.FieldInfo, ch.Info, new.Info))
 	}
 	return changes
@@ -119,16 +91,16 @@ func (ch *CharacterHistory) Diff(history *CharacterHistory) (*HistoryDiff[Charac
 
 func (fh *FriendshipHistory) changes(new *FriendshipHistory) []Change {
 	var changes []Change
-	if !fh.CreatedAt.Equal(new.CreatedAt) {
+	if !reflect.DeepEqual(fh.CreatedAt, new.CreatedAt) {
 		changes = append(changes, NewChange(friendshiphistory.FieldCreatedAt, fh.CreatedAt, new.CreatedAt))
 	}
-	if !fh.UpdatedAt.Equal(new.UpdatedAt) {
+	if !reflect.DeepEqual(fh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(friendshiphistory.FieldUpdatedAt, fh.UpdatedAt, new.UpdatedAt))
 	}
-	if fh.CharacterID != new.CharacterID {
+	if !reflect.DeepEqual(fh.CharacterID, new.CharacterID) {
 		changes = append(changes, NewChange(friendshiphistory.FieldCharacterID, fh.CharacterID, new.CharacterID))
 	}
-	if fh.FriendID != new.FriendID {
+	if !reflect.DeepEqual(fh.FriendID, new.FriendID) {
 		changes = append(changes, NewChange(friendshiphistory.FieldFriendID, fh.FriendID, new.FriendID))
 	}
 	return changes

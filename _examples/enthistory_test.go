@@ -402,7 +402,8 @@ func TestEntHistory(t *testing.T) {
 
 				assert.Equal(t, 9, len(auditTable))
 				assert.Equal(t, 6, len(auditTable[0]))
-				assert.Equal(t, "age: 10000 -> 20", auditTable[2][4])
+				assert.Equal(t, "age: 10000 -> 20\nnicknames: [\"Orgalorg\"] -> [\"Orgalorg\",\"Destroyer of Worlds\"]", auditTable[2][4])
+				assert.Equal(t, "name: \"Simon Petrikov\" -> \"Ice King\"\ninfo: {\"firstAppearance\":\"Come Along With Me\"} -> {\"firstAppearance\":\"Come Along With Me\",\"lastAppearance\":\"Together Again\"}", auditTable[5][4])
 			},
 		},
 	}
