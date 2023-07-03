@@ -9,18 +9,17 @@ import (
 
 type history struct {
 	ent.Schema
+	ref ent.Field
 }
 
-func (history) Fields() []ent.Field {
+func (h history) Fields() []ent.Field {
 	return []ent.Field{
 		field.Time("history_time").
 			Default(time.Now).
 			Immutable(),
-		field.Int("ref").
-			Immutable().
-			Optional(),
 		field.Enum("operation").
 			GoType(OpType("")).
 			Immutable(),
+		h.ref,
 	}
 }

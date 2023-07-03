@@ -44,7 +44,14 @@ func (FriendshipHistory) Fields() []ent.Field {
 			Immutable(),
 	}
 
-	return append(historyFields, Friendship{}.Fields()...)
+	original := Friendship{}
+	for _, field := range original.Fields() {
+		if field.Descriptor().Name != "id" {
+			historyFields = append(historyFields, field)
+		}
+	}
+
+	return historyFields
 }
 
 // Mixin of the FriendshipHistory.

@@ -25,8 +25,8 @@ var (
 	CharacterHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeInt, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "ref", Type: field.TypeInt, Nullable: true},
 		{Name: "age", Type: field.TypeInt},
 		{Name: "name", Type: field.TypeString},
 	}
@@ -73,8 +73,8 @@ var (
 	FriendshipHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeInt, Nullable: true},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "ref", Type: field.TypeInt, Nullable: true},
 		{Name: "character_id", Type: field.TypeInt},
 		{Name: "friend_id", Type: field.TypeInt},
 	}

@@ -36,23 +36,23 @@ func (fhc *FriendshipHistoryCreate) SetNillableHistoryTime(t *time.Time) *Friend
 	return fhc
 }
 
+// SetOperation sets the "operation" field.
+func (fhc *FriendshipHistoryCreate) SetOperation(et enthistory.OpType) *FriendshipHistoryCreate {
+	fhc.mutation.SetOperation(et)
+	return fhc
+}
+
 // SetRef sets the "ref" field.
-func (fhc *FriendshipHistoryCreate) SetRef(i int) *FriendshipHistoryCreate {
-	fhc.mutation.SetRef(i)
+func (fhc *FriendshipHistoryCreate) SetRef(s string) *FriendshipHistoryCreate {
+	fhc.mutation.SetRef(s)
 	return fhc
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (fhc *FriendshipHistoryCreate) SetNillableRef(i *int) *FriendshipHistoryCreate {
-	if i != nil {
-		fhc.SetRef(*i)
+func (fhc *FriendshipHistoryCreate) SetNillableRef(s *string) *FriendshipHistoryCreate {
+	if s != nil {
+		fhc.SetRef(*s)
 	}
-	return fhc
-}
-
-// SetOperation sets the "operation" field.
-func (fhc *FriendshipHistoryCreate) SetOperation(et enthistory.OpType) *FriendshipHistoryCreate {
-	fhc.mutation.SetOperation(et)
 	return fhc
 }
 
@@ -214,13 +214,13 @@ func (fhc *FriendshipHistoryCreate) createSpec() (*FriendshipHistory, *sqlgraph.
 		_spec.SetField(friendshiphistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := fhc.mutation.Ref(); ok {
-		_spec.SetField(friendshiphistory.FieldRef, field.TypeInt, value)
-		_node.Ref = value
-	}
 	if value, ok := fhc.mutation.Operation(); ok {
 		_spec.SetField(friendshiphistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
+	}
+	if value, ok := fhc.mutation.Ref(); ok {
+		_spec.SetField(friendshiphistory.FieldRef, field.TypeString, value)
+		_node.Ref = value
 	}
 	if value, ok := fhc.mutation.UpdatedBy(); ok {
 		_spec.SetField(friendshiphistory.FieldUpdatedBy, field.TypeInt, value)

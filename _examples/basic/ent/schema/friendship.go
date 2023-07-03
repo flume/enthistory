@@ -27,6 +27,7 @@ func (Friendship) Annotations() []schema.Annotation {
 // Fields of the Friendship.
 func (Friendship) Fields() []ent.Field {
 	return []ent.Field{
+		field.String("id"),
 		field.Int("character_id"),
 		field.Int("friend_id"),
 	}

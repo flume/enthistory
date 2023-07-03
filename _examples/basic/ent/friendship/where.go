@@ -12,48 +12,58 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Friendship {
+func ID(id string) predicate.Friendship {
 	return predicate.Friendship(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Friendship {
+func IDEQ(id string) predicate.Friendship {
 	return predicate.Friendship(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Friendship {
+func IDNEQ(id string) predicate.Friendship {
 	return predicate.Friendship(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Friendship {
+func IDIn(ids ...string) predicate.Friendship {
 	return predicate.Friendship(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Friendship {
+func IDNotIn(ids ...string) predicate.Friendship {
 	return predicate.Friendship(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Friendship {
+func IDGT(id string) predicate.Friendship {
 	return predicate.Friendship(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Friendship {
+func IDGTE(id string) predicate.Friendship {
 	return predicate.Friendship(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Friendship {
+func IDLT(id string) predicate.Friendship {
 	return predicate.Friendship(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Friendship {
+func IDLTE(id string) predicate.Friendship {
 	return predicate.Friendship(sql.FieldLTE(FieldID, id))
+}
+
+// IDEqualFold applies the EqualFold predicate on the ID field.
+func IDEqualFold(id string) predicate.Friendship {
+	return predicate.Friendship(sql.FieldEqualFold(FieldID, id))
+}
+
+// IDContainsFold applies the ContainsFold predicate on the ID field.
+func IDContainsFold(id string) predicate.Friendship {
+	return predicate.Friendship(sql.FieldContainsFold(FieldID, id))
 }
 
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.

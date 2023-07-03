@@ -131,6 +131,26 @@ func HistoryTimeLTE(v time.Time) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldLTE(FieldHistoryTime, v))
 }
 
+// OperationEQ applies the EQ predicate on the "operation" field.
+func OperationEQ(v enthistory.OpType) predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldEQ(FieldOperation, v))
+}
+
+// OperationNEQ applies the NEQ predicate on the "operation" field.
+func OperationNEQ(v enthistory.OpType) predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldNEQ(FieldOperation, v))
+}
+
+// OperationIn applies the In predicate on the "operation" field.
+func OperationIn(vs ...enthistory.OpType) predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldIn(FieldOperation, vs...))
+}
+
+// OperationNotIn applies the NotIn predicate on the "operation" field.
+func OperationNotIn(vs ...enthistory.OpType) predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldNotIn(FieldOperation, vs...))
+}
+
 // RefEQ applies the EQ predicate on the "ref" field.
 func RefEQ(v int) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldEQ(FieldRef, v))
@@ -179,26 +199,6 @@ func RefIsNil() predicate.CharacterHistory {
 // RefNotNil applies the NotNil predicate on the "ref" field.
 func RefNotNil() predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldNotNull(FieldRef))
-}
-
-// OperationEQ applies the EQ predicate on the "operation" field.
-func OperationEQ(v enthistory.OpType) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldEQ(FieldOperation, v))
-}
-
-// OperationNEQ applies the NEQ predicate on the "operation" field.
-func OperationNEQ(v enthistory.OpType) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldNEQ(FieldOperation, v))
-}
-
-// OperationIn applies the In predicate on the "operation" field.
-func OperationIn(vs ...enthistory.OpType) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldIn(FieldOperation, vs...))
-}
-
-// OperationNotIn applies the NotIn predicate on the "operation" field.
-func OperationNotIn(vs ...enthistory.OpType) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldNotIn(FieldOperation, vs...))
 }
 
 // UpdatedByEQ applies the EQ predicate on the "updated_by" field.

@@ -2,11 +2,14 @@ package enthistory
 
 import (
 	"embed"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
+
+	"entgo.io/ent/schema/field"
 
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
@@ -114,6 +117,7 @@ func NewHistoryExtension(opts ...ExtensionOption) *HistoryExtension {
 
 type templateInfo struct {
 	Schema               *load.Schema
+	IdType               string
 	SchemaPkg            string
 	TableName            string
 	OriginalTableName    string
@@ -151,12 +155,12 @@ var (
 	schemaTemplate = template.Must(template.ParseFS(_templates, "templates/schema.tmpl"))
 )
 
-func (h *HistoryExtension) generateHistorySchema(schema *load.Schema) (*load.Schema, error) {
+func (h *HistoryExtension) generateHistorySchema(schema *load.Schema, IdType string) (*load.Schema, error) {
 	pkg, err := getPkgFromSchemaPath(h.config.SchemaPath)
 	if err != nil {
 		return nil, err
 	}
-	templateInfo := templateInfo{
+	info := templateInfo{
 		TableName:         fmt.Sprintf("%v_history", getSchemaTableName(schema)),
 		OriginalTableName: schema.Name,
 		SchemaPkg:         pkg,
@@ -166,22 +170,31 @@ func (h *HistoryExtension) generateHistorySchema(schema *load.Schema) (*load.Sch
 		if h.config.UpdatedBy != nil {
 			valueType := h.config.UpdatedBy.valueType
 			if valueType == ValueTypeInt {
-				templateInfo.UpdatedByValueType = "Int"
+				info.UpdatedByValueType = "Int"
 			} else if valueType == ValueTypeString {
-				templateInfo.UpdatedByValueType = "String"
+				info.UpdatedByValueType = "String"
 			}
-			templateInfo.WithUpdatedBy = true
+			info.WithUpdatedBy = true
 		}
-		templateInfo.WithHistoryTimeIndex = h.config.HistoryTimeIndex
+		info.WithHistoryTimeIndex = h.config.HistoryTimeIndex
+	}
+
+	switch IdType {
+	case "int":
+		info.IdType = "Int"
+	case "string":
+		info.IdType = "String"
+	default:
+		return nil, errors.New("only id and string are supported id types right now")
 	}
 
 	// Load new base history schema
-	historySchema, err := loadHistorySchema()
+	historySchema, err := loadHistorySchema(IdType)
 	if err != nil {
 		return nil, err
 	}
 
-	updatedByField, err := getUpdatedByField(templateInfo.UpdatedByValueType)
+	updatedByField, err := getUpdatedByField(info.UpdatedByValueType)
 	if err != nil {
 		return nil, err
 	}
@@ -190,20 +203,27 @@ func (h *HistoryExtension) generateHistorySchema(schema *load.Schema) (*load.Sch
 		historySchema.Fields = append(historySchema.Fields, updatedByField)
 	}
 
-	if templateInfo.WithHistoryTimeIndex {
+	if info.WithHistoryTimeIndex {
 		historySchema.Indexes = append(historySchema.Indexes, &load.Index{Fields: []string{"history_time"}})
+	}
+
+	var historyFields []*load.Field
+	for _, field := range h.createHistoryFields(schema.Fields) {
+		if field.Name != "id" {
+			historyFields = append(historyFields, field)
+		}
 	}
 
 	// merge the original schema onto the history schema
 	historySchema.Name = fmt.Sprintf("%vHistory", schema.Name)
-	historySchema.Fields = append(historySchema.Fields, h.createHistoryFields(schema.Fields)...)
+	historySchema.Fields = append(historySchema.Fields, historyFields...)
 	historySchema.Annotations = map[string]any{
 		"EntSQL": map[string]any{
-			"table": templateInfo.TableName,
+			"table": info.TableName,
 		},
 	}
 
-	templateInfo.Schema = historySchema
+	info.Schema = historySchema
 	// Get path to write new history schema file
 	path, err := h.getHistorySchemaPath(schema)
 	if err != nil {
@@ -216,7 +236,7 @@ func (h *HistoryExtension) generateHistorySchema(schema *load.Schema) (*load.Sch
 	}
 	defer create.Close()
 	// execute schemaTemplate at the history schema path
-	if err = schemaTemplate.Execute(create, templateInfo); err != nil {
+	if err = schemaTemplate.Execute(create, info); err != nil {
 		return nil, err
 	}
 	return historySchema, nil
@@ -240,7 +260,18 @@ func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Genera
 				continue
 			}
 
-			historySchema, err := h.generateHistorySchema(schema)
+			var IdType *field.TypeInfo
+			for _, node := range g.Nodes {
+				if schema.Name == node.Name {
+					IdType = node.ID.Type
+				}
+			}
+
+			if IdType == nil {
+				return fmt.Errorf("could not get id type for schema: %s", schema.Name)
+			}
+
+			historySchema, err := h.generateHistorySchema(schema, IdType.String())
 			if err != nil {
 				return err
 			}

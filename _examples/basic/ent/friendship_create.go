@@ -62,6 +62,12 @@ func (fc *FriendshipCreate) SetFriendID(i int) *FriendshipCreate {
 	return fc
 }
 
+// SetID sets the "id" field.
+func (fc *FriendshipCreate) SetID(s string) *FriendshipCreate {
+	fc.mutation.SetID(s)
+	return fc
+}
+
 // SetCharacter sets the "character" edge to the Character entity.
 func (fc *FriendshipCreate) SetCharacter(c *Character) *FriendshipCreate {
 	return fc.SetCharacterID(c.ID)
@@ -151,8 +157,13 @@ func (fc *FriendshipCreate) sqlSave(ctx context.Context) (*Friendship, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(string); ok {
+			_node.ID = id
+		} else {
+			return nil, fmt.Errorf("unexpected Friendship.ID type: %T", _spec.ID.Value)
+		}
+	}
 	fc.mutation.id = &_node.ID
 	fc.mutation.done = true
 	return _node, nil
@@ -161,8 +172,12 @@ func (fc *FriendshipCreate) sqlSave(ctx context.Context) (*Friendship, error) {
 func (fc *FriendshipCreate) createSpec() (*Friendship, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Friendship{config: fc.config}
-		_spec = sqlgraph.NewCreateSpec(friendship.Table, sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(friendship.Table, sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeString))
 	)
+	if id, ok := fc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := fc.mutation.CreatedAt(); ok {
 		_spec.SetField(friendship.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -249,10 +264,6 @@ func (fcb *FriendshipCreateBulk) Save(ctx context.Context) ([]*Friendship, error
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

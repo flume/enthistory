@@ -62,7 +62,7 @@ func HistoryTime(v time.Time) predicate.FriendshipHistory {
 }
 
 // Ref applies equality check predicate on the "ref" field. It's identical to RefEQ.
-func Ref(v int) predicate.FriendshipHistory {
+func Ref(v string) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldEQ(FieldRef, v))
 }
 
@@ -131,56 +131,6 @@ func HistoryTimeLTE(v time.Time) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldLTE(FieldHistoryTime, v))
 }
 
-// RefEQ applies the EQ predicate on the "ref" field.
-func RefEQ(v int) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldEQ(FieldRef, v))
-}
-
-// RefNEQ applies the NEQ predicate on the "ref" field.
-func RefNEQ(v int) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldNEQ(FieldRef, v))
-}
-
-// RefIn applies the In predicate on the "ref" field.
-func RefIn(vs ...int) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldIn(FieldRef, vs...))
-}
-
-// RefNotIn applies the NotIn predicate on the "ref" field.
-func RefNotIn(vs ...int) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldNotIn(FieldRef, vs...))
-}
-
-// RefGT applies the GT predicate on the "ref" field.
-func RefGT(v int) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldGT(FieldRef, v))
-}
-
-// RefGTE applies the GTE predicate on the "ref" field.
-func RefGTE(v int) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldGTE(FieldRef, v))
-}
-
-// RefLT applies the LT predicate on the "ref" field.
-func RefLT(v int) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldLT(FieldRef, v))
-}
-
-// RefLTE applies the LTE predicate on the "ref" field.
-func RefLTE(v int) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldLTE(FieldRef, v))
-}
-
-// RefIsNil applies the IsNil predicate on the "ref" field.
-func RefIsNil() predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldIsNull(FieldRef))
-}
-
-// RefNotNil applies the NotNil predicate on the "ref" field.
-func RefNotNil() predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldNotNull(FieldRef))
-}
-
 // OperationEQ applies the EQ predicate on the "operation" field.
 func OperationEQ(v enthistory.OpType) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldEQ(FieldOperation, v))
@@ -199,6 +149,81 @@ func OperationIn(vs ...enthistory.OpType) predicate.FriendshipHistory {
 // OperationNotIn applies the NotIn predicate on the "operation" field.
 func OperationNotIn(vs ...enthistory.OpType) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldNotIn(FieldOperation, vs...))
+}
+
+// RefEQ applies the EQ predicate on the "ref" field.
+func RefEQ(v string) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldEQ(FieldRef, v))
+}
+
+// RefNEQ applies the NEQ predicate on the "ref" field.
+func RefNEQ(v string) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldNEQ(FieldRef, v))
+}
+
+// RefIn applies the In predicate on the "ref" field.
+func RefIn(vs ...string) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldIn(FieldRef, vs...))
+}
+
+// RefNotIn applies the NotIn predicate on the "ref" field.
+func RefNotIn(vs ...string) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldNotIn(FieldRef, vs...))
+}
+
+// RefGT applies the GT predicate on the "ref" field.
+func RefGT(v string) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldGT(FieldRef, v))
+}
+
+// RefGTE applies the GTE predicate on the "ref" field.
+func RefGTE(v string) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldGTE(FieldRef, v))
+}
+
+// RefLT applies the LT predicate on the "ref" field.
+func RefLT(v string) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldLT(FieldRef, v))
+}
+
+// RefLTE applies the LTE predicate on the "ref" field.
+func RefLTE(v string) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldLTE(FieldRef, v))
+}
+
+// RefContains applies the Contains predicate on the "ref" field.
+func RefContains(v string) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldContains(FieldRef, v))
+}
+
+// RefHasPrefix applies the HasPrefix predicate on the "ref" field.
+func RefHasPrefix(v string) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldHasPrefix(FieldRef, v))
+}
+
+// RefHasSuffix applies the HasSuffix predicate on the "ref" field.
+func RefHasSuffix(v string) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldHasSuffix(FieldRef, v))
+}
+
+// RefIsNil applies the IsNil predicate on the "ref" field.
+func RefIsNil() predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldIsNull(FieldRef))
+}
+
+// RefNotNil applies the NotNil predicate on the "ref" field.
+func RefNotNil() predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldNotNull(FieldRef))
+}
+
+// RefEqualFold applies the EqualFold predicate on the "ref" field.
+func RefEqualFold(v string) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldEqualFold(FieldRef, v))
+}
+
+// RefContainsFold applies the ContainsFold predicate on the "ref" field.
+func RefContainsFold(v string) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldContainsFold(FieldRef, v))
 }
 
 // UpdatedByEQ applies the EQ predicate on the "updated_by" field.

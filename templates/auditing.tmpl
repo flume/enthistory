@@ -201,7 +201,7 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 
 type record struct {
 	Table       string
-	RefId       int
+	RefId       any
 	HistoryTime time.Time
 	Operation   enthistory.OpType
 	Changes     []Change
@@ -236,15 +236,21 @@ func (r *record) toRow() []string {
 	return row
 }
 
-type ref struct {
-	Ref int
-}
-
 {{- range $n := $.Nodes }}
 {{- if (hasSuffix $n.Name "History") }}
+
+{{- range $h := $.Nodes }}
+{{ $sameNodeType := hasPrefix $n.Name (printf "%sHistory" $h.Name) }}
+{{- if $sameNodeType }}
+type {{ lower $n.Name }}ref struct {
+	Ref {{ $h.ID.Type }}
+}
+{{- end }}
+{{- end }}
+
 func audit{{ $n.Name }}(ctx context.Context, config config) ([][]string, error) {
 	var records = [][]string{}
-	var refs []ref
+	var refs []{{ lower $n.Name }}ref
 	client := New{{ $n.Name }}Client(config)
 	err := client.Query().
 		Unique(true).

@@ -21,10 +21,10 @@ type CharacterHistory struct {
 	ID int `json:"id,omitempty"`
 	// HistoryTime holds the value of the "history_time" field.
 	HistoryTime time.Time `json:"history_time,omitempty"`
-	// Ref holds the value of the "ref" field.
-	Ref int `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation enthistory.OpType `json:"operation,omitempty"`
+	// Ref holds the value of the "ref" field.
+	Ref int `json:"ref,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy *int `json:"updated_by,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
@@ -76,17 +76,17 @@ func (ch *CharacterHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ch.HistoryTime = value.Time
 			}
-		case characterhistory.FieldRef:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field ref", values[i])
-			} else if value.Valid {
-				ch.Ref = int(value.Int64)
-			}
 		case characterhistory.FieldOperation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value.Valid {
 				ch.Operation = enthistory.OpType(value.String)
+			}
+		case characterhistory.FieldRef:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field ref", values[i])
+			} else if value.Valid {
+				ch.Ref = int(value.Int64)
 			}
 		case characterhistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -158,11 +158,11 @@ func (ch *CharacterHistory) String() string {
 	builder.WriteString("history_time=")
 	builder.WriteString(ch.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("ref=")
-	builder.WriteString(fmt.Sprintf("%v", ch.Ref))
-	builder.WriteString(", ")
 	builder.WriteString("operation=")
 	builder.WriteString(fmt.Sprintf("%v", ch.Operation))
+	builder.WriteString(", ")
+	builder.WriteString("ref=")
+	builder.WriteString(fmt.Sprintf("%v", ch.Ref))
 	builder.WriteString(", ")
 	if v := ch.UpdatedBy; v != nil {
 		builder.WriteString("updated_by=")

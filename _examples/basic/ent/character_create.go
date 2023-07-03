@@ -78,14 +78,14 @@ func (cc *CharacterCreate) AddFriends(c ...*Character) *CharacterCreate {
 }
 
 // AddFriendshipIDs adds the "friendships" edge to the Friendship entity by IDs.
-func (cc *CharacterCreate) AddFriendshipIDs(ids ...int) *CharacterCreate {
+func (cc *CharacterCreate) AddFriendshipIDs(ids ...string) *CharacterCreate {
 	cc.mutation.AddFriendshipIDs(ids...)
 	return cc
 }
 
 // AddFriendships adds the "friendships" edges to the Friendship entity.
 func (cc *CharacterCreate) AddFriendships(f ...*Friendship) *CharacterCreate {
-	ids := make([]int, len(f))
+	ids := make([]string, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
 	}
@@ -226,7 +226,7 @@ func (cc *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
 			Columns: []string{character.FriendshipsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
