@@ -1,5 +1,9 @@
 # Changelog
 
+### [v0.8.1](https://github.com/flume/enthistory/compare/v0.8.0...v0.8.1) (2023-07-03)
+
+* Allow Many types for ID (string & int) (#22)
+
 ### [v0.8.0](https://github.com/flume/enthistory/compare/v0.7.0...v0.8.0) (2023-06-23)
 
 * Upgrade ent to v0.12.3 (#17)
