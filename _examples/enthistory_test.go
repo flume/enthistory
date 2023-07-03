@@ -356,17 +356,36 @@ func TestEntHistory(t *testing.T) {
 				userId := 75
 				ctx := context.WithValue(context.Background(), "userId", userId)
 
-				gunter, err := client.Character.Create().SetAge(10000).SetName("Gunter").Save(ctx)
+				gunter, err := client.Character.Create().
+					SetAge(10000).
+					SetName("Gunter").
+					SetNicknames([]string{"Orgalorg"}).
+					Save(ctx)
 				assert.NoError(t, err)
-				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").Save(ctx)
+				simon, err := client.Character.Create().
+					SetAge(47).
+					SetName("Simon Petrikov").
+					SetInfo(map[string]any{
+						"firstAppearance": "Come Along With Me",
+					}).
+					Save(ctx)
 				assert.NoError(t, err)
 
 				friendship, err := client.Friendship.Create().SetID("Ice Kingdom").SetCharacterID(gunter.ID).SetFriendID(simon.ID).Save(ctx)
 				assert.NoError(t, err)
 
-				gunter, err = gunter.Update().SetAge(20).Save(ctx)
+				gunter, err = gunter.Update().
+					SetNicknames([]string{"Orgalorg", "Destroyer of Worlds"}).
+					SetAge(20).
+					Save(ctx)
 				assert.NoError(t, err)
-				simon, err = simon.Update().SetName("Ice King").Save(ctx)
+				simon, err = simon.Update().
+					SetName("Ice King").
+					SetInfo(map[string]any{
+						"firstAppearance": "Come Along With Me",
+						"lastAppearance":  "Together Again",
+					}).
+					Save(ctx)
 				assert.NoError(t, err)
 
 				err = client.Friendship.DeleteOne(friendship).Exec(ctx)
