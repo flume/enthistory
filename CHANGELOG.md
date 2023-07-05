@@ -1,5 +1,9 @@
 # Changelog
 
+### [v0.8.2](https://github.com/flume/enthistory/compare/v0.8.1...v0.8.2) (2023-07-05)
+
+* Auditing fix for JSON fields (#23)
+
 ### [v0.8.1](https://github.com/flume/enthistory/compare/v0.8.0...v0.8.1) (2023-07-03)
 
 * Allow Many types for ID (string & int) (#22)
