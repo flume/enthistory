@@ -110,6 +110,18 @@ func (chc *CharacterHistoryCreate) SetName(s string) *CharacterHistoryCreate {
 	return chc
 }
 
+// SetNicknames sets the "nicknames" field.
+func (chc *CharacterHistoryCreate) SetNicknames(s []string) *CharacterHistoryCreate {
+	chc.mutation.SetNicknames(s)
+	return chc
+}
+
+// SetInfo sets the "info" field.
+func (chc *CharacterHistoryCreate) SetInfo(m map[string]interface{}) *CharacterHistoryCreate {
+	chc.mutation.SetInfo(m)
+	return chc
+}
+
 // Mutation returns the CharacterHistoryMutation object of the builder.
 func (chc *CharacterHistoryCreate) Mutation() *CharacterHistoryMutation {
 	return chc.mutation
@@ -246,6 +258,14 @@ func (chc *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cr
 	if value, ok := chc.mutation.Name(); ok {
 		_spec.SetField(characterhistory.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if value, ok := chc.mutation.Nicknames(); ok {
+		_spec.SetField(characterhistory.FieldNicknames, field.TypeJSON, value)
+		_node.Nicknames = value
+	}
+	if value, ok := chc.mutation.Info(); ok {
+		_spec.SetField(characterhistory.FieldInfo, field.TypeJSON, value)
+		_node.Info = value
 	}
 	return _node, _spec
 }

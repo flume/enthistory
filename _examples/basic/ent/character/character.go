@@ -22,6 +22,10 @@ const (
 	FieldAge = "age"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldNicknames holds the string denoting the nicknames field in the database.
+	FieldNicknames = "nicknames"
+	// FieldInfo holds the string denoting the info field in the database.
+	FieldInfo = "info"
 	// EdgeFriends holds the string denoting the friends edge name in mutations.
 	EdgeFriends = "friends"
 	// EdgeFriendships holds the string denoting the friendships edge name in mutations.
@@ -46,6 +50,8 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldAge,
 	FieldName,
+	FieldNicknames,
+	FieldInfo,
 }
 
 var (

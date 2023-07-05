@@ -46,6 +46,9 @@ type CharacterMutation struct {
 	age                *int
 	addage             *int
 	name               *string
+	nicknames          *[]string
+	appendnicknames    []string
+	info               *map[string]interface{}
 	clearedFields      map[string]struct{}
 	friends            map[int]struct{}
 	removedfriends     map[int]struct{}
@@ -320,6 +323,120 @@ func (m *CharacterMutation) ResetName() {
 	m.name = nil
 }
 
+// SetNicknames sets the "nicknames" field.
+func (m *CharacterMutation) SetNicknames(s []string) {
+	m.nicknames = &s
+	m.appendnicknames = nil
+}
+
+// Nicknames returns the value of the "nicknames" field in the mutation.
+func (m *CharacterMutation) Nicknames() (r []string, exists bool) {
+	v := m.nicknames
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNicknames returns the old "nicknames" field's value of the Character entity.
+// If the Character object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CharacterMutation) OldNicknames(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNicknames is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNicknames requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNicknames: %w", err)
+	}
+	return oldValue.Nicknames, nil
+}
+
+// AppendNicknames adds s to the "nicknames" field.
+func (m *CharacterMutation) AppendNicknames(s []string) {
+	m.appendnicknames = append(m.appendnicknames, s...)
+}
+
+// AppendedNicknames returns the list of values that were appended to the "nicknames" field in this mutation.
+func (m *CharacterMutation) AppendedNicknames() ([]string, bool) {
+	if len(m.appendnicknames) == 0 {
+		return nil, false
+	}
+	return m.appendnicknames, true
+}
+
+// ClearNicknames clears the value of the "nicknames" field.
+func (m *CharacterMutation) ClearNicknames() {
+	m.nicknames = nil
+	m.appendnicknames = nil
+	m.clearedFields[character.FieldNicknames] = struct{}{}
+}
+
+// NicknamesCleared returns if the "nicknames" field was cleared in this mutation.
+func (m *CharacterMutation) NicknamesCleared() bool {
+	_, ok := m.clearedFields[character.FieldNicknames]
+	return ok
+}
+
+// ResetNicknames resets all changes to the "nicknames" field.
+func (m *CharacterMutation) ResetNicknames() {
+	m.nicknames = nil
+	m.appendnicknames = nil
+	delete(m.clearedFields, character.FieldNicknames)
+}
+
+// SetInfo sets the "info" field.
+func (m *CharacterMutation) SetInfo(value map[string]interface{}) {
+	m.info = &value
+}
+
+// Info returns the value of the "info" field in the mutation.
+func (m *CharacterMutation) Info() (r map[string]interface{}, exists bool) {
+	v := m.info
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInfo returns the old "info" field's value of the Character entity.
+// If the Character object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CharacterMutation) OldInfo(ctx context.Context) (v map[string]interface{}, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInfo is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInfo requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInfo: %w", err)
+	}
+	return oldValue.Info, nil
+}
+
+// ClearInfo clears the value of the "info" field.
+func (m *CharacterMutation) ClearInfo() {
+	m.info = nil
+	m.clearedFields[character.FieldInfo] = struct{}{}
+}
+
+// InfoCleared returns if the "info" field was cleared in this mutation.
+func (m *CharacterMutation) InfoCleared() bool {
+	_, ok := m.clearedFields[character.FieldInfo]
+	return ok
+}
+
+// ResetInfo resets all changes to the "info" field.
+func (m *CharacterMutation) ResetInfo() {
+	m.info = nil
+	delete(m.clearedFields, character.FieldInfo)
+}
+
 // AddFriendIDs adds the "friends" edge to the Character entity by ids.
 func (m *CharacterMutation) AddFriendIDs(ids ...int) {
 	if m.friends == nil {
@@ -462,7 +579,7 @@ func (m *CharacterMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CharacterMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 6)
 	if m.created_at != nil {
 		fields = append(fields, character.FieldCreatedAt)
 	}
@@ -474,6 +591,12 @@ func (m *CharacterMutation) Fields() []string {
 	}
 	if m.name != nil {
 		fields = append(fields, character.FieldName)
+	}
+	if m.nicknames != nil {
+		fields = append(fields, character.FieldNicknames)
+	}
+	if m.info != nil {
+		fields = append(fields, character.FieldInfo)
 	}
 	return fields
 }
@@ -491,6 +614,10 @@ func (m *CharacterMutation) Field(name string) (ent.Value, bool) {
 		return m.Age()
 	case character.FieldName:
 		return m.Name()
+	case character.FieldNicknames:
+		return m.Nicknames()
+	case character.FieldInfo:
+		return m.Info()
 	}
 	return nil, false
 }
@@ -508,6 +635,10 @@ func (m *CharacterMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldAge(ctx)
 	case character.FieldName:
 		return m.OldName(ctx)
+	case character.FieldNicknames:
+		return m.OldNicknames(ctx)
+	case character.FieldInfo:
+		return m.OldInfo(ctx)
 	}
 	return nil, fmt.Errorf("unknown Character field %s", name)
 }
@@ -544,6 +675,20 @@ func (m *CharacterMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetName(v)
+		return nil
+	case character.FieldNicknames:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNicknames(v)
+		return nil
+	case character.FieldInfo:
+		v, ok := value.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInfo(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Character field %s", name)
@@ -589,7 +734,14 @@ func (m *CharacterMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *CharacterMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(character.FieldNicknames) {
+		fields = append(fields, character.FieldNicknames)
+	}
+	if m.FieldCleared(character.FieldInfo) {
+		fields = append(fields, character.FieldInfo)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -602,6 +754,14 @@ func (m *CharacterMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *CharacterMutation) ClearField(name string) error {
+	switch name {
+	case character.FieldNicknames:
+		m.ClearNicknames()
+		return nil
+	case character.FieldInfo:
+		m.ClearInfo()
+		return nil
+	}
 	return fmt.Errorf("unknown Character nullable field %s", name)
 }
 
@@ -620,6 +780,12 @@ func (m *CharacterMutation) ResetField(name string) error {
 		return nil
 	case character.FieldName:
 		m.ResetName()
+		return nil
+	case character.FieldNicknames:
+		m.ResetNicknames()
+		return nil
+	case character.FieldInfo:
+		m.ResetInfo()
 		return nil
 	}
 	return fmt.Errorf("unknown Character field %s", name)
@@ -738,24 +904,27 @@ func (m *CharacterMutation) ResetEdge(name string) error {
 // CharacterHistoryMutation represents an operation that mutates the CharacterHistory nodes in the graph.
 type CharacterHistoryMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	history_time  *time.Time
-	operation     *enthistory.OpType
-	ref           *int
-	addref        *int
-	updated_by    *int
-	addupdated_by *int
-	created_at    *time.Time
-	updated_at    *time.Time
-	age           *int
-	addage        *int
-	name          *string
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*CharacterHistory, error)
-	predicates    []predicate.CharacterHistory
+	op              Op
+	typ             string
+	id              *int
+	history_time    *time.Time
+	operation       *enthistory.OpType
+	ref             *int
+	addref          *int
+	updated_by      *int
+	addupdated_by   *int
+	created_at      *time.Time
+	updated_at      *time.Time
+	age             *int
+	addage          *int
+	name            *string
+	nicknames       *[]string
+	appendnicknames []string
+	info            *map[string]interface{}
+	clearedFields   map[string]struct{}
+	done            bool
+	oldValue        func(context.Context) (*CharacterHistory, error)
+	predicates      []predicate.CharacterHistory
 }
 
 var _ ent.Mutation = (*CharacterHistoryMutation)(nil)
@@ -1232,6 +1401,120 @@ func (m *CharacterHistoryMutation) ResetName() {
 	m.name = nil
 }
 
+// SetNicknames sets the "nicknames" field.
+func (m *CharacterHistoryMutation) SetNicknames(s []string) {
+	m.nicknames = &s
+	m.appendnicknames = nil
+}
+
+// Nicknames returns the value of the "nicknames" field in the mutation.
+func (m *CharacterHistoryMutation) Nicknames() (r []string, exists bool) {
+	v := m.nicknames
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNicknames returns the old "nicknames" field's value of the CharacterHistory entity.
+// If the CharacterHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CharacterHistoryMutation) OldNicknames(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNicknames is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNicknames requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNicknames: %w", err)
+	}
+	return oldValue.Nicknames, nil
+}
+
+// AppendNicknames adds s to the "nicknames" field.
+func (m *CharacterHistoryMutation) AppendNicknames(s []string) {
+	m.appendnicknames = append(m.appendnicknames, s...)
+}
+
+// AppendedNicknames returns the list of values that were appended to the "nicknames" field in this mutation.
+func (m *CharacterHistoryMutation) AppendedNicknames() ([]string, bool) {
+	if len(m.appendnicknames) == 0 {
+		return nil, false
+	}
+	return m.appendnicknames, true
+}
+
+// ClearNicknames clears the value of the "nicknames" field.
+func (m *CharacterHistoryMutation) ClearNicknames() {
+	m.nicknames = nil
+	m.appendnicknames = nil
+	m.clearedFields[characterhistory.FieldNicknames] = struct{}{}
+}
+
+// NicknamesCleared returns if the "nicknames" field was cleared in this mutation.
+func (m *CharacterHistoryMutation) NicknamesCleared() bool {
+	_, ok := m.clearedFields[characterhistory.FieldNicknames]
+	return ok
+}
+
+// ResetNicknames resets all changes to the "nicknames" field.
+func (m *CharacterHistoryMutation) ResetNicknames() {
+	m.nicknames = nil
+	m.appendnicknames = nil
+	delete(m.clearedFields, characterhistory.FieldNicknames)
+}
+
+// SetInfo sets the "info" field.
+func (m *CharacterHistoryMutation) SetInfo(value map[string]interface{}) {
+	m.info = &value
+}
+
+// Info returns the value of the "info" field in the mutation.
+func (m *CharacterHistoryMutation) Info() (r map[string]interface{}, exists bool) {
+	v := m.info
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInfo returns the old "info" field's value of the CharacterHistory entity.
+// If the CharacterHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CharacterHistoryMutation) OldInfo(ctx context.Context) (v map[string]interface{}, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInfo is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInfo requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInfo: %w", err)
+	}
+	return oldValue.Info, nil
+}
+
+// ClearInfo clears the value of the "info" field.
+func (m *CharacterHistoryMutation) ClearInfo() {
+	m.info = nil
+	m.clearedFields[characterhistory.FieldInfo] = struct{}{}
+}
+
+// InfoCleared returns if the "info" field was cleared in this mutation.
+func (m *CharacterHistoryMutation) InfoCleared() bool {
+	_, ok := m.clearedFields[characterhistory.FieldInfo]
+	return ok
+}
+
+// ResetInfo resets all changes to the "info" field.
+func (m *CharacterHistoryMutation) ResetInfo() {
+	m.info = nil
+	delete(m.clearedFields, characterhistory.FieldInfo)
+}
+
 // Where appends a list predicates to the CharacterHistoryMutation builder.
 func (m *CharacterHistoryMutation) Where(ps ...predicate.CharacterHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -1266,7 +1549,7 @@ func (m *CharacterHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CharacterHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 10)
 	if m.history_time != nil {
 		fields = append(fields, characterhistory.FieldHistoryTime)
 	}
@@ -1290,6 +1573,12 @@ func (m *CharacterHistoryMutation) Fields() []string {
 	}
 	if m.name != nil {
 		fields = append(fields, characterhistory.FieldName)
+	}
+	if m.nicknames != nil {
+		fields = append(fields, characterhistory.FieldNicknames)
+	}
+	if m.info != nil {
+		fields = append(fields, characterhistory.FieldInfo)
 	}
 	return fields
 }
@@ -1315,6 +1604,10 @@ func (m *CharacterHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Age()
 	case characterhistory.FieldName:
 		return m.Name()
+	case characterhistory.FieldNicknames:
+		return m.Nicknames()
+	case characterhistory.FieldInfo:
+		return m.Info()
 	}
 	return nil, false
 }
@@ -1340,6 +1633,10 @@ func (m *CharacterHistoryMutation) OldField(ctx context.Context, name string) (e
 		return m.OldAge(ctx)
 	case characterhistory.FieldName:
 		return m.OldName(ctx)
+	case characterhistory.FieldNicknames:
+		return m.OldNicknames(ctx)
+	case characterhistory.FieldInfo:
+		return m.OldInfo(ctx)
 	}
 	return nil, fmt.Errorf("unknown CharacterHistory field %s", name)
 }
@@ -1404,6 +1701,20 @@ func (m *CharacterHistoryMutation) SetField(name string, value ent.Value) error 
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetName(v)
+		return nil
+	case characterhistory.FieldNicknames:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNicknames(v)
+		return nil
+	case characterhistory.FieldInfo:
+		v, ok := value.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInfo(v)
 		return nil
 	}
 	return fmt.Errorf("unknown CharacterHistory field %s", name)
@@ -1480,6 +1791,12 @@ func (m *CharacterHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(characterhistory.FieldUpdatedBy) {
 		fields = append(fields, characterhistory.FieldUpdatedBy)
 	}
+	if m.FieldCleared(characterhistory.FieldNicknames) {
+		fields = append(fields, characterhistory.FieldNicknames)
+	}
+	if m.FieldCleared(characterhistory.FieldInfo) {
+		fields = append(fields, characterhistory.FieldInfo)
+	}
 	return fields
 }
 
@@ -1499,6 +1816,12 @@ func (m *CharacterHistoryMutation) ClearField(name string) error {
 		return nil
 	case characterhistory.FieldUpdatedBy:
 		m.ClearUpdatedBy()
+		return nil
+	case characterhistory.FieldNicknames:
+		m.ClearNicknames()
+		return nil
+	case characterhistory.FieldInfo:
+		m.ClearInfo()
 		return nil
 	}
 	return fmt.Errorf("unknown CharacterHistory nullable field %s", name)
@@ -1531,6 +1854,12 @@ func (m *CharacterHistoryMutation) ResetField(name string) error {
 		return nil
 	case characterhistory.FieldName:
 		m.ResetName()
+		return nil
+	case characterhistory.FieldNicknames:
+		m.ResetNicknames()
+		return nil
+	case characterhistory.FieldInfo:
+		m.ResetInfo()
 		return nil
 	}
 	return fmt.Errorf("unknown CharacterHistory field %s", name)
