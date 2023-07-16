@@ -218,8 +218,8 @@ particular schema, you can apply annotations to the schema to exclude it. Here's
 func (Character) Annotations() []schema.Annotation {
     return []schema.Annotation{
         enthistory.Annotations{
-        // Exclude history tables for this schema
-        Exclude: true,
+            // Exclude history tables for this schema
+            Exclude: true,
         },
     }
 }
