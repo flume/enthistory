@@ -7,7 +7,7 @@ enthistory is a powerful extension for generating history tables using ent.
 You can install enthistory by running the following command:
 
 ```shell
-go get github.com/flume/enthistory
+go get github.com/flume/enthistory@latest
 ```
 
 In addition to installing enthistory, you need to create two files in your `ent` directory: `entc.go` and `generate.go`.
@@ -216,12 +216,12 @@ particular schema, you can apply annotations to the schema to exclude it. Here's
 
 ```go
 func (Character) Annotations() []schema.Annotation {
-return []schema.Annotation{
-enthistory.Annotations{
-// Exclude history tables for this schema
-Exclude: true,
-},
-}
+    return []schema.Annotation{
+        enthistory.Annotations{
+        // Exclude history tables for this schema
+        Exclude: true,
+        },
+    }
 }
 ```
 
@@ -233,14 +233,14 @@ plan to set an alternative schema location, you can omit this option.
 
 ```go
 func main() {
-entc.Generate("./schema2",
-&gen.Config{},
-entc.Extensions(
-enthistory.NewHistoryExtension(
-enthistory.WithSchemaPath("./schema2")
-),
-),
-)
+    entc.Generate("./schema2",
+        &gen.Config{},
+        entc.Extensions(
+            enthistory.NewHistoryExtension(
+                enthistory.WithSchemaPath("./schema2")
+            ),
+        ),
+    )
 }
 ```
 
@@ -287,14 +287,14 @@ Instead of using `.Values()` like this:
 
 ```go
 field.Enum("action").
-Values("PUSH", "PULL")
+    Values("PUSH", "PULL")
 ```
 
 Use `.GoType()` like this:
 
 ```go
 field.Enum("action").
-GoType(types.Action(""))
+    GoType(types.Action(""))
 ```
 
 For more information on enums, refer to the [ent documentation](https://entgo.io/docs/schema-fields#enum-fields).
