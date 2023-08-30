@@ -1,5 +1,9 @@
 # Changelog
 
+### [v0.8.3](https://github.com/flume/enthistory/compare/v0.8.2...v0.8.3) (2023-08-30)
+
+* Mutation IDs for Update and Delete (#24)
+
 ### [v0.8.2](https://github.com/flume/enthistory/compare/v0.8.1...v0.8.2) (2023-07-05)
 
 * Auditing fix for JSON fields (#23)
