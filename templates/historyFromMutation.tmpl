@@ -97,47 +97,50 @@
                         updatedBy, _ := ctx.Value("{{ $updatedByKey }}").({{ $updatedByValueType }})
                         {{ end }}
 
-                        id, ok := m.ID()
-                        if !ok {
-                            return rollback(tx, idNotFoundError)
-                        }
-
-                        {{ camel $name }}, err := client.{{ $name }}.Get(ctx, id)
+                        ids, err := m.IDs(ctx)
                         if err != nil {
-                            return rollback(tx, err)
+                            return rollback(tx, fmt.Errorf("getting ids: %w", err))
                         }
 
-                        create := client.{{$h.Name}}.Create()
-                        if tx != nil {
-                            create = tx.{{$h.Name}}.Create()
-                        }
-                        create = create.
-                            SetOperation(EntOpToHistoryOp(m.Op())).
-                            SetHistoryTime(time.Now()).
-                            SetRef(id)
-
-                        {{- if not (eq $updatedByKey "") }}
-                            {{- if (eq $updatedByValueType "int") }}
-                            if updatedBy != 0 {
-                            {{- end }}
-                            {{- if (eq $updatedByValueType "string") }}
-                            if updatedBy != "" {
-                            {{- end }}
-                                create = create.SetUpdatedBy(updatedBy)
+                        for _, id := range ids {
+                            {{ camel $name }}, err := client.{{ $name }}.Get(ctx, id)
+                            if err != nil {
+                                return rollback(tx, err)
                             }
-                        {{- end }}
 
-                    {{ range $f := $n.Fields }}
-                        if {{ camel $f.Name }}, exists := m.{{ $f.StructField }}(); exists {
-                            create = create.Set{{ if $f.Nillable }}Nillable{{ end }}{{ $f.StructField }}({{ if $f.Nillable }}&{{ end }}{{ camel $f.Name }})
-                        } else {
-                            create = create.Set{{ if $f.Nillable }}Nillable{{ end }}{{ $f.StructField }}({{ camel $name }}.{{ pascal $f.Name }})
+                            create := client.{{$h.Name}}.Create()
+                            if tx != nil {
+                                create = tx.{{$h.Name}}.Create()
+                            }
+                            create = create.
+                                SetOperation(EntOpToHistoryOp(m.Op())).
+                                SetHistoryTime(time.Now()).
+                                SetRef(id)
+
+                            {{- if not (eq $updatedByKey "") }}
+                                {{- if (eq $updatedByValueType "int") }}
+                                if updatedBy != 0 {
+                                {{- end }}
+                                {{- if (eq $updatedByValueType "string") }}
+                                if updatedBy != "" {
+                                {{- end }}
+                                    create = create.SetUpdatedBy(updatedBy)
+                                }
+                            {{- end }}
+
+                        {{ range $f := $n.Fields }}
+                            if {{ camel $f.Name }}, exists := m.{{ $f.StructField }}(); exists {
+                                create = create.Set{{ if $f.Nillable }}Nillable{{ end }}{{ $f.StructField }}({{ if $f.Nillable }}&{{ end }}{{ camel $f.Name }})
+                            } else {
+                                create = create.Set{{ if $f.Nillable }}Nillable{{ end }}{{ $f.StructField }}({{ camel $name }}.{{ pascal $f.Name }})
+                            }
+                        {{ end }}
+                            _, err = create.Save(ctx)
+                            if err != nil {
+                                rollback(tx, err)
+                            }
                         }
-                    {{ end }}
-                        _, err = create.Save(ctx)
-                        if err != nil {
-                            rollback(tx, err)
-                        }
+
                         return nil
                     }
 
@@ -152,43 +155,46 @@
                         updatedBy, _ := ctx.Value("{{ $updatedByKey }}").({{ $updatedByValueType }})
                         {{ end }}
 
-                        id, ok := m.ID()
-                        if !ok {
-                            return rollback(tx, idNotFoundError)
-                        }
-
-                        {{ camel $name }}, err := client.{{ $name }}.Get(ctx, id)
+                        ids, err := m.IDs(ctx)
                         if err != nil {
-                            return rollback(tx, err)
+                            return rollback(tx, fmt.Errorf("getting ids: %w", err))
                         }
 
-                        create := client.{{$h.Name}}.Create()
-                        if tx != nil {
-                            create = tx.{{$h.Name}}.Create()
-                        }
-
-                        {{- if not (eq $updatedByKey "") }}
-                            {{- if (eq $updatedByValueType "int") }}
-                            if updatedBy != 0 {
-                            {{- end }}
-                            {{- if (eq $updatedByValueType "string") }}
-                            if updatedBy != "" {
-                            {{- end }}
-                                create = create.SetUpdatedBy(updatedBy)
+                        for _, id := range ids {
+                            {{ camel $name }}, err := client.{{ $name }}.Get(ctx, id)
+                            if err != nil {
+                                return rollback(tx, err)
                             }
-                        {{- end }}
 
-                        _, err = create.
-                            SetOperation(EntOpToHistoryOp(m.Op())).
-                            SetHistoryTime(time.Now()).
-                            SetRef(id).
-                        {{- range $f := $n.Fields }}
-                            Set{{ if $f.Nillable }}Nillable{{ end }}{{ $f.StructField }}({{ camel $name }}.{{ pascal $f.Name }}).
-                        {{- end }}
-                            Save(ctx)
-                        if err != nil {
-                            rollback(tx, err)
+                            create := client.{{$h.Name}}.Create()
+                            if tx != nil {
+                                create = tx.{{$h.Name}}.Create()
+                            }
+
+                            {{- if not (eq $updatedByKey "") }}
+                                {{- if (eq $updatedByValueType "int") }}
+                                if updatedBy != 0 {
+                                {{- end }}
+                                {{- if (eq $updatedByValueType "string") }}
+                                if updatedBy != "" {
+                                {{- end }}
+                                    create = create.SetUpdatedBy(updatedBy)
+                                }
+                            {{- end }}
+
+                            _, err = create.
+                                SetOperation(EntOpToHistoryOp(m.Op())).
+                                SetHistoryTime(time.Now()).
+                                SetRef(id).
+                            {{- range $f := $n.Fields }}
+                                Set{{ if $f.Nillable }}Nillable{{ end }}{{ $f.StructField }}({{ camel $name }}.{{ pascal $f.Name }}).
+                            {{- end }}
+                                Save(ctx)
+                            if err != nil {
+                                rollback(tx, err)
+                            }
                         }
+
                         return nil
                     }
                 {{ end }}

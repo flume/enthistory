@@ -4,6 +4,8 @@ import (
 	"context"
 	"os"
 
+	entcharacter "github.com/flume/enthistory/_examples/basic/ent/character"
+
 	"github.com/stretchr/testify/assert"
 
 	"github.com/flume/enthistory/_examples/basic/ent/characterhistory"
@@ -69,6 +71,27 @@ func TestEntHistory(t *testing.T) {
 				assert.NoError(t, err)
 				// delete
 				err = client.Character.DeleteOne(character).Exec(ctx)
+				assert.NoError(t, err)
+				characterHistory, err := character.History().All(ctx)
+				assert.NoError(t, err)
+				assert.Equal(t, 3, len(characterHistory))
+				allHistory, err := client.CharacterHistory.Query().All(ctx)
+				assert.NoError(t, err)
+				assert.Equal(t, 3, len(allHistory))
+			},
+		},
+		{
+			name: "Handles 1 character delete by name",
+			runner: func(t *testing.T, client *ent.Client) {
+				ctx := context.Background()
+				// create
+				character, err := client.Character.Create().SetAge(1003).SetName("Marceline").Save(ctx)
+				assert.NoError(t, err)
+				// update
+				character, err = character.Update().SetName("Marceline the Vampire Queen").Save(ctx)
+				assert.NoError(t, err)
+				// delete
+				_, err = client.Character.Delete().Where(entcharacter.NameEQ(character.Name)).Exec(ctx)
 				assert.NoError(t, err)
 				characterHistory, err := character.History().All(ctx)
 				assert.NoError(t, err)
