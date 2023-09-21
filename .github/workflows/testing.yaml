@@ -41,7 +41,7 @@ jobs:
       - name: GoLang CI Lint
         uses: golangci/golangci-lint-action@v3
         with:
-          version: v1.53
+          version: v1.54
           args: --timeout 10m0s
           skip-cache: true
 
@@ -61,5 +61,5 @@ jobs:
 
       - name: Format
         run: |
-          go install golang.org/x/tools/cmd/goimports@v0.9.3
+          go install golang.org/x/tools/cmd/goimports@v0.13.0
           UNFORMATTED_CODE_GOFMT=$(goimports -local github.com/flume -d ./)
