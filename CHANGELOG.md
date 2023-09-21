@@ -1,5 +1,13 @@
 # Changelog
 
+### [v0.9.1](https://github.com/flume/enthistory/compare/v0.9.0...v0.9.1) (2023-09-21)
+
+* fix: generate examples for tests
+
+### [v0.9.0](https://github.com/flume/enthistory/compare/v0.8.3...v0.9.0) (2023-09-21)
+
+* feat: Update Deps for Vulnerabilities (#25)
+
 ### [v0.8.3](https://github.com/flume/enthistory/compare/v0.8.2...v0.8.3) (2023-08-30)
 
 * Mutation IDs for Update and Delete (#24)
