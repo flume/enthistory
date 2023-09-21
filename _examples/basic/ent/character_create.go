@@ -260,11 +260,15 @@ func (cc *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
 // CharacterCreateBulk is the builder for creating many Character entities in bulk.
 type CharacterCreateBulk struct {
 	config
+	err      error
 	builders []*CharacterCreate
 }
 
 // Save creates the Character entities in the database.
 func (ccb *CharacterCreateBulk) Save(ctx context.Context) ([]*Character, error) {
+	if ccb.err != nil {
+		return nil, ccb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(ccb.builders))
 	nodes := make([]*Character, len(ccb.builders))
 	mutators := make([]Mutator, len(ccb.builders))

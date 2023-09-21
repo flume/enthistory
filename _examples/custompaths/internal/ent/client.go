@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"reflect"
 
 	"github.com/flume/enthistory"
 	"github.com/flume/enthistory/_examples/custompaths/internal/ent/migrate"
@@ -134,11 +135,14 @@ func Open(driverName, dataSourceName string, options ...Option) (*Client, error)
 	}
 }
 
+// ErrTxStarted is returned when trying to start a new transaction from a transactional client.
+var ErrTxStarted = errors.New("ent: cannot start a transaction within a transaction")
+
 // Tx returns a new transactional client. The provided context
 // is used until the transaction is committed or rolled back.
 func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	if _, ok := c.driver.(*txDriver); ok {
-		return nil, errors.New("ent: cannot start a transaction within a transaction")
+		return nil, ErrTxStarted
 	}
 	tx, err := newTx(ctx, c.driver)
 	if err != nil {
@@ -265,6 +269,21 @@ func (c *CharacterClient) Create() *CharacterCreate {
 
 // CreateBulk returns a builder for creating a bulk of Character entities.
 func (c *CharacterClient) CreateBulk(builders ...*CharacterCreate) *CharacterCreateBulk {
+	return &CharacterCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CharacterClient) MapCreateBulk(slice any, setFunc func(*CharacterCreate, int)) *CharacterCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CharacterCreateBulk{err: fmt.Errorf("calling to CharacterClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CharacterCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &CharacterCreateBulk{config: c.config, builders: builders}
 }
 
@@ -418,6 +437,21 @@ func (c *CharacterHistoryClient) CreateBulk(builders ...*CharacterHistoryCreate)
 	return &CharacterHistoryCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CharacterHistoryClient) MapCreateBulk(slice any, setFunc func(*CharacterHistoryCreate, int)) *CharacterHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CharacterHistoryCreateBulk{err: fmt.Errorf("calling to CharacterHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CharacterHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &CharacterHistoryCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for CharacterHistory.
 func (c *CharacterHistoryClient) Update() *CharacterHistoryUpdate {
 	mutation := newCharacterHistoryMutation(c.config, OpUpdate)
@@ -533,6 +567,21 @@ func (c *FriendshipClient) Create() *FriendshipCreate {
 
 // CreateBulk returns a builder for creating a bulk of Friendship entities.
 func (c *FriendshipClient) CreateBulk(builders ...*FriendshipCreate) *FriendshipCreateBulk {
+	return &FriendshipCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FriendshipClient) MapCreateBulk(slice any, setFunc func(*FriendshipCreate, int)) *FriendshipCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FriendshipCreateBulk{err: fmt.Errorf("calling to FriendshipClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FriendshipCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &FriendshipCreateBulk{config: c.config, builders: builders}
 }
 
@@ -683,6 +732,21 @@ func (c *FriendshipHistoryClient) Create() *FriendshipHistoryCreate {
 
 // CreateBulk returns a builder for creating a bulk of FriendshipHistory entities.
 func (c *FriendshipHistoryClient) CreateBulk(builders ...*FriendshipHistoryCreate) *FriendshipHistoryCreateBulk {
+	return &FriendshipHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FriendshipHistoryClient) MapCreateBulk(slice any, setFunc func(*FriendshipHistoryCreate, int)) *FriendshipHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FriendshipHistoryCreateBulk{err: fmt.Errorf("calling to FriendshipHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FriendshipHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &FriendshipHistoryCreateBulk{config: c.config, builders: builders}
 }
 

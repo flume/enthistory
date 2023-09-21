@@ -273,11 +273,15 @@ func (chc *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cr
 // CharacterHistoryCreateBulk is the builder for creating many CharacterHistory entities in bulk.
 type CharacterHistoryCreateBulk struct {
 	config
+	err      error
 	builders []*CharacterHistoryCreate
 }
 
 // Save creates the CharacterHistory entities in the database.
 func (chcb *CharacterHistoryCreateBulk) Save(ctx context.Context) ([]*CharacterHistory, error) {
+	if chcb.err != nil {
+		return nil, chcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(chcb.builders))
 	nodes := make([]*CharacterHistory, len(chcb.builders))
 	mutators := make([]Mutator, len(chcb.builders))

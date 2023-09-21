@@ -1450,6 +1450,7 @@ func (m *FriendshipMutation) ResetFriendID() {
 // ClearCharacter clears the "character" edge to the Character entity.
 func (m *FriendshipMutation) ClearCharacter() {
 	m.clearedcharacter = true
+	m.clearedFields[friendship.FieldCharacterID] = struct{}{}
 }
 
 // CharacterCleared reports if the "character" edge to the Character entity was cleared.
@@ -1476,6 +1477,7 @@ func (m *FriendshipMutation) ResetCharacter() {
 // ClearFriend clears the "friend" edge to the Character entity.
 func (m *FriendshipMutation) ClearFriend() {
 	m.clearedfriend = true
+	m.clearedFields[friendship.FieldFriendID] = struct{}{}
 }
 
 // FriendCleared reports if the "friend" edge to the Character entity was cleared.

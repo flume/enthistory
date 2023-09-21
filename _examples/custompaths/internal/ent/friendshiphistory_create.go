@@ -180,11 +180,15 @@ func (fhc *FriendshipHistoryCreate) createSpec() (*FriendshipHistory, *sqlgraph.
 // FriendshipHistoryCreateBulk is the builder for creating many FriendshipHistory entities in bulk.
 type FriendshipHistoryCreateBulk struct {
 	config
+	err      error
 	builders []*FriendshipHistoryCreate
 }
 
 // Save creates the FriendshipHistory entities in the database.
 func (fhcb *FriendshipHistoryCreateBulk) Save(ctx context.Context) ([]*FriendshipHistory, error) {
+	if fhcb.err != nil {
+		return nil, fhcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(fhcb.builders))
 	nodes := make([]*FriendshipHistory, len(fhcb.builders))
 	mutators := make([]Mutator, len(fhcb.builders))
