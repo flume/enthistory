@@ -2,6 +2,8 @@ module github.com/flume/enthistory
 
 go 1.21
 
+toolchain go1.21.0
+
 require (
 	entgo.io/ent v0.12.4
 	github.com/mattn/go-sqlite3 v1.14.17
