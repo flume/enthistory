@@ -35,6 +35,14 @@ func (fhu *FriendshipHistoryUpdate) SetCharacterID(i int) *FriendshipHistoryUpda
 	return fhu
 }
 
+// SetNillableCharacterID sets the "character_id" field if the given value is not nil.
+func (fhu *FriendshipHistoryUpdate) SetNillableCharacterID(i *int) *FriendshipHistoryUpdate {
+	if i != nil {
+		fhu.SetCharacterID(*i)
+	}
+	return fhu
+}
+
 // AddCharacterID adds i to the "character_id" field.
 func (fhu *FriendshipHistoryUpdate) AddCharacterID(i int) *FriendshipHistoryUpdate {
 	fhu.mutation.AddCharacterID(i)
@@ -45,6 +53,14 @@ func (fhu *FriendshipHistoryUpdate) AddCharacterID(i int) *FriendshipHistoryUpda
 func (fhu *FriendshipHistoryUpdate) SetFriendID(i int) *FriendshipHistoryUpdate {
 	fhu.mutation.ResetFriendID()
 	fhu.mutation.SetFriendID(i)
+	return fhu
+}
+
+// SetNillableFriendID sets the "friend_id" field if the given value is not nil.
+func (fhu *FriendshipHistoryUpdate) SetNillableFriendID(i *int) *FriendshipHistoryUpdate {
+	if i != nil {
+		fhu.SetFriendID(*i)
+	}
 	return fhu
 }
 
@@ -137,6 +153,14 @@ func (fhuo *FriendshipHistoryUpdateOne) SetCharacterID(i int) *FriendshipHistory
 	return fhuo
 }
 
+// SetNillableCharacterID sets the "character_id" field if the given value is not nil.
+func (fhuo *FriendshipHistoryUpdateOne) SetNillableCharacterID(i *int) *FriendshipHistoryUpdateOne {
+	if i != nil {
+		fhuo.SetCharacterID(*i)
+	}
+	return fhuo
+}
+
 // AddCharacterID adds i to the "character_id" field.
 func (fhuo *FriendshipHistoryUpdateOne) AddCharacterID(i int) *FriendshipHistoryUpdateOne {
 	fhuo.mutation.AddCharacterID(i)
@@ -147,6 +171,14 @@ func (fhuo *FriendshipHistoryUpdateOne) AddCharacterID(i int) *FriendshipHistory
 func (fhuo *FriendshipHistoryUpdateOne) SetFriendID(i int) *FriendshipHistoryUpdateOne {
 	fhuo.mutation.ResetFriendID()
 	fhuo.mutation.SetFriendID(i)
+	return fhuo
+}
+
+// SetNillableFriendID sets the "friend_id" field if the given value is not nil.
+func (fhuo *FriendshipHistoryUpdateOne) SetNillableFriendID(i *int) *FriendshipHistoryUpdateOne {
+	if i != nil {
+		fhuo.SetFriendID(*i)
+	}
 	return fhuo
 }
 

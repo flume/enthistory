@@ -50,9 +50,25 @@ func (fu *FriendshipUpdate) SetCharacterID(i int) *FriendshipUpdate {
 	return fu
 }
 
+// SetNillableCharacterID sets the "character_id" field if the given value is not nil.
+func (fu *FriendshipUpdate) SetNillableCharacterID(i *int) *FriendshipUpdate {
+	if i != nil {
+		fu.SetCharacterID(*i)
+	}
+	return fu
+}
+
 // SetFriendID sets the "friend_id" field.
 func (fu *FriendshipUpdate) SetFriendID(i int) *FriendshipUpdate {
 	fu.mutation.SetFriendID(i)
+	return fu
+}
+
+// SetNillableFriendID sets the "friend_id" field if the given value is not nil.
+func (fu *FriendshipUpdate) SetNillableFriendID(i *int) *FriendshipUpdate {
+	if i != nil {
+		fu.SetFriendID(*i)
+	}
 	return fu
 }
 
@@ -234,9 +250,25 @@ func (fuo *FriendshipUpdateOne) SetCharacterID(i int) *FriendshipUpdateOne {
 	return fuo
 }
 
+// SetNillableCharacterID sets the "character_id" field if the given value is not nil.
+func (fuo *FriendshipUpdateOne) SetNillableCharacterID(i *int) *FriendshipUpdateOne {
+	if i != nil {
+		fuo.SetCharacterID(*i)
+	}
+	return fuo
+}
+
 // SetFriendID sets the "friend_id" field.
 func (fuo *FriendshipUpdateOne) SetFriendID(i int) *FriendshipUpdateOne {
 	fuo.mutation.SetFriendID(i)
+	return fuo
+}
+
+// SetNillableFriendID sets the "friend_id" field if the given value is not nil.
+func (fuo *FriendshipUpdateOne) SetNillableFriendID(i *int) *FriendshipUpdateOne {
+	if i != nil {
+		fuo.SetFriendID(*i)
+	}
 	return fuo
 }
 
