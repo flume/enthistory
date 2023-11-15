@@ -51,6 +51,14 @@ func (chu *CharacterHistoryUpdate) SetAge(i int) *CharacterHistoryUpdate {
 	return chu
 }
 
+// SetNillableAge sets the "age" field if the given value is not nil.
+func (chu *CharacterHistoryUpdate) SetNillableAge(i *int) *CharacterHistoryUpdate {
+	if i != nil {
+		chu.SetAge(*i)
+	}
+	return chu
+}
+
 // AddAge adds i to the "age" field.
 func (chu *CharacterHistoryUpdate) AddAge(i int) *CharacterHistoryUpdate {
 	chu.mutation.AddAge(i)
@@ -60,6 +68,14 @@ func (chu *CharacterHistoryUpdate) AddAge(i int) *CharacterHistoryUpdate {
 // SetName sets the "name" field.
 func (chu *CharacterHistoryUpdate) SetName(s string) *CharacterHistoryUpdate {
 	chu.mutation.SetName(s)
+	return chu
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (chu *CharacterHistoryUpdate) SetNillableName(s *string) *CharacterHistoryUpdate {
+	if s != nil {
+		chu.SetName(*s)
+	}
 	return chu
 }
 
@@ -223,6 +239,14 @@ func (chuo *CharacterHistoryUpdateOne) SetAge(i int) *CharacterHistoryUpdateOne 
 	return chuo
 }
 
+// SetNillableAge sets the "age" field if the given value is not nil.
+func (chuo *CharacterHistoryUpdateOne) SetNillableAge(i *int) *CharacterHistoryUpdateOne {
+	if i != nil {
+		chuo.SetAge(*i)
+	}
+	return chuo
+}
+
 // AddAge adds i to the "age" field.
 func (chuo *CharacterHistoryUpdateOne) AddAge(i int) *CharacterHistoryUpdateOne {
 	chuo.mutation.AddAge(i)
@@ -232,6 +256,14 @@ func (chuo *CharacterHistoryUpdateOne) AddAge(i int) *CharacterHistoryUpdateOne 
 // SetName sets the "name" field.
 func (chuo *CharacterHistoryUpdateOne) SetName(s string) *CharacterHistoryUpdateOne {
 	chuo.mutation.SetName(s)
+	return chuo
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (chuo *CharacterHistoryUpdateOne) SetNillableName(s *string) *CharacterHistoryUpdateOne {
+	if s != nil {
+		chuo.SetName(*s)
+	}
 	return chuo
 }
 
