@@ -3,8 +3,8 @@ name: Testing
 on:
   push:
     branches:
-      - '**' # Run on all branches
-      - '!main' # Except main
+      - "**" # Run on all branches
+      - "!main" # Except main
 
 jobs:
   testing:
@@ -19,7 +19,7 @@ jobs:
         with:
           cache: true
           cache-dependency-path: go.mod
-          go-version: '1.21'
+          go-version: "1.21"
 
       - name: Test
         run: go test ./_examples/.
@@ -36,12 +36,12 @@ jobs:
         with:
           cache: true
           cache-dependency-path: go.mod
-          go-version: '1.21'
+          go-version: "1.21"
 
       - name: GoLang CI Lint
         uses: golangci/golangci-lint-action@v3
         with:
-          version: v1.54
+          version: v1.55
           args: --timeout 10m0s
           skip-cache: true
 
@@ -57,9 +57,14 @@ jobs:
         with:
           cache: true
           cache-dependency-path: go.mod
-          go-version: '1.21'
+          go-version: "1.21"
 
       - name: Format
         run: |
-          go install golang.org/x/tools/cmd/goimports@v0.13.0
+          go install golang.org/x/tools/cmd/goimports@v0.16.1
           UNFORMATTED_CODE_GOFMT=$(goimports -local github.com/flume -d ./)
+          if [ -n "$UNFORMATTED_CODE_GOFMT" ]; then
+            echo "Code is not formatted. Please run 'make fmt' to fix it."
+            echo "$UNFORMATTED_CODE_GOFMT"
+            exit 1
+          fi
