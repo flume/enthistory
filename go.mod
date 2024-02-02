@@ -6,13 +6,13 @@ toolchain go1.21.6
 
 require (
 	entgo.io/ent v0.12.5
-	github.com/google/uuid v1.5.0
-	github.com/mattn/go-sqlite3 v1.14.19
+	github.com/google/uuid v1.6.0
+	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/stretchr/testify v1.8.4
 )
 
 require (
-	ariga.io/atlas v0.18.0 // indirect
+	ariga.io/atlas v0.19.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -22,7 +22,7 @@ require (
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/stretchr/objx v0.5.1 // indirect
-	github.com/zclconf/go-cty v1.14.1 // indirect
+	github.com/zclconf/go-cty v1.14.2 // indirect
 	golang.org/x/mod v0.14.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/tools v0.17.0 // indirect
