@@ -6,6 +6,7 @@ toolchain go1.21.6
 
 require (
 	entgo.io/ent v0.12.5
+	github.com/google/uuid v1.5.0
 	github.com/mattn/go-sqlite3 v1.14.19
 	github.com/stretchr/testify v1.8.4
 )
@@ -17,7 +18,6 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-openapi/inflect v0.19.0 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
-	github.com/google/uuid v1.5.0 // indirect
 	github.com/hashicorp/hcl/v2 v2.19.1 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
