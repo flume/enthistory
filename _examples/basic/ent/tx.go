@@ -20,6 +20,10 @@ type Tx struct {
 	Friendship *FriendshipClient
 	// FriendshipHistory is the client for interacting with the FriendshipHistory builders.
 	FriendshipHistory *FriendshipHistoryClient
+	// Residence is the client for interacting with the Residence builders.
+	Residence *ResidenceClient
+	// ResidenceHistory is the client for interacting with the ResidenceHistory builders.
+	ResidenceHistory *ResidenceHistoryClient
 
 	// lazily loaded.
 	client     *Client
@@ -155,6 +159,8 @@ func (tx *Tx) init() {
 	tx.CharacterHistory = NewCharacterHistoryClient(tx.config)
 	tx.Friendship = NewFriendshipClient(tx.config)
 	tx.FriendshipHistory = NewFriendshipHistoryClient(tx.config)
+	tx.Residence = NewResidenceClient(tx.config)
+	tx.ResidenceHistory = NewResidenceHistoryClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

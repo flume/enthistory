@@ -304,6 +304,29 @@ func HasFriendsWith(preds ...predicate.Character) predicate.Character {
 	})
 }
 
+// HasResidence applies the HasEdge predicate on the "residence" edge.
+func HasResidence() predicate.Character {
+	return predicate.Character(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, ResidenceTable, ResidenceColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasResidenceWith applies the HasEdge predicate on the "residence" edge with a given conditions (other predicates).
+func HasResidenceWith(preds ...predicate.Residence) predicate.Character {
+	return predicate.Character(func(s *sql.Selector) {
+		step := newResidenceStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasFriendships applies the HasEdge predicate on the "friendships" edge.
 func HasFriendships() predicate.Character {
 	return predicate.Character(func(s *sql.Selector) {

@@ -17,3 +17,9 @@ type Friendship func(*sql.Selector)
 
 // FriendshipHistory is the predicate function for friendshiphistory builders.
 type FriendshipHistory func(*sql.Selector)
+
+// Residence is the predicate function for residence builders.
+type Residence func(*sql.Selector)
+
+// ResidenceHistory is the predicate function for residencehistory builders.
+type ResidenceHistory func(*sql.Selector)

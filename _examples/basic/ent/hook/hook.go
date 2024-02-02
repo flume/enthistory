@@ -57,6 +57,30 @@ func (f FriendshipHistoryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FriendshipHistoryMutation", m)
 }
 
+// The ResidenceFunc type is an adapter to allow the use of ordinary
+// function as Residence mutator.
+type ResidenceFunc func(context.Context, *ent.ResidenceMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ResidenceFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ResidenceMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ResidenceMutation", m)
+}
+
+// The ResidenceHistoryFunc type is an adapter to allow the use of ordinary
+// function as ResidenceHistory mutator.
+type ResidenceHistoryFunc func(context.Context, *ent.ResidenceHistoryMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ResidenceHistoryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ResidenceHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ResidenceHistoryMutation", m)
+}
+
 // Condition is a hook condition function.
 type Condition func(context.Context, ent.Mutation) bool
 

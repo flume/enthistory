@@ -11,6 +11,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
 	"github.com/flume/enthistory/_examples/basic/ent/character"
@@ -18,6 +19,8 @@ import (
 	"github.com/flume/enthistory/_examples/basic/ent/friendship"
 	"github.com/flume/enthistory/_examples/basic/ent/friendshiphistory"
 	"github.com/flume/enthistory/_examples/basic/ent/predicate"
+	"github.com/flume/enthistory/_examples/basic/ent/residence"
+	"github.com/flume/enthistory/_examples/basic/ent/residencehistory"
 )
 
 const (
@@ -33,6 +36,8 @@ const (
 	TypeCharacterHistory  = "CharacterHistory"
 	TypeFriendship        = "Friendship"
 	TypeFriendshipHistory = "FriendshipHistory"
+	TypeResidence         = "Residence"
+	TypeResidenceHistory  = "ResidenceHistory"
 )
 
 // CharacterMutation represents an operation that mutates the Character nodes in the graph.
@@ -53,6 +58,8 @@ type CharacterMutation struct {
 	friends            map[int]struct{}
 	removedfriends     map[int]struct{}
 	clearedfriends     bool
+	residence          *uuid.UUID
+	clearedresidence   bool
 	friendships        map[string]struct{}
 	removedfriendships map[string]struct{}
 	clearedfriendships bool
@@ -491,6 +498,45 @@ func (m *CharacterMutation) ResetFriends() {
 	m.removedfriends = nil
 }
 
+// SetResidenceID sets the "residence" edge to the Residence entity by id.
+func (m *CharacterMutation) SetResidenceID(id uuid.UUID) {
+	m.residence = &id
+}
+
+// ClearResidence clears the "residence" edge to the Residence entity.
+func (m *CharacterMutation) ClearResidence() {
+	m.clearedresidence = true
+}
+
+// ResidenceCleared reports if the "residence" edge to the Residence entity was cleared.
+func (m *CharacterMutation) ResidenceCleared() bool {
+	return m.clearedresidence
+}
+
+// ResidenceID returns the "residence" edge ID in the mutation.
+func (m *CharacterMutation) ResidenceID() (id uuid.UUID, exists bool) {
+	if m.residence != nil {
+		return *m.residence, true
+	}
+	return
+}
+
+// ResidenceIDs returns the "residence" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ResidenceID instead. It exists only for internal usage by the builders.
+func (m *CharacterMutation) ResidenceIDs() (ids []uuid.UUID) {
+	if id := m.residence; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetResidence resets all changes to the "residence" edge.
+func (m *CharacterMutation) ResetResidence() {
+	m.residence = nil
+	m.clearedresidence = false
+}
+
 // AddFriendshipIDs adds the "friendships" edge to the Friendship entity by ids.
 func (m *CharacterMutation) AddFriendshipIDs(ids ...string) {
 	if m.friendships == nil {
@@ -793,9 +839,12 @@ func (m *CharacterMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *CharacterMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.friends != nil {
 		edges = append(edges, character.EdgeFriends)
+	}
+	if m.residence != nil {
+		edges = append(edges, character.EdgeResidence)
 	}
 	if m.friendships != nil {
 		edges = append(edges, character.EdgeFriendships)
@@ -813,6 +862,10 @@ func (m *CharacterMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case character.EdgeResidence:
+		if id := m.residence; id != nil {
+			return []ent.Value{*id}
+		}
 	case character.EdgeFriendships:
 		ids := make([]ent.Value, 0, len(m.friendships))
 		for id := range m.friendships {
@@ -825,7 +878,7 @@ func (m *CharacterMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *CharacterMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.removedfriends != nil {
 		edges = append(edges, character.EdgeFriends)
 	}
@@ -857,9 +910,12 @@ func (m *CharacterMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *CharacterMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.clearedfriends {
 		edges = append(edges, character.EdgeFriends)
+	}
+	if m.clearedresidence {
+		edges = append(edges, character.EdgeResidence)
 	}
 	if m.clearedfriendships {
 		edges = append(edges, character.EdgeFriendships)
@@ -873,6 +929,8 @@ func (m *CharacterMutation) EdgeCleared(name string) bool {
 	switch name {
 	case character.EdgeFriends:
 		return m.clearedfriends
+	case character.EdgeResidence:
+		return m.clearedresidence
 	case character.EdgeFriendships:
 		return m.clearedfriendships
 	}
@@ -883,6 +941,9 @@ func (m *CharacterMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *CharacterMutation) ClearEdge(name string) error {
 	switch name {
+	case character.EdgeResidence:
+		m.ClearResidence()
+		return nil
 	}
 	return fmt.Errorf("unknown Character unique edge %s", name)
 }
@@ -893,6 +954,9 @@ func (m *CharacterMutation) ResetEdge(name string) error {
 	switch name {
 	case character.EdgeFriends:
 		m.ResetFriends()
+		return nil
+	case character.EdgeResidence:
+		m.ResetResidence()
 		return nil
 	case character.EdgeFriendships:
 		m.ResetFriendships()
@@ -3356,4 +3420,1265 @@ func (m *FriendshipHistoryMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *FriendshipHistoryMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown FriendshipHistory edge %s", name)
+}
+
+// ResidenceMutation represents an operation that mutates the Residence nodes in the graph.
+type ResidenceMutation struct {
+	config
+	op               Op
+	typ              string
+	id               *uuid.UUID
+	created_at       *time.Time
+	updated_at       *time.Time
+	name             *string
+	clearedFields    map[string]struct{}
+	occupants        map[int]struct{}
+	removedoccupants map[int]struct{}
+	clearedoccupants bool
+	done             bool
+	oldValue         func(context.Context) (*Residence, error)
+	predicates       []predicate.Residence
+}
+
+var _ ent.Mutation = (*ResidenceMutation)(nil)
+
+// residenceOption allows management of the mutation configuration using functional options.
+type residenceOption func(*ResidenceMutation)
+
+// newResidenceMutation creates new mutation for the Residence entity.
+func newResidenceMutation(c config, op Op, opts ...residenceOption) *ResidenceMutation {
+	m := &ResidenceMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeResidence,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withResidenceID sets the ID field of the mutation.
+func withResidenceID(id uuid.UUID) residenceOption {
+	return func(m *ResidenceMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Residence
+		)
+		m.oldValue = func(ctx context.Context) (*Residence, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Residence.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withResidence sets the old Residence of the mutation.
+func withResidence(node *Residence) residenceOption {
+	return func(m *ResidenceMutation) {
+		m.oldValue = func(context.Context) (*Residence, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ResidenceMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ResidenceMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Residence entities.
+func (m *ResidenceMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ResidenceMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ResidenceMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Residence.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *ResidenceMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ResidenceMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Residence entity.
+// If the Residence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ResidenceMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ResidenceMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ResidenceMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ResidenceMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Residence entity.
+// If the Residence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ResidenceMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ResidenceMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetName sets the "name" field.
+func (m *ResidenceMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *ResidenceMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the Residence entity.
+// If the Residence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ResidenceMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *ResidenceMutation) ResetName() {
+	m.name = nil
+}
+
+// AddOccupantIDs adds the "occupants" edge to the Character entity by ids.
+func (m *ResidenceMutation) AddOccupantIDs(ids ...int) {
+	if m.occupants == nil {
+		m.occupants = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.occupants[ids[i]] = struct{}{}
+	}
+}
+
+// ClearOccupants clears the "occupants" edge to the Character entity.
+func (m *ResidenceMutation) ClearOccupants() {
+	m.clearedoccupants = true
+}
+
+// OccupantsCleared reports if the "occupants" edge to the Character entity was cleared.
+func (m *ResidenceMutation) OccupantsCleared() bool {
+	return m.clearedoccupants
+}
+
+// RemoveOccupantIDs removes the "occupants" edge to the Character entity by IDs.
+func (m *ResidenceMutation) RemoveOccupantIDs(ids ...int) {
+	if m.removedoccupants == nil {
+		m.removedoccupants = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.occupants, ids[i])
+		m.removedoccupants[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedOccupants returns the removed IDs of the "occupants" edge to the Character entity.
+func (m *ResidenceMutation) RemovedOccupantsIDs() (ids []int) {
+	for id := range m.removedoccupants {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// OccupantsIDs returns the "occupants" edge IDs in the mutation.
+func (m *ResidenceMutation) OccupantsIDs() (ids []int) {
+	for id := range m.occupants {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetOccupants resets all changes to the "occupants" edge.
+func (m *ResidenceMutation) ResetOccupants() {
+	m.occupants = nil
+	m.clearedoccupants = false
+	m.removedoccupants = nil
+}
+
+// Where appends a list predicates to the ResidenceMutation builder.
+func (m *ResidenceMutation) Where(ps ...predicate.Residence) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ResidenceMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ResidenceMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Residence, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ResidenceMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ResidenceMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Residence).
+func (m *ResidenceMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ResidenceMutation) Fields() []string {
+	fields := make([]string, 0, 3)
+	if m.created_at != nil {
+		fields = append(fields, residence.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, residence.FieldUpdatedAt)
+	}
+	if m.name != nil {
+		fields = append(fields, residence.FieldName)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ResidenceMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case residence.FieldCreatedAt:
+		return m.CreatedAt()
+	case residence.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case residence.FieldName:
+		return m.Name()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ResidenceMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case residence.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case residence.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case residence.FieldName:
+		return m.OldName(ctx)
+	}
+	return nil, fmt.Errorf("unknown Residence field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ResidenceMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case residence.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case residence.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case residence.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Residence field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ResidenceMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ResidenceMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ResidenceMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Residence numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ResidenceMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ResidenceMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ResidenceMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown Residence nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ResidenceMutation) ResetField(name string) error {
+	switch name {
+	case residence.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case residence.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case residence.FieldName:
+		m.ResetName()
+		return nil
+	}
+	return fmt.Errorf("unknown Residence field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ResidenceMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.occupants != nil {
+		edges = append(edges, residence.EdgeOccupants)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ResidenceMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case residence.EdgeOccupants:
+		ids := make([]ent.Value, 0, len(m.occupants))
+		for id := range m.occupants {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ResidenceMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.removedoccupants != nil {
+		edges = append(edges, residence.EdgeOccupants)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ResidenceMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case residence.EdgeOccupants:
+		ids := make([]ent.Value, 0, len(m.removedoccupants))
+		for id := range m.removedoccupants {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ResidenceMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedoccupants {
+		edges = append(edges, residence.EdgeOccupants)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ResidenceMutation) EdgeCleared(name string) bool {
+	switch name {
+	case residence.EdgeOccupants:
+		return m.clearedoccupants
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ResidenceMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Residence unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ResidenceMutation) ResetEdge(name string) error {
+	switch name {
+	case residence.EdgeOccupants:
+		m.ResetOccupants()
+		return nil
+	}
+	return fmt.Errorf("unknown Residence edge %s", name)
+}
+
+// ResidenceHistoryMutation represents an operation that mutates the ResidenceHistory nodes in the graph.
+type ResidenceHistoryMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	history_time  *time.Time
+	operation     *enthistory.OpType
+	ref           *uuid.UUID
+	updated_by    *int
+	addupdated_by *int
+	created_at    *time.Time
+	updated_at    *time.Time
+	name          *string
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*ResidenceHistory, error)
+	predicates    []predicate.ResidenceHistory
+}
+
+var _ ent.Mutation = (*ResidenceHistoryMutation)(nil)
+
+// residencehistoryOption allows management of the mutation configuration using functional options.
+type residencehistoryOption func(*ResidenceHistoryMutation)
+
+// newResidenceHistoryMutation creates new mutation for the ResidenceHistory entity.
+func newResidenceHistoryMutation(c config, op Op, opts ...residencehistoryOption) *ResidenceHistoryMutation {
+	m := &ResidenceHistoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeResidenceHistory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withResidenceHistoryID sets the ID field of the mutation.
+func withResidenceHistoryID(id int) residencehistoryOption {
+	return func(m *ResidenceHistoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ResidenceHistory
+		)
+		m.oldValue = func(ctx context.Context) (*ResidenceHistory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ResidenceHistory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withResidenceHistory sets the old ResidenceHistory of the mutation.
+func withResidenceHistory(node *ResidenceHistory) residencehistoryOption {
+	return func(m *ResidenceHistoryMutation) {
+		m.oldValue = func(context.Context) (*ResidenceHistory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ResidenceHistoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ResidenceHistoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ResidenceHistoryMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ResidenceHistoryMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ResidenceHistory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHistoryTime sets the "history_time" field.
+func (m *ResidenceHistoryMutation) SetHistoryTime(t time.Time) {
+	m.history_time = &t
+}
+
+// HistoryTime returns the value of the "history_time" field in the mutation.
+func (m *ResidenceHistoryMutation) HistoryTime() (r time.Time, exists bool) {
+	v := m.history_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHistoryTime returns the old "history_time" field's value of the ResidenceHistory entity.
+// If the ResidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ResidenceHistoryMutation) OldHistoryTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHistoryTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHistoryTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHistoryTime: %w", err)
+	}
+	return oldValue.HistoryTime, nil
+}
+
+// ResetHistoryTime resets all changes to the "history_time" field.
+func (m *ResidenceHistoryMutation) ResetHistoryTime() {
+	m.history_time = nil
+}
+
+// SetOperation sets the "operation" field.
+func (m *ResidenceHistoryMutation) SetOperation(et enthistory.OpType) {
+	m.operation = &et
+}
+
+// Operation returns the value of the "operation" field in the mutation.
+func (m *ResidenceHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+	v := m.operation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOperation returns the old "operation" field's value of the ResidenceHistory entity.
+// If the ResidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ResidenceHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOperation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOperation: %w", err)
+	}
+	return oldValue.Operation, nil
+}
+
+// ResetOperation resets all changes to the "operation" field.
+func (m *ResidenceHistoryMutation) ResetOperation() {
+	m.operation = nil
+}
+
+// SetRef sets the "ref" field.
+func (m *ResidenceHistoryMutation) SetRef(u uuid.UUID) {
+	m.ref = &u
+}
+
+// Ref returns the value of the "ref" field in the mutation.
+func (m *ResidenceHistoryMutation) Ref() (r uuid.UUID, exists bool) {
+	v := m.ref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRef returns the old "ref" field's value of the ResidenceHistory entity.
+// If the ResidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ResidenceHistoryMutation) OldRef(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRef is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRef requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRef: %w", err)
+	}
+	return oldValue.Ref, nil
+}
+
+// ClearRef clears the value of the "ref" field.
+func (m *ResidenceHistoryMutation) ClearRef() {
+	m.ref = nil
+	m.clearedFields[residencehistory.FieldRef] = struct{}{}
+}
+
+// RefCleared returns if the "ref" field was cleared in this mutation.
+func (m *ResidenceHistoryMutation) RefCleared() bool {
+	_, ok := m.clearedFields[residencehistory.FieldRef]
+	return ok
+}
+
+// ResetRef resets all changes to the "ref" field.
+func (m *ResidenceHistoryMutation) ResetRef() {
+	m.ref = nil
+	delete(m.clearedFields, residencehistory.FieldRef)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ResidenceHistoryMutation) SetUpdatedBy(i int) {
+	m.updated_by = &i
+	m.addupdated_by = nil
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ResidenceHistoryMutation) UpdatedBy() (r int, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the ResidenceHistory entity.
+// If the ResidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ResidenceHistoryMutation) OldUpdatedBy(ctx context.Context) (v *int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (m *ResidenceHistoryMutation) AddUpdatedBy(i int) {
+	if m.addupdated_by != nil {
+		*m.addupdated_by += i
+	} else {
+		m.addupdated_by = &i
+	}
+}
+
+// AddedUpdatedBy returns the value that was added to the "updated_by" field in this mutation.
+func (m *ResidenceHistoryMutation) AddedUpdatedBy() (r int, exists bool) {
+	v := m.addupdated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ResidenceHistoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	m.clearedFields[residencehistory.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ResidenceHistoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[residencehistory.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ResidenceHistoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	delete(m.clearedFields, residencehistory.FieldUpdatedBy)
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *ResidenceHistoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ResidenceHistoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the ResidenceHistory entity.
+// If the ResidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ResidenceHistoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ResidenceHistoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ResidenceHistoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ResidenceHistoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the ResidenceHistory entity.
+// If the ResidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ResidenceHistoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ResidenceHistoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetName sets the "name" field.
+func (m *ResidenceHistoryMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *ResidenceHistoryMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the ResidenceHistory entity.
+// If the ResidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ResidenceHistoryMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *ResidenceHistoryMutation) ResetName() {
+	m.name = nil
+}
+
+// Where appends a list predicates to the ResidenceHistoryMutation builder.
+func (m *ResidenceHistoryMutation) Where(ps ...predicate.ResidenceHistory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ResidenceHistoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ResidenceHistoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ResidenceHistory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ResidenceHistoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ResidenceHistoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ResidenceHistory).
+func (m *ResidenceHistoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ResidenceHistoryMutation) Fields() []string {
+	fields := make([]string, 0, 7)
+	if m.history_time != nil {
+		fields = append(fields, residencehistory.FieldHistoryTime)
+	}
+	if m.operation != nil {
+		fields = append(fields, residencehistory.FieldOperation)
+	}
+	if m.ref != nil {
+		fields = append(fields, residencehistory.FieldRef)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, residencehistory.FieldUpdatedBy)
+	}
+	if m.created_at != nil {
+		fields = append(fields, residencehistory.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, residencehistory.FieldUpdatedAt)
+	}
+	if m.name != nil {
+		fields = append(fields, residencehistory.FieldName)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ResidenceHistoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case residencehistory.FieldHistoryTime:
+		return m.HistoryTime()
+	case residencehistory.FieldOperation:
+		return m.Operation()
+	case residencehistory.FieldRef:
+		return m.Ref()
+	case residencehistory.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case residencehistory.FieldCreatedAt:
+		return m.CreatedAt()
+	case residencehistory.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case residencehistory.FieldName:
+		return m.Name()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ResidenceHistoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case residencehistory.FieldHistoryTime:
+		return m.OldHistoryTime(ctx)
+	case residencehistory.FieldOperation:
+		return m.OldOperation(ctx)
+	case residencehistory.FieldRef:
+		return m.OldRef(ctx)
+	case residencehistory.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case residencehistory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case residencehistory.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case residencehistory.FieldName:
+		return m.OldName(ctx)
+	}
+	return nil, fmt.Errorf("unknown ResidenceHistory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ResidenceHistoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case residencehistory.FieldHistoryTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHistoryTime(v)
+		return nil
+	case residencehistory.FieldOperation:
+		v, ok := value.(enthistory.OpType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOperation(v)
+		return nil
+	case residencehistory.FieldRef:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRef(v)
+		return nil
+	case residencehistory.FieldUpdatedBy:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case residencehistory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case residencehistory.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case residencehistory.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ResidenceHistory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ResidenceHistoryMutation) AddedFields() []string {
+	var fields []string
+	if m.addupdated_by != nil {
+		fields = append(fields, residencehistory.FieldUpdatedBy)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ResidenceHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case residencehistory.FieldUpdatedBy:
+		return m.AddedUpdatedBy()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ResidenceHistoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case residencehistory.FieldUpdatedBy:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdatedBy(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ResidenceHistory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ResidenceHistoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(residencehistory.FieldRef) {
+		fields = append(fields, residencehistory.FieldRef)
+	}
+	if m.FieldCleared(residencehistory.FieldUpdatedBy) {
+		fields = append(fields, residencehistory.FieldUpdatedBy)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ResidenceHistoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ResidenceHistoryMutation) ClearField(name string) error {
+	switch name {
+	case residencehistory.FieldRef:
+		m.ClearRef()
+		return nil
+	case residencehistory.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	}
+	return fmt.Errorf("unknown ResidenceHistory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ResidenceHistoryMutation) ResetField(name string) error {
+	switch name {
+	case residencehistory.FieldHistoryTime:
+		m.ResetHistoryTime()
+		return nil
+	case residencehistory.FieldOperation:
+		m.ResetOperation()
+		return nil
+	case residencehistory.FieldRef:
+		m.ResetRef()
+		return nil
+	case residencehistory.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case residencehistory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case residencehistory.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case residencehistory.FieldName:
+		m.ResetName()
+		return nil
+	}
+	return fmt.Errorf("unknown ResidenceHistory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ResidenceHistoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ResidenceHistoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ResidenceHistoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ResidenceHistoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ResidenceHistoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ResidenceHistoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ResidenceHistoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ResidenceHistory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ResidenceHistoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ResidenceHistory edge %s", name)
 }

@@ -17,6 +17,8 @@ import (
 	"github.com/flume/enthistory/_examples/basic/ent/characterhistory"
 	"github.com/flume/enthistory/_examples/basic/ent/friendship"
 	"github.com/flume/enthistory/_examples/basic/ent/friendshiphistory"
+	"github.com/flume/enthistory/_examples/basic/ent/residence"
+	"github.com/flume/enthistory/_examples/basic/ent/residencehistory"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -81,6 +83,8 @@ func checkColumn(table, column string) error {
 			characterhistory.Table:  characterhistory.ValidColumn,
 			friendship.Table:        friendship.ValidColumn,
 			friendshiphistory.Table: friendshiphistory.ValidColumn,
+			residence.Table:         residence.ValidColumn,
+			residencehistory.Table:  residencehistory.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

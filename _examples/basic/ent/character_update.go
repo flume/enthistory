@@ -12,10 +12,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 
 	"github.com/flume/enthistory/_examples/basic/ent/character"
 	"github.com/flume/enthistory/_examples/basic/ent/friendship"
 	"github.com/flume/enthistory/_examples/basic/ent/predicate"
+	"github.com/flume/enthistory/_examples/basic/ent/residence"
 )
 
 // CharacterUpdate is the builder for updating Character entities.
@@ -125,6 +127,25 @@ func (cu *CharacterUpdate) AddFriends(c ...*Character) *CharacterUpdate {
 	return cu.AddFriendIDs(ids...)
 }
 
+// SetResidenceID sets the "residence" edge to the Residence entity by ID.
+func (cu *CharacterUpdate) SetResidenceID(id uuid.UUID) *CharacterUpdate {
+	cu.mutation.SetResidenceID(id)
+	return cu
+}
+
+// SetNillableResidenceID sets the "residence" edge to the Residence entity by ID if the given value is not nil.
+func (cu *CharacterUpdate) SetNillableResidenceID(id *uuid.UUID) *CharacterUpdate {
+	if id != nil {
+		cu = cu.SetResidenceID(*id)
+	}
+	return cu
+}
+
+// SetResidence sets the "residence" edge to the Residence entity.
+func (cu *CharacterUpdate) SetResidence(r *Residence) *CharacterUpdate {
+	return cu.SetResidenceID(r.ID)
+}
+
 // AddFriendshipIDs adds the "friendships" edge to the Friendship entity by IDs.
 func (cu *CharacterUpdate) AddFriendshipIDs(ids ...string) *CharacterUpdate {
 	cu.mutation.AddFriendshipIDs(ids...)
@@ -164,6 +185,12 @@ func (cu *CharacterUpdate) RemoveFriends(c ...*Character) *CharacterUpdate {
 		ids[i] = c[i].ID
 	}
 	return cu.RemoveFriendIDs(ids...)
+}
+
+// ClearResidence clears the "residence" edge to the Residence entity.
+func (cu *CharacterUpdate) ClearResidence() *CharacterUpdate {
+	cu.mutation.ClearResidence()
+	return cu
 }
 
 // ClearFriendships clears all "friendships" edges to the Friendship entity.
@@ -320,6 +347,35 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cu.mutation.ResidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   character.ResidenceTable,
+			Columns: []string{character.ResidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(residence.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.ResidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   character.ResidenceTable,
+			Columns: []string{character.ResidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(residence.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if cu.mutation.FriendshipsCleared() {
@@ -481,6 +537,25 @@ func (cuo *CharacterUpdateOne) AddFriends(c ...*Character) *CharacterUpdateOne {
 	return cuo.AddFriendIDs(ids...)
 }
 
+// SetResidenceID sets the "residence" edge to the Residence entity by ID.
+func (cuo *CharacterUpdateOne) SetResidenceID(id uuid.UUID) *CharacterUpdateOne {
+	cuo.mutation.SetResidenceID(id)
+	return cuo
+}
+
+// SetNillableResidenceID sets the "residence" edge to the Residence entity by ID if the given value is not nil.
+func (cuo *CharacterUpdateOne) SetNillableResidenceID(id *uuid.UUID) *CharacterUpdateOne {
+	if id != nil {
+		cuo = cuo.SetResidenceID(*id)
+	}
+	return cuo
+}
+
+// SetResidence sets the "residence" edge to the Residence entity.
+func (cuo *CharacterUpdateOne) SetResidence(r *Residence) *CharacterUpdateOne {
+	return cuo.SetResidenceID(r.ID)
+}
+
 // AddFriendshipIDs adds the "friendships" edge to the Friendship entity by IDs.
 func (cuo *CharacterUpdateOne) AddFriendshipIDs(ids ...string) *CharacterUpdateOne {
 	cuo.mutation.AddFriendshipIDs(ids...)
@@ -520,6 +595,12 @@ func (cuo *CharacterUpdateOne) RemoveFriends(c ...*Character) *CharacterUpdateOn
 		ids[i] = c[i].ID
 	}
 	return cuo.RemoveFriendIDs(ids...)
+}
+
+// ClearResidence clears the "residence" edge to the Residence entity.
+func (cuo *CharacterUpdateOne) ClearResidence() *CharacterUpdateOne {
+	cuo.mutation.ClearResidence()
+	return cuo
 }
 
 // ClearFriendships clears all "friendships" edges to the Friendship entity.
@@ -706,6 +787,35 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 		createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.ResidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   character.ResidenceTable,
+			Columns: []string{character.ResidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(residence.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.ResidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   character.ResidenceTable,
+			Columns: []string{character.ResidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(residence.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if cuo.mutation.FriendshipsCleared() {
