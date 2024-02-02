@@ -42,6 +42,9 @@ func (Character) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("friends", Character.Type).
 			Through("friendships", Friendship.Type),
+		edge.From("residence", Residence.Type).
+			Ref("occupants").
+			Unique(),
 	}
 }
 
