@@ -149,6 +149,30 @@ func TestEntHistory(t *testing.T) {
 			},
 		},
 		{
+			name: "Handles many occupants",
+			runner: func(t *testing.T, client *ent.Client) {
+				ctx := context.Background()
+				// create character 1
+				finn, err := client.Character.Create().SetAge(14).SetName("Finn the Human").Save(ctx)
+				assert.NoError(t, err)
+				// create character 2
+				jake, err := client.Character.Create().SetAge(10).SetName("Jake the Dog").Save(ctx)
+				assert.NoError(t, err)
+
+				// create friendship
+				residence, err := client.Residence.Create().SetName("Tree Fort").AddOccupants(finn, jake).Save(ctx)
+				assert.NoError(t, err)
+				residences, err := residence.History().All(ctx)
+				assert.NoError(t, err)
+				assert.Equal(t, 1, len(residences))
+				// UUIDs are the same
+				assert.Equal(t, residence.ID, residences[0].Ref)
+				allResidenceHistory, err := client.ResidenceHistory.Query().All(ctx)
+				assert.NoError(t, err)
+				assert.Equal(t, 1, len(allResidenceHistory))
+			},
+		},
+		{
 			name: "Handles setting updatedBy from context",
 			runner: func(t *testing.T, client *ent.Client) {
 				userId := 75
@@ -397,6 +421,9 @@ func TestEntHistory(t *testing.T) {
 				friendship, err := client.Friendship.Create().SetID("Ice Kingdom").SetCharacterID(gunter.ID).SetFriendID(simon.ID).Save(ctx)
 				assert.NoError(t, err)
 
+				residence, err := client.Residence.Create().SetName("Ice Kingdom").AddOccupants(gunter, simon).Save(ctx)
+				assert.NoError(t, err)
+
 				gunter, err = gunter.Update().
 					SetNicknames([]string{"Orgalorg", "Destroyer of Worlds"}).
 					SetAge(20).
@@ -411,6 +438,9 @@ func TestEntHistory(t *testing.T) {
 					Save(ctx)
 				assert.NoError(t, err)
 
+				err = client.Residence.DeleteOne(residence).Exec(ctx)
+				assert.NoError(t, err)
+
 				err = client.Friendship.DeleteOne(friendship).Exec(ctx)
 				assert.NoError(t, err)
 
@@ -423,10 +453,11 @@ func TestEntHistory(t *testing.T) {
 				auditTable, err := client.Audit(ctx)
 				assert.NoError(t, err)
 
-				assert.Equal(t, 9, len(auditTable))
+				assert.Equal(t, 11, len(auditTable))
 				assert.Equal(t, 6, len(auditTable[0]))
 				assert.Equal(t, "age: 10000 -> 20\nnicknames: [\"Orgalorg\"] -> [\"Orgalorg\",\"Destroyer of Worlds\"]", auditTable[2][4])
 				assert.Equal(t, "name: \"Simon Petrikov\" -> \"Ice King\"\ninfo: {\"firstAppearance\":\"Come Along With Me\"} -> {\"firstAppearance\":\"Come Along With Me\",\"lastAppearance\":\"Together Again\"}", auditTable[5][4])
+				assert.Equal(t, residence.ID.String(), auditTable[10][1])
 			},
 		},
 	}
