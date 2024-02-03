@@ -74,7 +74,38 @@ func TestEntHistory(t *testing.T) {
 				assert.NoError(t, err)
 
 			},
-		},		
+		},
+		{
+			name: "Handles store relation (edge to organization) ",
+			runner: func(t *testing.T, client *ent.Client) {
+				userId := uuid.New()
+				ctx := context.WithValue(context.Background(), "userId", userId)
+
+				// create organization
+				organization, err := client.Organization.Create().SetName("Multiple").Save(ctx)
+				assert.NoError(t, err)				
+
+				organization2, err := client.Organization.Create().SetName("Multiple 2").Save(ctx)
+				assert.NoError(t, err)
+
+				// create store
+				store, err := client.Store.Create().SetName("Texas").SetRegion("North").SetOrganizationID(organization.ID).Save(ctx)
+				assert.NoError(t, err)
+
+				storeHistory, err := store.History().First(ctx)
+				assert.NoError(t, err)
+				assert.Equal(t, userId, *storeHistory.UpdatedBy)				
+
+				// update store
+				store, err = store.Update().SetOrganizationID(organization2.ID).Save(ctx)
+				assert.NoError(t, err)				
+
+				storeHistory, err = store.History().Latest(ctx)
+				assert.NoError(t, err)
+				assert.Equal(t, userId, *storeHistory.UpdatedBy)				
+				assert.Equal(t, organization2.ID, storeHistory.OrganizationID)
+			},
+		},	
 	}
 	for _, tt := range tests {
 		os.Remove("entdb")
