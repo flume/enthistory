@@ -7,7 +7,6 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-
 	"github.com/flume/enthistory"
 
 	"time"
@@ -24,39 +23,40 @@ func (FriendshipHistory) Annotations() []schema.Annotation {
 		entsql.Annotation{
 			Table: "friendship_history",
 		},
-		enthistory.Annotations{
-			IsHistory: true,
-			Exclude:   true,
-		},
+        enthistory.Annotations{
+            IsHistory: true,
+            Exclude: true,
+        },
 	}
 }
 
 // Fields of the FriendshipHistory.
 func (FriendshipHistory) Fields() []ent.Field {
 	historyFields := []ent.Field{
-		field.Time("history_time").
-			Default(time.Now).
-			Immutable(),
-		field.String("ref").
-			Immutable().
-			Optional(),
-		field.Enum("operation").
-			GoType(enthistory.OpType("")).
-			Immutable(),
-		field.Int("updated_by").
-			Optional().
-			Immutable().
-			Nillable(),
-	}
+        field.Time("history_time").
+            Default(time.Now).
+            Immutable(),
+        field.String("ref").
+            Immutable().
+            Optional(),
+        field.Enum("operation").
+            GoType(enthistory.OpType("")).
+            Immutable(),
+        field.Int("updated_by").
+            Optional().
+            Immutable().
+            Nillable(),
+    }
 
-	original := Friendship{}
-	for _, field := range original.Fields() {
-		if field.Descriptor().Name != "id" {
-			historyFields = append(historyFields, field)
-		}
-	}
 
-	return historyFields
+    original := Friendship{}
+    for _, field := range original.Fields() {
+        if field.Descriptor().Name != "id" {
+            historyFields = append(historyFields, field)
+        }
+    }
+
+    return historyFields
 }
 
 // Mixin of the FriendshipHistory.
@@ -65,6 +65,6 @@ func (FriendshipHistory) Mixin() []ent.Mixin {
 }
 func (FriendshipHistory) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("history_time"),
+        index.Fields("history_time"),
 	}
 }

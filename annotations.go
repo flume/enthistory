@@ -3,6 +3,7 @@ package enthistory
 const (
 	ValueTypeInt ValueType = iota
 	ValueTypeString
+	ValueTypeUUID
 )
 
 type ValueType uint

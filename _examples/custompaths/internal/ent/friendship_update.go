@@ -10,7 +10,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
 	"github.com/flume/enthistory/_examples/custompaths/internal/ent/character"
 	"github.com/flume/enthistory/_examples/custompaths/internal/ent/friendship"
 	"github.com/flume/enthistory/_examples/custompaths/internal/ent/predicate"

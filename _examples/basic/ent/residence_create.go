@@ -10,10 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/google/uuid"
-
 	"github.com/flume/enthistory/_examples/basic/ent/character"
 	"github.com/flume/enthistory/_examples/basic/ent/residence"
+	"github.com/google/uuid"
 )
 
 // ResidenceCreate is the builder for creating a Residence entity.

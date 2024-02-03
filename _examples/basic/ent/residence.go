@@ -9,9 +9,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/google/uuid"
-
 	"github.com/flume/enthistory/_examples/basic/ent/residence"
+	"github.com/google/uuid"
 )
 
 // Residence is the model entity for the Residence schema.

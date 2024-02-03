@@ -6,10 +6,9 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/google/uuid"
-
 	"github.com/flume/enthistory"
 	"github.com/flume/enthistory/_examples/basic/ent/predicate"
+	"github.com/google/uuid"
 )
 
 // ID filters vertices based on their ID field.
