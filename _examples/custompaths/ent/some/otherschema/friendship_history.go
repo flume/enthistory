@@ -6,7 +6,6 @@ import (
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
-
 	"github.com/flume/enthistory"
 
 	"time"
@@ -23,35 +22,36 @@ func (FriendshipHistory) Annotations() []schema.Annotation {
 		entsql.Annotation{
 			Table: "friendship_history",
 		},
-		enthistory.Annotations{
-			IsHistory: true,
-			Exclude:   true,
-		},
+        enthistory.Annotations{
+            IsHistory: true,
+            Exclude: true,
+        },
 	}
 }
 
 // Fields of the FriendshipHistory.
 func (FriendshipHistory) Fields() []ent.Field {
 	historyFields := []ent.Field{
-		field.Time("history_time").
-			Default(time.Now).
-			Immutable(),
-		field.Int("ref").
-			Immutable().
-			Optional(),
-		field.Enum("operation").
-			GoType(enthistory.OpType("")).
-			Immutable(),
-	}
+        field.Time("history_time").
+            Default(time.Now).
+            Immutable(),
+        field.Int("ref").
+            Immutable().
+            Optional(),
+        field.Enum("operation").
+            GoType(enthistory.OpType("")).
+            Immutable(),
+    }
 
-	original := Friendship{}
-	for _, field := range original.Fields() {
-		if field.Descriptor().Name != "id" {
-			historyFields = append(historyFields, field)
-		}
-	}
 
-	return historyFields
+    original := Friendship{}
+    for _, field := range original.Fields() {
+        if field.Descriptor().Name != "id" {
+            historyFields = append(historyFields, field)
+        }
+    }
+
+    return historyFields
 }
 
 // Mixin of the FriendshipHistory.

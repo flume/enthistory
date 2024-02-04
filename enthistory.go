@@ -172,6 +172,8 @@ func (h *HistoryExtension) generateHistorySchema(schema *load.Schema, IdType *fi
 				info.UpdatedByValueType = "Int"
 			} else if valueType == ValueTypeString {
 				info.UpdatedByValueType = "String"
+			} else if valueType == ValueTypeUUID {
+				info.UpdatedByValueType = "UUID"
 			}
 			info.WithUpdatedBy = true
 		}

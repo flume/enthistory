@@ -192,13 +192,16 @@ indexing based on your specific needs.
 
 To track which users are making changes to your tables, you can use the `enthistory.WithUpdatedBy()` option when
 initializing the extension. You need to provide a key name (string) and specify the type of
-value (`enthistory.ValueTypeInt` for integers or `enthistory.ValueTypeString` for strings). The value corresponding to
+value (`enthistory.ValueTypeInt` for integers, `enthistory.ValueTypeUUID` for UUID or `enthistory.ValueTypeString` for strings). The value corresponding to
 the key should be stored in the context using `context.WithValue()`. If you don't plan to use this feature, you can omit
 it.
 
 ```go
 // Example for tracking user ID
 enthistory.WithUpdatedBy("userId", enthistory.ValueTypeInt)
+
+// Example for tracking user as UUID
+enthistory.WithUpdatedBy("userId", enthistory.ValueTypeUUID)
 
 // Example for tracking user email
 enthistory.WithUpdatedBy("userEmail", enthistory.ValueTypeString)

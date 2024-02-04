@@ -11,8 +11,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/google/uuid"
-
 	"github.com/flume/enthistory"
 	"github.com/flume/enthistory/_examples/basic/ent/character"
 	"github.com/flume/enthistory/_examples/basic/ent/characterhistory"
@@ -21,6 +19,7 @@ import (
 	"github.com/flume/enthistory/_examples/basic/ent/predicate"
 	"github.com/flume/enthistory/_examples/basic/ent/residence"
 	"github.com/flume/enthistory/_examples/basic/ent/residencehistory"
+	"github.com/google/uuid"
 )
 
 const (

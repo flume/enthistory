@@ -70,6 +70,9 @@
                             {{- if (eq $updatedByValueType "string") }}
                             if updatedBy != "" {
                             {{- end }}
+                            {{- if (eq $updatedByValueType "uuid.UUID") }}
+                            if updatedBy != uuid.Nil {                            
+                            {{- end }}
                                 create = create.SetUpdatedBy(updatedBy)
                             }
                         {{- end }}
@@ -124,6 +127,9 @@
                                 {{- if (eq $updatedByValueType "string") }}
                                 if updatedBy != "" {
                                 {{- end }}
+                                {{- if (eq $updatedByValueType "uuid.UUID") }}
+                                if updatedBy != uuid.Nil {                            
+                                {{- end }}
                                     create = create.SetUpdatedBy(updatedBy)
                                 }
                             {{- end }}
@@ -177,6 +183,9 @@
                                 {{- end }}
                                 {{- if (eq $updatedByValueType "string") }}
                                 if updatedBy != "" {
+                                {{- end }}
+                                {{- if (eq $updatedByValueType "uuid.UUID") }}
+                                if updatedBy != uuid.Nil {                            
                                 {{- end }}
                                     create = create.SetUpdatedBy(updatedBy)
                                 }

@@ -9,16 +9,14 @@ import (
 	"log"
 	"reflect"
 
-	"github.com/google/uuid"
-
 	"github.com/flume/enthistory"
 	"github.com/flume/enthistory/_examples/basic/ent/migrate"
+	"github.com/google/uuid"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-
 	"github.com/flume/enthistory/_examples/basic/ent/character"
 	"github.com/flume/enthistory/_examples/basic/ent/characterhistory"
 	"github.com/flume/enthistory/_examples/basic/ent/friendship"

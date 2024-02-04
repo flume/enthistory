@@ -68,6 +68,9 @@ func getUpdatedByField(updatedByValueType string) (*load.Field, error) {
 	if updatedByValueType == "Int" {
 		return load.NewField(field.Int("updated_by").Optional().Nillable().Immutable().Descriptor())
 	}
+	if updatedByValueType == "UUID" {
+		return load.NewField(field.UUID("updated_by", uuid.UUID{}).Optional().Nillable().Immutable().Descriptor())
+	}
 	return nil, nil
 }
 

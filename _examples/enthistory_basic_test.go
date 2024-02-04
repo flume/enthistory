@@ -21,7 +21,7 @@ import (
 	"testing"
 )
 
-func TestEntHistory(t *testing.T) {
+func TestEntHistoryBasic(t *testing.T) {
 	tests := []struct {
 		name   string
 		runner func(t *testing.T, client *ent.Client)
