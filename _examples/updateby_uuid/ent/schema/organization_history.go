@@ -7,8 +7,8 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-    "github.com/google/uuid"
-    
+	"github.com/google/uuid"
+
 	"github.com/flume/enthistory"
 
 	"time"
@@ -25,40 +25,37 @@ func (OrganizationHistory) Annotations() []schema.Annotation {
 		entsql.Annotation{
 			Table: "Organization_history",
 		},
-        enthistory.Annotations{
-            IsHistory: true,
-            Exclude: true,
-        },
+		enthistory.Annotations{
+			IsHistory: true,
+			Exclude:   true,
+		},
 	}
 }
 
 // Fields of the OrganizationHistory.
 func (OrganizationHistory) Fields() []ent.Field {
 	historyFields := []ent.Field{
-        field.Time("history_time").
-            Default(time.Now).
-            Immutable(),
-        field.UUID("ref", uuid.UUID{}).
-            Immutable().
-            Optional(),
-        field.Enum("operation").
-            GoType(enthistory.OpType("")).
-            Immutable(),
-        field.UUID("updated_by", uuid.UUID{}).
-            Optional().
-            Immutable().
-            Nillable(),
-    }
+		field.Time("history_time").
+			Default(time.Now).
+			Immutable(),
+		field.UUID("ref", uuid.UUID{}).
+			Immutable().
+			Optional(),
+		field.Enum("operation").
+			GoType(enthistory.OpType("")).
+			Immutable(),
+		field.UUID("updated_by", uuid.UUID{}).
+			Optional().
+			Immutable().
+			Nillable(),
+	}
 
+	original := Organization{}
+	for _, field := range original.Fields() {
+		historyFields = append(historyFields, field)
+	}
 
-    original := Organization{}
-    for _, field := range original.Fields() {
-        if field.Descriptor().Name != "id" {
-            historyFields = append(historyFields, field)
-        }
-    }
-
-    return historyFields
+	return historyFields
 }
 
 // Mixin of the OrganizationHistory.
@@ -67,6 +64,6 @@ func (OrganizationHistory) Mixin() []ent.Mixin {
 }
 func (OrganizationHistory) Indexes() []ent.Index {
 	return []ent.Index{
-        index.Fields("history_time"),
+		index.Fields("history_time"),
 	}
 }

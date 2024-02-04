@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+
 	"github.com/flume/enthistory"
 	"github.com/flume/enthistory/_examples/basic/ent/characterhistory"
 )

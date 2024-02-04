@@ -10,9 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
+
 	"github.com/flume/enthistory"
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organizationhistory"
-	"github.com/google/uuid"
 )
 
 // OrganizationHistoryCreate is the builder for creating a OrganizationHistory entity.
@@ -110,6 +111,20 @@ func (ohc *OrganizationHistoryCreate) SetInfo(m map[string]interface{}) *Organiz
 	return ohc
 }
 
+// SetID sets the "id" field.
+func (ohc *OrganizationHistoryCreate) SetID(u uuid.UUID) *OrganizationHistoryCreate {
+	ohc.mutation.SetID(u)
+	return ohc
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (ohc *OrganizationHistoryCreate) SetNillableID(u *uuid.UUID) *OrganizationHistoryCreate {
+	if u != nil {
+		ohc.SetID(*u)
+	}
+	return ohc
+}
+
 // Mutation returns the OrganizationHistoryMutation object of the builder.
 func (ohc *OrganizationHistoryCreate) Mutation() *OrganizationHistoryMutation {
 	return ohc.mutation
@@ -157,6 +172,10 @@ func (ohc *OrganizationHistoryCreate) defaults() {
 		v := organizationhistory.DefaultUpdatedAt()
 		ohc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := ohc.mutation.ID(); !ok {
+		v := organizationhistory.DefaultID()
+		ohc.mutation.SetID(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -195,8 +214,13 @@ func (ohc *OrganizationHistoryCreate) sqlSave(ctx context.Context) (*Organizatio
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	ohc.mutation.id = &_node.ID
 	ohc.mutation.done = true
 	return _node, nil
@@ -205,8 +229,12 @@ func (ohc *OrganizationHistoryCreate) sqlSave(ctx context.Context) (*Organizatio
 func (ohc *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgraph.CreateSpec) {
 	var (
 		_node = &OrganizationHistory{config: ohc.config}
-		_spec = sqlgraph.NewCreateSpec(organizationhistory.Table, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(organizationhistory.Table, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeUUID))
 	)
+	if id, ok := ohc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
 	if value, ok := ohc.mutation.HistoryTime(); ok {
 		_spec.SetField(organizationhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
@@ -287,10 +315,6 @@ func (ohcb *OrganizationHistoryCreateBulk) Save(ctx context.Context) ([]*Organiz
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

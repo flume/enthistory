@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+
 	"github.com/flume/enthistory/_examples/basic/ent/friendshiphistory"
 	"github.com/flume/enthistory/_examples/basic/ent/predicate"
 )
@@ -40,7 +41,7 @@ func (fhd *FriendshipHistoryDelete) ExecX(ctx context.Context) int {
 }
 
 func (fhd *FriendshipHistoryDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(friendshiphistory.Table, sqlgraph.NewFieldSpec(friendshiphistory.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewDeleteSpec(friendshiphistory.Table, sqlgraph.NewFieldSpec(friendshiphistory.FieldID, field.TypeString))
 	if ps := fhd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

@@ -10,6 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
+
 	"github.com/flume/enthistory/_examples/basic/ent/predicate"
 	"github.com/flume/enthistory/_examples/basic/ent/residencehistory"
 )
@@ -81,8 +83,8 @@ func (rhq *ResidenceHistoryQuery) FirstX(ctx context.Context) *ResidenceHistory 
 
 // FirstID returns the first ResidenceHistory ID from the query.
 // Returns a *NotFoundError when no ResidenceHistory ID was found.
-func (rhq *ResidenceHistoryQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (rhq *ResidenceHistoryQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = rhq.Limit(1).IDs(setContextOp(ctx, rhq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -94,7 +96,7 @@ func (rhq *ResidenceHistoryQuery) FirstID(ctx context.Context) (id int, err erro
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (rhq *ResidenceHistoryQuery) FirstIDX(ctx context.Context) int {
+func (rhq *ResidenceHistoryQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := rhq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -132,8 +134,8 @@ func (rhq *ResidenceHistoryQuery) OnlyX(ctx context.Context) *ResidenceHistory {
 // OnlyID is like Only, but returns the only ResidenceHistory ID in the query.
 // Returns a *NotSingularError when more than one ResidenceHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (rhq *ResidenceHistoryQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (rhq *ResidenceHistoryQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = rhq.Limit(2).IDs(setContextOp(ctx, rhq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -149,7 +151,7 @@ func (rhq *ResidenceHistoryQuery) OnlyID(ctx context.Context) (id int, err error
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (rhq *ResidenceHistoryQuery) OnlyIDX(ctx context.Context) int {
+func (rhq *ResidenceHistoryQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := rhq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -177,7 +179,7 @@ func (rhq *ResidenceHistoryQuery) AllX(ctx context.Context) []*ResidenceHistory 
 }
 
 // IDs executes the query and returns a list of ResidenceHistory IDs.
-func (rhq *ResidenceHistoryQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (rhq *ResidenceHistoryQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if rhq.ctx.Unique == nil && rhq.path != nil {
 		rhq.Unique(true)
 	}
@@ -189,7 +191,7 @@ func (rhq *ResidenceHistoryQuery) IDs(ctx context.Context) (ids []int, err error
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (rhq *ResidenceHistoryQuery) IDsX(ctx context.Context) []int {
+func (rhq *ResidenceHistoryQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := rhq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -364,7 +366,7 @@ func (rhq *ResidenceHistoryQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (rhq *ResidenceHistoryQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(residencehistory.Table, residencehistory.Columns, sqlgraph.NewFieldSpec(residencehistory.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(residencehistory.Table, residencehistory.Columns, sqlgraph.NewFieldSpec(residencehistory.FieldID, field.TypeUUID))
 	_spec.From = rhq.sql
 	if unique := rhq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

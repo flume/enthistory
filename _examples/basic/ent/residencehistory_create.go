@@ -10,9 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
+
 	"github.com/flume/enthistory"
 	"github.com/flume/enthistory/_examples/basic/ent/residencehistory"
-	"github.com/google/uuid"
 )
 
 // ResidenceHistoryCreate is the builder for creating a ResidenceHistory entity.
@@ -104,6 +105,20 @@ func (rhc *ResidenceHistoryCreate) SetName(s string) *ResidenceHistoryCreate {
 	return rhc
 }
 
+// SetID sets the "id" field.
+func (rhc *ResidenceHistoryCreate) SetID(u uuid.UUID) *ResidenceHistoryCreate {
+	rhc.mutation.SetID(u)
+	return rhc
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (rhc *ResidenceHistoryCreate) SetNillableID(u *uuid.UUID) *ResidenceHistoryCreate {
+	if u != nil {
+		rhc.SetID(*u)
+	}
+	return rhc
+}
+
 // Mutation returns the ResidenceHistoryMutation object of the builder.
 func (rhc *ResidenceHistoryCreate) Mutation() *ResidenceHistoryMutation {
 	return rhc.mutation
@@ -151,6 +166,10 @@ func (rhc *ResidenceHistoryCreate) defaults() {
 		v := residencehistory.DefaultUpdatedAt()
 		rhc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := rhc.mutation.ID(); !ok {
+		v := residencehistory.DefaultID()
+		rhc.mutation.SetID(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -189,8 +208,13 @@ func (rhc *ResidenceHistoryCreate) sqlSave(ctx context.Context) (*ResidenceHisto
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	rhc.mutation.id = &_node.ID
 	rhc.mutation.done = true
 	return _node, nil
@@ -199,8 +223,12 @@ func (rhc *ResidenceHistoryCreate) sqlSave(ctx context.Context) (*ResidenceHisto
 func (rhc *ResidenceHistoryCreate) createSpec() (*ResidenceHistory, *sqlgraph.CreateSpec) {
 	var (
 		_node = &ResidenceHistory{config: rhc.config}
-		_spec = sqlgraph.NewCreateSpec(residencehistory.Table, sqlgraph.NewFieldSpec(residencehistory.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(residencehistory.Table, sqlgraph.NewFieldSpec(residencehistory.FieldID, field.TypeUUID))
 	)
+	if id, ok := rhc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
 	if value, ok := rhc.mutation.HistoryTime(); ok {
 		_spec.SetField(residencehistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
@@ -277,10 +305,6 @@ func (rhcb *ResidenceHistoryCreateBulk) Save(ctx context.Context) ([]*ResidenceH
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

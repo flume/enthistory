@@ -11,11 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
+
 	"github.com/flume/enthistory/_examples/basic/ent/character"
 	"github.com/flume/enthistory/_examples/basic/ent/friendship"
 	"github.com/flume/enthistory/_examples/basic/ent/predicate"
 	"github.com/flume/enthistory/_examples/basic/ent/residence"
-	"github.com/google/uuid"
 )
 
 // CharacterQuery is the builder for querying Character entities.

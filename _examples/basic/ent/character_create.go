@@ -10,10 +10,11 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
+
 	"github.com/flume/enthistory/_examples/basic/ent/character"
 	"github.com/flume/enthistory/_examples/basic/ent/friendship"
 	"github.com/flume/enthistory/_examples/basic/ent/residence"
-	"github.com/google/uuid"
 )
 
 // CharacterCreate is the builder for creating a Character entity.

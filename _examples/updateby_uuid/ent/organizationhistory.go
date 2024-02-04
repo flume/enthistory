@@ -10,16 +10,17 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
+
 	"github.com/flume/enthistory"
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organizationhistory"
-	"github.com/google/uuid"
 )
 
 // OrganizationHistory is the model entity for the OrganizationHistory schema.
 type OrganizationHistory struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID uuid.UUID `json:"id,omitempty"`
 	// HistoryTime holds the value of the "history_time" field.
 	HistoryTime time.Time `json:"history_time,omitempty"`
 	// Operation holds the value of the "operation" field.
@@ -48,13 +49,11 @@ func (*OrganizationHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		case organizationhistory.FieldInfo:
 			values[i] = new([]byte)
-		case organizationhistory.FieldID:
-			values[i] = new(sql.NullInt64)
 		case organizationhistory.FieldOperation, organizationhistory.FieldName:
 			values[i] = new(sql.NullString)
 		case organizationhistory.FieldHistoryTime, organizationhistory.FieldCreatedAt, organizationhistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case organizationhistory.FieldRef:
+		case organizationhistory.FieldID, organizationhistory.FieldRef:
 			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -72,11 +71,11 @@ func (oh *OrganizationHistory) assignValues(columns []string, values []any) erro
 	for i := range columns {
 		switch columns[i] {
 		case organizationhistory.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				oh.ID = *value
 			}
-			oh.ID = int(value.Int64)
 		case organizationhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])

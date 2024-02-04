@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+
 	"github.com/flume/enthistory/_examples/basic/ent/friendshiphistory"
 	"github.com/flume/enthistory/_examples/basic/ent/predicate"
 )
@@ -81,8 +82,8 @@ func (fhq *FriendshipHistoryQuery) FirstX(ctx context.Context) *FriendshipHistor
 
 // FirstID returns the first FriendshipHistory ID from the query.
 // Returns a *NotFoundError when no FriendshipHistory ID was found.
-func (fhq *FriendshipHistoryQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (fhq *FriendshipHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+	var ids []string
 	if ids, err = fhq.Limit(1).IDs(setContextOp(ctx, fhq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -94,7 +95,7 @@ func (fhq *FriendshipHistoryQuery) FirstID(ctx context.Context) (id int, err err
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (fhq *FriendshipHistoryQuery) FirstIDX(ctx context.Context) int {
+func (fhq *FriendshipHistoryQuery) FirstIDX(ctx context.Context) string {
 	id, err := fhq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -132,8 +133,8 @@ func (fhq *FriendshipHistoryQuery) OnlyX(ctx context.Context) *FriendshipHistory
 // OnlyID is like Only, but returns the only FriendshipHistory ID in the query.
 // Returns a *NotSingularError when more than one FriendshipHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (fhq *FriendshipHistoryQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (fhq *FriendshipHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+	var ids []string
 	if ids, err = fhq.Limit(2).IDs(setContextOp(ctx, fhq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -149,7 +150,7 @@ func (fhq *FriendshipHistoryQuery) OnlyID(ctx context.Context) (id int, err erro
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (fhq *FriendshipHistoryQuery) OnlyIDX(ctx context.Context) int {
+func (fhq *FriendshipHistoryQuery) OnlyIDX(ctx context.Context) string {
 	id, err := fhq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -177,7 +178,7 @@ func (fhq *FriendshipHistoryQuery) AllX(ctx context.Context) []*FriendshipHistor
 }
 
 // IDs executes the query and returns a list of FriendshipHistory IDs.
-func (fhq *FriendshipHistoryQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (fhq *FriendshipHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
 	if fhq.ctx.Unique == nil && fhq.path != nil {
 		fhq.Unique(true)
 	}
@@ -189,7 +190,7 @@ func (fhq *FriendshipHistoryQuery) IDs(ctx context.Context) (ids []int, err erro
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (fhq *FriendshipHistoryQuery) IDsX(ctx context.Context) []int {
+func (fhq *FriendshipHistoryQuery) IDsX(ctx context.Context) []string {
 	ids, err := fhq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -364,7 +365,7 @@ func (fhq *FriendshipHistoryQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (fhq *FriendshipHistoryQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(friendshiphistory.Table, friendshiphistory.Columns, sqlgraph.NewFieldSpec(friendshiphistory.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(friendshiphistory.Table, friendshiphistory.Columns, sqlgraph.NewFieldSpec(friendshiphistory.FieldID, field.TypeString))
 	_spec.From = fhq.sql
 	if unique := fhq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

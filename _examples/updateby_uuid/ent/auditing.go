@@ -11,10 +11,11 @@ import (
 	"reflect"
 	"time"
 
+	"github.com/google/uuid"
+
 	"github.com/flume/enthistory"
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organizationhistory"
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/storehistory"
-	"github.com/google/uuid"
 )
 
 type Change struct {
@@ -65,8 +66,9 @@ func (oh *OrganizationHistory) Diff(history *OrganizationHistory) (*HistoryDiff[
 	}
 
 	ohUnix, historyUnix := oh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	ohOlder := ohUnix < historyUnix || (ohUnix == historyUnix && oh.ID < history.ID)
-	historyOlder := ohUnix > historyUnix || (ohUnix == historyUnix && oh.ID > history.ID)
+
+	ohOlder := ohUnix < historyUnix || (ohUnix == historyUnix && oh.ID.Time() < history.ID.Time())
+	historyOlder := ohUnix > historyUnix || (ohUnix == historyUnix && oh.ID.Time() > history.ID.Time())
 
 	if ohOlder {
 		return &HistoryDiff[OrganizationHistory]{
@@ -110,8 +112,9 @@ func (sh *StoreHistory) Diff(history *StoreHistory) (*HistoryDiff[StoreHistory],
 	}
 
 	shUnix, historyUnix := sh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	shOlder := shUnix < historyUnix || (shUnix == historyUnix && sh.ID < history.ID)
-	historyOlder := shUnix > historyUnix || (shUnix == historyUnix && sh.ID > history.ID)
+
+	shOlder := shUnix < historyUnix || (shUnix == historyUnix && sh.ID.Time() < history.ID.Time())
+	historyOlder := shUnix > historyUnix || (shUnix == historyUnix && sh.ID.Time() > history.ID.Time())
 
 	if shOlder {
 		return &HistoryDiff[StoreHistory]{
@@ -217,7 +220,7 @@ func auditOrganizationHistory(ctx context.Context, config config) ([][]string, e
 	client := NewOrganizationHistoryClient(config)
 	err := client.Query().
 		Unique(true).
-		Order(organizationhistory.ByRef()).
+		Order(organizationhistory.ByHistoryTime()).
 		Select(organizationhistory.FieldRef).
 		Scan(ctx, &refs)
 
@@ -270,7 +273,7 @@ func auditStoreHistory(ctx context.Context, config config) ([][]string, error) {
 	client := NewStoreHistoryClient(config)
 	err := client.Query().
 		Unique(true).
-		Order(storehistory.ByRef()).
+		Order(storehistory.ByHistoryTime()).
 		Select(storehistory.FieldRef).
 		Scan(ctx, &refs)
 

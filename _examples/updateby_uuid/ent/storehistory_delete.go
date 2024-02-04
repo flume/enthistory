@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/predicate"
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/storehistory"
 )
@@ -40,7 +41,7 @@ func (shd *StoreHistoryDelete) ExecX(ctx context.Context) int {
 }
 
 func (shd *StoreHistoryDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(storehistory.Table, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewDeleteSpec(storehistory.Table, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeUUID))
 	if ps := shd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

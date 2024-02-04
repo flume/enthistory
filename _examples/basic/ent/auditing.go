@@ -11,11 +11,12 @@ import (
 	"reflect"
 	"time"
 
+	"github.com/google/uuid"
+
 	"github.com/flume/enthistory"
 	"github.com/flume/enthistory/_examples/basic/ent/characterhistory"
 	"github.com/flume/enthistory/_examples/basic/ent/friendshiphistory"
 	"github.com/flume/enthistory/_examples/basic/ent/residencehistory"
-	"github.com/google/uuid"
 )
 
 type Change struct {
@@ -72,6 +73,7 @@ func (ch *CharacterHistory) Diff(history *CharacterHistory) (*HistoryDiff[Charac
 	}
 
 	chUnix, historyUnix := ch.HistoryTime.Unix(), history.HistoryTime.Unix()
+
 	chOlder := chUnix < historyUnix || (chUnix == historyUnix && ch.ID < history.ID)
 	historyOlder := chUnix > historyUnix || (chUnix == historyUnix && ch.ID > history.ID)
 
@@ -114,6 +116,7 @@ func (fh *FriendshipHistory) Diff(history *FriendshipHistory) (*HistoryDiff[Frie
 	}
 
 	fhUnix, historyUnix := fh.HistoryTime.Unix(), history.HistoryTime.Unix()
+
 	fhOlder := fhUnix < historyUnix || (fhUnix == historyUnix && fh.ID < history.ID)
 	historyOlder := fhUnix > historyUnix || (fhUnix == historyUnix && fh.ID > history.ID)
 
@@ -153,8 +156,9 @@ func (rh *ResidenceHistory) Diff(history *ResidenceHistory) (*HistoryDiff[Reside
 	}
 
 	rhUnix, historyUnix := rh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	rhOlder := rhUnix < historyUnix || (rhUnix == historyUnix && rh.ID < history.ID)
-	historyOlder := rhUnix > historyUnix || (rhUnix == historyUnix && rh.ID > history.ID)
+
+	rhOlder := rhUnix < historyUnix || (rhUnix == historyUnix && rh.ID.Time() < history.ID.Time())
+	historyOlder := rhUnix > historyUnix || (rhUnix == historyUnix && rh.ID.Time() > history.ID.Time())
 
 	if rhOlder {
 		return &HistoryDiff[ResidenceHistory]{
@@ -266,7 +270,7 @@ func auditCharacterHistory(ctx context.Context, config config) ([][]string, erro
 	client := NewCharacterHistoryClient(config)
 	err := client.Query().
 		Unique(true).
-		Order(characterhistory.ByRef()).
+		Order(characterhistory.ByHistoryTime()).
 		Select(characterhistory.FieldRef).
 		Scan(ctx, &refs)
 
@@ -319,7 +323,7 @@ func auditFriendshipHistory(ctx context.Context, config config) ([][]string, err
 	client := NewFriendshipHistoryClient(config)
 	err := client.Query().
 		Unique(true).
-		Order(friendshiphistory.ByRef()).
+		Order(friendshiphistory.ByHistoryTime()).
 		Select(friendshiphistory.FieldRef).
 		Scan(ctx, &refs)
 
@@ -372,7 +376,7 @@ func auditResidenceHistory(ctx context.Context, config config) ([][]string, erro
 	client := NewResidenceHistoryClient(config)
 	err := client.Query().
 		Unique(true).
-		Order(residencehistory.ByRef()).
+		Order(residencehistory.ByHistoryTime()).
 		Select(residencehistory.FieldRef).
 		Scan(ctx, &refs)
 

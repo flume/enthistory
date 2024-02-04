@@ -11,9 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
+
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/predicate"
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/storehistory"
-	"github.com/google/uuid"
 )
 
 // StoreHistoryUpdate is the builder for updating StoreHistory entities.
@@ -118,7 +119,7 @@ func (shu *StoreHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 func (shu *StoreHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(storehistory.Table, storehistory.Columns, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(storehistory.Table, storehistory.Columns, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeUUID))
 	if ps := shu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -266,7 +267,7 @@ func (shuo *StoreHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 func (shuo *StoreHistoryUpdateOne) sqlSave(ctx context.Context) (_node *StoreHistory, err error) {
-	_spec := sqlgraph.NewUpdateSpec(storehistory.Table, storehistory.Columns, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(storehistory.Table, storehistory.Columns, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeUUID))
 	id, ok := shuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "StoreHistory.id" for update`)}

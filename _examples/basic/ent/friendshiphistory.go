@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+
 	"github.com/flume/enthistory"
 	"github.com/flume/enthistory/_examples/basic/ent/friendshiphistory"
 )
@@ -17,7 +18,7 @@ import (
 type FriendshipHistory struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 	// HistoryTime holds the value of the "history_time" field.
 	HistoryTime time.Time `json:"history_time,omitempty"`
 	// Operation holds the value of the "operation" field.
@@ -42,9 +43,9 @@ func (*FriendshipHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case friendshiphistory.FieldID, friendshiphistory.FieldUpdatedBy, friendshiphistory.FieldCharacterID, friendshiphistory.FieldFriendID:
+		case friendshiphistory.FieldUpdatedBy, friendshiphistory.FieldCharacterID, friendshiphistory.FieldFriendID:
 			values[i] = new(sql.NullInt64)
-		case friendshiphistory.FieldOperation, friendshiphistory.FieldRef:
+		case friendshiphistory.FieldID, friendshiphistory.FieldOperation, friendshiphistory.FieldRef:
 			values[i] = new(sql.NullString)
 		case friendshiphistory.FieldHistoryTime, friendshiphistory.FieldCreatedAt, friendshiphistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -64,11 +65,11 @@ func (fh *FriendshipHistory) assignValues(columns []string, values []any) error 
 	for i := range columns {
 		switch columns[i] {
 		case friendshiphistory.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value.Valid {
+				fh.ID = value.String
 			}
-			fh.ID = int(value.Int64)
 		case friendshiphistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])

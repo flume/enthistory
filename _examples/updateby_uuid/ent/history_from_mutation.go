@@ -11,7 +11,9 @@ import (
 	"time"
 
 	"entgo.io/ent"
+
 	"github.com/flume/enthistory"
+
 	"github.com/google/uuid"
 )
 
@@ -58,10 +60,12 @@ func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) erro
 	if tx != nil {
 		create = tx.OrganizationHistory.Create()
 	}
+	now := time.Now()
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(time.Now()).
+		SetHistoryTime(now).
 		SetRef(id)
+
 	if updatedBy != uuid.Nil {
 		create = create.SetUpdatedBy(updatedBy)
 	}
@@ -113,10 +117,12 @@ func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 		if tx != nil {
 			create = tx.OrganizationHistory.Create()
 		}
+		now := time.Now()
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
+			SetHistoryTime(now).
 			SetRef(id)
+
 		if updatedBy != uuid.Nil {
 			create = create.SetUpdatedBy(updatedBy)
 		}
@@ -182,9 +188,10 @@ func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			create = create.SetUpdatedBy(updatedBy)
 		}
 
+		now := time.Now()
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
+			SetHistoryTime(now).
 			SetRef(id).
 			SetCreatedAt(organization.CreatedAt).
 			SetUpdatedAt(organization.UpdatedAt).
@@ -217,10 +224,12 @@ func (m *StoreMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	if tx != nil {
 		create = tx.StoreHistory.Create()
 	}
+	now := time.Now()
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(time.Now()).
+		SetHistoryTime(now).
 		SetRef(id)
+
 	if updatedBy != uuid.Nil {
 		create = create.SetUpdatedBy(updatedBy)
 	}
@@ -276,10 +285,12 @@ func (m *StoreMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 		if tx != nil {
 			create = tx.StoreHistory.Create()
 		}
+		now := time.Now()
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
+			SetHistoryTime(now).
 			SetRef(id)
+
 		if updatedBy != uuid.Nil {
 			create = create.SetUpdatedBy(updatedBy)
 		}
@@ -351,9 +362,10 @@ func (m *StoreMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			create = create.SetUpdatedBy(updatedBy)
 		}
 
+		now := time.Now()
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
+			SetHistoryTime(now).
 			SetRef(id).
 			SetCreatedAt(store.CreatedAt).
 			SetUpdatedAt(store.UpdatedAt).

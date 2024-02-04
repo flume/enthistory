@@ -7,8 +7,8 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-    "github.com/google/uuid"
-    
+	"github.com/google/uuid"
+
 	"github.com/flume/enthistory"
 
 	"time"
@@ -25,40 +25,37 @@ func (StoreHistory) Annotations() []schema.Annotation {
 		entsql.Annotation{
 			Table: "Store_history",
 		},
-        enthistory.Annotations{
-            IsHistory: true,
-            Exclude: true,
-        },
+		enthistory.Annotations{
+			IsHistory: true,
+			Exclude:   true,
+		},
 	}
 }
 
 // Fields of the StoreHistory.
 func (StoreHistory) Fields() []ent.Field {
 	historyFields := []ent.Field{
-        field.Time("history_time").
-            Default(time.Now).
-            Immutable(),
-        field.UUID("ref", uuid.UUID{}).
-            Immutable().
-            Optional(),
-        field.Enum("operation").
-            GoType(enthistory.OpType("")).
-            Immutable(),
-        field.UUID("updated_by", uuid.UUID{}).
-            Optional().
-            Immutable().
-            Nillable(),
-    }
+		field.Time("history_time").
+			Default(time.Now).
+			Immutable(),
+		field.UUID("ref", uuid.UUID{}).
+			Immutable().
+			Optional(),
+		field.Enum("operation").
+			GoType(enthistory.OpType("")).
+			Immutable(),
+		field.UUID("updated_by", uuid.UUID{}).
+			Optional().
+			Immutable().
+			Nillable(),
+	}
 
+	original := Store{}
+	for _, field := range original.Fields() {
+		historyFields = append(historyFields, field)
+	}
 
-    original := Store{}
-    for _, field := range original.Fields() {
-        if field.Descriptor().Name != "id" {
-            historyFields = append(historyFields, field)
-        }
-    }
-
-    return historyFields
+	return historyFields
 }
 
 // Mixin of the StoreHistory.
@@ -67,6 +64,6 @@ func (StoreHistory) Mixin() []ent.Mixin {
 }
 func (StoreHistory) Indexes() []ent.Index {
 	return []ent.Index{
-        index.Fields("history_time"),
+		index.Fields("history_time"),
 	}
 }

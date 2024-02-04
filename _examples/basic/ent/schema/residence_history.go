@@ -7,8 +7,8 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-    "github.com/google/uuid"
-    
+	"github.com/google/uuid"
+
 	"github.com/flume/enthistory"
 
 	"time"
@@ -25,40 +25,37 @@ func (ResidenceHistory) Annotations() []schema.Annotation {
 		entsql.Annotation{
 			Table: "residence_history",
 		},
-        enthistory.Annotations{
-            IsHistory: true,
-            Exclude: true,
-        },
+		enthistory.Annotations{
+			IsHistory: true,
+			Exclude:   true,
+		},
 	}
 }
 
 // Fields of the ResidenceHistory.
 func (ResidenceHistory) Fields() []ent.Field {
 	historyFields := []ent.Field{
-        field.Time("history_time").
-            Default(time.Now).
-            Immutable(),
-        field.UUID("ref", uuid.UUID{}).
-            Immutable().
-            Optional(),
-        field.Enum("operation").
-            GoType(enthistory.OpType("")).
-            Immutable(),
-        field.Int("updated_by").
-            Optional().
-            Immutable().
-            Nillable(),
-    }
+		field.Time("history_time").
+			Default(time.Now).
+			Immutable(),
+		field.UUID("ref", uuid.UUID{}).
+			Immutable().
+			Optional(),
+		field.Enum("operation").
+			GoType(enthistory.OpType("")).
+			Immutable(),
+		field.Int("updated_by").
+			Optional().
+			Immutable().
+			Nillable(),
+	}
 
+	original := Residence{}
+	for _, field := range original.Fields() {
+		historyFields = append(historyFields, field)
+	}
 
-    original := Residence{}
-    for _, field := range original.Fields() {
-        if field.Descriptor().Name != "id" {
-            historyFields = append(historyFields, field)
-        }
-    }
-
-    return historyFields
+	return historyFields
 }
 
 // Mixin of the ResidenceHistory.
@@ -67,6 +64,6 @@ func (ResidenceHistory) Mixin() []ent.Mixin {
 }
 func (ResidenceHistory) Indexes() []ent.Index {
 	return []ent.Index{
-        index.Fields("history_time"),
+		index.Fields("history_time"),
 	}
 }

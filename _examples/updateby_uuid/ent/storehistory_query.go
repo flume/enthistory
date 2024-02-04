@@ -10,6 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
+
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/predicate"
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/storehistory"
 )
@@ -81,8 +83,8 @@ func (shq *StoreHistoryQuery) FirstX(ctx context.Context) *StoreHistory {
 
 // FirstID returns the first StoreHistory ID from the query.
 // Returns a *NotFoundError when no StoreHistory ID was found.
-func (shq *StoreHistoryQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (shq *StoreHistoryQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = shq.Limit(1).IDs(setContextOp(ctx, shq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -94,7 +96,7 @@ func (shq *StoreHistoryQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (shq *StoreHistoryQuery) FirstIDX(ctx context.Context) int {
+func (shq *StoreHistoryQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := shq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -132,8 +134,8 @@ func (shq *StoreHistoryQuery) OnlyX(ctx context.Context) *StoreHistory {
 // OnlyID is like Only, but returns the only StoreHistory ID in the query.
 // Returns a *NotSingularError when more than one StoreHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (shq *StoreHistoryQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (shq *StoreHistoryQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = shq.Limit(2).IDs(setContextOp(ctx, shq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -149,7 +151,7 @@ func (shq *StoreHistoryQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (shq *StoreHistoryQuery) OnlyIDX(ctx context.Context) int {
+func (shq *StoreHistoryQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := shq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -177,7 +179,7 @@ func (shq *StoreHistoryQuery) AllX(ctx context.Context) []*StoreHistory {
 }
 
 // IDs executes the query and returns a list of StoreHistory IDs.
-func (shq *StoreHistoryQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (shq *StoreHistoryQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if shq.ctx.Unique == nil && shq.path != nil {
 		shq.Unique(true)
 	}
@@ -189,7 +191,7 @@ func (shq *StoreHistoryQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (shq *StoreHistoryQuery) IDsX(ctx context.Context) []int {
+func (shq *StoreHistoryQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := shq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -364,7 +366,7 @@ func (shq *StoreHistoryQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (shq *StoreHistoryQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(storehistory.Table, storehistory.Columns, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(storehistory.Table, storehistory.Columns, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeUUID))
 	_spec.From = shq.sql
 	if unique := shq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

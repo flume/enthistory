@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organizationhistory"
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/storehistory"
 )

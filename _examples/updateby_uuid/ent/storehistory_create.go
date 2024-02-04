@@ -10,9 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
+
 	"github.com/flume/enthistory"
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/storehistory"
-	"github.com/google/uuid"
 )
 
 // StoreHistoryCreate is the builder for creating a StoreHistory entity.
@@ -116,6 +117,20 @@ func (shc *StoreHistoryCreate) SetOrganizationID(u uuid.UUID) *StoreHistoryCreat
 	return shc
 }
 
+// SetID sets the "id" field.
+func (shc *StoreHistoryCreate) SetID(u uuid.UUID) *StoreHistoryCreate {
+	shc.mutation.SetID(u)
+	return shc
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (shc *StoreHistoryCreate) SetNillableID(u *uuid.UUID) *StoreHistoryCreate {
+	if u != nil {
+		shc.SetID(*u)
+	}
+	return shc
+}
+
 // Mutation returns the StoreHistoryMutation object of the builder.
 func (shc *StoreHistoryCreate) Mutation() *StoreHistoryMutation {
 	return shc.mutation
@@ -163,6 +178,10 @@ func (shc *StoreHistoryCreate) defaults() {
 		v := storehistory.DefaultUpdatedAt()
 		shc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := shc.mutation.ID(); !ok {
+		v := storehistory.DefaultID()
+		shc.mutation.SetID(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -207,8 +226,13 @@ func (shc *StoreHistoryCreate) sqlSave(ctx context.Context) (*StoreHistory, erro
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	shc.mutation.id = &_node.ID
 	shc.mutation.done = true
 	return _node, nil
@@ -217,8 +241,12 @@ func (shc *StoreHistoryCreate) sqlSave(ctx context.Context) (*StoreHistory, erro
 func (shc *StoreHistoryCreate) createSpec() (*StoreHistory, *sqlgraph.CreateSpec) {
 	var (
 		_node = &StoreHistory{config: shc.config}
-		_spec = sqlgraph.NewCreateSpec(storehistory.Table, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(storehistory.Table, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeUUID))
 	)
+	if id, ok := shc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
 	if value, ok := shc.mutation.HistoryTime(); ok {
 		_spec.SetField(storehistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
@@ -303,10 +331,6 @@ func (shcb *StoreHistoryCreateBulk) Save(ctx context.Context) ([]*StoreHistory, 
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

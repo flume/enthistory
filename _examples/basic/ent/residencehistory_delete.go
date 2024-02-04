@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+
 	"github.com/flume/enthistory/_examples/basic/ent/predicate"
 	"github.com/flume/enthistory/_examples/basic/ent/residencehistory"
 )
@@ -40,7 +41,7 @@ func (rhd *ResidenceHistoryDelete) ExecX(ctx context.Context) int {
 }
 
 func (rhd *ResidenceHistoryDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(residencehistory.Table, sqlgraph.NewFieldSpec(residencehistory.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewDeleteSpec(residencehistory.Table, sqlgraph.NewFieldSpec(residencehistory.FieldID, field.TypeUUID))
 	if ps := rhd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

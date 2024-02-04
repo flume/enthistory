@@ -10,6 +10,7 @@ import (
 	_ "github.com/flume/enthistory/_examples/updateby_uuid/ent/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
+
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/migrate"
 )
 

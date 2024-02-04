@@ -5,12 +5,13 @@ package ent
 import (
 	"time"
 
+	"github.com/google/uuid"
+
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organization"
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organizationhistory"
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/schema"
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/store"
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/storehistory"
-	"github.com/google/uuid"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -51,6 +52,10 @@ func init() {
 	organizationhistoryDescUpdatedAt := organizationhistoryMixinFields0[1].Descriptor()
 	// organizationhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	organizationhistory.DefaultUpdatedAt = organizationhistoryDescUpdatedAt.Default.(func() time.Time)
+	// organizationhistoryDescID is the schema descriptor for id field.
+	organizationhistoryDescID := organizationhistoryFields[4].Descriptor()
+	// organizationhistory.DefaultID holds the default value on creation for the id field.
+	organizationhistory.DefaultID = organizationhistoryDescID.Default.(func() uuid.UUID)
 	storeMixin := schema.Store{}.Mixin()
 	storeMixinFields0 := storeMixin[0].Fields()
 	_ = storeMixinFields0
@@ -85,4 +90,8 @@ func init() {
 	storehistoryDescUpdatedAt := storehistoryMixinFields0[1].Descriptor()
 	// storehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	storehistory.DefaultUpdatedAt = storehistoryDescUpdatedAt.Default.(func() time.Time)
+	// storehistoryDescID is the schema descriptor for id field.
+	storehistoryDescID := storehistoryFields[4].Descriptor()
+	// storehistory.DefaultID holds the default value on creation for the id field.
+	storehistory.DefaultID = storehistoryDescID.Default.(func() uuid.UUID)
 }

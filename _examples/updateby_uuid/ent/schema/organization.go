@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/google/uuid"
+
 	"github.com/flume/enthistory/_examples/basic/ent/schema/mixins"
 )
 
@@ -30,7 +31,7 @@ func (Organization) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).
 			Default(uuid.New),
-		field.String("name"),		
+		field.String("name"),
 		field.JSON("info", map[string]any{}).
 			Optional(),
 	}
@@ -39,7 +40,7 @@ func (Organization) Fields() []ent.Field {
 // Edges of the Organization.
 func (Organization) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("organization_stores", Store.Type).			
+		edge.To("organization_stores", Store.Type).
 			Annotations(entsql.Annotation{
 				OnDelete: entsql.Cascade,
 			}),

@@ -10,9 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
+
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organization"
 	"github.com/flume/enthistory/_examples/updateby_uuid/ent/store"
-	"github.com/google/uuid"
 )
 
 // StoreCreate is the builder for creating a Store entity.

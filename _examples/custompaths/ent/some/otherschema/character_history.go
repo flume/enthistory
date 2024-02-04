@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+
 	"github.com/flume/enthistory"
 
 	"time"
@@ -22,36 +23,33 @@ func (CharacterHistory) Annotations() []schema.Annotation {
 		entsql.Annotation{
 			Table: "character_history",
 		},
-        enthistory.Annotations{
-            IsHistory: true,
-            Exclude: true,
-        },
+		enthistory.Annotations{
+			IsHistory: true,
+			Exclude:   true,
+		},
 	}
 }
 
 // Fields of the CharacterHistory.
 func (CharacterHistory) Fields() []ent.Field {
 	historyFields := []ent.Field{
-        field.Time("history_time").
-            Default(time.Now).
-            Immutable(),
-        field.Int("ref").
-            Immutable().
-            Optional(),
-        field.Enum("operation").
-            GoType(enthistory.OpType("")).
-            Immutable(),
-    }
+		field.Time("history_time").
+			Default(time.Now).
+			Immutable(),
+		field.Int("ref").
+			Immutable().
+			Optional(),
+		field.Enum("operation").
+			GoType(enthistory.OpType("")).
+			Immutable(),
+	}
 
+	original := Character{}
+	for _, field := range original.Fields() {
+		historyFields = append(historyFields, field)
+	}
 
-    original := Character{}
-    for _, field := range original.Fields() {
-        if field.Descriptor().Name != "id" {
-            historyFields = append(historyFields, field)
-        }
-    }
-
-    return historyFields
+	return historyFields
 }
 
 // Mixin of the CharacterHistory.

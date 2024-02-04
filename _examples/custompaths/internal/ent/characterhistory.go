@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+
 	"github.com/flume/enthistory"
 	"github.com/flume/enthistory/_examples/custompaths/internal/ent/characterhistory"
 )

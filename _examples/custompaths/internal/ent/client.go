@@ -16,6 +16,7 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+
 	"github.com/flume/enthistory/_examples/custompaths/internal/ent/character"
 	"github.com/flume/enthistory/_examples/custompaths/internal/ent/characterhistory"
 	"github.com/flume/enthistory/_examples/custompaths/internal/ent/friendship"

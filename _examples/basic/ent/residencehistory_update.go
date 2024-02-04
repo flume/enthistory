@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+
 	"github.com/flume/enthistory/_examples/basic/ent/predicate"
 	"github.com/flume/enthistory/_examples/basic/ent/residencehistory"
 )
@@ -89,7 +90,7 @@ func (rhu *ResidenceHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 func (rhu *ResidenceHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(residencehistory.Table, residencehistory.Columns, sqlgraph.NewFieldSpec(residencehistory.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(residencehistory.Table, residencehistory.Columns, sqlgraph.NewFieldSpec(residencehistory.FieldID, field.TypeUUID))
 	if ps := rhu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -203,7 +204,7 @@ func (rhuo *ResidenceHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 func (rhuo *ResidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ResidenceHistory, err error) {
-	_spec := sqlgraph.NewUpdateSpec(residencehistory.Table, residencehistory.Columns, sqlgraph.NewFieldSpec(residencehistory.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(residencehistory.Table, residencehistory.Columns, sqlgraph.NewFieldSpec(residencehistory.FieldID, field.TypeUUID))
 	id, ok := rhuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "ResidenceHistory.id" for update`)}

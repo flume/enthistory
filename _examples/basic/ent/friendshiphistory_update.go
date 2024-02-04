@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+
 	"github.com/flume/enthistory/_examples/basic/ent/friendshiphistory"
 	"github.com/flume/enthistory/_examples/basic/ent/predicate"
 )
@@ -117,7 +118,7 @@ func (fhu *FriendshipHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 func (fhu *FriendshipHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(friendshiphistory.Table, friendshiphistory.Columns, sqlgraph.NewFieldSpec(friendshiphistory.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(friendshiphistory.Table, friendshiphistory.Columns, sqlgraph.NewFieldSpec(friendshiphistory.FieldID, field.TypeString))
 	if ps := fhu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -268,7 +269,7 @@ func (fhuo *FriendshipHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 func (fhuo *FriendshipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FriendshipHistory, err error) {
-	_spec := sqlgraph.NewUpdateSpec(friendshiphistory.Table, friendshiphistory.Columns, sqlgraph.NewFieldSpec(friendshiphistory.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(friendshiphistory.Table, friendshiphistory.Columns, sqlgraph.NewFieldSpec(friendshiphistory.FieldID, field.TypeString))
 	id, ok := fhuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "FriendshipHistory.id" for update`)}
