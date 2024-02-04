@@ -78,8 +78,9 @@ func ({{ $h.Receiver }} *{{ $h.Name }}) Diff(history *{{ $h.Name }}) (*HistoryDi
     }
 
     {{ $h.Receiver }}Unix, historyUnix := {{ $h.Receiver }}.HistoryTime.Unix(), history.HistoryTime.Unix()
-    {{ $h.Receiver }}Older := {{ $h.Receiver }}Unix < historyUnix || ({{ $h.Receiver }}Unix == historyUnix && {{ $h.Receiver }}.ID < history.ID)
-    historyOlder := {{ $h.Receiver }}Unix > historyUnix || ({{ $h.Receiver }}Unix == historyUnix && {{ $h.Receiver }}.ID > history.ID)
+	{{ $isUUID := eq $n.ID.Type.String "uuid.UUID" }}
+    {{ $h.Receiver }}Older := {{ $h.Receiver }}Unix < historyUnix || ({{ $h.Receiver }}Unix == historyUnix && {{ $h.Receiver }}.ID{{ if $isUUID }}.Time(){{ end }} < history.ID{{ if $isUUID }}.Time(){{ end }})
+    historyOlder := {{ $h.Receiver }}Unix > historyUnix || ({{ $h.Receiver }}Unix == historyUnix && {{ $h.Receiver }}.ID{{ if $isUUID }}.Time(){{ end }} > history.ID{{ if $isUUID }}.Time(){{ end }})
 
    if {{ $h.Receiver }}Older {
         return &HistoryDiff[{{ $h.Name }}]{
@@ -204,7 +205,7 @@ func audit{{ $n.Name }}(ctx context.Context, config config) ([][]string, error) 
 	client := New{{ $n.Name }}Client(config)
 	err := client.Query().
 		Unique(true).
-		Order({{ lower $n.Name }}.ByRef()).
+		Order({{ lower $n.Name }}.ByHistoryTime()).
 		Select({{ lower $n.Name }}.FieldRef).
 		Scan(ctx, &refs)
 

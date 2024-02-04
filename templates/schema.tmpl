@@ -77,9 +77,7 @@ func ({{ $name }}) Fields() []ent.Field {
 
     original := {{ .OriginalTableName }}{}
     for _, field := range original.Fields() {
-        if field.Descriptor().Name != "id" {
-            historyFields = append(historyFields, field)
-        }
+        historyFields = append(historyFields, field)
     }
 
     return historyFields
