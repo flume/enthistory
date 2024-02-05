@@ -56,10 +56,10 @@ func (m *CharacterMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	if tx != nil {
 		create = tx.CharacterHistory.Create()
 	}
-	now := time.Now()
+
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(now).
+		SetHistoryTime(time.Now()).
 		SetRef(id)
 
 	if age, exists := m.Age(); exists {
@@ -99,10 +99,10 @@ func (m *CharacterMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 		if tx != nil {
 			create = tx.CharacterHistory.Create()
 		}
-		now := time.Now()
+
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(now).
+			SetHistoryTime(time.Now()).
 			SetRef(id)
 
 		if age, exists := m.Age(); exists {
@@ -149,10 +149,9 @@ func (m *CharacterMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			create = tx.CharacterHistory.Create()
 		}
 
-		now := time.Now()
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(now).
+			SetHistoryTime(time.Now()).
 			SetRef(id).
 			SetAge(character.Age).
 			SetName(character.Name).
@@ -181,10 +180,10 @@ func (m *FriendshipMutation) CreateHistoryFromCreate(ctx context.Context) error 
 	if tx != nil {
 		create = tx.FriendshipHistory.Create()
 	}
-	now := time.Now()
+
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(now).
+		SetHistoryTime(time.Now()).
 		SetRef(id)
 
 	if characterID, exists := m.CharacterID(); exists {
@@ -224,10 +223,10 @@ func (m *FriendshipMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 		if tx != nil {
 			create = tx.FriendshipHistory.Create()
 		}
-		now := time.Now()
+
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(now).
+			SetHistoryTime(time.Now()).
 			SetRef(id)
 
 		if characterID, exists := m.CharacterID(); exists {
@@ -274,10 +273,9 @@ func (m *FriendshipMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			create = tx.FriendshipHistory.Create()
 		}
 
-		now := time.Now()
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(now).
+			SetHistoryTime(time.Now()).
 			SetRef(id).
 			SetCharacterID(friendship.CharacterID).
 			SetFriendID(friendship.FriendID).

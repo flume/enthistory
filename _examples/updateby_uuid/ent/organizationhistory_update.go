@@ -102,7 +102,7 @@ func (ohu *OrganizationHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 func (ohu *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(organizationhistory.Table, organizationhistory.Columns, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeUUID))
+	_spec := sqlgraph.NewUpdateSpec(organizationhistory.Table, organizationhistory.Columns, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeInt))
 	if ps := ohu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -234,7 +234,7 @@ func (ohuo *OrganizationHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 func (ohuo *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *OrganizationHistory, err error) {
-	_spec := sqlgraph.NewUpdateSpec(organizationhistory.Table, organizationhistory.Columns, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeUUID))
+	_spec := sqlgraph.NewUpdateSpec(organizationhistory.Table, organizationhistory.Columns, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeInt))
 	id, ok := ohuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "OrganizationHistory.id" for update`)}

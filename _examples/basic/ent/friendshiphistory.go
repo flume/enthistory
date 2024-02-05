@@ -18,7 +18,7 @@ import (
 type FriendshipHistory struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID string `json:"id,omitempty"`
+	ID int `json:"id,omitempty"`
 	// HistoryTime holds the value of the "history_time" field.
 	HistoryTime time.Time `json:"history_time,omitempty"`
 	// Operation holds the value of the "operation" field.
@@ -43,9 +43,9 @@ func (*FriendshipHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case friendshiphistory.FieldUpdatedBy, friendshiphistory.FieldCharacterID, friendshiphistory.FieldFriendID:
+		case friendshiphistory.FieldID, friendshiphistory.FieldUpdatedBy, friendshiphistory.FieldCharacterID, friendshiphistory.FieldFriendID:
 			values[i] = new(sql.NullInt64)
-		case friendshiphistory.FieldID, friendshiphistory.FieldOperation, friendshiphistory.FieldRef:
+		case friendshiphistory.FieldOperation, friendshiphistory.FieldRef:
 			values[i] = new(sql.NullString)
 		case friendshiphistory.FieldHistoryTime, friendshiphistory.FieldCreatedAt, friendshiphistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -65,11 +65,11 @@ func (fh *FriendshipHistory) assignValues(columns []string, values []any) error 
 	for i := range columns {
 		switch columns[i] {
 		case friendshiphistory.FieldID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field id", values[i])
-			} else if value.Valid {
-				fh.ID = value.String
+			value, ok := values[i].(*sql.NullInt64)
+			if !ok {
+				return fmt.Errorf("unexpected type %T for field id", value)
 			}
+			fh.ID = int(value.Int64)
 		case friendshiphistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])

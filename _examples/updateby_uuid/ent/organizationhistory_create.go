@@ -112,16 +112,8 @@ func (ohc *OrganizationHistoryCreate) SetInfo(m map[string]interface{}) *Organiz
 }
 
 // SetID sets the "id" field.
-func (ohc *OrganizationHistoryCreate) SetID(u uuid.UUID) *OrganizationHistoryCreate {
-	ohc.mutation.SetID(u)
-	return ohc
-}
-
-// SetNillableID sets the "id" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableID(u *uuid.UUID) *OrganizationHistoryCreate {
-	if u != nil {
-		ohc.SetID(*u)
-	}
+func (ohc *OrganizationHistoryCreate) SetID(i int) *OrganizationHistoryCreate {
+	ohc.mutation.SetID(i)
 	return ohc
 }
 
@@ -172,10 +164,6 @@ func (ohc *OrganizationHistoryCreate) defaults() {
 		v := organizationhistory.DefaultUpdatedAt()
 		ohc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ohc.mutation.ID(); !ok {
-		v := organizationhistory.DefaultID()
-		ohc.mutation.SetID(v)
-	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -214,12 +202,9 @@ func (ohc *OrganizationHistoryCreate) sqlSave(ctx context.Context) (*Organizatio
 		}
 		return nil, err
 	}
-	if _spec.ID.Value != nil {
-		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
-			_node.ID = *id
-		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
-			return nil, err
-		}
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int(id)
 	}
 	ohc.mutation.id = &_node.ID
 	ohc.mutation.done = true
@@ -229,11 +214,11 @@ func (ohc *OrganizationHistoryCreate) sqlSave(ctx context.Context) (*Organizatio
 func (ohc *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgraph.CreateSpec) {
 	var (
 		_node = &OrganizationHistory{config: ohc.config}
-		_spec = sqlgraph.NewCreateSpec(organizationhistory.Table, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeUUID))
+		_spec = sqlgraph.NewCreateSpec(organizationhistory.Table, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeInt))
 	)
 	if id, ok := ohc.mutation.ID(); ok {
 		_node.ID = id
-		_spec.ID.Value = &id
+		_spec.ID.Value = id
 	}
 	if value, ok := ohc.mutation.HistoryTime(); ok {
 		_spec.SetField(organizationhistory.FieldHistoryTime, field.TypeTime, value)
@@ -315,6 +300,10 @@ func (ohcb *OrganizationHistoryCreateBulk) Save(ctx context.Context) ([]*Organiz
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
+					id := specs[i].ID.Value.(int64)
+					nodes[i].ID = int(id)
+				}
 				mutation.done = true
 				return nodes[i], nil
 			})

@@ -41,7 +41,7 @@ func (rhd *ResidenceHistoryDelete) ExecX(ctx context.Context) int {
 }
 
 func (rhd *ResidenceHistoryDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(residencehistory.Table, sqlgraph.NewFieldSpec(residencehistory.FieldID, field.TypeUUID))
+	_spec := sqlgraph.NewDeleteSpec(residencehistory.Table, sqlgraph.NewFieldSpec(residencehistory.FieldID, field.TypeInt))
 	if ps := rhd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

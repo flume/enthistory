@@ -52,7 +52,9 @@ func (OrganizationHistory) Fields() []ent.Field {
 
 	original := Organization{}
 	for _, field := range original.Fields() {
-		historyFields = append(historyFields, field)
+		if field.Descriptor().Name != "id" {
+			historyFields = append(historyFields, field)
+		}
 	}
 
 	return historyFields

@@ -106,16 +106,8 @@ func (rhc *ResidenceHistoryCreate) SetName(s string) *ResidenceHistoryCreate {
 }
 
 // SetID sets the "id" field.
-func (rhc *ResidenceHistoryCreate) SetID(u uuid.UUID) *ResidenceHistoryCreate {
-	rhc.mutation.SetID(u)
-	return rhc
-}
-
-// SetNillableID sets the "id" field if the given value is not nil.
-func (rhc *ResidenceHistoryCreate) SetNillableID(u *uuid.UUID) *ResidenceHistoryCreate {
-	if u != nil {
-		rhc.SetID(*u)
-	}
+func (rhc *ResidenceHistoryCreate) SetID(i int) *ResidenceHistoryCreate {
+	rhc.mutation.SetID(i)
 	return rhc
 }
 
@@ -166,10 +158,6 @@ func (rhc *ResidenceHistoryCreate) defaults() {
 		v := residencehistory.DefaultUpdatedAt()
 		rhc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := rhc.mutation.ID(); !ok {
-		v := residencehistory.DefaultID()
-		rhc.mutation.SetID(v)
-	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -208,12 +196,9 @@ func (rhc *ResidenceHistoryCreate) sqlSave(ctx context.Context) (*ResidenceHisto
 		}
 		return nil, err
 	}
-	if _spec.ID.Value != nil {
-		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
-			_node.ID = *id
-		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
-			return nil, err
-		}
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int(id)
 	}
 	rhc.mutation.id = &_node.ID
 	rhc.mutation.done = true
@@ -223,11 +208,11 @@ func (rhc *ResidenceHistoryCreate) sqlSave(ctx context.Context) (*ResidenceHisto
 func (rhc *ResidenceHistoryCreate) createSpec() (*ResidenceHistory, *sqlgraph.CreateSpec) {
 	var (
 		_node = &ResidenceHistory{config: rhc.config}
-		_spec = sqlgraph.NewCreateSpec(residencehistory.Table, sqlgraph.NewFieldSpec(residencehistory.FieldID, field.TypeUUID))
+		_spec = sqlgraph.NewCreateSpec(residencehistory.Table, sqlgraph.NewFieldSpec(residencehistory.FieldID, field.TypeInt))
 	)
 	if id, ok := rhc.mutation.ID(); ok {
 		_node.ID = id
-		_spec.ID.Value = &id
+		_spec.ID.Value = id
 	}
 	if value, ok := rhc.mutation.HistoryTime(); ok {
 		_spec.SetField(residencehistory.FieldHistoryTime, field.TypeTime, value)
@@ -305,6 +290,10 @@ func (rhcb *ResidenceHistoryCreateBulk) Save(ctx context.Context) ([]*ResidenceH
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
+					id := specs[i].ID.Value.(int64)
+					nodes[i].ID = int(id)
+				}
 				mutation.done = true
 				return nodes[i], nil
 			})

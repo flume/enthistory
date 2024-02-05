@@ -13,47 +13,47 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id uuid.UUID) predicate.ResidenceHistory {
+func ID(id int) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id uuid.UUID) predicate.ResidenceHistory {
+func IDEQ(id int) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id uuid.UUID) predicate.ResidenceHistory {
+func IDNEQ(id int) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...uuid.UUID) predicate.ResidenceHistory {
+func IDIn(ids ...int) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...uuid.UUID) predicate.ResidenceHistory {
+func IDNotIn(ids ...int) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id uuid.UUID) predicate.ResidenceHistory {
+func IDGT(id int) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id uuid.UUID) predicate.ResidenceHistory {
+func IDGTE(id int) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id uuid.UUID) predicate.ResidenceHistory {
+func IDLT(id int) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id uuid.UUID) predicate.ResidenceHistory {
+func IDLTE(id int) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldLTE(FieldID, id))
 }
 

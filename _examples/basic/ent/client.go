@@ -811,7 +811,7 @@ func (c *FriendshipHistoryClient) UpdateOne(fh *FriendshipHistory) *FriendshipHi
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *FriendshipHistoryClient) UpdateOneID(id string) *FriendshipHistoryUpdateOne {
+func (c *FriendshipHistoryClient) UpdateOneID(id int) *FriendshipHistoryUpdateOne {
 	mutation := newFriendshipHistoryMutation(c.config, OpUpdateOne, withFriendshipHistoryID(id))
 	return &FriendshipHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -828,7 +828,7 @@ func (c *FriendshipHistoryClient) DeleteOne(fh *FriendshipHistory) *FriendshipHi
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *FriendshipHistoryClient) DeleteOneID(id string) *FriendshipHistoryDeleteOne {
+func (c *FriendshipHistoryClient) DeleteOneID(id int) *FriendshipHistoryDeleteOne {
 	builder := c.Delete().Where(friendshiphistory.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -845,12 +845,12 @@ func (c *FriendshipHistoryClient) Query() *FriendshipHistoryQuery {
 }
 
 // Get returns a FriendshipHistory entity by its id.
-func (c *FriendshipHistoryClient) Get(ctx context.Context, id string) (*FriendshipHistory, error) {
+func (c *FriendshipHistoryClient) Get(ctx context.Context, id int) (*FriendshipHistory, error) {
 	return c.Query().Where(friendshiphistory.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *FriendshipHistoryClient) GetX(ctx context.Context, id string) *FriendshipHistory {
+func (c *FriendshipHistoryClient) GetX(ctx context.Context, id int) *FriendshipHistory {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -1093,7 +1093,7 @@ func (c *ResidenceHistoryClient) UpdateOne(rh *ResidenceHistory) *ResidenceHisto
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *ResidenceHistoryClient) UpdateOneID(id uuid.UUID) *ResidenceHistoryUpdateOne {
+func (c *ResidenceHistoryClient) UpdateOneID(id int) *ResidenceHistoryUpdateOne {
 	mutation := newResidenceHistoryMutation(c.config, OpUpdateOne, withResidenceHistoryID(id))
 	return &ResidenceHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -1110,7 +1110,7 @@ func (c *ResidenceHistoryClient) DeleteOne(rh *ResidenceHistory) *ResidenceHisto
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ResidenceHistoryClient) DeleteOneID(id uuid.UUID) *ResidenceHistoryDeleteOne {
+func (c *ResidenceHistoryClient) DeleteOneID(id int) *ResidenceHistoryDeleteOne {
 	builder := c.Delete().Where(residencehistory.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -1127,12 +1127,12 @@ func (c *ResidenceHistoryClient) Query() *ResidenceHistoryQuery {
 }
 
 // Get returns a ResidenceHistory entity by its id.
-func (c *ResidenceHistoryClient) Get(ctx context.Context, id uuid.UUID) (*ResidenceHistory, error) {
+func (c *ResidenceHistoryClient) Get(ctx context.Context, id int) (*ResidenceHistory, error) {
 	return c.Query().Where(residencehistory.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *ResidenceHistoryClient) GetX(ctx context.Context, id uuid.UUID) *ResidenceHistory {
+func (c *ResidenceHistoryClient) GetX(ctx context.Context, id int) *ResidenceHistory {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)

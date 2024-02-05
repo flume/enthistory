@@ -25,7 +25,7 @@ var (
 	}
 	// OrganizationHistoryColumns holds the columns for the "Organization_history" table.
 	OrganizationHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUUID},
+		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
 		{Name: "ref", Type: field.TypeUUID, Nullable: true},
@@ -73,7 +73,7 @@ var (
 	}
 	// StoreHistoryColumns holds the columns for the "Store_history" table.
 	StoreHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUUID},
+		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
 		{Name: "ref", Type: field.TypeUUID, Nullable: true},

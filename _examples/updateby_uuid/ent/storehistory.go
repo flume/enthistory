@@ -19,7 +19,7 @@ import (
 type StoreHistory struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID uuid.UUID `json:"id,omitempty"`
+	ID int `json:"id,omitempty"`
 	// HistoryTime holds the value of the "history_time" field.
 	HistoryTime time.Time `json:"history_time,omitempty"`
 	// Operation holds the value of the "operation" field.
@@ -48,11 +48,13 @@ func (*StoreHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case storehistory.FieldUpdatedBy:
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
+		case storehistory.FieldID:
+			values[i] = new(sql.NullInt64)
 		case storehistory.FieldOperation, storehistory.FieldName, storehistory.FieldRegion:
 			values[i] = new(sql.NullString)
 		case storehistory.FieldHistoryTime, storehistory.FieldCreatedAt, storehistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case storehistory.FieldID, storehistory.FieldRef, storehistory.FieldOrganizationID:
+		case storehistory.FieldRef, storehistory.FieldOrganizationID:
 			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -70,11 +72,11 @@ func (sh *StoreHistory) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case storehistory.FieldID:
-			if value, ok := values[i].(*uuid.UUID); !ok {
-				return fmt.Errorf("unexpected type %T for field id", values[i])
-			} else if value != nil {
-				sh.ID = *value
+			value, ok := values[i].(*sql.NullInt64)
+			if !ok {
+				return fmt.Errorf("unexpected type %T for field id", value)
 			}
+			sh.ID = int(value.Int64)
 		case storehistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])

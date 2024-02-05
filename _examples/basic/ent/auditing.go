@@ -73,7 +73,6 @@ func (ch *CharacterHistory) Diff(history *CharacterHistory) (*HistoryDiff[Charac
 	}
 
 	chUnix, historyUnix := ch.HistoryTime.Unix(), history.HistoryTime.Unix()
-
 	chOlder := chUnix < historyUnix || (chUnix == historyUnix && ch.ID < history.ID)
 	historyOlder := chUnix > historyUnix || (chUnix == historyUnix && ch.ID > history.ID)
 
@@ -116,7 +115,6 @@ func (fh *FriendshipHistory) Diff(history *FriendshipHistory) (*HistoryDiff[Frie
 	}
 
 	fhUnix, historyUnix := fh.HistoryTime.Unix(), history.HistoryTime.Unix()
-
 	fhOlder := fhUnix < historyUnix || (fhUnix == historyUnix && fh.ID < history.ID)
 	historyOlder := fhUnix > historyUnix || (fhUnix == historyUnix && fh.ID > history.ID)
 
@@ -156,9 +154,8 @@ func (rh *ResidenceHistory) Diff(history *ResidenceHistory) (*HistoryDiff[Reside
 	}
 
 	rhUnix, historyUnix := rh.HistoryTime.Unix(), history.HistoryTime.Unix()
-
-	rhOlder := rhUnix < historyUnix || (rhUnix == historyUnix && rh.ID.Time() < history.ID.Time())
-	historyOlder := rhUnix > historyUnix || (rhUnix == historyUnix && rh.ID.Time() > history.ID.Time())
+	rhOlder := rhUnix < historyUnix || (rhUnix == historyUnix && rh.ID < history.ID)
+	historyOlder := rhUnix > historyUnix || (rhUnix == historyUnix && rh.ID > history.ID)
 
 	if rhOlder {
 		return &HistoryDiff[ResidenceHistory]{
@@ -208,25 +205,25 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	records := [][]string{
 		{"Table", "Ref Id", "History Time", "Operation", "Changes", "Updated By"},
 	}
-	var record [][]string
+	var rec [][]string
 	var err error
-	record, err = auditCharacterHistory(ctx, c.config)
+	rec, err = auditCharacterHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	records = append(records, rec...)
 
-	record, err = auditFriendshipHistory(ctx, c.config)
+	rec, err = auditFriendshipHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	records = append(records, rec...)
 
-	record, err = auditResidenceHistory(ctx, c.config)
+	rec, err = auditResidenceHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	records = append(records, rec...)
 
 	return records, nil
 }

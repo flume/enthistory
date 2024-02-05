@@ -122,8 +122,4 @@ func init() {
 	residencehistoryDescUpdatedAt := residencehistoryMixinFields0[1].Descriptor()
 	// residencehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	residencehistory.DefaultUpdatedAt = residencehistoryDescUpdatedAt.Default.(func() time.Time)
-	// residencehistoryDescID is the schema descriptor for id field.
-	residencehistoryDescID := residencehistoryFields[4].Descriptor()
-	// residencehistory.DefaultID holds the default value on creation for the id field.
-	residencehistory.DefaultID = residencehistoryDescID.Default.(func() uuid.UUID)
 }

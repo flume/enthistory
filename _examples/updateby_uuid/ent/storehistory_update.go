@@ -119,7 +119,7 @@ func (shu *StoreHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 func (shu *StoreHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(storehistory.Table, storehistory.Columns, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeUUID))
+	_spec := sqlgraph.NewUpdateSpec(storehistory.Table, storehistory.Columns, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeInt))
 	if ps := shu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -267,7 +267,7 @@ func (shuo *StoreHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 func (shuo *StoreHistoryUpdateOne) sqlSave(ctx context.Context) (_node *StoreHistory, err error) {
-	_spec := sqlgraph.NewUpdateSpec(storehistory.Table, storehistory.Columns, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeUUID))
+	_spec := sqlgraph.NewUpdateSpec(storehistory.Table, storehistory.Columns, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeInt))
 	id, ok := shuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "StoreHistory.id" for update`)}

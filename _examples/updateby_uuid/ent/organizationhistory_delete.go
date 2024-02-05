@@ -41,7 +41,7 @@ func (ohd *OrganizationHistoryDelete) ExecX(ctx context.Context) int {
 }
 
 func (ohd *OrganizationHistoryDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(organizationhistory.Table, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeUUID))
+	_spec := sqlgraph.NewDeleteSpec(organizationhistory.Table, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeInt))
 	if ps := ohd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

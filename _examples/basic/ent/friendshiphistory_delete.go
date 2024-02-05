@@ -41,7 +41,7 @@ func (fhd *FriendshipHistoryDelete) ExecX(ctx context.Context) int {
 }
 
 func (fhd *FriendshipHistoryDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(friendshiphistory.Table, sqlgraph.NewFieldSpec(friendshiphistory.FieldID, field.TypeString))
+	_spec := sqlgraph.NewDeleteSpec(friendshiphistory.Table, sqlgraph.NewFieldSpec(friendshiphistory.FieldID, field.TypeInt))
 	if ps := fhd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

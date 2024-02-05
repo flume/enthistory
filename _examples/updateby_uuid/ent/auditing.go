@@ -66,9 +66,8 @@ func (oh *OrganizationHistory) Diff(history *OrganizationHistory) (*HistoryDiff[
 	}
 
 	ohUnix, historyUnix := oh.HistoryTime.Unix(), history.HistoryTime.Unix()
-
-	ohOlder := ohUnix < historyUnix || (ohUnix == historyUnix && oh.ID.Time() < history.ID.Time())
-	historyOlder := ohUnix > historyUnix || (ohUnix == historyUnix && oh.ID.Time() > history.ID.Time())
+	ohOlder := ohUnix < historyUnix || (ohUnix == historyUnix && oh.ID < history.ID)
+	historyOlder := ohUnix > historyUnix || (ohUnix == historyUnix && oh.ID > history.ID)
 
 	if ohOlder {
 		return &HistoryDiff[OrganizationHistory]{
@@ -112,9 +111,8 @@ func (sh *StoreHistory) Diff(history *StoreHistory) (*HistoryDiff[StoreHistory],
 	}
 
 	shUnix, historyUnix := sh.HistoryTime.Unix(), history.HistoryTime.Unix()
-
-	shOlder := shUnix < historyUnix || (shUnix == historyUnix && sh.ID.Time() < history.ID.Time())
-	historyOlder := shUnix > historyUnix || (shUnix == historyUnix && sh.ID.Time() > history.ID.Time())
+	shOlder := shUnix < historyUnix || (shUnix == historyUnix && sh.ID < history.ID)
+	historyOlder := shUnix > historyUnix || (shUnix == historyUnix && sh.ID > history.ID)
 
 	if shOlder {
 		return &HistoryDiff[StoreHistory]{
@@ -164,19 +162,19 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	records := [][]string{
 		{"Table", "Ref Id", "History Time", "Operation", "Changes", "Updated By"},
 	}
-	var record [][]string
+	var rec [][]string
 	var err error
-	record, err = auditOrganizationHistory(ctx, c.config)
+	rec, err = auditOrganizationHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	records = append(records, rec...)
 
-	record, err = auditStoreHistory(ctx, c.config)
+	rec, err = auditStoreHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	records = append(records, rec...)
 
 	return records, nil
 }

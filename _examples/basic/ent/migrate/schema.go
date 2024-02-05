@@ -98,7 +98,7 @@ var (
 	}
 	// FriendshipHistoryColumns holds the columns for the "friendship_history" table.
 	FriendshipHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
+		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
@@ -136,7 +136,7 @@ var (
 	}
 	// ResidenceHistoryColumns holds the columns for the "residence_history" table.
 	ResidenceHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUUID},
+		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
 		{Name: "ref", Type: field.TypeUUID, Nullable: true},

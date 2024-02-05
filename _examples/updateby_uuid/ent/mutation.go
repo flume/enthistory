@@ -650,7 +650,7 @@ type OrganizationHistoryMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *uuid.UUID
+	id            *int
 	history_time  *time.Time
 	operation     *enthistory.OpType
 	ref           *uuid.UUID
@@ -685,7 +685,7 @@ func newOrganizationHistoryMutation(c config, op Op, opts ...organizationhistory
 }
 
 // withOrganizationHistoryID sets the ID field of the mutation.
-func withOrganizationHistoryID(id uuid.UUID) organizationhistoryOption {
+func withOrganizationHistoryID(id int) organizationhistoryOption {
 	return func(m *OrganizationHistoryMutation) {
 		var (
 			err   error
@@ -737,13 +737,13 @@ func (m OrganizationHistoryMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of OrganizationHistory entities.
-func (m *OrganizationHistoryMutation) SetID(id uuid.UUID) {
+func (m *OrganizationHistoryMutation) SetID(id int) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *OrganizationHistoryMutation) ID() (id uuid.UUID, exists bool) {
+func (m *OrganizationHistoryMutation) ID() (id int, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -754,12 +754,12 @@ func (m *OrganizationHistoryMutation) ID() (id uuid.UUID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *OrganizationHistoryMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+func (m *OrganizationHistoryMutation) IDs(ctx context.Context) ([]int, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []uuid.UUID{id}, nil
+			return []int{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -2022,7 +2022,7 @@ type StoreHistoryMutation struct {
 	config
 	op              Op
 	typ             string
-	id              *uuid.UUID
+	id              *int
 	history_time    *time.Time
 	operation       *enthistory.OpType
 	ref             *uuid.UUID
@@ -2058,7 +2058,7 @@ func newStoreHistoryMutation(c config, op Op, opts ...storehistoryOption) *Store
 }
 
 // withStoreHistoryID sets the ID field of the mutation.
-func withStoreHistoryID(id uuid.UUID) storehistoryOption {
+func withStoreHistoryID(id int) storehistoryOption {
 	return func(m *StoreHistoryMutation) {
 		var (
 			err   error
@@ -2110,13 +2110,13 @@ func (m StoreHistoryMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of StoreHistory entities.
-func (m *StoreHistoryMutation) SetID(id uuid.UUID) {
+func (m *StoreHistoryMutation) SetID(id int) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *StoreHistoryMutation) ID() (id uuid.UUID, exists bool) {
+func (m *StoreHistoryMutation) ID() (id int, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -2127,12 +2127,12 @@ func (m *StoreHistoryMutation) ID() (id uuid.UUID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *StoreHistoryMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+func (m *StoreHistoryMutation) IDs(ctx context.Context) ([]int, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []uuid.UUID{id}, nil
+			return []int{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
