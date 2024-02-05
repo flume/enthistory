@@ -78,9 +78,8 @@ func ({{ $h.Receiver }} *{{ $h.Name }}) Diff(history *{{ $h.Name }}) (*HistoryDi
     }
 
     {{ $h.Receiver }}Unix, historyUnix := {{ $h.Receiver }}.HistoryTime.Unix(), history.HistoryTime.Unix()
-	{{ $isUUID := eq $n.ID.Type.String "uuid.UUID" }}
-    {{ $h.Receiver }}Older := {{ $h.Receiver }}Unix < historyUnix || ({{ $h.Receiver }}Unix == historyUnix && {{ $h.Receiver }}.ID{{ if $isUUID }}.Time(){{ end }} < history.ID{{ if $isUUID }}.Time(){{ end }})
-    historyOlder := {{ $h.Receiver }}Unix > historyUnix || ({{ $h.Receiver }}Unix == historyUnix && {{ $h.Receiver }}.ID{{ if $isUUID }}.Time(){{ end }} > history.ID{{ if $isUUID }}.Time(){{ end }})
+    {{ $h.Receiver }}Older := {{ $h.Receiver }}Unix < historyUnix || ({{ $h.Receiver }}Unix == historyUnix && {{ $h.Receiver }}.ID < history.ID)
+    historyOlder := {{ $h.Receiver }}Unix > historyUnix || ({{ $h.Receiver }}Unix == historyUnix && {{ $h.Receiver }}.ID > history.ID)
 
    if {{ $h.Receiver }}Older {
         return &HistoryDiff[{{ $h.Name }}]{
@@ -134,16 +133,16 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	records := [][]string{
 		{"Table", "Ref Id", "History Time", "Operation", "Changes"{{ if not (eq $updatedByKey "") }}, "Updated By" {{ end }}},
 	}
-	var record [][]string
+	var rec [][]string
 	var err error
 
 	{{- range $n := $.Nodes }}
     {{- if (hasSuffix $n.Name "History") }}
-	record, err = audit{{ $n.Name }}(ctx, c.config)
+	rec, err = audit{{ $n.Name }}(ctx, c.config)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	records = append(records, rec...)
     {{ end }}
 	{{- end }}
 

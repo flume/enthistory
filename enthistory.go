@@ -210,7 +210,14 @@ func (h *HistoryExtension) generateHistorySchema(schema *load.Schema, IdType *fi
 		historySchema.Indexes = append(historySchema.Indexes, &load.Index{Fields: []string{"history_time"}})
 	}
 
-	historyFields := h.createHistoryFields(schema.Fields)
+	var historyFields []*load.Field
+	for _, f := range h.createHistoryFields(schema.Fields) {
+		if f.Name == "id" {
+			f.Default = false
+			f.Info = &field.TypeInfo{Type: field.TypeInt}
+		}
+		historyFields = append(historyFields, f)
+	}
 
 	// merge the original schema onto the history schema
 	historySchema.Name = fmt.Sprintf("%vHistory", schema.Name)

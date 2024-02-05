@@ -96,15 +96,11 @@ import (
                         if tx != nil {
                             create = tx.{{$h.Name}}.Create()
                         }
-                        now := time.Now()
+
                         create = create.
                             SetOperation(EntOpToHistoryOp(m.Op())).
-                            SetHistoryTime(now).
+                            SetHistoryTime(time.Now()).
                             SetRef(id)
-
-                        {{ if eq $h.ID.Type.String "string" }}
-                            create = create.SetID(genHistoryId(id, m.Op(), now))
-                        {{ end }}
 
                         {{- if not (eq $updatedByKey "") }}
                             {{- if (eq $updatedByValueType "int") }}
@@ -158,15 +154,11 @@ import (
                             if tx != nil {
                                 create = tx.{{$h.Name}}.Create()
                             }
-                            now := time.Now()
+
                             create = create.
                                 SetOperation(EntOpToHistoryOp(m.Op())).
-                                SetHistoryTime(now).
+                                SetHistoryTime(time.Now()).
                                 SetRef(id)
-
-                            {{ if eq $h.ID.Type.String "string" }}
-                                create = create.SetID(genHistoryId(id, m.Op(), now))
-                            {{ end }}
 
                             {{- if not (eq $updatedByKey "") }}
                                 {{- if (eq $updatedByValueType "int") }}
@@ -239,14 +231,10 @@ import (
                                 }
                             {{- end }}
 
-                            now := time.Now()
                             _, err = create.
                                 SetOperation(EntOpToHistoryOp(m.Op())).
-                                SetHistoryTime(now).
+                                SetHistoryTime(time.Now()).
                                 SetRef(id).
-                            {{ if eq $h.ID.Type.String "string" }}
-                                SetID(genHistoryId(id, m.Op(), now)).
-                            {{ end }}
                             {{- range $f := $n.Fields }}
                                 Set{{ if $f.Nillable }}Nillable{{ end }}{{ $f.StructField }}({{ camel $name }}.{{ pascal $f.Name }}).
                             {{- end }}
