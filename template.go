@@ -26,6 +26,8 @@ func extractUpdatedByValueType(val any) string {
 		return "int"
 	case ValueTypeString:
 		return "string"
+	case ValueTypeUUID:
+		return "uuid.UUID"
 	default:
 		return ""
 	}

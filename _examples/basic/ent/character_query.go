@@ -11,10 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 
 	"github.com/flume/enthistory/_examples/basic/ent/character"
 	"github.com/flume/enthistory/_examples/basic/ent/friendship"
 	"github.com/flume/enthistory/_examples/basic/ent/predicate"
+	"github.com/flume/enthistory/_examples/basic/ent/residence"
 )
 
 // CharacterQuery is the builder for querying Character entities.
@@ -25,7 +27,9 @@ type CharacterQuery struct {
 	inters          []Interceptor
 	predicates      []predicate.Character
 	withFriends     *CharacterQuery
+	withResidence   *ResidenceQuery
 	withFriendships *FriendshipQuery
+	withFKs         bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -77,6 +81,28 @@ func (cq *CharacterQuery) QueryFriends() *CharacterQuery {
 			sqlgraph.From(character.Table, character.FieldID, selector),
 			sqlgraph.To(character.Table, character.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, character.FriendsTable, character.FriendsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryResidence chains the current query on the "residence" edge.
+func (cq *CharacterQuery) QueryResidence() *ResidenceQuery {
+	query := (&ResidenceClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(character.Table, character.FieldID, selector),
+			sqlgraph.To(residence.Table, residence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, character.ResidenceTable, character.ResidenceColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
@@ -299,6 +325,7 @@ func (cq *CharacterQuery) Clone() *CharacterQuery {
 		inters:          append([]Interceptor{}, cq.inters...),
 		predicates:      append([]predicate.Character{}, cq.predicates...),
 		withFriends:     cq.withFriends.Clone(),
+		withResidence:   cq.withResidence.Clone(),
 		withFriendships: cq.withFriendships.Clone(),
 		// clone intermediate query.
 		sql:  cq.sql.Clone(),
@@ -314,6 +341,17 @@ func (cq *CharacterQuery) WithFriends(opts ...func(*CharacterQuery)) *CharacterQ
 		opt(query)
 	}
 	cq.withFriends = query
+	return cq
+}
+
+// WithResidence tells the query-builder to eager-load the nodes that are connected to
+// the "residence" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CharacterQuery) WithResidence(opts ...func(*ResidenceQuery)) *CharacterQuery {
+	query := (&ResidenceClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withResidence = query
 	return cq
 }
 
@@ -405,12 +443,20 @@ func (cq *CharacterQuery) prepareQuery(ctx context.Context) error {
 func (cq *CharacterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Character, error) {
 	var (
 		nodes       = []*Character{}
+		withFKs     = cq.withFKs
 		_spec       = cq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			cq.withFriends != nil,
+			cq.withResidence != nil,
 			cq.withFriendships != nil,
 		}
 	)
+	if cq.withResidence != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, character.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Character).scanValues(nil, columns)
 	}
@@ -433,6 +479,12 @@ func (cq *CharacterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Ch
 		if err := cq.loadFriends(ctx, query, nodes,
 			func(n *Character) { n.Edges.Friends = []*Character{} },
 			func(n *Character, e *Character) { n.Edges.Friends = append(n.Edges.Friends, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := cq.withResidence; query != nil {
+		if err := cq.loadResidence(ctx, query, nodes, nil,
+			func(n *Character, e *Residence) { n.Edges.Residence = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -503,6 +555,38 @@ func (cq *CharacterQuery) loadFriends(ctx context.Context, query *CharacterQuery
 		}
 		for kn := range nodes {
 			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (cq *CharacterQuery) loadResidence(ctx context.Context, query *ResidenceQuery, nodes []*Character, init func(*Character), assign func(*Character, *Residence)) error {
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*Character)
+	for i := range nodes {
+		if nodes[i].residence_occupants == nil {
+			continue
+		}
+		fk := *nodes[i].residence_occupants
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(residence.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "residence_occupants" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil

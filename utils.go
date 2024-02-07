@@ -2,8 +2,11 @@ package enthistory
 
 import (
 	"errors"
+	"reflect"
 	"regexp"
 	"strings"
+
+	"github.com/google/uuid"
 
 	"entgo.io/ent/schema/field"
 
@@ -27,14 +30,20 @@ func copyRef[T any](ref *T) *T {
 	return &val
 }
 
-func loadHistorySchema(IdType string) (*load.Schema, error) {
+func loadHistorySchema(IdType *field.TypeInfo) (*load.Schema, error) {
 	schema := history{}
 
-	switch IdType {
+	switch IdType.String() {
 	case "int":
 		schema.ref = field.Int("ref").Immutable().Optional()
 	case "string":
 		schema.ref = field.String("ref").Immutable().Optional()
+	case "uuid.UUID":
+		equal := IdType.RType.TypeEqual(reflect.TypeOf(uuid.UUID{}))
+		if !equal {
+			return nil, errors.New("unsupported uuid type")
+		}
+		schema.ref = field.UUID("ref", uuid.UUID{}).Immutable().Optional()
 	default:
 		return nil, errors.New("only id and string are supported id types right now")
 	}
@@ -58,6 +67,9 @@ func getUpdatedByField(updatedByValueType string) (*load.Field, error) {
 	}
 	if updatedByValueType == "Int" {
 		return load.NewField(field.Int("updated_by").Optional().Nillable().Immutable().Descriptor())
+	}
+	if updatedByValueType == "UUID" {
+		return load.NewField(field.UUID("updated_by", uuid.UUID{}).Optional().Nillable().Immutable().Descriptor())
 	}
 	return nil, nil
 }

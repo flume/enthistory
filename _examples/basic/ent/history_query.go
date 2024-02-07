@@ -11,6 +11,7 @@ import (
 
 	"github.com/flume/enthistory/_examples/basic/ent/characterhistory"
 	"github.com/flume/enthistory/_examples/basic/ent/friendshiphistory"
+	"github.com/flume/enthistory/_examples/basic/ent/residencehistory"
 )
 
 func (c *Character) History() *CharacterHistoryQuery {
@@ -124,5 +125,60 @@ func (fh *FriendshipHistory) Restore(ctx context.Context) (*Friendship, error) {
 		SetUpdatedAt(fh.UpdatedAt).
 		SetCharacterID(fh.CharacterID).
 		SetFriendID(fh.FriendID).
+		Save(ctx)
+}
+
+func (r *Residence) History() *ResidenceHistoryQuery {
+	historyClient := NewResidenceHistoryClient(r.config)
+	return historyClient.Query().Where(residencehistory.Ref(r.ID))
+}
+
+func (rh *ResidenceHistory) Next(ctx context.Context) (*ResidenceHistory, error) {
+	client := NewResidenceHistoryClient(rh.config)
+	return client.Query().
+		Where(
+			residencehistory.Ref(rh.Ref),
+			residencehistory.HistoryTimeGT(rh.HistoryTime),
+		).
+		Order(residencehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (rh *ResidenceHistory) Prev(ctx context.Context) (*ResidenceHistory, error) {
+	client := NewResidenceHistoryClient(rh.config)
+	return client.Query().
+		Where(
+			residencehistory.Ref(rh.Ref),
+			residencehistory.HistoryTimeLT(rh.HistoryTime),
+		).
+		Order(residencehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (rhq *ResidenceHistoryQuery) Earliest(ctx context.Context) (*ResidenceHistory, error) {
+	return rhq.
+		Order(residencehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (rhq *ResidenceHistoryQuery) Latest(ctx context.Context) (*ResidenceHistory, error) {
+	return rhq.
+		Order(residencehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (rhq *ResidenceHistoryQuery) AsOf(ctx context.Context, time time.Time) (*ResidenceHistory, error) {
+	return rhq.
+		Where(residencehistory.HistoryTimeLTE(time)).
+		Order(residencehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (rh *ResidenceHistory) Restore(ctx context.Context) (*Residence, error) {
+	client := NewResidenceClient(rh.config)
+	return client.
+		UpdateOneID(rh.Ref).
+		SetUpdatedAt(rh.UpdatedAt).
+		SetName(rh.Name).
 		Save(ctx)
 }

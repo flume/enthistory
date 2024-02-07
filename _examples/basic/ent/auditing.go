@@ -11,9 +11,12 @@ import (
 	"reflect"
 	"time"
 
+	"github.com/google/uuid"
+
 	"github.com/flume/enthistory"
 	"github.com/flume/enthistory/_examples/basic/ent/characterhistory"
 	"github.com/flume/enthistory/_examples/basic/ent/friendshiphistory"
+	"github.com/flume/enthistory/_examples/basic/ent/residencehistory"
 )
 
 type Change struct {
@@ -131,6 +134,45 @@ func (fh *FriendshipHistory) Diff(history *FriendshipHistory) (*HistoryDiff[Frie
 	return nil, IdenticalHistoryError
 }
 
+func (rh *ResidenceHistory) changes(new *ResidenceHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(rh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(residencehistory.FieldCreatedAt, rh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(rh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(residencehistory.FieldUpdatedAt, rh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(rh.Name, new.Name) {
+		changes = append(changes, NewChange(residencehistory.FieldName, rh.Name, new.Name))
+	}
+	return changes
+}
+
+func (rh *ResidenceHistory) Diff(history *ResidenceHistory) (*HistoryDiff[ResidenceHistory], error) {
+	if rh.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	rhUnix, historyUnix := rh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	rhOlder := rhUnix < historyUnix || (rhUnix == historyUnix && rh.ID < history.ID)
+	historyOlder := rhUnix > historyUnix || (rhUnix == historyUnix && rh.ID > history.ID)
+
+	if rhOlder {
+		return &HistoryDiff[ResidenceHistory]{
+			Old:     rh,
+			New:     history,
+			Changes: rh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[ResidenceHistory]{
+			Old:     history,
+			New:     rh,
+			Changes: history.changes(rh),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
 func (c Change) String(op enthistory.OpType) string {
 	var newstr, oldstr string
 	if c.New != nil {
@@ -163,19 +205,25 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	records := [][]string{
 		{"Table", "Ref Id", "History Time", "Operation", "Changes", "Updated By"},
 	}
-	var record [][]string
+	var rec [][]string
 	var err error
-	record, err = auditCharacterHistory(ctx, c.config)
+	rec, err = auditCharacterHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	records = append(records, rec...)
 
-	record, err = auditFriendshipHistory(ctx, c.config)
+	rec, err = auditFriendshipHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
 	}
-	records = append(records, record...)
+	records = append(records, rec...)
+
+	rec, err = auditResidenceHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, rec...)
 
 	return records, nil
 }
@@ -219,7 +267,7 @@ func auditCharacterHistory(ctx context.Context, config config) ([][]string, erro
 	client := NewCharacterHistoryClient(config)
 	err := client.Query().
 		Unique(true).
-		Order(characterhistory.ByRef()).
+		Order(characterhistory.ByHistoryTime()).
 		Select(characterhistory.FieldRef).
 		Scan(ctx, &refs)
 
@@ -272,7 +320,7 @@ func auditFriendshipHistory(ctx context.Context, config config) ([][]string, err
 	client := NewFriendshipHistoryClient(config)
 	err := client.Query().
 		Unique(true).
-		Order(friendshiphistory.ByRef()).
+		Order(friendshiphistory.ByHistoryTime()).
 		Select(friendshiphistory.FieldRef).
 		Scan(ctx, &refs)
 
@@ -305,6 +353,59 @@ func auditFriendshipHistory(ctx context.Context, config config) ([][]string, err
 			default:
 				if i == 0 {
 					record.Changes = (&FriendshipHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type residencehistoryref struct {
+	Ref uuid.UUID
+}
+
+func auditResidenceHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []residencehistoryref
+	client := NewResidenceHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(residencehistory.ByHistoryTime()).
+		Select(residencehistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(residencehistory.Ref(currRef.Ref)).
+			Order(residencehistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "ResidenceHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case enthistory.OpTypeInsert:
+				record.Changes = (&ResidenceHistory{}).changes(curr)
+			case enthistory.OpTypeDelete:
+				record.Changes = curr.changes(&ResidenceHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&ResidenceHistory{}).changes(curr)
 				} else {
 					record.Changes = histories[i-1].changes(curr)
 				}

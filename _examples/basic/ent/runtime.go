@@ -5,10 +5,14 @@ package ent
 import (
 	"time"
 
+	"github.com/google/uuid"
+
 	"github.com/flume/enthistory/_examples/basic/ent/character"
 	"github.com/flume/enthistory/_examples/basic/ent/characterhistory"
 	"github.com/flume/enthistory/_examples/basic/ent/friendship"
 	"github.com/flume/enthistory/_examples/basic/ent/friendshiphistory"
+	"github.com/flume/enthistory/_examples/basic/ent/residence"
+	"github.com/flume/enthistory/_examples/basic/ent/residencehistory"
 	"github.com/flume/enthistory/_examples/basic/ent/schema"
 )
 
@@ -84,4 +88,38 @@ func init() {
 	friendshiphistoryDescUpdatedAt := friendshiphistoryMixinFields0[1].Descriptor()
 	// friendshiphistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	friendshiphistory.DefaultUpdatedAt = friendshiphistoryDescUpdatedAt.Default.(func() time.Time)
+	residenceMixin := schema.Residence{}.Mixin()
+	residenceMixinFields0 := residenceMixin[0].Fields()
+	_ = residenceMixinFields0
+	residenceFields := schema.Residence{}.Fields()
+	_ = residenceFields
+	// residenceDescCreatedAt is the schema descriptor for created_at field.
+	residenceDescCreatedAt := residenceMixinFields0[0].Descriptor()
+	// residence.DefaultCreatedAt holds the default value on creation for the created_at field.
+	residence.DefaultCreatedAt = residenceDescCreatedAt.Default.(func() time.Time)
+	// residenceDescUpdatedAt is the schema descriptor for updated_at field.
+	residenceDescUpdatedAt := residenceMixinFields0[1].Descriptor()
+	// residence.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	residence.DefaultUpdatedAt = residenceDescUpdatedAt.Default.(func() time.Time)
+	// residenceDescID is the schema descriptor for id field.
+	residenceDescID := residenceFields[0].Descriptor()
+	// residence.DefaultID holds the default value on creation for the id field.
+	residence.DefaultID = residenceDescID.Default.(func() uuid.UUID)
+	residencehistoryMixin := schema.ResidenceHistory{}.Mixin()
+	residencehistoryMixinFields0 := residencehistoryMixin[0].Fields()
+	_ = residencehistoryMixinFields0
+	residencehistoryFields := schema.ResidenceHistory{}.Fields()
+	_ = residencehistoryFields
+	// residencehistoryDescHistoryTime is the schema descriptor for history_time field.
+	residencehistoryDescHistoryTime := residencehistoryFields[0].Descriptor()
+	// residencehistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	residencehistory.DefaultHistoryTime = residencehistoryDescHistoryTime.Default.(func() time.Time)
+	// residencehistoryDescCreatedAt is the schema descriptor for created_at field.
+	residencehistoryDescCreatedAt := residencehistoryMixinFields0[0].Descriptor()
+	// residencehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	residencehistory.DefaultCreatedAt = residencehistoryDescCreatedAt.Default.(func() time.Time)
+	// residencehistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	residencehistoryDescUpdatedAt := residencehistoryMixinFields0[1].Descriptor()
+	// residencehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	residencehistory.DefaultUpdatedAt = residencehistoryDescUpdatedAt.Default.(func() time.Time)
 }

@@ -10,6 +10,9 @@ import (
 	"entgo.io/ent/schema/index"
 	{{- end }}
 
+    {{- if or (eq $.IdType "UUID") (eq $.UpdatedByValueType "UUID") }}
+    "github.com/google/uuid"
+    {{ end }}
 	"github.com/flume/enthistory"
 
 	"time"
@@ -42,17 +45,32 @@ func ({{ $name }}) Fields() []ent.Field {
         field.Time("history_time").
             Default(time.Now).
             Immutable(),
+        {{- if eq .IdType "UUID" }}
+        field.{{ .IdType }}("ref", uuid.UUID{}).
+            Immutable().
+            Optional(),
+        {{- else }}
         field.{{ .IdType }}("ref").
             Immutable().
             Optional(),
+        {{- end }}
         field.Enum("operation").
             GoType(enthistory.OpType("")).
             Immutable(),
         {{- if $.WithUpdatedBy }}
+
+        {{- if (eq $.UpdatedByValueType "UUID") }}
+        field.{{ $.UpdatedByValueType }}("updated_by", uuid.UUID{}).
+            Optional().
+            Immutable().
+            Nillable(),
+        {{- else }}
         field.{{ $.UpdatedByValueType }}("updated_by").
             Optional().
             Immutable().
             Nillable(),
+        {{- end }}
+
         {{- end }}
     }
 

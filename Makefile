@@ -23,6 +23,7 @@ lint:
 generate:
 	go generate ./_examples/basic/ent
 	go generate ./_examples/custompaths/ent
+	go generate ./_examples/updateby_uuid/ent
 	$(MAKE) fmt
 
 .PHONY: test

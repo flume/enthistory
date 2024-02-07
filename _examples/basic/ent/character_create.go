@@ -10,9 +10,11 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 
 	"github.com/flume/enthistory/_examples/basic/ent/character"
 	"github.com/flume/enthistory/_examples/basic/ent/friendship"
+	"github.com/flume/enthistory/_examples/basic/ent/residence"
 )
 
 // CharacterCreate is the builder for creating a Character entity.
@@ -87,6 +89,25 @@ func (cc *CharacterCreate) AddFriends(c ...*Character) *CharacterCreate {
 		ids[i] = c[i].ID
 	}
 	return cc.AddFriendIDs(ids...)
+}
+
+// SetResidenceID sets the "residence" edge to the Residence entity by ID.
+func (cc *CharacterCreate) SetResidenceID(id uuid.UUID) *CharacterCreate {
+	cc.mutation.SetResidenceID(id)
+	return cc
+}
+
+// SetNillableResidenceID sets the "residence" edge to the Residence entity by ID if the given value is not nil.
+func (cc *CharacterCreate) SetNillableResidenceID(id *uuid.UUID) *CharacterCreate {
+	if id != nil {
+		cc = cc.SetResidenceID(*id)
+	}
+	return cc
+}
+
+// SetResidence sets the "residence" edge to the Residence entity.
+func (cc *CharacterCreate) SetResidence(r *Residence) *CharacterCreate {
+	return cc.SetResidenceID(r.ID)
 }
 
 // AddFriendshipIDs adds the "friendships" edge to the Friendship entity by IDs.
@@ -236,6 +257,23 @@ func (cc *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
 		createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.ResidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   character.ResidenceTable,
+			Columns: []string{character.ResidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(residence.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.residence_occupants = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := cc.mutation.FriendshipsIDs(); len(nodes) > 0 {

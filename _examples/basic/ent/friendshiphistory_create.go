@@ -110,6 +110,12 @@ func (fhc *FriendshipHistoryCreate) SetFriendID(i int) *FriendshipHistoryCreate 
 	return fhc
 }
 
+// SetID sets the "id" field.
+func (fhc *FriendshipHistoryCreate) SetID(i int) *FriendshipHistoryCreate {
+	fhc.mutation.SetID(i)
+	return fhc
+}
+
 // Mutation returns the FriendshipHistoryMutation object of the builder.
 func (fhc *FriendshipHistoryCreate) Mutation() *FriendshipHistoryMutation {
 	return fhc.mutation
@@ -198,8 +204,10 @@ func (fhc *FriendshipHistoryCreate) sqlSave(ctx context.Context) (*FriendshipHis
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int(id)
+	}
 	fhc.mutation.id = &_node.ID
 	fhc.mutation.done = true
 	return _node, nil
@@ -210,6 +218,10 @@ func (fhc *FriendshipHistoryCreate) createSpec() (*FriendshipHistory, *sqlgraph.
 		_node = &FriendshipHistory{config: fhc.config}
 		_spec = sqlgraph.NewCreateSpec(friendshiphistory.Table, sqlgraph.NewFieldSpec(friendshiphistory.FieldID, field.TypeInt))
 	)
+	if id, ok := fhc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := fhc.mutation.HistoryTime(); ok {
 		_spec.SetField(friendshiphistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
@@ -290,7 +302,7 @@ func (fhcb *FriendshipHistoryCreateBulk) Save(ctx context.Context) ([]*Friendshi
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
 					nodes[i].ID = int(id)
 				}

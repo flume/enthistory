@@ -56,6 +56,7 @@ func (m *CharacterMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	if tx != nil {
 		create = tx.CharacterHistory.Create()
 	}
+
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
@@ -98,6 +99,7 @@ func (m *CharacterMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 		if tx != nil {
 			create = tx.CharacterHistory.Create()
 		}
+
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
@@ -178,6 +180,7 @@ func (m *FriendshipMutation) CreateHistoryFromCreate(ctx context.Context) error 
 	if tx != nil {
 		create = tx.FriendshipHistory.Create()
 	}
+
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
@@ -220,6 +223,7 @@ func (m *FriendshipMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 		if tx != nil {
 			create = tx.FriendshipHistory.Create()
 		}
+
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).

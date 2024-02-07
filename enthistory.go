@@ -2,7 +2,6 @@ package enthistory
 
 import (
 	"embed"
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -155,7 +154,7 @@ var (
 	schemaTemplate = template.Must(template.ParseFS(_templates, "templates/schema.tmpl"))
 )
 
-func (h *HistoryExtension) generateHistorySchema(schema *load.Schema, IdType string) (*load.Schema, error) {
+func (h *HistoryExtension) generateHistorySchema(schema *load.Schema, IdType *field.TypeInfo) (*load.Schema, error) {
 	pkg, err := getPkgFromSchemaPath(h.config.SchemaPath)
 	if err != nil {
 		return nil, err
@@ -173,19 +172,23 @@ func (h *HistoryExtension) generateHistorySchema(schema *load.Schema, IdType str
 				info.UpdatedByValueType = "Int"
 			} else if valueType == ValueTypeString {
 				info.UpdatedByValueType = "String"
+			} else if valueType == ValueTypeUUID {
+				info.UpdatedByValueType = "UUID"
 			}
 			info.WithUpdatedBy = true
 		}
 		info.WithHistoryTimeIndex = h.config.HistoryTimeIndex
 	}
 
-	switch IdType {
+	switch IdType.String() {
 	case "int":
 		info.IdType = "Int"
 	case "string":
 		info.IdType = "String"
+	case "uuid.UUID":
+		info.IdType = "UUID"
 	default:
-		return nil, errors.New("only id and string are supported id types right now")
+		return nil, fmt.Errorf("unsupported id type: %s", IdType)
 	}
 
 	// Load new base history schema
@@ -208,10 +211,12 @@ func (h *HistoryExtension) generateHistorySchema(schema *load.Schema, IdType str
 	}
 
 	var historyFields []*load.Field
-	for _, field := range h.createHistoryFields(schema.Fields) {
-		if field.Name != "id" {
-			historyFields = append(historyFields, field)
+	for _, f := range h.createHistoryFields(schema.Fields) {
+		if f.Name == "id" {
+			f.Default = false
+			f.Info = &field.TypeInfo{Type: field.TypeInt}
 		}
+		historyFields = append(historyFields, f)
 	}
 
 	// merge the original schema onto the history schema
@@ -271,7 +276,7 @@ func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Genera
 				return fmt.Errorf("could not get id type for schema: %s", schema.Name)
 			}
 
-			historySchema, err := h.generateHistorySchema(schema, IdType.String())
+			historySchema, err := h.generateHistorySchema(schema, IdType)
 			if err != nil {
 				return err
 			}

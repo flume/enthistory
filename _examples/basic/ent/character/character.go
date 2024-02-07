@@ -28,12 +28,21 @@ const (
 	FieldInfo = "info"
 	// EdgeFriends holds the string denoting the friends edge name in mutations.
 	EdgeFriends = "friends"
+	// EdgeResidence holds the string denoting the residence edge name in mutations.
+	EdgeResidence = "residence"
 	// EdgeFriendships holds the string denoting the friendships edge name in mutations.
 	EdgeFriendships = "friendships"
 	// Table holds the table name of the character in the database.
 	Table = "character"
 	// FriendsTable is the table that holds the friends relation/edge. The primary key declared below.
 	FriendsTable = "friendship"
+	// ResidenceTable is the table that holds the residence relation/edge.
+	ResidenceTable = "character"
+	// ResidenceInverseTable is the table name for the Residence entity.
+	// It exists in this package in order to avoid circular dependency with the "residence" package.
+	ResidenceInverseTable = "residence"
+	// ResidenceColumn is the table column denoting the residence relation/edge.
+	ResidenceColumn = "residence_occupants"
 	// FriendshipsTable is the table that holds the friendships relation/edge.
 	FriendshipsTable = "friendship"
 	// FriendshipsInverseTable is the table name for the Friendship entity.
@@ -54,6 +63,12 @@ var Columns = []string{
 	FieldInfo,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "character"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"residence_occupants",
+}
+
 var (
 	// FriendsPrimaryKey and FriendsColumn2 are the table columns denoting the
 	// primary key for the friends relation (M2M).
@@ -64,6 +79,11 @@ var (
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -121,6 +141,13 @@ func ByFriends(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByResidenceField orders the results by residence field.
+func ByResidenceField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newResidenceStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByFriendshipsCount orders the results by friendships count.
 func ByFriendshipsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -139,6 +166,13 @@ func newFriendsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(Table, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, FriendsTable, FriendsPrimaryKey...),
+	)
+}
+func newResidenceStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ResidenceInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ResidenceTable, ResidenceColumn),
 	)
 }
 func newFriendshipsStep() *sqlgraph.Step {

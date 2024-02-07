@@ -10,8 +10,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 
 	"github.com/flume/enthistory/_examples/basic/ent/character"
+	"github.com/flume/enthistory/_examples/basic/ent/residence"
 )
 
 // Character is the model entity for the Character schema.
@@ -33,19 +35,22 @@ type Character struct {
 	Info map[string]interface{} `json:"info,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CharacterQuery when eager-loading is set.
-	Edges        CharacterEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges               CharacterEdges `json:"edges"`
+	residence_occupants *uuid.UUID
+	selectValues        sql.SelectValues
 }
 
 // CharacterEdges holds the relations/edges for other nodes in the graph.
 type CharacterEdges struct {
 	// Friends holds the value of the friends edge.
 	Friends []*Character `json:"friends,omitempty"`
+	// Residence holds the value of the residence edge.
+	Residence *Residence `json:"residence,omitempty"`
 	// Friendships holds the value of the friendships edge.
 	Friendships []*Friendship `json:"friendships,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 }
 
 // FriendsOrErr returns the Friends value or an error if the edge
@@ -57,10 +62,23 @@ func (e CharacterEdges) FriendsOrErr() ([]*Character, error) {
 	return nil, &NotLoadedError{edge: "friends"}
 }
 
+// ResidenceOrErr returns the Residence value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e CharacterEdges) ResidenceOrErr() (*Residence, error) {
+	if e.loadedTypes[1] {
+		if e.Residence == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: residence.Label}
+		}
+		return e.Residence, nil
+	}
+	return nil, &NotLoadedError{edge: "residence"}
+}
+
 // FriendshipsOrErr returns the Friendships value or an error if the edge
 // was not loaded in eager-loading.
 func (e CharacterEdges) FriendshipsOrErr() ([]*Friendship, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.Friendships, nil
 	}
 	return nil, &NotLoadedError{edge: "friendships"}
@@ -79,6 +97,8 @@ func (*Character) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case character.FieldCreatedAt, character.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
+		case character.ForeignKeys[0]: // residence_occupants
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -140,6 +160,13 @@ func (c *Character) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field info: %w", err)
 				}
 			}
+		case character.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field residence_occupants", values[i])
+			} else if value.Valid {
+				c.residence_occupants = new(uuid.UUID)
+				*c.residence_occupants = *value.S.(*uuid.UUID)
+			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
 		}
@@ -156,6 +183,11 @@ func (c *Character) Value(name string) (ent.Value, error) {
 // QueryFriends queries the "friends" edge of the Character entity.
 func (c *Character) QueryFriends() *CharacterQuery {
 	return NewCharacterClient(c.config).QueryFriends(c)
+}
+
+// QueryResidence queries the "residence" edge of the Character entity.
+func (c *Character) QueryResidence() *ResidenceQuery {
+	return NewCharacterClient(c.config).QueryResidence(c)
 }
 
 // QueryFriendships queries the "friendships" edge of the Character entity.
