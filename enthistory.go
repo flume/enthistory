@@ -226,6 +226,10 @@ func (h *HistoryExtension) generateHistorySchema(schema *load.Schema, IdType *fi
 		"EntSQL": map[string]any{
 			"table": info.TableName,
 		},
+		"History": map[string]any{
+			"exclude":   true,
+			"isHistory": true,
+		},
 	}
 
 	info.Schema = historySchema
