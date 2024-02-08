@@ -2,13 +2,14 @@ package _examples
 
 import (
 	"encoding/json"
-	"entgo.io/ent/entc/gen"
-	"github.com/stretchr/testify/assert"
 	"go/ast"
 	"go/parser"
 	"go/token"
 	"strings"
 	"testing"
+
+	"entgo.io/ent/entc/gen"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSchemaSnapshotAnnotations(t *testing.T) {
