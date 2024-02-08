@@ -9,6 +9,7 @@ import (
 
 	"github.com/flume/enthistory/_examples/without_updatedby/ent"
 	"github.com/flume/enthistory/_examples/without_updatedby/ent/migrate"
+
 	// required by schema hooks.
 	_ "github.com/flume/enthistory/_examples/without_updatedby/ent/runtime"
 )
