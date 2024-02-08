@@ -14,7 +14,9 @@ import (
 
 func main() {
 	if err := entc.Generate("./schema",
-		&gen.Config{},
+		&gen.Config{
+			Features: []gen.Feature{gen.FeatureSnapshot},
+		},
 		entc.Extensions(
 			enthistory.NewHistoryExtension(
 				enthistory.WithUpdatedBy("userId", enthistory.ValueTypeInt),
