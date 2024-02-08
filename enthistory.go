@@ -326,7 +326,10 @@ func (h *HistoryExtension) removeOldGenerated(schemas []*load.Schema) error {
 func (h *HistoryExtension) createHistoryFields(schemaFields []*load.Field) []*load.Field {
 	historyFields := make([]*load.Field, len(schemaFields))
 	fieldPropertiesSet := h.config.FieldProperties != nil
-	i := 4
+	i := len(history{}.Fields())
+	if h.config.UpdatedBy != nil {
+		i = i + 1
+	}
 	for j, field := range schemaFields {
 		nillable := field.Nillable
 		immutable := field.Immutable
