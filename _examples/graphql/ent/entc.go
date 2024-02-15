@@ -1,0 +1,46 @@
+//go:build ignore
+
+package main
+
+import (
+	"entgo.io/contrib/entgql"
+	"entgo.io/ent/entc/gen"
+	"github.com/flume/enthistory"
+	"log"
+
+	"entgo.io/ent/entc"
+)
+
+func main() {
+	gqlExtension, err := entgql.NewExtension(
+		// Generate a GraphQL schema for the Ent schema
+		// and save it as "query.graphql".
+		entgql.WithSchemaGenerator(),
+		entgql.WithWhereInputs(true),
+		entgql.WithSchemaPath("graphql/query.graphql"),
+		entgql.WithConfigPath("gqlgen.yml"),
+	)
+	if err != nil {
+		log.Fatalf("failed to create entgql extension: %v", err)
+	}
+
+	historyExtension := enthistory.NewHistoryExtension(
+		enthistory.WithSchemaPath("ent/schema"),
+	)
+
+	opts := []entc.Option{
+		entc.Extensions(gqlExtension, historyExtension),
+	}
+
+	if err = entc.Generate("./ent/schema", &gen.Config{
+		Target:  "ent",
+		Package: "github.com/enthistory/_examples/graphql/ent",
+		Features: []gen.Feature{
+			gen.FeatureEntQL,
+			gen.FeaturePrivacy,
+			gen.FeatureSnapshot,
+		},
+	}, opts...); err != nil {
+		log.Fatalf("failed to run ent codegen: %v", err)
+	}
+}
