@@ -132,6 +132,7 @@ type templateInfo struct {
 	WithUpdatedBy        bool
 	UpdatedByValueType   string
 	WithHistoryTimeIndex bool
+	InheritIdType        bool
 }
 
 func (h *HistoryExtension) Templates() []*gen.Template {
@@ -172,6 +173,7 @@ func (h *HistoryExtension) generateHistorySchema(schema *load.Schema, IdType *fi
 		TableName:         fmt.Sprintf("%v_history", getSchemaTableName(schema)),
 		OriginalTableName: schema.Name,
 		SchemaPkg:         pkg,
+		InheritIdType:     h.config.InheritIdType,
 	}
 
 	if h.config != nil {
@@ -221,7 +223,7 @@ func (h *HistoryExtension) generateHistorySchema(schema *load.Schema, IdType *fi
 
 	var historyFields []*load.Field
 	for _, f := range h.createHistoryFields(schema.Fields) {
-		if f.Name == "id" {
+		if f.Name == "id" && !info.InheritIdType {
 			f.Default = false
 			f.Info = &field.TypeInfo{Type: field.TypeInt}
 		}

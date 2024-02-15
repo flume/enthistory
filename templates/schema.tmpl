@@ -74,13 +74,16 @@ func ({{ $name }}) Fields() []ent.Field {
         {{- end }}
     }
 
-
     original := {{ .OriginalTableName }}{}
+    {{- if not .InheritIdType }}
     for _, field := range original.Fields() {
         if field.Descriptor().Name != "id" {
             historyFields = append(historyFields, field)
         }
     }
+    {{- else }}
+    historyFields = append(historyFields, original.Fields()...)
+    {{- end }}
 
     return historyFields
 }
