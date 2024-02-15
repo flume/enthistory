@@ -26,6 +26,8 @@ func main() {
 
 	historyExtension := enthistory.NewHistoryExtension(
 		enthistory.WithSchemaPath("ent/schema"),
+		enthistory.WithUpdatedBy("userId", enthistory.ValueTypeUUID),
+		enthistory.WithInheritIdType(),
 	)
 
 	opts := []entc.Option{

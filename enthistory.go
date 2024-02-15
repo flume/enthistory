@@ -31,6 +31,7 @@ type FieldProperties struct {
 }
 
 type Config struct {
+	InheritIdType    bool
 	UpdatedBy        *UpdatedBy
 	Auditing         bool
 	SchemaPath       string
@@ -49,6 +50,14 @@ type HistoryExtension struct {
 }
 
 type ExtensionOption = func(*HistoryExtension)
+
+// WithInheritIdType allows you to set the history schema id type to match the original schema id type,
+// instead of defaulting to int. Otherwise, the history schema id type will default to int.
+func WithInheritIdType() ExtensionOption {
+	return func(ex *HistoryExtension) {
+		ex.config.InheritIdType = true
+	}
+}
 
 // WithUpdatedBy sets the key and type for pulling updated_by from the context,
 // usually done via a middleware to track which users are making which changes
