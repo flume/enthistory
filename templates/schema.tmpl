@@ -2,6 +2,9 @@
 package {{ .SchemaPkg }}
 
 import (
+    {{- if .EntqlEnabled }}
+    "entgo.io/contrib/entgql"
+    {{- end }}
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -48,7 +51,10 @@ func ({{ $name }}) Fields() []ent.Field {
         {{- if eq .IdType "UUID" }}
         field.{{ .IdType }}("ref", uuid.UUID{}).
             Immutable().
-            Optional(),
+            Optional(){{- if .EntqlEnabled }}.{{ else }},{{ end }}
+            {{- if .EntqlEnabled }}
+            Annotations(entgql.Annotation{Type: "ID"}),
+            {{- end }}
         {{- else }}
         field.{{ .IdType }}("ref").
             Immutable().
@@ -63,7 +69,10 @@ func ({{ $name }}) Fields() []ent.Field {
         field.{{ $.UpdatedByValueType }}("updated_by", uuid.UUID{}).
             Optional().
             Immutable().
-            Nillable(),
+            Nillable(){{- if .EntqlEnabled }}.{{ else }},{{ end }}
+        {{- if .EntqlEnabled }}
+            Annotations(entgql.Annotation{Type: "ID"}),
+        {{- end }}
         {{- else }}
         field.{{ $.UpdatedByValueType }}("updated_by").
             Optional().

@@ -125,6 +125,7 @@ func NewHistoryExtension(opts ...ExtensionOption) *HistoryExtension {
 
 type templateInfo struct {
 	Schema               *load.Schema
+	EntqlEnabled         bool
 	IdType               string
 	SchemaPkg            string
 	TableName            string
@@ -164,17 +165,14 @@ var (
 	schemaTemplate = template.Must(template.ParseFS(_templates, "templates/schema.tmpl"))
 )
 
-func (h *HistoryExtension) generateHistorySchema(schema *load.Schema, IdType *field.TypeInfo) (*load.Schema, error) {
+func (h *HistoryExtension) generateHistorySchema(info templateInfo, schema *load.Schema, IdType *field.TypeInfo) (*load.Schema, error) {
 	pkg, err := getPkgFromSchemaPath(h.config.SchemaPath)
 	if err != nil {
 		return nil, err
 	}
-	info := templateInfo{
-		TableName:         fmt.Sprintf("%v_history", getSchemaTableName(schema)),
-		OriginalTableName: schema.Name,
-		SchemaPkg:         pkg,
-		InheritIdType:     h.config.InheritIdType,
-	}
+	info.TableName = fmt.Sprintf("%v_history", getSchemaTableName(schema))
+	info.SchemaPkg = pkg
+	info.InheritIdType = h.config.InheritIdType
 
 	if h.config != nil {
 		if h.config.UpdatedBy != nil {
@@ -269,6 +267,7 @@ func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Genera
 			return err
 		}
 
+		entqlEnabled, _ := g.FeatureEnabled("entql")
 		var schemas []*load.Schema
 		for _, schema := range g.Schemas {
 			annotations := getHistoryAnnotations(schema)
@@ -291,7 +290,12 @@ func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Genera
 				return fmt.Errorf("could not get id type for schema: %s", schema.Name)
 			}
 
-			historySchema, err := h.generateHistorySchema(schema, IdType)
+			info := templateInfo{
+				OriginalTableName: schema.Name,
+				EntqlEnabled:      entqlEnabled,
+			}
+
+			historySchema, err := h.generateHistorySchema(info, schema, IdType)
 			if err != nil {
 				return err
 			}

@@ -15,13 +15,12 @@ model:
   filename: graphql/type_gen.go
   package: graphql
 autobind:
-  - github.com/enthistory/_examples/graphql/ent
-  - github.com/enthistory/_examples/graphql/ent/todo
+  - _examples/graphql/ent
 omit_getters: true
 # This section declares type mapping between the GraphQL and Go type systems.
 models:
   # Defines the ID field as Go 'int'.
   ID:
-    model: [github.com/enthistory/_examples/graphql/ent/schema/uuidgql.UUID]
+    model: [_examples/graphql/ent/schema/uuidgql.UUID]
   Node:
-    model: [github.com/enthistory/_examples/graphql/ent.Noder]
+    model: [_examples/graphql/ent.Noder]

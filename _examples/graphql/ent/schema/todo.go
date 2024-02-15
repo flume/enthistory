@@ -19,7 +19,11 @@ type Todo struct {
 func (Todo) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.New()).Default(uuid.New),
-		field.UUID("other_id", uuid.New()).Optional(),
+		field.UUID("other_id", uuid.New()).Optional().Annotations(
+			entgql.Annotation{
+				Type: "ID",
+			},
+		),
 		field.String("name").NotEmpty().Annotations(
 			entgql.OrderField("NAME"),
 		),

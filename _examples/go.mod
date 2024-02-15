@@ -1,4 +1,4 @@
-module github.com/flume/enthistory/_examples
+module _examples
 
 go 1.21
 

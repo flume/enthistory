@@ -6,6 +6,8 @@ import (
 	"regexp"
 	"strings"
 
+	"entgo.io/contrib/entgql"
+
 	"github.com/google/uuid"
 
 	"entgo.io/ent/schema/field"
@@ -35,15 +37,15 @@ func loadHistorySchema(IdType *field.TypeInfo) (*load.Schema, error) {
 
 	switch IdType.String() {
 	case "int":
-		schema.ref = field.Int("ref").Immutable().Optional()
+		schema.ref = field.Int("ref").Immutable().Optional().Annotations(entgql.Annotation{Type: "ID"})
 	case "string":
-		schema.ref = field.String("ref").Immutable().Optional()
+		schema.ref = field.String("ref").Immutable().Optional().Annotations(entgql.Annotation{Type: "ID"})
 	case "uuid.UUID":
 		equal := IdType.RType.TypeEqual(reflect.TypeOf(uuid.UUID{}))
 		if !equal {
 			return nil, errors.New("unsupported uuid type")
 		}
-		schema.ref = field.UUID("ref", uuid.UUID{}).Immutable().Optional()
+		schema.ref = field.UUID("ref", uuid.UUID{}).Immutable().Optional().Annotations(entgql.Annotation{Type: "ID"})
 	default:
 		return nil, errors.New("only id and string are supported id types right now")
 	}

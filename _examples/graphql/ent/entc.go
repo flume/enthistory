@@ -3,10 +3,12 @@
 package main
 
 import (
+	"log"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent/entc/gen"
+
 	"github.com/flume/enthistory"
-	"log"
 
 	"entgo.io/ent/entc"
 )
@@ -36,7 +38,7 @@ func main() {
 
 	if err = entc.Generate("./ent/schema", &gen.Config{
 		Target:  "ent",
-		Package: "github.com/enthistory/_examples/graphql/ent",
+		Package: "_examples/graphql/ent",
 		Features: []gen.Feature{
 			gen.FeatureEntQL,
 			gen.FeaturePrivacy,
