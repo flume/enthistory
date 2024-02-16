@@ -4,6 +4,7 @@ import (
 	"database/sql/driver"
 	"fmt"
 	"io"
+	"strconv"
 )
 
 type OpType string
@@ -35,7 +36,7 @@ func (op OpType) String() string {
 }
 
 func (op OpType) MarshalGQL(w io.Writer) {
-	io.WriteString(w, op.String())
+	_, _ = w.Write([]byte(strconv.Quote(op.String())))
 }
 
 // UnmarshalGQL implements graphql.Unmarshaler interface.
