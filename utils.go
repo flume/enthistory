@@ -32,20 +32,32 @@ func copyRef[T any](ref *T) *T {
 	return &val
 }
 
-func loadHistorySchema(IdType *field.TypeInfo) (*load.Schema, error) {
+func loadHistorySchema(IdType *field.TypeInfo, entqlEnabled bool) (*load.Schema, error) {
 	schema := history{}
 
 	switch IdType.String() {
 	case "int":
-		schema.ref = field.Int("ref").Immutable().Optional().Annotations(entgql.Annotation{Type: "ID"})
+		field := field.Int("ref").Immutable().Optional()
+		if entqlEnabled {
+			field = field.Annotations(entgql.Annotation{Type: "ID"})
+		}
+		schema.ref = field
 	case "string":
-		schema.ref = field.String("ref").Immutable().Optional().Annotations(entgql.Annotation{Type: "ID"})
+		field := field.String("ref").Immutable().Optional()
+		if entqlEnabled {
+			field = field.Annotations(entgql.Annotation{Type: "ID"})
+		}
+		schema.ref = field
 	case "uuid.UUID":
 		equal := IdType.RType.TypeEqual(reflect.TypeOf(uuid.UUID{}))
 		if !equal {
 			return nil, errors.New("unsupported uuid type")
 		}
-		schema.ref = field.UUID("ref", uuid.UUID{}).Immutable().Optional().Annotations(entgql.Annotation{Type: "ID"})
+		field := field.UUID("ref", uuid.UUID{}).Immutable().Optional()
+		if entqlEnabled {
+			field = field.Annotations(entgql.Annotation{Type: "ID"})
+		}
+		schema.ref = field
 	default:
 		return nil, errors.New("only id and string are supported id types right now")
 	}

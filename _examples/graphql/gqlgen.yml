@@ -1,5 +1,7 @@
 # schema tells gqlgen where the GraphQL schema is located.
 schema: [graphql/query.graphql]
+# doing this to keep gqlgen happy with go workspaces
+skip_validation: true
 exec:
   filename: graphql/resolver/generated.go
   package: resolver

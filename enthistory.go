@@ -201,7 +201,7 @@ func (h *HistoryExtension) generateHistorySchema(info templateInfo, schema *load
 	}
 
 	// Load new base history schema
-	historySchema, err := loadHistorySchema(IdType)
+	historySchema, err := loadHistorySchema(IdType, info.EntqlEnabled)
 	if err != nil {
 		return nil, err
 	}
