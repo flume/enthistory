@@ -3,6 +3,9 @@
 package ent
 
 import (
+	"_examples/basic/ent/character"
+	"_examples/basic/ent/predicate"
+	"_examples/basic/ent/residence"
 	"context"
 	"database/sql/driver"
 	"fmt"
@@ -12,10 +15,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-
-	"github.com/flume/enthistory/_examples/basic/ent/character"
-	"github.com/flume/enthistory/_examples/basic/ent/predicate"
-	"github.com/flume/enthistory/_examples/basic/ent/residence"
 )
 
 // ResidenceQuery is the builder for querying Residence entities.

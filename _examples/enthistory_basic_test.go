@@ -4,19 +4,19 @@ import (
 	"context"
 	"os"
 
-	entcharacter "github.com/flume/enthistory/_examples/basic/ent/character"
+	entcharacter "_examples/basic/ent/character"
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/flume/enthistory/_examples/basic/ent/characterhistory"
+	"_examples/basic/ent/characterhistory"
 
-	"github.com/flume/enthistory/_examples/basic/ent"
-	"github.com/flume/enthistory/_examples/basic/ent/enttest"
-	"github.com/flume/enthistory/_examples/basic/ent/migrate"
+	"_examples/basic/ent"
+	"_examples/basic/ent/enttest"
+	"_examples/basic/ent/migrate"
 
 	_ "github.com/mattn/go-sqlite3"
 
-	_ "github.com/flume/enthistory/_examples/basic/ent/runtime"
+	_ "_examples/basic/ent/runtime"
 
 	"testing"
 )

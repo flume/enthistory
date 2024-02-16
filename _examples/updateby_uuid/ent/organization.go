@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/updateby_uuid/ent/organization"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -11,8 +12,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organization"
 )
 
 // Organization is the model entity for the Organization schema.

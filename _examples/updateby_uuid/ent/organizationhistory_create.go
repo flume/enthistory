@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/updateby_uuid/ent/organizationhistory"
 	"context"
 	"errors"
 	"fmt"
@@ -13,7 +14,6 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organizationhistory"
 )
 
 // OrganizationHistoryCreate is the builder for creating a OrganizationHistory entity.

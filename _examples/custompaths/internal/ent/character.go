@@ -3,13 +3,12 @@
 package ent
 
 import (
+	"_examples/custompaths/internal/ent/character"
 	"fmt"
 	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/character"
 )
 
 // Character is the model entity for the Character schema.

@@ -3,14 +3,13 @@
 package ent
 
 import (
+	"_examples/custompaths/internal/ent/characterhistory"
+	"_examples/custompaths/internal/ent/predicate"
 	"context"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/characterhistory"
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/predicate"
 )
 
 // CharacterHistoryDelete is the builder for deleting a CharacterHistory entity.

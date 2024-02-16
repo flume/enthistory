@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/basic/ent/residencehistory"
 	"context"
 	"errors"
 	"fmt"
@@ -13,7 +14,6 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/basic/ent/residencehistory"
 )
 
 // ResidenceHistoryCreate is the builder for creating a ResidenceHistory entity.

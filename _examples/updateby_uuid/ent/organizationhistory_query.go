@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"_examples/updateby_uuid/ent/organizationhistory"
+	"_examples/updateby_uuid/ent/predicate"
 	"context"
 	"fmt"
 	"math"
@@ -10,9 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organizationhistory"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/predicate"
 )
 
 // OrganizationHistoryQuery is the builder for querying OrganizationHistory entities.

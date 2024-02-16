@@ -8,7 +8,6 @@ help:
 # fmt:
 #    Format go code
 fmt:
-	(for x in $$(git status -s | awk '$$2 ~ /\.go$$/ { print $$2 }'); do goimports -local github.com/flume -w $$x; done) || true
 	goimports -local github.com/flume -w ./
 
 .PHONY: lint

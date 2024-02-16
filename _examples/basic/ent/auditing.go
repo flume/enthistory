@@ -11,12 +11,13 @@ import (
 	"reflect"
 	"time"
 
+	"_examples/basic/ent/characterhistory"
+	"_examples/basic/ent/friendshiphistory"
+	"_examples/basic/ent/residencehistory"
+
 	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/basic/ent/characterhistory"
-	"github.com/flume/enthistory/_examples/basic/ent/friendshiphistory"
-	"github.com/flume/enthistory/_examples/basic/ent/residencehistory"
 )
 
 type Change struct {

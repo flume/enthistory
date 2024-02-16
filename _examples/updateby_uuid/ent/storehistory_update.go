@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"_examples/updateby_uuid/ent/predicate"
+	"_examples/updateby_uuid/ent/storehistory"
 	"context"
 	"errors"
 	"fmt"
@@ -12,9 +14,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/predicate"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/storehistory"
 )
 
 // StoreHistoryUpdate is the builder for updating StoreHistory entities.

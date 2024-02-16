@@ -3,6 +3,11 @@
 package ent
 
 import (
+	"_examples/updateby_uuid/ent/organization"
+	"_examples/updateby_uuid/ent/organizationhistory"
+	"_examples/updateby_uuid/ent/predicate"
+	"_examples/updateby_uuid/ent/store"
+	"_examples/updateby_uuid/ent/storehistory"
 	"context"
 	"errors"
 	"fmt"
@@ -14,11 +19,6 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organization"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organizationhistory"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/predicate"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/store"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/storehistory"
 )
 
 const (

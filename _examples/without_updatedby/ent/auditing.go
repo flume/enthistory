@@ -13,10 +13,11 @@ import (
 
 	"github.com/google/uuid"
 
+	"_examples/without_updatedby/ent/characterhistory"
+	"_examples/without_updatedby/ent/friendshiphistory"
+	"_examples/without_updatedby/ent/residencehistory"
+
 	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/characterhistory"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/friendshiphistory"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/residencehistory"
 )
 
 type Change struct {

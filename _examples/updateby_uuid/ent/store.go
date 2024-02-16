@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"_examples/updateby_uuid/ent/organization"
+	"_examples/updateby_uuid/ent/store"
 	"fmt"
 	"strings"
 	"time"
@@ -10,9 +12,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organization"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/store"
 )
 
 // Store is the model entity for the Store schema.

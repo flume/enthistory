@@ -3,14 +3,13 @@
 package ent
 
 import (
+	"_examples/basic/ent/character"
+	"_examples/basic/ent/predicate"
 	"context"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"github.com/flume/enthistory/_examples/basic/ent/character"
-	"github.com/flume/enthistory/_examples/basic/ent/predicate"
 )
 
 // CharacterDelete is the builder for deleting a Character entity.

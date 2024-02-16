@@ -9,20 +9,20 @@ import (
 	"log"
 	"reflect"
 
-	"github.com/google/uuid"
+	"_examples/updateby_uuid/ent/migrate"
 
-	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/migrate"
+	"_examples/updateby_uuid/ent/organization"
+	"_examples/updateby_uuid/ent/organizationhistory"
+	"_examples/updateby_uuid/ent/store"
+	"_examples/updateby_uuid/ent/storehistory"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organization"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organizationhistory"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/store"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/storehistory"
+	"github.com/flume/enthistory"
 )
 
 // Client is the client that holds all ent builders.

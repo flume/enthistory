@@ -3,15 +3,14 @@
 package ent
 
 import (
+	"_examples/updateby_uuid/ent/organization"
+	"_examples/updateby_uuid/ent/organizationhistory"
+	"_examples/updateby_uuid/ent/schema"
+	"_examples/updateby_uuid/ent/store"
+	"_examples/updateby_uuid/ent/storehistory"
 	"time"
 
 	"github.com/google/uuid"
-
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organization"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organizationhistory"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/schema"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/store"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/storehistory"
 )
 
 // The init function reads all schema descriptors with runtime code

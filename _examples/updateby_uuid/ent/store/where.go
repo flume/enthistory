@@ -3,13 +3,12 @@
 package store
 
 import (
+	"_examples/updateby_uuid/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/google/uuid"
-
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

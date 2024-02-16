@@ -3,6 +3,10 @@
 package ent
 
 import (
+	"_examples/basic/ent/character"
+	"_examples/basic/ent/friendship"
+	"_examples/basic/ent/predicate"
+	"_examples/basic/ent/residence"
 	"context"
 	"database/sql/driver"
 	"fmt"
@@ -12,11 +16,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-
-	"github.com/flume/enthistory/_examples/basic/ent/character"
-	"github.com/flume/enthistory/_examples/basic/ent/friendship"
-	"github.com/flume/enthistory/_examples/basic/ent/predicate"
-	"github.com/flume/enthistory/_examples/basic/ent/residence"
 )
 
 // CharacterQuery is the builder for querying Character entities.

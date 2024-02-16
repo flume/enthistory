@@ -3,14 +3,13 @@
 package ent
 
 import (
+	"_examples/custompaths/internal/ent/character"
+	"_examples/custompaths/internal/ent/friendship"
 	"fmt"
 	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/character"
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/friendship"
 )
 
 // Friendship is the model entity for the Friendship schema.

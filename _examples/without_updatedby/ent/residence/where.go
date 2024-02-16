@@ -9,7 +9,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/google/uuid"
 
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/predicate"
+	"_examples/without_updatedby/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

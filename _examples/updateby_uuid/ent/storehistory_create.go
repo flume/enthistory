@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/updateby_uuid/ent/storehistory"
 	"context"
 	"errors"
 	"fmt"
@@ -13,7 +14,6 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/storehistory"
 )
 
 // StoreHistoryCreate is the builder for creating a StoreHistory entity.

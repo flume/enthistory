@@ -2,7 +2,7 @@
 
 package runtime
 
-// The schema-stitching logic is generated in github.com/flume/enthistory/_examples/without_updatedby/ent/runtime.go
+// The schema-stitching logic is generated in _examples/without_updatedby/ent/runtime.go
 
 const (
 	Version = "v0.12.5"                                         // Version of ent codegen.

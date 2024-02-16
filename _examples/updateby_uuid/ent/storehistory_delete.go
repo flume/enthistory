@@ -3,14 +3,13 @@
 package ent
 
 import (
+	"_examples/updateby_uuid/ent/predicate"
+	"_examples/updateby_uuid/ent/storehistory"
 	"context"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/predicate"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/storehistory"
 )
 
 // StoreHistoryDelete is the builder for deleting a StoreHistory entity.

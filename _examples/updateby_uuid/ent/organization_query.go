@@ -3,6 +3,9 @@
 package ent
 
 import (
+	"_examples/updateby_uuid/ent/organization"
+	"_examples/updateby_uuid/ent/predicate"
+	"_examples/updateby_uuid/ent/store"
 	"context"
 	"database/sql/driver"
 	"fmt"
@@ -12,10 +15,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organization"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/predicate"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/store"
 )
 
 // OrganizationQuery is the builder for querying Organization entities.

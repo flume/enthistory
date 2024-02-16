@@ -3,12 +3,11 @@
 package ent
 
 import (
+	"_examples/custompaths/ent/some/otherschema"
+	"_examples/custompaths/internal/ent/character"
+	"_examples/custompaths/internal/ent/characterhistory"
+	"_examples/custompaths/internal/ent/friendshiphistory"
 	"time"
-
-	"github.com/flume/enthistory/_examples/custompaths/ent/some/otherschema"
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/character"
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/characterhistory"
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/friendshiphistory"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -28,7 +27,7 @@ func init() {
 	// characterhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
 	characterhistory.DefaultHistoryTime = characterhistoryDescHistoryTime.Default.(func() time.Time)
 	// characterhistoryDescAge is the schema descriptor for age field.
-	characterhistoryDescAge := characterhistoryFields[4].Descriptor()
+	characterhistoryDescAge := characterhistoryFields[3].Descriptor()
 	// characterhistory.AgeValidator is a validator for the "age" field. It is called by the builders before save.
 	characterhistory.AgeValidator = characterhistoryDescAge.Validators[0].(func(int) error)
 	friendshiphistoryFields := otherschema.FriendshipHistory{}.Fields()

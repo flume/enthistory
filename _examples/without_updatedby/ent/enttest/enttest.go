@@ -7,11 +7,11 @@ import (
 
 	"entgo.io/ent/dialect/sql/schema"
 
-	"github.com/flume/enthistory/_examples/without_updatedby/ent"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/migrate"
+	"_examples/without_updatedby/ent"
+	"_examples/without_updatedby/ent/migrate"
 
 	// required by schema hooks.
-	_ "github.com/flume/enthistory/_examples/without_updatedby/ent/runtime"
+	_ "_examples/without_updatedby/ent/runtime"
 )
 
 type (

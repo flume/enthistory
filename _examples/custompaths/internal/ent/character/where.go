@@ -3,10 +3,10 @@
 package character
 
 import (
+	"_examples/custompaths/internal/ent/predicate"
+
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

@@ -10,8 +10,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 
+	"_examples/without_updatedby/ent/friendshiphistory"
+
 	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/friendshiphistory"
 )
 
 // FriendshipHistory is the model entity for the FriendshipHistory schema.

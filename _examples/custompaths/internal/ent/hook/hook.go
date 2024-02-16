@@ -3,10 +3,9 @@
 package hook
 
 import (
+	"_examples/custompaths/internal/ent"
 	"context"
 	"fmt"
-
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent"
 )
 
 // The CharacterFunc type is an adapter to allow the use of ordinary

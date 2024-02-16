@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/basic/ent/residencehistory"
 	"fmt"
 	"strings"
 	"time"
@@ -12,7 +13,6 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/basic/ent/residencehistory"
 )
 
 // ResidenceHistory is the model entity for the ResidenceHistory schema.

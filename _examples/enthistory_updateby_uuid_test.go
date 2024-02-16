@@ -11,10 +11,10 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/enttest"
+	"_examples/updateby_uuid/ent"
+	"_examples/updateby_uuid/ent/enttest"
 
-	_ "github.com/flume/enthistory/_examples/updateby_uuid/ent/runtime"
+	_ "_examples/updateby_uuid/ent/runtime"
 
 	"testing"
 )

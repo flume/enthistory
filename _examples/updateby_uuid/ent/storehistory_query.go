@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"_examples/updateby_uuid/ent/predicate"
+	"_examples/updateby_uuid/ent/storehistory"
 	"context"
 	"fmt"
 	"math"
@@ -10,9 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/predicate"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/storehistory"
 )
 
 // StoreHistoryQuery is the builder for querying StoreHistory entities.

@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"_examples/basic/ent/character"
+	"_examples/basic/ent/friendship"
 	"context"
 	"errors"
 	"fmt"
@@ -10,9 +12,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"github.com/flume/enthistory/_examples/basic/ent/character"
-	"github.com/flume/enthistory/_examples/basic/ent/friendship"
 )
 
 // FriendshipCreate is the builder for creating a Friendship entity.

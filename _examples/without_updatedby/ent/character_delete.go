@@ -9,8 +9,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/character"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/predicate"
+	"_examples/without_updatedby/ent/character"
+	"_examples/without_updatedby/ent/predicate"
 )
 
 // CharacterDelete is the builder for deleting a Character entity.
