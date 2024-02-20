@@ -11,8 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 
+	"_examples/without_updatedby/ent/friendshiphistory"
+
 	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/friendshiphistory"
 )
 
 // FriendshipHistoryCreate is the builder for creating a FriendshipHistory entity.

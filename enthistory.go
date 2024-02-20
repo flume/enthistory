@@ -31,6 +31,7 @@ type FieldProperties struct {
 }
 
 type Config struct {
+	InheritIdType    bool
 	UpdatedBy        *UpdatedBy
 	Auditing         bool
 	SchemaPath       string
@@ -49,6 +50,14 @@ type HistoryExtension struct {
 }
 
 type ExtensionOption = func(*HistoryExtension)
+
+// WithInheritIdType allows you to set the history schema id type to match the original schema id type,
+// instead of defaulting to int. Otherwise, the history schema id type will default to int.
+func WithInheritIdType() ExtensionOption {
+	return func(ex *HistoryExtension) {
+		ex.config.InheritIdType = true
+	}
+}
 
 // WithUpdatedBy sets the key and type for pulling updated_by from the context,
 // usually done via a middleware to track which users are making which changes
@@ -116,6 +125,7 @@ func NewHistoryExtension(opts ...ExtensionOption) *HistoryExtension {
 
 type templateInfo struct {
 	Schema               *load.Schema
+	EntqlEnabled         bool
 	IdType               string
 	SchemaPkg            string
 	TableName            string
@@ -123,6 +133,7 @@ type templateInfo struct {
 	WithUpdatedBy        bool
 	UpdatedByValueType   string
 	WithHistoryTimeIndex bool
+	InheritIdType        bool
 }
 
 func (h *HistoryExtension) Templates() []*gen.Template {
@@ -154,16 +165,14 @@ var (
 	schemaTemplate = template.Must(template.ParseFS(_templates, "templates/schema.tmpl"))
 )
 
-func (h *HistoryExtension) generateHistorySchema(schema *load.Schema, IdType *field.TypeInfo) (*load.Schema, error) {
+func (h *HistoryExtension) generateHistorySchema(info templateInfo, schema *load.Schema, IdType *field.TypeInfo) (*load.Schema, error) {
 	pkg, err := getPkgFromSchemaPath(h.config.SchemaPath)
 	if err != nil {
 		return nil, err
 	}
-	info := templateInfo{
-		TableName:         fmt.Sprintf("%v_history", getSchemaTableName(schema)),
-		OriginalTableName: schema.Name,
-		SchemaPkg:         pkg,
-	}
+	info.TableName = fmt.Sprintf("%v_history", getSchemaTableName(schema))
+	info.SchemaPkg = pkg
+	info.InheritIdType = h.config.InheritIdType
 
 	if h.config != nil {
 		if h.config.UpdatedBy != nil {
@@ -192,7 +201,7 @@ func (h *HistoryExtension) generateHistorySchema(schema *load.Schema, IdType *fi
 	}
 
 	// Load new base history schema
-	historySchema, err := loadHistorySchema(IdType)
+	historySchema, err := loadHistorySchema(IdType, info.EntqlEnabled)
 	if err != nil {
 		return nil, err
 	}
@@ -212,7 +221,7 @@ func (h *HistoryExtension) generateHistorySchema(schema *load.Schema, IdType *fi
 
 	var historyFields []*load.Field
 	for _, f := range h.createHistoryFields(schema.Fields) {
-		if f.Name == "id" {
+		if f.Name == "id" && !info.InheritIdType {
 			f.Default = false
 			f.Info = &field.TypeInfo{Type: field.TypeInt}
 		}
@@ -258,6 +267,7 @@ func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Genera
 			return err
 		}
 
+		entqlEnabled, _ := g.FeatureEnabled("entql")
 		var schemas []*load.Schema
 		for _, schema := range g.Schemas {
 			annotations := getHistoryAnnotations(schema)
@@ -280,7 +290,12 @@ func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Genera
 				return fmt.Errorf("could not get id type for schema: %s", schema.Name)
 			}
 
-			historySchema, err := h.generateHistorySchema(schema, IdType)
+			info := templateInfo{
+				OriginalTableName: schema.Name,
+				EntqlEnabled:      entqlEnabled,
+			}
+
+			historySchema, err := h.generateHistorySchema(info, schema, IdType)
 			if err != nil {
 				return err
 			}

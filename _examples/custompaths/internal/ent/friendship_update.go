@@ -3,6 +3,9 @@
 package ent
 
 import (
+	"_examples/custompaths/internal/ent/character"
+	"_examples/custompaths/internal/ent/friendship"
+	"_examples/custompaths/internal/ent/predicate"
 	"context"
 	"errors"
 	"fmt"
@@ -10,10 +13,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/character"
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/friendship"
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/predicate"
 )
 
 // FriendshipUpdate is the builder for updating Friendship entities.

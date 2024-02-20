@@ -13,8 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/characterhistory"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/predicate"
+	"_examples/without_updatedby/ent/characterhistory"
+	"_examples/without_updatedby/ent/predicate"
 )
 
 // CharacterHistoryUpdate is the builder for updating CharacterHistory entities.

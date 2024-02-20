@@ -8,8 +8,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 
+	"_examples/without_updatedby/ent/predicate"
+
 	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

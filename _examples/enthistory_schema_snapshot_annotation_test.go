@@ -1,10 +1,13 @@
 package _examples
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -30,11 +33,11 @@ func TestSchemaSnapshotAnnotations(t *testing.T) {
 	schemaValue := schemaSpec.Values[0].(*ast.BasicLit).Value
 	assert.NotEmpty(t, schemaValue)
 
-	var g = struct {
-		gen.Graph
-		Features []string
-	}{}
-	err = json.Unmarshal([]byte(strings.Trim(schemaValue, "`")), &g)
+	g := gen.Snapshot{}
+
+	snapshot, err := trim([]byte(schemaValue))
+	assert.NoError(t, err)
+	err = json.Unmarshal(snapshot, &g)
 	assert.NoError(t, err)
 
 	for _, schema := range g.Schemas {
@@ -49,4 +52,17 @@ func TestSchemaSnapshotAnnotations(t *testing.T) {
 			assert.Empty(t, schema.Annotations["History"])
 		}
 	}
+}
+
+func trim(line []byte) ([]byte, error) {
+	start := bytes.IndexByte(line, '"')
+	end := bytes.LastIndexByte(line, '"')
+	if start == -1 || start >= end {
+		return nil, fmt.Errorf("unexpected snapshot line %s", line)
+	}
+	l, err := strconv.Unquote(string(line[start : end+1]))
+	if err != nil {
+		return nil, err
+	}
+	return []byte(l), nil
 }

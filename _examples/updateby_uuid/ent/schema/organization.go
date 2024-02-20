@@ -9,7 +9,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/flume/enthistory/_examples/basic/ent/schema/mixins"
+	"_examples/basic/ent/schema/mixins"
 )
 
 // Organization holds the schema definition for the Organization entity.

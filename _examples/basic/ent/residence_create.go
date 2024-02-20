@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"_examples/basic/ent/character"
+	"_examples/basic/ent/residence"
 	"context"
 	"errors"
 	"fmt"
@@ -11,9 +13,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-
-	"github.com/flume/enthistory/_examples/basic/ent/character"
-	"github.com/flume/enthistory/_examples/basic/ent/residence"
 )
 
 // ResidenceCreate is the builder for creating a Residence entity.

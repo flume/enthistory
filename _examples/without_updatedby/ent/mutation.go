@@ -13,14 +13,15 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 
+	"_examples/without_updatedby/ent/character"
+	"_examples/without_updatedby/ent/characterhistory"
+	"_examples/without_updatedby/ent/friendship"
+	"_examples/without_updatedby/ent/friendshiphistory"
+	"_examples/without_updatedby/ent/predicate"
+	"_examples/without_updatedby/ent/residence"
+	"_examples/without_updatedby/ent/residencehistory"
+
 	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/character"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/characterhistory"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/friendship"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/friendshiphistory"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/predicate"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/residence"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/residencehistory"
 )
 
 const (

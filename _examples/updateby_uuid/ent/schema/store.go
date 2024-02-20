@@ -8,7 +8,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
 
-	"github.com/flume/enthistory/_examples/basic/ent/schema/mixins"
+	"_examples/basic/ent/schema/mixins"
 )
 
 // Store holds the schema definition for the Store entity.

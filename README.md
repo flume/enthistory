@@ -188,6 +188,11 @@ By default, an index is not placed on the `history_time` field. If you want to e
 field, you can use the `enthistory.WithHistoryTimeIndex()` configuration option. This option gives you more control over
 indexing based on your specific needs.
 
+### History Model ID Types
+
+By default, history models do not inherit the ID type from the original models. If you want to use the same ID type for
+history models as the original models, you can use the `enthistory.WithInheritIdType()` configuration option.
+
 ### Updated By
 
 To track which users are making changes to your tables, you can use the `enthistory.WithUpdatedBy()` option when

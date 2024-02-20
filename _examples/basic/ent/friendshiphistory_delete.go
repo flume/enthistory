@@ -3,14 +3,13 @@
 package ent
 
 import (
+	"_examples/basic/ent/friendshiphistory"
+	"_examples/basic/ent/predicate"
 	"context"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"github.com/flume/enthistory/_examples/basic/ent/friendshiphistory"
-	"github.com/flume/enthistory/_examples/basic/ent/predicate"
 )
 
 // FriendshipHistoryDelete is the builder for deleting a FriendshipHistory entity.

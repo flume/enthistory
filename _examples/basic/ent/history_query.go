@@ -7,11 +7,11 @@ import (
 	"context"
 	"time"
 
-	"entgo.io/ent/dialect/sql"
+	"_examples/basic/ent/characterhistory"
+	"_examples/basic/ent/friendshiphistory"
+	"_examples/basic/ent/residencehistory"
 
-	"github.com/flume/enthistory/_examples/basic/ent/characterhistory"
-	"github.com/flume/enthistory/_examples/basic/ent/friendshiphistory"
-	"github.com/flume/enthistory/_examples/basic/ent/residencehistory"
+	"entgo.io/ent/dialect/sql"
 )
 
 func (c *Character) History() *CharacterHistoryQuery {

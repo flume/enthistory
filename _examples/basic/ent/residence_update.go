@@ -3,6 +3,9 @@
 package ent
 
 import (
+	"_examples/basic/ent/character"
+	"_examples/basic/ent/predicate"
+	"_examples/basic/ent/residence"
 	"context"
 	"errors"
 	"fmt"
@@ -11,10 +14,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"github.com/flume/enthistory/_examples/basic/ent/character"
-	"github.com/flume/enthistory/_examples/basic/ent/predicate"
-	"github.com/flume/enthistory/_examples/basic/ent/residence"
 )
 
 // ResidenceUpdate is the builder for updating Residence entities.

@@ -3,6 +3,11 @@
 package ent
 
 import (
+	"_examples/custompaths/internal/ent/character"
+	"_examples/custompaths/internal/ent/characterhistory"
+	"_examples/custompaths/internal/ent/friendship"
+	"_examples/custompaths/internal/ent/friendshiphistory"
+	"_examples/custompaths/internal/ent/predicate"
 	"context"
 	"errors"
 	"fmt"
@@ -13,11 +18,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/character"
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/characterhistory"
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/friendship"
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/friendshiphistory"
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/predicate"
 )
 
 const (

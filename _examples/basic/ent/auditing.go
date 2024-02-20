@@ -11,12 +11,13 @@ import (
 	"reflect"
 	"time"
 
+	"_examples/basic/ent/characterhistory"
+	"_examples/basic/ent/friendshiphistory"
+	"_examples/basic/ent/residencehistory"
+
 	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/basic/ent/characterhistory"
-	"github.com/flume/enthistory/_examples/basic/ent/friendshiphistory"
-	"github.com/flume/enthistory/_examples/basic/ent/residencehistory"
 )
 
 type Change struct {
@@ -193,11 +194,11 @@ func (c Change) String(op enthistory.OpType) string {
 	}
 	switch op {
 	case enthistory.OpTypeInsert:
-		return fmt.Sprintf("%s: %#s", c.FieldName, newstr)
+		return fmt.Sprintf("%s: %s", c.FieldName, newstr)
 	case enthistory.OpTypeDelete:
-		return fmt.Sprintf("%s: %#s", c.FieldName, oldstr)
+		return fmt.Sprintf("%s: %s", c.FieldName, oldstr)
 	default:
-		return fmt.Sprintf("%s: %#s -> %#s", c.FieldName, oldstr, newstr)
+		return fmt.Sprintf("%s: %s -> %s", c.FieldName, oldstr, newstr)
 	}
 }
 

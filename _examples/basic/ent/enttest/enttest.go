@@ -3,15 +3,15 @@
 package enttest
 
 import (
+	"_examples/basic/ent"
 	"context"
 
-	"github.com/flume/enthistory/_examples/basic/ent"
 	// required by schema hooks.
-	_ "github.com/flume/enthistory/_examples/basic/ent/runtime"
+	_ "_examples/basic/ent/runtime"
+
+	"_examples/basic/ent/migrate"
 
 	"entgo.io/ent/dialect/sql/schema"
-
-	"github.com/flume/enthistory/_examples/basic/ent/migrate"
 )
 
 type (

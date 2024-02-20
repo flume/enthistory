@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/basic/ent/characterhistory"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -12,7 +13,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/basic/ent/characterhistory"
 )
 
 // CharacterHistory is the model entity for the CharacterHistory schema.

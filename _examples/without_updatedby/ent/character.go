@@ -12,8 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/character"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/residence"
+	"_examples/without_updatedby/ent/character"
+	"_examples/without_updatedby/ent/residence"
 )
 
 // Character is the model entity for the Character schema.

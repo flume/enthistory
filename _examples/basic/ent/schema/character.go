@@ -7,7 +7,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
-	"github.com/flume/enthistory/_examples/basic/ent/schema/mixins"
+	"_examples/basic/ent/schema/mixins"
 )
 
 // Character holds the schema definition for the Character entity.

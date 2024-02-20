@@ -3,13 +3,13 @@
 package organizationhistory
 
 import (
+	"_examples/updateby_uuid/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

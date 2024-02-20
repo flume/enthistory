@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/residence"
+	"_examples/without_updatedby/ent/residence"
 )
 
 // Residence is the model entity for the Residence schema.

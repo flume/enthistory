@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/updateby_uuid/ent/storehistory"
 	"fmt"
 	"strings"
 	"time"
@@ -12,7 +13,6 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/storehistory"
 )
 
 // StoreHistory is the model entity for the StoreHistory schema.

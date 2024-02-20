@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/friendshiphistory"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/predicate"
+	"_examples/without_updatedby/ent/friendshiphistory"
+	"_examples/without_updatedby/ent/predicate"
 )
 
 // FriendshipHistoryQuery is the builder for querying FriendshipHistory entities.

@@ -3,14 +3,13 @@
 package ent
 
 import (
+	"_examples/basic/ent/predicate"
+	"_examples/basic/ent/residencehistory"
 	"context"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"github.com/flume/enthistory/_examples/basic/ent/predicate"
-	"github.com/flume/enthistory/_examples/basic/ent/residencehistory"
 )
 
 // ResidenceHistoryDelete is the builder for deleting a ResidenceHistory entity.

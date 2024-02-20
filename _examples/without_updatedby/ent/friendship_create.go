@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/character"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/friendship"
+	"_examples/without_updatedby/ent/character"
+	"_examples/without_updatedby/ent/friendship"
 )
 
 // FriendshipCreate is the builder for creating a Friendship entity.

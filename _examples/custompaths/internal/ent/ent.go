@@ -3,6 +3,10 @@
 package ent
 
 import (
+	"_examples/custompaths/internal/ent/character"
+	"_examples/custompaths/internal/ent/characterhistory"
+	"_examples/custompaths/internal/ent/friendship"
+	"_examples/custompaths/internal/ent/friendshiphistory"
 	"context"
 	"errors"
 	"fmt"
@@ -12,11 +16,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/character"
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/characterhistory"
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/friendship"
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/friendshiphistory"
 )
 
 // ent aliases to avoid import conflicts in user's code.

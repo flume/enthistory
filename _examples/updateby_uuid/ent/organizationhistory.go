@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/updateby_uuid/ent/organizationhistory"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -13,7 +14,6 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organizationhistory"
 )
 
 // OrganizationHistory is the model entity for the OrganizationHistory schema.

@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"_examples/basic/ent/characterhistory"
+	"_examples/basic/ent/predicate"
 	"context"
 	"errors"
 	"fmt"
@@ -12,9 +14,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-
-	"github.com/flume/enthistory/_examples/basic/ent/characterhistory"
-	"github.com/flume/enthistory/_examples/basic/ent/predicate"
 )
 
 // CharacterHistoryUpdate is the builder for updating CharacterHistory entities.

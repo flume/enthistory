@@ -7,10 +7,10 @@ import (
 	"context"
 	"time"
 
-	"entgo.io/ent/dialect/sql"
+	"_examples/updateby_uuid/ent/organizationhistory"
+	"_examples/updateby_uuid/ent/storehistory"
 
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organizationhistory"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/storehistory"
+	"entgo.io/ent/dialect/sql"
 )
 
 func (o *Organization) History() *OrganizationHistoryQuery {

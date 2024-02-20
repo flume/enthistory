@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/custompaths/internal/ent/characterhistory"
 	"context"
 	"errors"
 	"fmt"
@@ -12,7 +13,6 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/flume/enthistory"
-	"github.com/flume/enthistory/_examples/custompaths/internal/ent/characterhistory"
 )
 
 // CharacterHistoryCreate is the builder for creating a CharacterHistory entity.

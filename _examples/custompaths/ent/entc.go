@@ -20,8 +20,8 @@ func main() {
 	if err := entc.Generate(schemaPath,
 		&gen.Config{
 			Target:  "../internal/ent",
-			Schema:  "github.com/flume/enthistory/_examples/custompaths/ent/some/path",
-			Package: "github.com/flume/enthistory/_examples/custompaths/internal/ent",
+			Schema:  "_examples/custompaths/ent/some/path",
+			Package: "_examples/custompaths/internal/ent",
 		},
 		entc.Extensions(
 			enthistory.NewHistoryExtension(

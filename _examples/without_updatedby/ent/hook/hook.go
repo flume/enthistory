@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/flume/enthistory/_examples/without_updatedby/ent"
+	"_examples/without_updatedby/ent"
 )
 
 // The CharacterFunc type is an adapter to allow the use of ordinary

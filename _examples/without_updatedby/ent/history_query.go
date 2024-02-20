@@ -9,9 +9,9 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/characterhistory"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/friendshiphistory"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/residencehistory"
+	"_examples/without_updatedby/ent/characterhistory"
+	"_examples/without_updatedby/ent/friendshiphistory"
+	"_examples/without_updatedby/ent/residencehistory"
 )
 
 func (c *Character) History() *CharacterHistoryQuery {

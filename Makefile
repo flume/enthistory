@@ -24,13 +24,15 @@ generate:
 	go generate ./_examples/basic/ent
 	go generate ./_examples/custompaths/ent
 	go generate ./_examples/updateby_uuid/ent
+	go generate ./_examples/graphql
 	$(MAKE) fmt
+
 
 .PHONY: test
 # test:
 #    Run the tests
 test:
-	go test ./_examples/.
+	(cd ./_examples && go test ./.)
 
 tag:
 	@echo "creating tag"

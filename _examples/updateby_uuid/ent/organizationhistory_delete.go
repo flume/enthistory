@@ -3,14 +3,13 @@
 package ent
 
 import (
+	"_examples/updateby_uuid/ent/organizationhistory"
+	"_examples/updateby_uuid/ent/predicate"
 	"context"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organizationhistory"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/predicate"
 )
 
 // OrganizationHistoryDelete is the builder for deleting a OrganizationHistory entity.

@@ -8,12 +8,12 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/flume/enthistory/_examples/without_updatedby/ent"
-	entcharacter "github.com/flume/enthistory/_examples/without_updatedby/ent/character"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/characterhistory"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/enttest"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/migrate"
-	_ "github.com/flume/enthistory/_examples/without_updatedby/ent/runtime"
+	"_examples/without_updatedby/ent"
+	entcharacter "_examples/without_updatedby/ent/character"
+	"_examples/without_updatedby/ent/characterhistory"
+	"_examples/without_updatedby/ent/enttest"
+	"_examples/without_updatedby/ent/migrate"
+	_ "_examples/without_updatedby/ent/runtime"
 )
 
 func TestEntHistoryWithoutUpdatedBy(t *testing.T) {

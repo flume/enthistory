@@ -3,6 +3,10 @@
 package ent
 
 import (
+	"_examples/updateby_uuid/ent/organization"
+	"_examples/updateby_uuid/ent/organizationhistory"
+	"_examples/updateby_uuid/ent/store"
+	"_examples/updateby_uuid/ent/storehistory"
 	"context"
 	"errors"
 	"fmt"
@@ -12,11 +16,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organization"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/organizationhistory"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/store"
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/storehistory"
 )
 
 // ent aliases to avoid import conflicts in user's code.

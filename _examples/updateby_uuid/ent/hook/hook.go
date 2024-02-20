@@ -3,10 +3,9 @@
 package hook
 
 import (
+	"_examples/updateby_uuid/ent"
 	"context"
 	"fmt"
-
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent"
 )
 
 // The OrganizationFunc type is an adapter to allow the use of ordinary

@@ -14,10 +14,10 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
 
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/character"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/friendship"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/predicate"
-	"github.com/flume/enthistory/_examples/without_updatedby/ent/residence"
+	"_examples/without_updatedby/ent/character"
+	"_examples/without_updatedby/ent/friendship"
+	"_examples/without_updatedby/ent/predicate"
+	"_examples/without_updatedby/ent/residence"
 )
 
 // CharacterUpdate is the builder for updating Character entities.

@@ -1,6 +1,11 @@
 package enthistory
 
-import "database/sql/driver"
+import (
+	"database/sql/driver"
+	"fmt"
+	"io"
+	"strconv"
+)
 
 type OpType string
 
@@ -28,4 +33,24 @@ func (op OpType) Value() (driver.Value, error) {
 
 func (op OpType) String() string {
 	return string(op)
+}
+
+func (op OpType) MarshalGQL(w io.Writer) {
+	_, _ = w.Write([]byte(strconv.Quote(op.String())))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (op *OpType) UnmarshalGQL(val any) error {
+	str, ok := val.(string)
+	if !ok {
+		return fmt.Errorf("enum %T must be a string", val)
+	}
+	*op = OpType(str)
+
+	switch *op {
+	case OpTypeInsert, OpTypeUpdate, OpTypeDelete:
+		return nil
+	default:
+		return fmt.Errorf("%s is not a valid history operation type", str)
+	}
 }

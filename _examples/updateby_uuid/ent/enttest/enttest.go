@@ -3,15 +3,15 @@
 package enttest
 
 import (
+	"_examples/updateby_uuid/ent"
 	"context"
 
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent"
 	// required by schema hooks.
-	_ "github.com/flume/enthistory/_examples/updateby_uuid/ent/runtime"
+	_ "_examples/updateby_uuid/ent/runtime"
+
+	"_examples/updateby_uuid/ent/migrate"
 
 	"entgo.io/ent/dialect/sql/schema"
-
-	"github.com/flume/enthistory/_examples/updateby_uuid/ent/migrate"
 )
 
 type (

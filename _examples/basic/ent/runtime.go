@@ -3,17 +3,16 @@
 package ent
 
 import (
+	"_examples/basic/ent/character"
+	"_examples/basic/ent/characterhistory"
+	"_examples/basic/ent/friendship"
+	"_examples/basic/ent/friendshiphistory"
+	"_examples/basic/ent/residence"
+	"_examples/basic/ent/residencehistory"
+	"_examples/basic/ent/schema"
 	"time"
 
 	"github.com/google/uuid"
-
-	"github.com/flume/enthistory/_examples/basic/ent/character"
-	"github.com/flume/enthistory/_examples/basic/ent/characterhistory"
-	"github.com/flume/enthistory/_examples/basic/ent/friendship"
-	"github.com/flume/enthistory/_examples/basic/ent/friendshiphistory"
-	"github.com/flume/enthistory/_examples/basic/ent/residence"
-	"github.com/flume/enthistory/_examples/basic/ent/residencehistory"
-	"github.com/flume/enthistory/_examples/basic/ent/schema"
 )
 
 // The init function reads all schema descriptors with runtime code

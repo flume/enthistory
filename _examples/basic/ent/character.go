@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"_examples/basic/ent/character"
+	"_examples/basic/ent/residence"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -11,9 +13,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-
-	"github.com/flume/enthistory/_examples/basic/ent/character"
-	"github.com/flume/enthistory/_examples/basic/ent/residence"
 )
 
 // Character is the model entity for the Character schema.

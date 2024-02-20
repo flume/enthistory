@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"_examples/basic/ent/friendshiphistory"
+	"_examples/basic/ent/predicate"
 	"context"
 	"errors"
 	"fmt"
@@ -11,9 +13,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"github.com/flume/enthistory/_examples/basic/ent/friendshiphistory"
-	"github.com/flume/enthistory/_examples/basic/ent/predicate"
 )
 
 // FriendshipHistoryUpdate is the builder for updating FriendshipHistory entities.
