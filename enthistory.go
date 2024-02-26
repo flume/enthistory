@@ -261,22 +261,6 @@ func (h *HistoryExtension) generateHistorySchema(info templateInfo, schema *load
 	return historySchema, nil
 }
 
-func mergeAnnotations(dest, src map[string]any) map[string]any {
-	merged := maps.Clone(src)
-	for k, v := range dest {
-		if _, ok := merged[k]; !ok {
-			merged[k] = v
-		} else {
-			destMap, destOk := v.(map[string]any)
-			srcMap, srcOk := merged[k].(map[string]any)
-			if destOk && srcOk {
-				merged[k] = mergeAnnotations(destMap, srcMap)
-			}
-		}
-	}
-	return merged
-}
-
 func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Generator {
 	return gen.GenerateFunc(func(g *gen.Graph) error {
 		err := h.removeOldGenerated(g.Schemas)

@@ -2,6 +2,7 @@ package enthistory
 
 import (
 	"errors"
+	"maps"
 	"reflect"
 	"regexp"
 	"strings"
@@ -99,6 +100,22 @@ func getUpdatedByField(updatedByValueType string, entgqlEnabled bool) (*load.Fie
 		return load.NewField(f.Descriptor())
 	}
 	return nil, nil
+}
+
+func mergeAnnotations(dest, src map[string]any) map[string]any {
+	merged := maps.Clone(src)
+	for k, v := range dest {
+		if _, ok := merged[k]; !ok {
+			merged[k] = v
+		} else {
+			destMap, destOk := v.(map[string]any)
+			srcMap, srcOk := merged[k].(map[string]any)
+			if destOk && srcOk {
+				merged[k] = mergeAnnotations(destMap, srcMap)
+			}
+		}
+	}
+	return merged
 }
 
 func getHistoryAnnotations(schema *load.Schema) Annotations {
