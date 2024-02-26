@@ -21,15 +21,22 @@ type OrganizationHistory struct {
 
 // Annotations of the OrganizationHistory.
 func (OrganizationHistory) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entsql.Annotation{
-			Table: "Organization_history",
-		},
-		enthistory.Annotations{
-			IsHistory: true,
-			Exclude:   true,
-		},
+	tablename := "Organization_history"
+	annotations := append(Organization{}.Annotations(), enthistory.Annotations{
+		IsHistory: true,
+		Exclude:   true,
+	})
+	for i, a := range annotations {
+		if ant, ok := a.(entsql.Annotation); ok {
+			ant.Table = tablename
+			annotations[i] = ant
+			break
+		}
+		if i == len(annotations)-1 {
+			annotations = append(annotations, entsql.Annotation{Table: tablename})
+		}
 	}
+	return annotations
 }
 
 // Fields of the OrganizationHistory.

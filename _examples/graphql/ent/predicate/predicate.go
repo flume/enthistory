@@ -6,6 +6,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// TestSkip is the predicate function for testskip builders.
+type TestSkip func(*sql.Selector)
+
+// TestSkipHistory is the predicate function for testskiphistory builders.
+type TestSkipHistory func(*sql.Selector)
+
 // Todo is the predicate function for todo builders.
 type Todo func(*sql.Selector)
 

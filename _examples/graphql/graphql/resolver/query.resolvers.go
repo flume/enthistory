@@ -28,6 +28,11 @@ func (r *queryResolver) Todos(ctx context.Context, after *entgql.Cursor[uuid.UUI
 	panic(fmt.Errorf("not implemented: Todos - todos"))
 }
 
+// TodoHistories is the resolver for the todoHistories field.
+func (r *queryResolver) TodoHistories(ctx context.Context, after *entgql.Cursor[uuid.UUID], first *int, before *entgql.Cursor[uuid.UUID], last *int, orderBy *ent.TodoHistoryOrder, where *ent.TodoHistoryWhereInput) (*ent.TodoHistoryConnection, error) {
+	panic(fmt.Errorf("not implemented: TodoHistories - todoHistories"))
+}
+
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 

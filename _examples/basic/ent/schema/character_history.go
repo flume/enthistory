@@ -20,15 +20,22 @@ type CharacterHistory struct {
 
 // Annotations of the CharacterHistory.
 func (CharacterHistory) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entsql.Annotation{
-			Table: "character_history",
-		},
-		enthistory.Annotations{
-			IsHistory: true,
-			Exclude:   true,
-		},
+	tablename := "character_history"
+	annotations := append(Character{}.Annotations(), enthistory.Annotations{
+		IsHistory: true,
+		Exclude:   true,
+	})
+	for i, a := range annotations {
+		if ant, ok := a.(entsql.Annotation); ok {
+			ant.Table = tablename
+			annotations[i] = ant
+			break
+		}
+		if i == len(annotations)-1 {
+			annotations = append(annotations, entsql.Annotation{Table: tablename})
+		}
 	}
+	return annotations
 }
 
 // Fields of the CharacterHistory.

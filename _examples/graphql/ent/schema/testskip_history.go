@@ -14,15 +14,15 @@ import (
 	"time"
 )
 
-// TodoHistory holds the schema definition for the TodoHistory entity.
-type TodoHistory struct {
+// TestSkipHistory holds the schema definition for the TestSkipHistory entity.
+type TestSkipHistory struct {
 	ent.Schema
 }
 
-// Annotations of the TodoHistory.
-func (TodoHistory) Annotations() []schema.Annotation {
-	tablename := "todo_history"
-	annotations := append(Todo{}.Annotations(), enthistory.Annotations{
+// Annotations of the TestSkipHistory.
+func (TestSkipHistory) Annotations() []schema.Annotation {
+	tablename := "testskip_history"
+	annotations := append(TestSkip{}.Annotations(), enthistory.Annotations{
 		IsHistory: true,
 		Exclude:   true,
 	})
@@ -39,8 +39,8 @@ func (TodoHistory) Annotations() []schema.Annotation {
 	return annotations
 }
 
-// Fields of the TodoHistory.
-func (TodoHistory) Fields() []ent.Field {
+// Fields of the TestSkipHistory.
+func (TestSkipHistory) Fields() []ent.Field {
 	historyFields := []ent.Field{
 		field.Time("history_time").
 			Default(time.Now).
@@ -59,13 +59,13 @@ func (TodoHistory) Fields() []ent.Field {
 			Annotations(entgql.Annotation{Type: "ID"}),
 	}
 
-	original := Todo{}
+	original := TestSkip{}
 	historyFields = append(historyFields, original.Fields()...)
 
 	return historyFields
 }
 
-// Mixin of the TodoHistory.
-func (TodoHistory) Mixin() []ent.Mixin {
-	return Todo{}.Mixin()
+// Mixin of the TestSkipHistory.
+func (TestSkipHistory) Mixin() []ent.Mixin {
+	return TestSkip{}.Mixin()
 }

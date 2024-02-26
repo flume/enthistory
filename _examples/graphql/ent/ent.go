@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"_examples/graphql/ent/testskip"
+	"_examples/graphql/ent/testskiphistory"
 	"_examples/graphql/ent/todo"
 	"_examples/graphql/ent/todohistory"
 	"context"
@@ -74,8 +76,10 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			todo.Table:        todo.ValidColumn,
-			todohistory.Table: todohistory.ValidColumn,
+			testskip.Table:        testskip.ValidColumn,
+			testskiphistory.Table: testskiphistory.ValidColumn,
+			todo.Table:            todo.ValidColumn,
+			todohistory.Table:     todohistory.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)
