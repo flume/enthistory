@@ -3,6 +3,7 @@ package enthistory
 import (
 	"embed"
 	"fmt"
+	"maps"
 	"os"
 	"path/filepath"
 	"strings"
@@ -206,7 +207,7 @@ func (h *HistoryExtension) generateHistorySchema(info templateInfo, schema *load
 		return nil, err
 	}
 
-	updatedByField, err := getUpdatedByField(info.UpdatedByValueType)
+	updatedByField, err := getUpdatedByField(info.UpdatedByValueType, info.EntqlEnabled)
 	if err != nil {
 		return nil, err
 	}
@@ -240,7 +241,7 @@ func (h *HistoryExtension) generateHistorySchema(info templateInfo, schema *load
 			"isHistory": true,
 		},
 	}
-
+	historySchema.Annotations = mergeAnnotations(maps.Clone(schema.Annotations), maps.Clone(historySchema.Annotations))
 	info.Schema = historySchema
 	// Get path to write new history schema file
 	path, err := h.getHistorySchemaPath(schema)
@@ -258,6 +259,22 @@ func (h *HistoryExtension) generateHistorySchema(info templateInfo, schema *load
 		return nil, err
 	}
 	return historySchema, nil
+}
+
+func mergeAnnotations(dest, src map[string]any) map[string]any {
+	merged := maps.Clone(src)
+	for k, v := range dest {
+		if _, ok := merged[k]; !ok {
+			merged[k] = v
+		} else {
+			destMap, destOk := v.(map[string]any)
+			srcMap, srcOk := merged[k].(map[string]any)
+			if destOk && srcOk {
+				merged[k] = mergeAnnotations(destMap, srcMap)
+			}
+		}
+	}
+	return merged
 }
 
 func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Generator {
@@ -309,7 +326,8 @@ func (h *HistoryExtension) generateHistorySchemas(next gen.Generator) gen.Genera
 		if err != nil {
 			return err
 		}
-		return next.Generate(graph)
+		*g = *graph
+		return next.Generate(g)
 	})
 }
 
