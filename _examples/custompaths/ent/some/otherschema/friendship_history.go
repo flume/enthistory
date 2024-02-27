@@ -20,18 +20,16 @@ type FriendshipHistory struct {
 // Annotations of the FriendshipHistory.
 func (FriendshipHistory) Annotations() []schema.Annotation {
 	tablename := "friendship_history"
-	annotations := append(Friendship{}.Annotations(), enthistory.Annotations{
-		IsHistory: true,
-		Exclude:   true,
-	})
+	annotations := append(Friendship{}.Annotations(), entsql.Annotation{}, enthistory.Annotations{})
 	for i, a := range annotations {
-		if ant, ok := a.(entsql.Annotation); ok {
+		switch ant := a.(type) {
+		case entsql.Annotation:
 			ant.Table = tablename
 			annotations[i] = ant
-			break
-		}
-		if i == len(annotations)-1 {
-			annotations = append(annotations, entsql.Annotation{Table: tablename})
+		case enthistory.Annotations:
+			ant.IsHistory = true
+			ant.Exclude = true
+			annotations[i] = ant
 		}
 	}
 	return annotations

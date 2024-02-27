@@ -32,18 +32,16 @@ type {{ $name }} struct {
 // Annotations of the {{ $name }}.
 func ({{ $name }}) Annotations() []schema.Annotation {
     tablename := "{{ .TableName }}"
-	annotations := append({{ .OriginalTableName }}{}.Annotations(), enthistory.Annotations{
-		IsHistory: true,
-		Exclude:   true,
-	})
-	for i, a := range annotations {
-		if ant, ok := a.(entsql.Annotation); ok {
-            ant.Table = tablename
+	annotations := append({{ .OriginalTableName }}{}.Annotations(), entsql.Annotation{}, enthistory.Annotations{})
+    for i, a := range annotations {
+		switch ant := a.(type) {
+		case entsql.Annotation:
+			ant.Table = tablename
 			annotations[i] = ant
-			break
-		}
-		if i == len(annotations)-1 {
-			annotations = append(annotations, entsql.Annotation{Table: tablename})
+		case enthistory.Annotations:
+			ant.IsHistory = true
+			ant.Exclude = true
+            annotations[i] = ant
 		}
 	}
 	return annotations
