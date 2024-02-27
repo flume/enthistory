@@ -4,6 +4,7 @@ package ent
 
 import (
 	"_examples/graphql/ent/predicate"
+	"_examples/graphql/ent/testexclude"
 	"_examples/graphql/ent/todo"
 	"_examples/graphql/ent/todohistory"
 	"errors"
@@ -14,6 +15,226 @@ import (
 
 	"github.com/flume/enthistory"
 )
+
+// TestExcludeWhereInput represents a where input for filtering TestExclude queries.
+type TestExcludeWhereInput struct {
+	Predicates []predicate.TestExclude  `json:"-"`
+	Not        *TestExcludeWhereInput   `json:"not,omitempty"`
+	Or         []*TestExcludeWhereInput `json:"or,omitempty"`
+	And        []*TestExcludeWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *uuid.UUID  `json:"id,omitempty"`
+	IDNEQ   *uuid.UUID  `json:"idNEQ,omitempty"`
+	IDIn    []uuid.UUID `json:"idIn,omitempty"`
+	IDNotIn []uuid.UUID `json:"idNotIn,omitempty"`
+	IDGT    *uuid.UUID  `json:"idGT,omitempty"`
+	IDGTE   *uuid.UUID  `json:"idGTE,omitempty"`
+	IDLT    *uuid.UUID  `json:"idLT,omitempty"`
+	IDLTE   *uuid.UUID  `json:"idLTE,omitempty"`
+
+	// "other_id" field predicates.
+	OtherID       *uuid.UUID  `json:"otherID,omitempty"`
+	OtherIDNEQ    *uuid.UUID  `json:"otherIDNEQ,omitempty"`
+	OtherIDIn     []uuid.UUID `json:"otherIDIn,omitempty"`
+	OtherIDNotIn  []uuid.UUID `json:"otherIDNotIn,omitempty"`
+	OtherIDGT     *uuid.UUID  `json:"otherIDGT,omitempty"`
+	OtherIDGTE    *uuid.UUID  `json:"otherIDGTE,omitempty"`
+	OtherIDLT     *uuid.UUID  `json:"otherIDLT,omitempty"`
+	OtherIDLTE    *uuid.UUID  `json:"otherIDLTE,omitempty"`
+	OtherIDIsNil  bool        `json:"otherIDIsNil,omitempty"`
+	OtherIDNotNil bool        `json:"otherIDNotNil,omitempty"`
+
+	// "name" field predicates.
+	Name             *string  `json:"name,omitempty"`
+	NameNEQ          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGT           *string  `json:"nameGT,omitempty"`
+	NameGTE          *string  `json:"nameGTE,omitempty"`
+	NameLT           *string  `json:"nameLT,omitempty"`
+	NameLTE          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *TestExcludeWhereInput) AddPredicates(predicates ...predicate.TestExclude) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the TestExcludeWhereInput filter on the TestExcludeQuery builder.
+func (i *TestExcludeWhereInput) Filter(q *TestExcludeQuery) (*TestExcludeQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyTestExcludeWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyTestExcludeWhereInput is returned in case the TestExcludeWhereInput is empty.
+var ErrEmptyTestExcludeWhereInput = errors.New("ent: empty predicate TestExcludeWhereInput")
+
+// P returns a predicate for filtering testexcludes.
+// An error is returned if the input is empty or invalid.
+func (i *TestExcludeWhereInput) P() (predicate.TestExclude, error) {
+	var predicates []predicate.TestExclude
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, testexclude.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.TestExclude, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, testexclude.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.TestExclude, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, testexclude.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, testexclude.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, testexclude.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, testexclude.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, testexclude.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, testexclude.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, testexclude.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, testexclude.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, testexclude.IDLTE(*i.IDLTE))
+	}
+	if i.OtherID != nil {
+		predicates = append(predicates, testexclude.OtherIDEQ(*i.OtherID))
+	}
+	if i.OtherIDNEQ != nil {
+		predicates = append(predicates, testexclude.OtherIDNEQ(*i.OtherIDNEQ))
+	}
+	if len(i.OtherIDIn) > 0 {
+		predicates = append(predicates, testexclude.OtherIDIn(i.OtherIDIn...))
+	}
+	if len(i.OtherIDNotIn) > 0 {
+		predicates = append(predicates, testexclude.OtherIDNotIn(i.OtherIDNotIn...))
+	}
+	if i.OtherIDGT != nil {
+		predicates = append(predicates, testexclude.OtherIDGT(*i.OtherIDGT))
+	}
+	if i.OtherIDGTE != nil {
+		predicates = append(predicates, testexclude.OtherIDGTE(*i.OtherIDGTE))
+	}
+	if i.OtherIDLT != nil {
+		predicates = append(predicates, testexclude.OtherIDLT(*i.OtherIDLT))
+	}
+	if i.OtherIDLTE != nil {
+		predicates = append(predicates, testexclude.OtherIDLTE(*i.OtherIDLTE))
+	}
+	if i.OtherIDIsNil {
+		predicates = append(predicates, testexclude.OtherIDIsNil())
+	}
+	if i.OtherIDNotNil {
+		predicates = append(predicates, testexclude.OtherIDNotNil())
+	}
+	if i.Name != nil {
+		predicates = append(predicates, testexclude.NameEQ(*i.Name))
+	}
+	if i.NameNEQ != nil {
+		predicates = append(predicates, testexclude.NameNEQ(*i.NameNEQ))
+	}
+	if len(i.NameIn) > 0 {
+		predicates = append(predicates, testexclude.NameIn(i.NameIn...))
+	}
+	if len(i.NameNotIn) > 0 {
+		predicates = append(predicates, testexclude.NameNotIn(i.NameNotIn...))
+	}
+	if i.NameGT != nil {
+		predicates = append(predicates, testexclude.NameGT(*i.NameGT))
+	}
+	if i.NameGTE != nil {
+		predicates = append(predicates, testexclude.NameGTE(*i.NameGTE))
+	}
+	if i.NameLT != nil {
+		predicates = append(predicates, testexclude.NameLT(*i.NameLT))
+	}
+	if i.NameLTE != nil {
+		predicates = append(predicates, testexclude.NameLTE(*i.NameLTE))
+	}
+	if i.NameContains != nil {
+		predicates = append(predicates, testexclude.NameContains(*i.NameContains))
+	}
+	if i.NameHasPrefix != nil {
+		predicates = append(predicates, testexclude.NameHasPrefix(*i.NameHasPrefix))
+	}
+	if i.NameHasSuffix != nil {
+		predicates = append(predicates, testexclude.NameHasSuffix(*i.NameHasSuffix))
+	}
+	if i.NameEqualFold != nil {
+		predicates = append(predicates, testexclude.NameEqualFold(*i.NameEqualFold))
+	}
+	if i.NameContainsFold != nil {
+		predicates = append(predicates, testexclude.NameContainsFold(*i.NameContainsFold))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyTestExcludeWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return testexclude.And(predicates...), nil
+	}
+}
 
 // TodoWhereInput represents a where input for filtering Todo queries.
 type TodoWhereInput struct {

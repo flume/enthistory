@@ -8,6 +8,18 @@ import (
 	"fmt"
 )
 
+// The TestExcludeFunc type is an adapter to allow the use of ordinary
+// function as TestExclude mutator.
+type TestExcludeFunc func(context.Context, *ent.TestExcludeMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TestExcludeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.TestExcludeMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TestExcludeMutation", m)
+}
+
 // The TestSkipFunc type is an adapter to allow the use of ordinary
 // function as TestSkip mutator.
 type TestSkipFunc func(context.Context, *ent.TestSkipMutation) (ent.Value, error)

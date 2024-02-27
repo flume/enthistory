@@ -11,6 +11,7 @@ import (
 
 	"_examples/graphql/ent/migrate"
 
+	"_examples/graphql/ent/testexclude"
 	"_examples/graphql/ent/testskip"
 	"_examples/graphql/ent/testskiphistory"
 	"_examples/graphql/ent/todo"
@@ -29,6 +30,8 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// TestExclude is the client for interacting with the TestExclude builders.
+	TestExclude *TestExcludeClient
 	// TestSkip is the client for interacting with the TestSkip builders.
 	TestSkip *TestSkipClient
 	// TestSkipHistory is the client for interacting with the TestSkipHistory builders.
@@ -53,6 +56,7 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.TestExclude = NewTestExcludeClient(c.config)
 	c.TestSkip = NewTestSkipClient(c.config)
 	c.TestSkipHistory = NewTestSkipHistoryClient(c.config)
 	c.Todo = NewTodoClient(c.config)
@@ -162,6 +166,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	return &Tx{
 		ctx:             ctx,
 		config:          cfg,
+		TestExclude:     NewTestExcludeClient(cfg),
 		TestSkip:        NewTestSkipClient(cfg),
 		TestSkipHistory: NewTestSkipHistoryClient(cfg),
 		Todo:            NewTodoClient(cfg),
@@ -185,6 +190,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	return &Tx{
 		ctx:             ctx,
 		config:          cfg,
+		TestExclude:     NewTestExcludeClient(cfg),
 		TestSkip:        NewTestSkipClient(cfg),
 		TestSkipHistory: NewTestSkipHistoryClient(cfg),
 		Todo:            NewTodoClient(cfg),
@@ -195,7 +201,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		TestSkip.
+//		TestExclude.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -217,6 +223,7 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
+	c.TestExclude.Use(hooks...)
 	c.TestSkip.Use(hooks...)
 	c.TestSkipHistory.Use(hooks...)
 	c.Todo.Use(hooks...)
@@ -226,6 +233,7 @@ func (c *Client) Use(hooks ...Hook) {
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
+	c.TestExclude.Intercept(interceptors...)
 	c.TestSkip.Intercept(interceptors...)
 	c.TestSkipHistory.Intercept(interceptors...)
 	c.Todo.Intercept(interceptors...)
@@ -235,6 +243,8 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 // Mutate implements the ent.Mutator interface.
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
+	case *TestExcludeMutation:
+		return c.TestExclude.mutate(ctx, m)
 	case *TestSkipMutation:
 		return c.TestSkip.mutate(ctx, m)
 	case *TestSkipHistoryMutation:
@@ -245,6 +255,139 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.TodoHistory.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
+	}
+}
+
+// TestExcludeClient is a client for the TestExclude schema.
+type TestExcludeClient struct {
+	config
+}
+
+// NewTestExcludeClient returns a client for the TestExclude from the given config.
+func NewTestExcludeClient(c config) *TestExcludeClient {
+	return &TestExcludeClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `testexclude.Hooks(f(g(h())))`.
+func (c *TestExcludeClient) Use(hooks ...Hook) {
+	c.hooks.TestExclude = append(c.hooks.TestExclude, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `testexclude.Intercept(f(g(h())))`.
+func (c *TestExcludeClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TestExclude = append(c.inters.TestExclude, interceptors...)
+}
+
+// Create returns a builder for creating a TestExclude entity.
+func (c *TestExcludeClient) Create() *TestExcludeCreate {
+	mutation := newTestExcludeMutation(c.config, OpCreate)
+	return &TestExcludeCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TestExclude entities.
+func (c *TestExcludeClient) CreateBulk(builders ...*TestExcludeCreate) *TestExcludeCreateBulk {
+	return &TestExcludeCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TestExcludeClient) MapCreateBulk(slice any, setFunc func(*TestExcludeCreate, int)) *TestExcludeCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TestExcludeCreateBulk{err: fmt.Errorf("calling to TestExcludeClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TestExcludeCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TestExcludeCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TestExclude.
+func (c *TestExcludeClient) Update() *TestExcludeUpdate {
+	mutation := newTestExcludeMutation(c.config, OpUpdate)
+	return &TestExcludeUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TestExcludeClient) UpdateOne(te *TestExclude) *TestExcludeUpdateOne {
+	mutation := newTestExcludeMutation(c.config, OpUpdateOne, withTestExclude(te))
+	return &TestExcludeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TestExcludeClient) UpdateOneID(id uuid.UUID) *TestExcludeUpdateOne {
+	mutation := newTestExcludeMutation(c.config, OpUpdateOne, withTestExcludeID(id))
+	return &TestExcludeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TestExclude.
+func (c *TestExcludeClient) Delete() *TestExcludeDelete {
+	mutation := newTestExcludeMutation(c.config, OpDelete)
+	return &TestExcludeDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TestExcludeClient) DeleteOne(te *TestExclude) *TestExcludeDeleteOne {
+	return c.DeleteOneID(te.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TestExcludeClient) DeleteOneID(id uuid.UUID) *TestExcludeDeleteOne {
+	builder := c.Delete().Where(testexclude.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TestExcludeDeleteOne{builder}
+}
+
+// Query returns a query builder for TestExclude.
+func (c *TestExcludeClient) Query() *TestExcludeQuery {
+	return &TestExcludeQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTestExclude},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TestExclude entity by its id.
+func (c *TestExcludeClient) Get(ctx context.Context, id uuid.UUID) (*TestExclude, error) {
+	return c.Query().Where(testexclude.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TestExcludeClient) GetX(ctx context.Context, id uuid.UUID) *TestExclude {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *TestExcludeClient) Hooks() []Hook {
+	return c.hooks.TestExclude
+}
+
+// Interceptors returns the client interceptors.
+func (c *TestExcludeClient) Interceptors() []Interceptor {
+	return c.inters.TestExclude
+}
+
+func (c *TestExcludeClient) mutate(ctx context.Context, m *TestExcludeMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TestExcludeCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TestExcludeUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TestExcludeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TestExcludeDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown TestExclude mutation op: %q", m.Op())
 	}
 }
 
@@ -783,9 +926,9 @@ func (c *TodoHistoryClient) mutate(ctx context.Context, m *TodoHistoryMutation) 
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		TestSkip, TestSkipHistory, Todo, TodoHistory []ent.Hook
+		TestExclude, TestSkip, TestSkipHistory, Todo, TodoHistory []ent.Hook
 	}
 	inters struct {
-		TestSkip, TestSkipHistory, Todo, TodoHistory []ent.Interceptor
+		TestExclude, TestSkip, TestSkipHistory, Todo, TodoHistory []ent.Interceptor
 	}
 )

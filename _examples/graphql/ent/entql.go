@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/graphql/ent/testexclude"
 	"_examples/graphql/ent/testskip"
 	"_examples/graphql/ent/testskiphistory"
 	"_examples/graphql/ent/todo"
@@ -16,8 +17,23 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 4)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 5)}
 	graph.Nodes[0] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   testexclude.Table,
+			Columns: testexclude.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeUUID,
+				Column: testexclude.FieldID,
+			},
+		},
+		Type: "TestExclude",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			testexclude.FieldOtherID: {Type: field.TypeUUID, Column: testexclude.FieldOtherID},
+			testexclude.FieldName:    {Type: field.TypeString, Column: testexclude.FieldName},
+		},
+	}
+	graph.Nodes[1] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   testskip.Table,
 			Columns: testskip.Columns,
@@ -32,7 +48,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			testskip.FieldName:    {Type: field.TypeString, Column: testskip.FieldName},
 		},
 	}
-	graph.Nodes[1] = &sqlgraph.Node{
+	graph.Nodes[2] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   testskiphistory.Table,
 			Columns: testskiphistory.Columns,
@@ -51,7 +67,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			testskiphistory.FieldName:        {Type: field.TypeString, Column: testskiphistory.FieldName},
 		},
 	}
-	graph.Nodes[2] = &sqlgraph.Node{
+	graph.Nodes[3] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   todo.Table,
 			Columns: todo.Columns,
@@ -66,7 +82,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			todo.FieldName:    {Type: field.TypeString, Column: todo.FieldName},
 		},
 	}
-	graph.Nodes[3] = &sqlgraph.Node{
+	graph.Nodes[4] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   todohistory.Table,
 			Columns: todohistory.Columns,
@@ -92,6 +108,56 @@ var schemaGraph = func() *sqlgraph.Schema {
 // All update, update-one and query builders implement this interface.
 type predicateAdder interface {
 	addPredicate(func(s *sql.Selector))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (teq *TestExcludeQuery) addPredicate(pred func(s *sql.Selector)) {
+	teq.predicates = append(teq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the TestExcludeQuery builder.
+func (teq *TestExcludeQuery) Filter() *TestExcludeFilter {
+	return &TestExcludeFilter{config: teq.config, predicateAdder: teq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *TestExcludeMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the TestExcludeMutation builder.
+func (m *TestExcludeMutation) Filter() *TestExcludeFilter {
+	return &TestExcludeFilter{config: m.config, predicateAdder: m}
+}
+
+// TestExcludeFilter provides a generic filtering capability at runtime for TestExcludeQuery.
+type TestExcludeFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *TestExcludeFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[0].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql [16]byte predicate on the id field.
+func (f *TestExcludeFilter) WhereID(p entql.ValueP) {
+	f.Where(p.Field(testexclude.FieldID))
+}
+
+// WhereOtherID applies the entql [16]byte predicate on the other_id field.
+func (f *TestExcludeFilter) WhereOtherID(p entql.ValueP) {
+	f.Where(p.Field(testexclude.FieldOtherID))
+}
+
+// WhereName applies the entql string predicate on the name field.
+func (f *TestExcludeFilter) WhereName(p entql.StringP) {
+	f.Where(p.Field(testexclude.FieldName))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -123,7 +189,7 @@ type TestSkipFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TestSkipFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[0].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[1].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -173,7 +239,7 @@ type TestSkipHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TestSkipHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[1].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[2].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -243,7 +309,7 @@ type TodoFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TodoFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[2].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[3].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -293,7 +359,7 @@ type TodoHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TodoHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[3].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[4].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

@@ -12,6 +12,8 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
+	// TestExclude is the client for interacting with the TestExclude builders.
+	TestExclude *TestExcludeClient
 	// TestSkip is the client for interacting with the TestSkip builders.
 	TestSkip *TestSkipClient
 	// TestSkipHistory is the client for interacting with the TestSkipHistory builders.
@@ -151,6 +153,7 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
+	tx.TestExclude = NewTestExcludeClient(tx.config)
 	tx.TestSkip = NewTestSkipClient(tx.config)
 	tx.TestSkipHistory = NewTestSkipHistoryClient(tx.config)
 	tx.Todo = NewTodoClient(tx.config)
@@ -164,7 +167,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: TestSkip.QueryXXX(), the query will be executed
+// applies a query, for example: TestExclude.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

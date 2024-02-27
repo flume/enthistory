@@ -110,6 +110,30 @@ func DenyMutationOperationRule(op ent.Op) MutationRule {
 	return OnMutationOperation(rule, op)
 }
 
+// The TestExcludeQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type TestExcludeQueryRuleFunc func(context.Context, *ent.TestExcludeQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f TestExcludeQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.TestExcludeQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.TestExcludeQuery", q)
+}
+
+// The TestExcludeMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type TestExcludeMutationRuleFunc func(context.Context, *ent.TestExcludeMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f TestExcludeMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.TestExcludeMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.TestExcludeMutation", m)
+}
+
 // The TestSkipQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type TestSkipQueryRuleFunc func(context.Context, *ent.TestSkipQuery) error
@@ -241,6 +265,8 @@ var _ QueryMutationRule = FilterFunc(nil)
 
 func queryFilter(q ent.Query) (Filter, error) {
 	switch q := q.(type) {
+	case *ent.TestExcludeQuery:
+		return q.Filter(), nil
 	case *ent.TestSkipQuery:
 		return q.Filter(), nil
 	case *ent.TestSkipHistoryQuery:
@@ -256,6 +282,8 @@ func queryFilter(q ent.Query) (Filter, error) {
 
 func mutationFilter(m ent.Mutation) (Filter, error) {
 	switch m := m.(type) {
+	case *ent.TestExcludeMutation:
+		return m.Filter(), nil
 	case *ent.TestSkipMutation:
 		return m.Filter(), nil
 	case *ent.TestSkipHistoryMutation:

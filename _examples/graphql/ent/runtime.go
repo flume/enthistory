@@ -4,6 +4,7 @@ package ent
 
 import (
 	"_examples/graphql/ent/schema"
+	"_examples/graphql/ent/testexclude"
 	"_examples/graphql/ent/testskip"
 	"_examples/graphql/ent/testskiphistory"
 	"_examples/graphql/ent/todo"
@@ -17,6 +18,16 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	testexcludeFields := schema.TestExclude{}.Fields()
+	_ = testexcludeFields
+	// testexcludeDescName is the schema descriptor for name field.
+	testexcludeDescName := testexcludeFields[2].Descriptor()
+	// testexclude.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	testexclude.NameValidator = testexcludeDescName.Validators[0].(func(string) error)
+	// testexcludeDescID is the schema descriptor for id field.
+	testexcludeDescID := testexcludeFields[0].Descriptor()
+	// testexclude.DefaultID holds the default value on creation for the id field.
+	testexclude.DefaultID = testexcludeDescID.Default.(func() uuid.UUID)
 	testskipFields := schema.TestSkip{}.Fields()
 	_ = testskipFields
 	// testskipDescName is the schema descriptor for name field.

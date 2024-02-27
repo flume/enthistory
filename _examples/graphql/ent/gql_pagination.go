@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/graphql/ent/testexclude"
 	"_examples/graphql/ent/todo"
 	"_examples/graphql/ent/todohistory"
 	"context"
@@ -98,6 +99,299 @@ func paginateLimit(first, last *int) int {
 		limit = *last + 1
 	}
 	return limit
+}
+
+// TestExcludeEdge is the edge representation of TestExclude.
+type TestExcludeEdge struct {
+	Node   *TestExclude `json:"node"`
+	Cursor Cursor       `json:"cursor"`
+}
+
+// TestExcludeConnection is the connection containing edges to TestExclude.
+type TestExcludeConnection struct {
+	Edges      []*TestExcludeEdge `json:"edges"`
+	PageInfo   PageInfo           `json:"pageInfo"`
+	TotalCount int                `json:"totalCount"`
+}
+
+func (c *TestExcludeConnection) build(nodes []*TestExclude, pager *testexcludePager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *TestExclude
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *TestExclude {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *TestExclude {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*TestExcludeEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &TestExcludeEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// TestExcludePaginateOption enables pagination customization.
+type TestExcludePaginateOption func(*testexcludePager) error
+
+// WithTestExcludeOrder configures pagination ordering.
+func WithTestExcludeOrder(order *TestExcludeOrder) TestExcludePaginateOption {
+	if order == nil {
+		order = DefaultTestExcludeOrder
+	}
+	o := *order
+	return func(pager *testexcludePager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultTestExcludeOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithTestExcludeFilter configures pagination filter.
+func WithTestExcludeFilter(filter func(*TestExcludeQuery) (*TestExcludeQuery, error)) TestExcludePaginateOption {
+	return func(pager *testexcludePager) error {
+		if filter == nil {
+			return errors.New("TestExcludeQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type testexcludePager struct {
+	reverse bool
+	order   *TestExcludeOrder
+	filter  func(*TestExcludeQuery) (*TestExcludeQuery, error)
+}
+
+func newTestExcludePager(opts []TestExcludePaginateOption, reverse bool) (*testexcludePager, error) {
+	pager := &testexcludePager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultTestExcludeOrder
+	}
+	return pager, nil
+}
+
+func (p *testexcludePager) applyFilter(query *TestExcludeQuery) (*TestExcludeQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *testexcludePager) toCursor(te *TestExclude) Cursor {
+	return p.order.Field.toCursor(te)
+}
+
+func (p *testexcludePager) applyCursors(query *TestExcludeQuery, after, before *Cursor) (*TestExcludeQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultTestExcludeOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *testexcludePager) applyOrder(query *TestExcludeQuery) *TestExcludeQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultTestExcludeOrder.Field {
+		query = query.Order(DefaultTestExcludeOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *testexcludePager) orderExpr(query *TestExcludeQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultTestExcludeOrder.Field {
+			b.Comma().Ident(DefaultTestExcludeOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to TestExclude.
+func (te *TestExcludeQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...TestExcludePaginateOption,
+) (*TestExcludeConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newTestExcludePager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if te, err = pager.applyFilter(te); err != nil {
+		return nil, err
+	}
+	conn := &TestExcludeConnection{Edges: []*TestExcludeEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			if conn.TotalCount, err = te.Clone().Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if te, err = pager.applyCursors(te, after, before); err != nil {
+		return nil, err
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		te.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := te.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	te = pager.applyOrder(te)
+	nodes, err := te.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// TestExcludeOrderFieldName orders TestExclude by name.
+	TestExcludeOrderFieldName = &TestExcludeOrderField{
+		Value: func(te *TestExclude) (ent.Value, error) {
+			return te.Name, nil
+		},
+		column: testexclude.FieldName,
+		toTerm: testexclude.ByName,
+		toCursor: func(te *TestExclude) Cursor {
+			return Cursor{
+				ID:    te.ID,
+				Value: te.Name,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f TestExcludeOrderField) String() string {
+	var str string
+	switch f.column {
+	case TestExcludeOrderFieldName.column:
+		str = "NAME"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f TestExcludeOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *TestExcludeOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("TestExcludeOrderField %T must be a string", v)
+	}
+	switch str {
+	case "NAME":
+		*f = *TestExcludeOrderFieldName
+	default:
+		return fmt.Errorf("%s is not a valid TestExcludeOrderField", str)
+	}
+	return nil
+}
+
+// TestExcludeOrderField defines the ordering field of TestExclude.
+type TestExcludeOrderField struct {
+	// Value extracts the ordering value from the given TestExclude.
+	Value    func(*TestExclude) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) testexclude.OrderOption
+	toCursor func(*TestExclude) Cursor
+}
+
+// TestExcludeOrder defines the ordering of TestExclude.
+type TestExcludeOrder struct {
+	Direction OrderDirection         `json:"direction"`
+	Field     *TestExcludeOrderField `json:"field"`
+}
+
+// DefaultTestExcludeOrder is the default ordering of TestExclude.
+var DefaultTestExcludeOrder = &TestExcludeOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &TestExcludeOrderField{
+		Value: func(te *TestExclude) (ent.Value, error) {
+			return te.ID, nil
+		},
+		column: testexclude.FieldID,
+		toTerm: testexclude.ByID,
+		toCursor: func(te *TestExclude) Cursor {
+			return Cursor{ID: te.ID}
+		},
+	},
+}
+
+// ToEdge converts TestExclude into TestExcludeEdge.
+func (te *TestExclude) ToEdge(order *TestExcludeOrder) *TestExcludeEdge {
+	if order == nil {
+		order = DefaultTestExcludeOrder
+	}
+	return &TestExcludeEdge{
+		Node:   te,
+		Cursor: order.Field.toCursor(te),
+	}
 }
 
 // TodoEdge is the edge representation of Todo.

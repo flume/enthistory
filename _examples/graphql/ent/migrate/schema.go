@@ -9,6 +9,18 @@ import (
 )
 
 var (
+	// TestExcludeColumns holds the columns for the "TestExclude" table.
+	TestExcludeColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "other_id", Type: field.TypeUUID, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+	}
+	// TestExcludeTable holds the schema information for the "TestExclude" table.
+	TestExcludeTable = &schema.Table{
+		Name:       "TestExclude",
+		Columns:    TestExcludeColumns,
+		PrimaryKey: []*schema.Column{TestExcludeColumns[0]},
+	}
 	// TestskipColumns holds the columns for the "testskip" table.
 	TestskipColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
@@ -67,6 +79,7 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		TestExcludeTable,
 		TestskipTable,
 		TestskipHistoryTable,
 		TodosTable,
@@ -75,6 +88,9 @@ var (
 )
 
 func init() {
+	TestExcludeTable.Annotation = &entsql.Annotation{
+		Table: "TestExclude",
+	}
 	TestskipTable.Annotation = &entsql.Annotation{
 		Table: "testskip",
 	}

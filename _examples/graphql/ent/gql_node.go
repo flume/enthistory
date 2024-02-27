@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/graphql/ent/testexclude"
 	"_examples/graphql/ent/todo"
 	"_examples/graphql/ent/todohistory"
 	"context"
@@ -18,6 +19,9 @@ import (
 type Noder interface {
 	IsNode()
 }
+
+// IsNode implements the Node interface check for GQLGen.
+func (n *TestExclude) IsNode() {}
 
 // IsNode implements the Node interface check for GQLGen.
 func (n *Todo) IsNode() {}
@@ -83,6 +87,18 @@ func (c *Client) Noder(ctx context.Context, id uuid.UUID, opts ...NodeOption) (_
 
 func (c *Client) noder(ctx context.Context, table string, id uuid.UUID) (Noder, error) {
 	switch table {
+	case testexclude.Table:
+		query := c.TestExclude.Query().
+			Where(testexclude.ID(id))
+		query, err := query.CollectFields(ctx, "TestExclude")
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
 	case todo.Table:
 		query := c.Todo.Query().
 			Where(todo.ID(id))
@@ -180,6 +196,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []uuid.UUID) ([]N
 		idmap[id] = append(idmap[id], &noders[i])
 	}
 	switch table {
+	case testexclude.Table:
+		query := c.TestExclude.Query().
+			Where(testexclude.IDIn(ids...))
+		query, err := query.CollectFields(ctx, "TestExclude")
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case todo.Table:
 		query := c.Todo.Query().
 			Where(todo.IDIn(ids...))
