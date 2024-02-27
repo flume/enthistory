@@ -85,7 +85,6 @@ func getUpdatedByField(updatedByValueType string, entgqlEnabled bool) (*load.Fie
 		return load.NewField(f.Descriptor())
 	}
 	if updatedByValueType == "Int" {
-		// return load.NewField(field.Int("updated_by").Optional().Nillable().Immutable().Descriptor())
 		f := field.Int("updated_by").Optional().Nillable().Immutable()
 		if entgqlEnabled {
 			f = f.Annotations(entgql.Annotation{Type: "ID"})
