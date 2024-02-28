@@ -2,6 +2,7 @@ package enthistory
 
 import (
 	"errors"
+	"maps"
 	"reflect"
 	"regexp"
 	"strings"
@@ -37,27 +38,27 @@ func loadHistorySchema(IdType *field.TypeInfo, entqlEnabled bool) (*load.Schema,
 
 	switch IdType.String() {
 	case "int":
-		field := field.Int("ref").Immutable().Optional()
+		f := field.Int("ref").Immutable().Optional()
 		if entqlEnabled {
-			field = field.Annotations(entgql.Annotation{Type: "ID"})
+			f = f.Annotations(entgql.Annotation{Type: "ID"})
 		}
-		schema.ref = field
+		schema.ref = f
 	case "string":
-		field := field.String("ref").Immutable().Optional()
+		f := field.String("ref").Immutable().Optional()
 		if entqlEnabled {
-			field = field.Annotations(entgql.Annotation{Type: "ID"})
+			f = f.Annotations(entgql.Annotation{Type: "ID"})
 		}
-		schema.ref = field
+		schema.ref = f
 	case "uuid.UUID":
 		equal := IdType.RType.TypeEqual(reflect.TypeOf(uuid.UUID{}))
 		if !equal {
 			return nil, errors.New("unsupported uuid type")
 		}
-		field := field.UUID("ref", uuid.UUID{}).Immutable().Optional()
+		f := field.UUID("ref", uuid.UUID{}).Immutable().Optional()
 		if entqlEnabled {
-			field = field.Annotations(entgql.Annotation{Type: "ID"})
+			f = f.Annotations(entgql.Annotation{Type: "ID"})
 		}
-		schema.ref = field
+		schema.ref = f
 	default:
 		return nil, errors.New("only id and string are supported id types right now")
 	}
@@ -75,17 +76,45 @@ func loadHistorySchema(IdType *field.TypeInfo, entqlEnabled bool) (*load.Schema,
 	return historySchema, nil
 }
 
-func getUpdatedByField(updatedByValueType string) (*load.Field, error) {
+func getUpdatedByField(updatedByValueType string, entgqlEnabled bool) (*load.Field, error) {
 	if updatedByValueType == "String" {
-		return load.NewField(field.String("updated_by").Optional().Nillable().Immutable().Descriptor())
+		f := field.String("updated_by").Optional().Nillable().Immutable()
+		if entgqlEnabled {
+			f = f.Annotations(entgql.Annotation{Type: "ID"})
+		}
+		return load.NewField(f.Descriptor())
 	}
 	if updatedByValueType == "Int" {
-		return load.NewField(field.Int("updated_by").Optional().Nillable().Immutable().Descriptor())
+		f := field.Int("updated_by").Optional().Nillable().Immutable()
+		if entgqlEnabled {
+			f = f.Annotations(entgql.Annotation{Type: "ID"})
+		}
+		return load.NewField(f.Descriptor())
 	}
 	if updatedByValueType == "UUID" {
-		return load.NewField(field.UUID("updated_by", uuid.UUID{}).Optional().Nillable().Immutable().Descriptor())
+		f := field.UUID("updated_by", uuid.UUID{}).Optional().Nillable().Immutable()
+		if entgqlEnabled {
+			f = f.Annotations(entgql.Annotation{Type: "ID"})
+		}
+		return load.NewField(f.Descriptor())
 	}
 	return nil, nil
+}
+
+func mergeAnnotations(dest, src map[string]any) map[string]any {
+	merged := maps.Clone(src)
+	for k, v := range dest {
+		if _, ok := merged[k]; !ok {
+			merged[k] = v
+		} else {
+			destMap, destOk := v.(map[string]any)
+			srcMap, srcOk := merged[k].(map[string]any)
+			if destOk && srcOk {
+				merged[k] = mergeAnnotations(destMap, srcMap)
+			}
+		}
+	}
+	return merged
 }
 
 func getHistoryAnnotations(schema *load.Schema) Annotations {

@@ -2,11 +2,11 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
-	"entgo.io/ent/schema/index"
 	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
@@ -14,15 +14,15 @@ import (
 	"time"
 )
 
-// StoreHistory holds the schema definition for the StoreHistory entity.
-type StoreHistory struct {
+// TestSkipHistory holds the schema definition for the TestSkipHistory entity.
+type TestSkipHistory struct {
 	ent.Schema
 }
 
-// Annotations of the StoreHistory.
-func (StoreHistory) Annotations() []schema.Annotation {
-	tablename := "Store_history"
-	annotations := append(Store{}.Annotations(), entsql.Annotation{}, enthistory.Annotations{})
+// Annotations of the TestSkipHistory.
+func (TestSkipHistory) Annotations() []schema.Annotation {
+	tablename := "testskip_history"
+	annotations := append(TestSkip{}.Annotations(), entsql.Annotation{}, enthistory.Annotations{})
 	for i, a := range annotations {
 		switch ant := a.(type) {
 		case entsql.Annotation:
@@ -37,40 +37,33 @@ func (StoreHistory) Annotations() []schema.Annotation {
 	return annotations
 }
 
-// Fields of the StoreHistory.
-func (StoreHistory) Fields() []ent.Field {
+// Fields of the TestSkipHistory.
+func (TestSkipHistory) Fields() []ent.Field {
 	historyFields := []ent.Field{
 		field.Time("history_time").
 			Default(time.Now).
 			Immutable(),
 		field.UUID("ref", uuid.UUID{}).
 			Immutable().
-			Optional(),
+			Optional().
+			Annotations(entgql.Annotation{Type: "ID"}),
 		field.Enum("operation").
 			GoType(enthistory.OpType("")).
 			Immutable(),
 		field.UUID("updated_by", uuid.UUID{}).
 			Optional().
 			Immutable().
-			Nillable(),
+			Nillable().
+			Annotations(entgql.Annotation{Type: "ID"}),
 	}
 
-	original := Store{}
-	for _, field := range original.Fields() {
-		if field.Descriptor().Name != "id" {
-			historyFields = append(historyFields, field)
-		}
-	}
+	original := TestSkip{}
+	historyFields = append(historyFields, original.Fields()...)
 
 	return historyFields
 }
 
-// Mixin of the StoreHistory.
-func (StoreHistory) Mixin() []ent.Mixin {
-	return Store{}.Mixin()
-}
-func (StoreHistory) Indexes() []ent.Index {
-	return []ent.Index{
-		index.Fields("history_time"),
-	}
+// Mixin of the TestSkipHistory.
+func (TestSkipHistory) Mixin() []ent.Mixin {
+	return TestSkip{}.Mixin()
 }

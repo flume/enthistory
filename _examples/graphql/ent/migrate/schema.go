@@ -9,6 +9,46 @@ import (
 )
 
 var (
+	// TestExcludeColumns holds the columns for the "TestExclude" table.
+	TestExcludeColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "other_id", Type: field.TypeUUID, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+	}
+	// TestExcludeTable holds the schema information for the "TestExclude" table.
+	TestExcludeTable = &schema.Table{
+		Name:       "TestExclude",
+		Columns:    TestExcludeColumns,
+		PrimaryKey: []*schema.Column{TestExcludeColumns[0]},
+	}
+	// TestskipColumns holds the columns for the "testskip" table.
+	TestskipColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "other_id", Type: field.TypeUUID, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+	}
+	// TestskipTable holds the schema information for the "testskip" table.
+	TestskipTable = &schema.Table{
+		Name:       "testskip",
+		Columns:    TestskipColumns,
+		PrimaryKey: []*schema.Column{TestskipColumns[0]},
+	}
+	// TestskipHistoryColumns holds the columns for the "testskip_history" table.
+	TestskipHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "ref", Type: field.TypeUUID, Nullable: true},
+		{Name: "updated_by", Type: field.TypeUUID, Nullable: true},
+		{Name: "other_id", Type: field.TypeUUID, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+	}
+	// TestskipHistoryTable holds the schema information for the "testskip_history" table.
+	TestskipHistoryTable = &schema.Table{
+		Name:       "testskip_history",
+		Columns:    TestskipHistoryColumns,
+		PrimaryKey: []*schema.Column{TestskipHistoryColumns[0]},
+	}
 	// TodosColumns holds the columns for the "todos" table.
 	TodosColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
@@ -39,12 +79,24 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		TestExcludeTable,
+		TestskipTable,
+		TestskipHistoryTable,
 		TodosTable,
 		TodoHistoryTable,
 	}
 )
 
 func init() {
+	TestExcludeTable.Annotation = &entsql.Annotation{
+		Table: "TestExclude",
+	}
+	TestskipTable.Annotation = &entsql.Annotation{
+		Table: "testskip",
+	}
+	TestskipHistoryTable.Annotation = &entsql.Annotation{
+		Table: "testskip_history",
+	}
 	TodoHistoryTable.Annotation = &entsql.Annotation{
 		Table: "todo_history",
 	}

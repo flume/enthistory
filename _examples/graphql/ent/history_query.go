@@ -7,10 +7,66 @@ import (
 	"context"
 	"time"
 
+	"_examples/graphql/ent/testskiphistory"
 	"_examples/graphql/ent/todohistory"
 
 	"entgo.io/ent/dialect/sql"
 )
+
+func (ts *TestSkip) History() *TestSkipHistoryQuery {
+	historyClient := NewTestSkipHistoryClient(ts.config)
+	return historyClient.Query().Where(testskiphistory.Ref(ts.ID))
+}
+
+func (tsh *TestSkipHistory) Next(ctx context.Context) (*TestSkipHistory, error) {
+	client := NewTestSkipHistoryClient(tsh.config)
+	return client.Query().
+		Where(
+			testskiphistory.Ref(tsh.Ref),
+			testskiphistory.HistoryTimeGT(tsh.HistoryTime),
+		).
+		Order(testskiphistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (tsh *TestSkipHistory) Prev(ctx context.Context) (*TestSkipHistory, error) {
+	client := NewTestSkipHistoryClient(tsh.config)
+	return client.Query().
+		Where(
+			testskiphistory.Ref(tsh.Ref),
+			testskiphistory.HistoryTimeLT(tsh.HistoryTime),
+		).
+		Order(testskiphistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (tshq *TestSkipHistoryQuery) Earliest(ctx context.Context) (*TestSkipHistory, error) {
+	return tshq.
+		Order(testskiphistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (tshq *TestSkipHistoryQuery) Latest(ctx context.Context) (*TestSkipHistory, error) {
+	return tshq.
+		Order(testskiphistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (tshq *TestSkipHistoryQuery) AsOf(ctx context.Context, time time.Time) (*TestSkipHistory, error) {
+	return tshq.
+		Where(testskiphistory.HistoryTimeLTE(time)).
+		Order(testskiphistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (tsh *TestSkipHistory) Restore(ctx context.Context) (*TestSkip, error) {
+	client := NewTestSkipClient(tsh.config)
+	return client.
+		UpdateOneID(tsh.Ref).
+		SetOtherID(tsh.OtherID).
+		SetName(tsh.Name).
+		Save(ctx)
+}
 
 func (t *Todo) History() *TodoHistoryQuery {
 	historyClient := NewTodoHistoryClient(t.config)

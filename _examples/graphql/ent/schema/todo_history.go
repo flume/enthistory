@@ -21,15 +21,20 @@ type TodoHistory struct {
 
 // Annotations of the TodoHistory.
 func (TodoHistory) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entsql.Annotation{
-			Table: "todo_history",
-		},
-		enthistory.Annotations{
-			IsHistory: true,
-			Exclude:   true,
-		},
+	tablename := "todo_history"
+	annotations := append(Todo{}.Annotations(), entsql.Annotation{}, enthistory.Annotations{})
+	for i, a := range annotations {
+		switch ant := a.(type) {
+		case entsql.Annotation:
+			ant.Table = tablename
+			annotations[i] = ant
+		case enthistory.Annotations:
+			ant.IsHistory = true
+			ant.Exclude = true
+			annotations[i] = ant
+		}
 	}
+	return annotations
 }
 
 // Fields of the TodoHistory.

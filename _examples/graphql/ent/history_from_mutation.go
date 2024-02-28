@@ -42,6 +42,145 @@ func rollback(tx *Tx, err error) error {
 	return err
 }
 
+func (m *TestSkipMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+	tx, err := m.Tx()
+	if err != nil {
+		tx = nil
+	}
+
+	updatedBy, _ := ctx.Value("userId").(uuid.UUID)
+
+	id, ok := m.ID()
+	if !ok {
+		return rollback(tx, idNotFoundError)
+	}
+
+	create := client.TestSkipHistory.Create()
+	if tx != nil {
+		create = tx.TestSkipHistory.Create()
+	}
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+	if updatedBy != uuid.Nil {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if otherID, exists := m.OtherID(); exists {
+		create = create.SetOtherID(otherID)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	_, err = create.Save(ctx)
+	if err != nil {
+		rollback(tx, err)
+	}
+	return nil
+}
+
+func (m *TestSkipMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	client := m.Client()
+	tx, err := m.Tx()
+	if err != nil {
+		tx = nil
+	}
+
+	updatedBy, _ := ctx.Value("userId").(uuid.UUID)
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return rollback(tx, fmt.Errorf("getting ids: %w", err))
+	}
+
+	for _, id := range ids {
+		testskip, err := client.TestSkip.Get(ctx, id)
+		if err != nil {
+			return rollback(tx, err)
+		}
+
+		create := client.TestSkipHistory.Create()
+		if tx != nil {
+			create = tx.TestSkipHistory.Create()
+		}
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+		if updatedBy != uuid.Nil {
+			create = create.SetUpdatedBy(updatedBy)
+		}
+
+		if otherID, exists := m.OtherID(); exists {
+			create = create.SetOtherID(otherID)
+		} else {
+			create = create.SetOtherID(testskip.OtherID)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(testskip.Name)
+		}
+
+		_, err = create.Save(ctx)
+		if err != nil {
+			rollback(tx, err)
+		}
+	}
+
+	return nil
+}
+
+func (m *TestSkipMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	client := m.Client()
+	tx, err := m.Tx()
+	if err != nil {
+		tx = nil
+	}
+
+	updatedBy, _ := ctx.Value("userId").(uuid.UUID)
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return rollback(tx, fmt.Errorf("getting ids: %w", err))
+	}
+
+	for _, id := range ids {
+		testskip, err := client.TestSkip.Get(ctx, id)
+		if err != nil {
+			return rollback(tx, err)
+		}
+
+		create := client.TestSkipHistory.Create()
+		if tx != nil {
+			create = tx.TestSkipHistory.Create()
+		}
+		if updatedBy != uuid.Nil {
+			create = create.SetUpdatedBy(updatedBy)
+		}
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetOtherID(testskip.OtherID).
+			SetName(testskip.Name).
+			Save(ctx)
+		if err != nil {
+			rollback(tx, err)
+		}
+	}
+
+	return nil
+}
+
 func (m *TodoMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 	tx, err := m.Tx()

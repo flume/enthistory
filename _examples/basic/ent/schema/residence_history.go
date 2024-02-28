@@ -21,15 +21,20 @@ type ResidenceHistory struct {
 
 // Annotations of the ResidenceHistory.
 func (ResidenceHistory) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entsql.Annotation{
-			Table: "residence_history",
-		},
-		enthistory.Annotations{
-			IsHistory: true,
-			Exclude:   true,
-		},
+	tablename := "residence_history"
+	annotations := append(Residence{}.Annotations(), entsql.Annotation{}, enthistory.Annotations{})
+	for i, a := range annotations {
+		switch ant := a.(type) {
+		case entsql.Annotation:
+			ant.Table = tablename
+			annotations[i] = ant
+		case enthistory.Annotations:
+			ant.IsHistory = true
+			ant.Exclude = true
+			annotations[i] = ant
+		}
 	}
+	return annotations
 }
 
 // Fields of the ResidenceHistory.

@@ -4,6 +4,9 @@ package ent
 
 import (
 	"_examples/graphql/ent/predicate"
+	"_examples/graphql/ent/testexclude"
+	"_examples/graphql/ent/testskip"
+	"_examples/graphql/ent/testskiphistory"
 	"_examples/graphql/ent/todo"
 	"_examples/graphql/ent/todohistory"
 	"context"
@@ -28,9 +31,1490 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeTodo        = "Todo"
-	TypeTodoHistory = "TodoHistory"
+	TypeTestExclude     = "TestExclude"
+	TypeTestSkip        = "TestSkip"
+	TypeTestSkipHistory = "TestSkipHistory"
+	TypeTodo            = "Todo"
+	TypeTodoHistory     = "TodoHistory"
 )
+
+// TestExcludeMutation represents an operation that mutates the TestExclude nodes in the graph.
+type TestExcludeMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *uuid.UUID
+	other_id      *uuid.UUID
+	name          *string
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*TestExclude, error)
+	predicates    []predicate.TestExclude
+}
+
+var _ ent.Mutation = (*TestExcludeMutation)(nil)
+
+// testexcludeOption allows management of the mutation configuration using functional options.
+type testexcludeOption func(*TestExcludeMutation)
+
+// newTestExcludeMutation creates new mutation for the TestExclude entity.
+func newTestExcludeMutation(c config, op Op, opts ...testexcludeOption) *TestExcludeMutation {
+	m := &TestExcludeMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeTestExclude,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withTestExcludeID sets the ID field of the mutation.
+func withTestExcludeID(id uuid.UUID) testexcludeOption {
+	return func(m *TestExcludeMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *TestExclude
+		)
+		m.oldValue = func(ctx context.Context) (*TestExclude, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().TestExclude.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withTestExclude sets the old TestExclude of the mutation.
+func withTestExclude(node *TestExclude) testexcludeOption {
+	return func(m *TestExcludeMutation) {
+		m.oldValue = func(context.Context) (*TestExclude, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m TestExcludeMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m TestExcludeMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of TestExclude entities.
+func (m *TestExcludeMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *TestExcludeMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *TestExcludeMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().TestExclude.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetOtherID sets the "other_id" field.
+func (m *TestExcludeMutation) SetOtherID(u uuid.UUID) {
+	m.other_id = &u
+}
+
+// OtherID returns the value of the "other_id" field in the mutation.
+func (m *TestExcludeMutation) OtherID() (r uuid.UUID, exists bool) {
+	v := m.other_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOtherID returns the old "other_id" field's value of the TestExclude entity.
+// If the TestExclude object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TestExcludeMutation) OldOtherID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOtherID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOtherID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOtherID: %w", err)
+	}
+	return oldValue.OtherID, nil
+}
+
+// ClearOtherID clears the value of the "other_id" field.
+func (m *TestExcludeMutation) ClearOtherID() {
+	m.other_id = nil
+	m.clearedFields[testexclude.FieldOtherID] = struct{}{}
+}
+
+// OtherIDCleared returns if the "other_id" field was cleared in this mutation.
+func (m *TestExcludeMutation) OtherIDCleared() bool {
+	_, ok := m.clearedFields[testexclude.FieldOtherID]
+	return ok
+}
+
+// ResetOtherID resets all changes to the "other_id" field.
+func (m *TestExcludeMutation) ResetOtherID() {
+	m.other_id = nil
+	delete(m.clearedFields, testexclude.FieldOtherID)
+}
+
+// SetName sets the "name" field.
+func (m *TestExcludeMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *TestExcludeMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the TestExclude entity.
+// If the TestExclude object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TestExcludeMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *TestExcludeMutation) ResetName() {
+	m.name = nil
+}
+
+// Where appends a list predicates to the TestExcludeMutation builder.
+func (m *TestExcludeMutation) Where(ps ...predicate.TestExclude) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the TestExcludeMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *TestExcludeMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.TestExclude, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *TestExcludeMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *TestExcludeMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (TestExclude).
+func (m *TestExcludeMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *TestExcludeMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.other_id != nil {
+		fields = append(fields, testexclude.FieldOtherID)
+	}
+	if m.name != nil {
+		fields = append(fields, testexclude.FieldName)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *TestExcludeMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case testexclude.FieldOtherID:
+		return m.OtherID()
+	case testexclude.FieldName:
+		return m.Name()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *TestExcludeMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case testexclude.FieldOtherID:
+		return m.OldOtherID(ctx)
+	case testexclude.FieldName:
+		return m.OldName(ctx)
+	}
+	return nil, fmt.Errorf("unknown TestExclude field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *TestExcludeMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case testexclude.FieldOtherID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOtherID(v)
+		return nil
+	case testexclude.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	}
+	return fmt.Errorf("unknown TestExclude field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *TestExcludeMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *TestExcludeMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *TestExcludeMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown TestExclude numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *TestExcludeMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(testexclude.FieldOtherID) {
+		fields = append(fields, testexclude.FieldOtherID)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *TestExcludeMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *TestExcludeMutation) ClearField(name string) error {
+	switch name {
+	case testexclude.FieldOtherID:
+		m.ClearOtherID()
+		return nil
+	}
+	return fmt.Errorf("unknown TestExclude nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *TestExcludeMutation) ResetField(name string) error {
+	switch name {
+	case testexclude.FieldOtherID:
+		m.ResetOtherID()
+		return nil
+	case testexclude.FieldName:
+		m.ResetName()
+		return nil
+	}
+	return fmt.Errorf("unknown TestExclude field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *TestExcludeMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *TestExcludeMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *TestExcludeMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *TestExcludeMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *TestExcludeMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *TestExcludeMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *TestExcludeMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown TestExclude unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *TestExcludeMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown TestExclude edge %s", name)
+}
+
+// TestSkipMutation represents an operation that mutates the TestSkip nodes in the graph.
+type TestSkipMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *uuid.UUID
+	other_id      *uuid.UUID
+	name          *string
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*TestSkip, error)
+	predicates    []predicate.TestSkip
+}
+
+var _ ent.Mutation = (*TestSkipMutation)(nil)
+
+// testskipOption allows management of the mutation configuration using functional options.
+type testskipOption func(*TestSkipMutation)
+
+// newTestSkipMutation creates new mutation for the TestSkip entity.
+func newTestSkipMutation(c config, op Op, opts ...testskipOption) *TestSkipMutation {
+	m := &TestSkipMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeTestSkip,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withTestSkipID sets the ID field of the mutation.
+func withTestSkipID(id uuid.UUID) testskipOption {
+	return func(m *TestSkipMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *TestSkip
+		)
+		m.oldValue = func(ctx context.Context) (*TestSkip, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().TestSkip.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withTestSkip sets the old TestSkip of the mutation.
+func withTestSkip(node *TestSkip) testskipOption {
+	return func(m *TestSkipMutation) {
+		m.oldValue = func(context.Context) (*TestSkip, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m TestSkipMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m TestSkipMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of TestSkip entities.
+func (m *TestSkipMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *TestSkipMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *TestSkipMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().TestSkip.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetOtherID sets the "other_id" field.
+func (m *TestSkipMutation) SetOtherID(u uuid.UUID) {
+	m.other_id = &u
+}
+
+// OtherID returns the value of the "other_id" field in the mutation.
+func (m *TestSkipMutation) OtherID() (r uuid.UUID, exists bool) {
+	v := m.other_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOtherID returns the old "other_id" field's value of the TestSkip entity.
+// If the TestSkip object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TestSkipMutation) OldOtherID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOtherID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOtherID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOtherID: %w", err)
+	}
+	return oldValue.OtherID, nil
+}
+
+// ClearOtherID clears the value of the "other_id" field.
+func (m *TestSkipMutation) ClearOtherID() {
+	m.other_id = nil
+	m.clearedFields[testskip.FieldOtherID] = struct{}{}
+}
+
+// OtherIDCleared returns if the "other_id" field was cleared in this mutation.
+func (m *TestSkipMutation) OtherIDCleared() bool {
+	_, ok := m.clearedFields[testskip.FieldOtherID]
+	return ok
+}
+
+// ResetOtherID resets all changes to the "other_id" field.
+func (m *TestSkipMutation) ResetOtherID() {
+	m.other_id = nil
+	delete(m.clearedFields, testskip.FieldOtherID)
+}
+
+// SetName sets the "name" field.
+func (m *TestSkipMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *TestSkipMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the TestSkip entity.
+// If the TestSkip object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TestSkipMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *TestSkipMutation) ResetName() {
+	m.name = nil
+}
+
+// Where appends a list predicates to the TestSkipMutation builder.
+func (m *TestSkipMutation) Where(ps ...predicate.TestSkip) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the TestSkipMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *TestSkipMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.TestSkip, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *TestSkipMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *TestSkipMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (TestSkip).
+func (m *TestSkipMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *TestSkipMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.other_id != nil {
+		fields = append(fields, testskip.FieldOtherID)
+	}
+	if m.name != nil {
+		fields = append(fields, testskip.FieldName)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *TestSkipMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case testskip.FieldOtherID:
+		return m.OtherID()
+	case testskip.FieldName:
+		return m.Name()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *TestSkipMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case testskip.FieldOtherID:
+		return m.OldOtherID(ctx)
+	case testskip.FieldName:
+		return m.OldName(ctx)
+	}
+	return nil, fmt.Errorf("unknown TestSkip field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *TestSkipMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case testskip.FieldOtherID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOtherID(v)
+		return nil
+	case testskip.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	}
+	return fmt.Errorf("unknown TestSkip field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *TestSkipMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *TestSkipMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *TestSkipMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown TestSkip numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *TestSkipMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(testskip.FieldOtherID) {
+		fields = append(fields, testskip.FieldOtherID)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *TestSkipMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *TestSkipMutation) ClearField(name string) error {
+	switch name {
+	case testskip.FieldOtherID:
+		m.ClearOtherID()
+		return nil
+	}
+	return fmt.Errorf("unknown TestSkip nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *TestSkipMutation) ResetField(name string) error {
+	switch name {
+	case testskip.FieldOtherID:
+		m.ResetOtherID()
+		return nil
+	case testskip.FieldName:
+		m.ResetName()
+		return nil
+	}
+	return fmt.Errorf("unknown TestSkip field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *TestSkipMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *TestSkipMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *TestSkipMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *TestSkipMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *TestSkipMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *TestSkipMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *TestSkipMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown TestSkip unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *TestSkipMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown TestSkip edge %s", name)
+}
+
+// TestSkipHistoryMutation represents an operation that mutates the TestSkipHistory nodes in the graph.
+type TestSkipHistoryMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *uuid.UUID
+	history_time  *time.Time
+	operation     *enthistory.OpType
+	ref           *uuid.UUID
+	updated_by    *uuid.UUID
+	other_id      *uuid.UUID
+	name          *string
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*TestSkipHistory, error)
+	predicates    []predicate.TestSkipHistory
+}
+
+var _ ent.Mutation = (*TestSkipHistoryMutation)(nil)
+
+// testskiphistoryOption allows management of the mutation configuration using functional options.
+type testskiphistoryOption func(*TestSkipHistoryMutation)
+
+// newTestSkipHistoryMutation creates new mutation for the TestSkipHistory entity.
+func newTestSkipHistoryMutation(c config, op Op, opts ...testskiphistoryOption) *TestSkipHistoryMutation {
+	m := &TestSkipHistoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeTestSkipHistory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withTestSkipHistoryID sets the ID field of the mutation.
+func withTestSkipHistoryID(id uuid.UUID) testskiphistoryOption {
+	return func(m *TestSkipHistoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *TestSkipHistory
+		)
+		m.oldValue = func(ctx context.Context) (*TestSkipHistory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().TestSkipHistory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withTestSkipHistory sets the old TestSkipHistory of the mutation.
+func withTestSkipHistory(node *TestSkipHistory) testskiphistoryOption {
+	return func(m *TestSkipHistoryMutation) {
+		m.oldValue = func(context.Context) (*TestSkipHistory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m TestSkipHistoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m TestSkipHistoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of TestSkipHistory entities.
+func (m *TestSkipHistoryMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *TestSkipHistoryMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *TestSkipHistoryMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().TestSkipHistory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHistoryTime sets the "history_time" field.
+func (m *TestSkipHistoryMutation) SetHistoryTime(t time.Time) {
+	m.history_time = &t
+}
+
+// HistoryTime returns the value of the "history_time" field in the mutation.
+func (m *TestSkipHistoryMutation) HistoryTime() (r time.Time, exists bool) {
+	v := m.history_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHistoryTime returns the old "history_time" field's value of the TestSkipHistory entity.
+// If the TestSkipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TestSkipHistoryMutation) OldHistoryTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHistoryTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHistoryTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHistoryTime: %w", err)
+	}
+	return oldValue.HistoryTime, nil
+}
+
+// ResetHistoryTime resets all changes to the "history_time" field.
+func (m *TestSkipHistoryMutation) ResetHistoryTime() {
+	m.history_time = nil
+}
+
+// SetOperation sets the "operation" field.
+func (m *TestSkipHistoryMutation) SetOperation(et enthistory.OpType) {
+	m.operation = &et
+}
+
+// Operation returns the value of the "operation" field in the mutation.
+func (m *TestSkipHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+	v := m.operation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOperation returns the old "operation" field's value of the TestSkipHistory entity.
+// If the TestSkipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TestSkipHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOperation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOperation: %w", err)
+	}
+	return oldValue.Operation, nil
+}
+
+// ResetOperation resets all changes to the "operation" field.
+func (m *TestSkipHistoryMutation) ResetOperation() {
+	m.operation = nil
+}
+
+// SetRef sets the "ref" field.
+func (m *TestSkipHistoryMutation) SetRef(u uuid.UUID) {
+	m.ref = &u
+}
+
+// Ref returns the value of the "ref" field in the mutation.
+func (m *TestSkipHistoryMutation) Ref() (r uuid.UUID, exists bool) {
+	v := m.ref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRef returns the old "ref" field's value of the TestSkipHistory entity.
+// If the TestSkipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TestSkipHistoryMutation) OldRef(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRef is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRef requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRef: %w", err)
+	}
+	return oldValue.Ref, nil
+}
+
+// ClearRef clears the value of the "ref" field.
+func (m *TestSkipHistoryMutation) ClearRef() {
+	m.ref = nil
+	m.clearedFields[testskiphistory.FieldRef] = struct{}{}
+}
+
+// RefCleared returns if the "ref" field was cleared in this mutation.
+func (m *TestSkipHistoryMutation) RefCleared() bool {
+	_, ok := m.clearedFields[testskiphistory.FieldRef]
+	return ok
+}
+
+// ResetRef resets all changes to the "ref" field.
+func (m *TestSkipHistoryMutation) ResetRef() {
+	m.ref = nil
+	delete(m.clearedFields, testskiphistory.FieldRef)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *TestSkipHistoryMutation) SetUpdatedBy(u uuid.UUID) {
+	m.updated_by = &u
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *TestSkipHistoryMutation) UpdatedBy() (r uuid.UUID, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the TestSkipHistory entity.
+// If the TestSkipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TestSkipHistoryMutation) OldUpdatedBy(ctx context.Context) (v *uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *TestSkipHistoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[testskiphistory.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *TestSkipHistoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[testskiphistory.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *TestSkipHistoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, testskiphistory.FieldUpdatedBy)
+}
+
+// SetOtherID sets the "other_id" field.
+func (m *TestSkipHistoryMutation) SetOtherID(u uuid.UUID) {
+	m.other_id = &u
+}
+
+// OtherID returns the value of the "other_id" field in the mutation.
+func (m *TestSkipHistoryMutation) OtherID() (r uuid.UUID, exists bool) {
+	v := m.other_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOtherID returns the old "other_id" field's value of the TestSkipHistory entity.
+// If the TestSkipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TestSkipHistoryMutation) OldOtherID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOtherID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOtherID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOtherID: %w", err)
+	}
+	return oldValue.OtherID, nil
+}
+
+// ClearOtherID clears the value of the "other_id" field.
+func (m *TestSkipHistoryMutation) ClearOtherID() {
+	m.other_id = nil
+	m.clearedFields[testskiphistory.FieldOtherID] = struct{}{}
+}
+
+// OtherIDCleared returns if the "other_id" field was cleared in this mutation.
+func (m *TestSkipHistoryMutation) OtherIDCleared() bool {
+	_, ok := m.clearedFields[testskiphistory.FieldOtherID]
+	return ok
+}
+
+// ResetOtherID resets all changes to the "other_id" field.
+func (m *TestSkipHistoryMutation) ResetOtherID() {
+	m.other_id = nil
+	delete(m.clearedFields, testskiphistory.FieldOtherID)
+}
+
+// SetName sets the "name" field.
+func (m *TestSkipHistoryMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *TestSkipHistoryMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the TestSkipHistory entity.
+// If the TestSkipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TestSkipHistoryMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *TestSkipHistoryMutation) ResetName() {
+	m.name = nil
+}
+
+// Where appends a list predicates to the TestSkipHistoryMutation builder.
+func (m *TestSkipHistoryMutation) Where(ps ...predicate.TestSkipHistory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the TestSkipHistoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *TestSkipHistoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.TestSkipHistory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *TestSkipHistoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *TestSkipHistoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (TestSkipHistory).
+func (m *TestSkipHistoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *TestSkipHistoryMutation) Fields() []string {
+	fields := make([]string, 0, 6)
+	if m.history_time != nil {
+		fields = append(fields, testskiphistory.FieldHistoryTime)
+	}
+	if m.operation != nil {
+		fields = append(fields, testskiphistory.FieldOperation)
+	}
+	if m.ref != nil {
+		fields = append(fields, testskiphistory.FieldRef)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, testskiphistory.FieldUpdatedBy)
+	}
+	if m.other_id != nil {
+		fields = append(fields, testskiphistory.FieldOtherID)
+	}
+	if m.name != nil {
+		fields = append(fields, testskiphistory.FieldName)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *TestSkipHistoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case testskiphistory.FieldHistoryTime:
+		return m.HistoryTime()
+	case testskiphistory.FieldOperation:
+		return m.Operation()
+	case testskiphistory.FieldRef:
+		return m.Ref()
+	case testskiphistory.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case testskiphistory.FieldOtherID:
+		return m.OtherID()
+	case testskiphistory.FieldName:
+		return m.Name()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *TestSkipHistoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case testskiphistory.FieldHistoryTime:
+		return m.OldHistoryTime(ctx)
+	case testskiphistory.FieldOperation:
+		return m.OldOperation(ctx)
+	case testskiphistory.FieldRef:
+		return m.OldRef(ctx)
+	case testskiphistory.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case testskiphistory.FieldOtherID:
+		return m.OldOtherID(ctx)
+	case testskiphistory.FieldName:
+		return m.OldName(ctx)
+	}
+	return nil, fmt.Errorf("unknown TestSkipHistory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *TestSkipHistoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case testskiphistory.FieldHistoryTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHistoryTime(v)
+		return nil
+	case testskiphistory.FieldOperation:
+		v, ok := value.(enthistory.OpType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOperation(v)
+		return nil
+	case testskiphistory.FieldRef:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRef(v)
+		return nil
+	case testskiphistory.FieldUpdatedBy:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case testskiphistory.FieldOtherID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOtherID(v)
+		return nil
+	case testskiphistory.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	}
+	return fmt.Errorf("unknown TestSkipHistory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *TestSkipHistoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *TestSkipHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *TestSkipHistoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown TestSkipHistory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *TestSkipHistoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(testskiphistory.FieldRef) {
+		fields = append(fields, testskiphistory.FieldRef)
+	}
+	if m.FieldCleared(testskiphistory.FieldUpdatedBy) {
+		fields = append(fields, testskiphistory.FieldUpdatedBy)
+	}
+	if m.FieldCleared(testskiphistory.FieldOtherID) {
+		fields = append(fields, testskiphistory.FieldOtherID)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *TestSkipHistoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *TestSkipHistoryMutation) ClearField(name string) error {
+	switch name {
+	case testskiphistory.FieldRef:
+		m.ClearRef()
+		return nil
+	case testskiphistory.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case testskiphistory.FieldOtherID:
+		m.ClearOtherID()
+		return nil
+	}
+	return fmt.Errorf("unknown TestSkipHistory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *TestSkipHistoryMutation) ResetField(name string) error {
+	switch name {
+	case testskiphistory.FieldHistoryTime:
+		m.ResetHistoryTime()
+		return nil
+	case testskiphistory.FieldOperation:
+		m.ResetOperation()
+		return nil
+	case testskiphistory.FieldRef:
+		m.ResetRef()
+		return nil
+	case testskiphistory.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case testskiphistory.FieldOtherID:
+		m.ResetOtherID()
+		return nil
+	case testskiphistory.FieldName:
+		m.ResetName()
+		return nil
+	}
+	return fmt.Errorf("unknown TestSkipHistory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *TestSkipHistoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *TestSkipHistoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *TestSkipHistoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *TestSkipHistoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *TestSkipHistoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *TestSkipHistoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *TestSkipHistoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown TestSkipHistory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *TestSkipHistoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown TestSkipHistory edge %s", name)
+}
 
 // TodoMutation represents an operation that mutates the Todo nodes in the graph.
 type TodoMutation struct {

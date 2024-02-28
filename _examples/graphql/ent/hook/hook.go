@@ -8,6 +8,42 @@ import (
 	"fmt"
 )
 
+// The TestExcludeFunc type is an adapter to allow the use of ordinary
+// function as TestExclude mutator.
+type TestExcludeFunc func(context.Context, *ent.TestExcludeMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TestExcludeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.TestExcludeMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TestExcludeMutation", m)
+}
+
+// The TestSkipFunc type is an adapter to allow the use of ordinary
+// function as TestSkip mutator.
+type TestSkipFunc func(context.Context, *ent.TestSkipMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TestSkipFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.TestSkipMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TestSkipMutation", m)
+}
+
+// The TestSkipHistoryFunc type is an adapter to allow the use of ordinary
+// function as TestSkipHistory mutator.
+type TestSkipHistoryFunc func(context.Context, *ent.TestSkipHistoryMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TestSkipHistoryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.TestSkipHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TestSkipHistoryMutation", m)
+}
+
 // The TodoFunc type is an adapter to allow the use of ordinary
 // function as Todo mutator.
 type TodoFunc func(context.Context, *ent.TodoMutation) (ent.Value, error)
