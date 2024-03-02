@@ -16,8 +16,10 @@ import (
 	"entgo.io/ent/entc/load"
 )
 
-var matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
-var matchAllCap = regexp.MustCompile("([a-z0-9])([A-Z])")
+var (
+	matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
+	matchAllCap   = regexp.MustCompile("([a-z0-9])([A-Z])")
+)
 
 func toSnakeCase(str string) string {
 	snake := matchFirstCap.ReplaceAllString(str, "${1}_${2}")
@@ -74,6 +76,14 @@ func loadHistorySchema(IdType *field.TypeInfo, entqlEnabled bool) (*load.Schema,
 	}
 
 	return historySchema, nil
+}
+
+func deref[T any](t *T) T {
+	var zero T
+	if t == nil {
+		return zero
+	}
+	return *t
 }
 
 func getUpdatedByField(updatedByValueType string, entgqlEnabled bool) (*load.Field, error) {
