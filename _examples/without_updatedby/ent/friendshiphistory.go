@@ -3,14 +3,13 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/friendshiphistory"
 	"fmt"
 	"strings"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-
-	"_examples/without_updatedby/ent/friendshiphistory"
 
 	"github.com/flume/enthistory"
 )
@@ -26,14 +25,14 @@ type FriendshipHistory struct {
 	Operation enthistory.OpType `json:"operation,omitempty"`
 	// Ref holds the value of the "ref" field.
 	Ref string `json:"ref,omitempty"`
-	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// CharacterID holds the value of the "character_id" field.
 	CharacterID int `json:"character_id,omitempty"`
 	// FriendID holds the value of the "friend_id" field.
-	FriendID     int `json:"friend_id,omitempty"`
+	FriendID int `json:"friend_id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt    time.Time `json:"updated_at,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -87,18 +86,6 @@ func (fh *FriendshipHistory) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				fh.Ref = value.String
 			}
-		case friendshiphistory.FieldCreatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field created_at", values[i])
-			} else if value.Valid {
-				fh.CreatedAt = value.Time
-			}
-		case friendshiphistory.FieldUpdatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
-			} else if value.Valid {
-				fh.UpdatedAt = value.Time
-			}
 		case friendshiphistory.FieldCharacterID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field character_id", values[i])
@@ -110,6 +97,18 @@ func (fh *FriendshipHistory) assignValues(columns []string, values []any) error 
 				return fmt.Errorf("unexpected type %T for field friend_id", values[i])
 			} else if value.Valid {
 				fh.FriendID = int(value.Int64)
+			}
+		case friendshiphistory.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				fh.CreatedAt = value.Time
+			}
+		case friendshiphistory.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				fh.UpdatedAt = value.Time
 			}
 		default:
 			fh.selectValues.Set(columns[i], values[i])
@@ -156,17 +155,17 @@ func (fh *FriendshipHistory) String() string {
 	builder.WriteString("ref=")
 	builder.WriteString(fh.Ref)
 	builder.WriteString(", ")
-	builder.WriteString("created_at=")
-	builder.WriteString(fh.CreatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("updated_at=")
-	builder.WriteString(fh.UpdatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
 	builder.WriteString("character_id=")
 	builder.WriteString(fmt.Sprintf("%v", fh.CharacterID))
 	builder.WriteString(", ")
 	builder.WriteString("friend_id=")
 	builder.WriteString(fmt.Sprintf("%v", fh.FriendID))
+	builder.WriteString(", ")
+	builder.WriteString("created_at=")
+	builder.WriteString(fh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(fh.UpdatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

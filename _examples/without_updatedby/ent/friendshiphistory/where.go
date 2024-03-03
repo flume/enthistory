@@ -3,11 +3,10 @@
 package friendshiphistory
 
 import (
+	"_examples/without_updatedby/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-
-	"_examples/without_updatedby/ent/predicate"
 
 	"github.com/flume/enthistory"
 )
@@ -67,16 +66,6 @@ func Ref(v string) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldEQ(FieldRef, v))
 }
 
-// CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
-func CreatedAt(v time.Time) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldEQ(FieldCreatedAt, v))
-}
-
-// UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
-func UpdatedAt(v time.Time) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldEQ(FieldUpdatedAt, v))
-}
-
 // CharacterID applies equality check predicate on the "character_id" field. It's identical to CharacterIDEQ.
 func CharacterID(v int) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldEQ(FieldCharacterID, v))
@@ -85,6 +74,16 @@ func CharacterID(v int) predicate.FriendshipHistory {
 // FriendID applies equality check predicate on the "friend_id" field. It's identical to FriendIDEQ.
 func FriendID(v int) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldEQ(FieldFriendID, v))
+}
+
+// CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
+func CreatedAt(v time.Time) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldEQ(FieldCreatedAt, v))
+}
+
+// UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
+func UpdatedAt(v time.Time) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -222,86 +221,6 @@ func RefContainsFold(v string) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldContainsFold(FieldRef, v))
 }
 
-// CreatedAtEQ applies the EQ predicate on the "created_at" field.
-func CreatedAtEQ(v time.Time) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldEQ(FieldCreatedAt, v))
-}
-
-// CreatedAtNEQ applies the NEQ predicate on the "created_at" field.
-func CreatedAtNEQ(v time.Time) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldNEQ(FieldCreatedAt, v))
-}
-
-// CreatedAtIn applies the In predicate on the "created_at" field.
-func CreatedAtIn(vs ...time.Time) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldIn(FieldCreatedAt, vs...))
-}
-
-// CreatedAtNotIn applies the NotIn predicate on the "created_at" field.
-func CreatedAtNotIn(vs ...time.Time) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldNotIn(FieldCreatedAt, vs...))
-}
-
-// CreatedAtGT applies the GT predicate on the "created_at" field.
-func CreatedAtGT(v time.Time) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldGT(FieldCreatedAt, v))
-}
-
-// CreatedAtGTE applies the GTE predicate on the "created_at" field.
-func CreatedAtGTE(v time.Time) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldGTE(FieldCreatedAt, v))
-}
-
-// CreatedAtLT applies the LT predicate on the "created_at" field.
-func CreatedAtLT(v time.Time) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldLT(FieldCreatedAt, v))
-}
-
-// CreatedAtLTE applies the LTE predicate on the "created_at" field.
-func CreatedAtLTE(v time.Time) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldLTE(FieldCreatedAt, v))
-}
-
-// UpdatedAtEQ applies the EQ predicate on the "updated_at" field.
-func UpdatedAtEQ(v time.Time) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldEQ(FieldUpdatedAt, v))
-}
-
-// UpdatedAtNEQ applies the NEQ predicate on the "updated_at" field.
-func UpdatedAtNEQ(v time.Time) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldNEQ(FieldUpdatedAt, v))
-}
-
-// UpdatedAtIn applies the In predicate on the "updated_at" field.
-func UpdatedAtIn(vs ...time.Time) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldIn(FieldUpdatedAt, vs...))
-}
-
-// UpdatedAtNotIn applies the NotIn predicate on the "updated_at" field.
-func UpdatedAtNotIn(vs ...time.Time) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldNotIn(FieldUpdatedAt, vs...))
-}
-
-// UpdatedAtGT applies the GT predicate on the "updated_at" field.
-func UpdatedAtGT(v time.Time) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldGT(FieldUpdatedAt, v))
-}
-
-// UpdatedAtGTE applies the GTE predicate on the "updated_at" field.
-func UpdatedAtGTE(v time.Time) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldGTE(FieldUpdatedAt, v))
-}
-
-// UpdatedAtLT applies the LT predicate on the "updated_at" field.
-func UpdatedAtLT(v time.Time) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldLT(FieldUpdatedAt, v))
-}
-
-// UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
-func UpdatedAtLTE(v time.Time) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldLTE(FieldUpdatedAt, v))
-}
-
 // CharacterIDEQ applies the EQ predicate on the "character_id" field.
 func CharacterIDEQ(v int) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldEQ(FieldCharacterID, v))
@@ -380,6 +299,86 @@ func FriendIDLT(v int) predicate.FriendshipHistory {
 // FriendIDLTE applies the LTE predicate on the "friend_id" field.
 func FriendIDLTE(v int) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldLTE(FieldFriendID, v))
+}
+
+// CreatedAtEQ applies the EQ predicate on the "created_at" field.
+func CreatedAtEQ(v time.Time) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldEQ(FieldCreatedAt, v))
+}
+
+// CreatedAtNEQ applies the NEQ predicate on the "created_at" field.
+func CreatedAtNEQ(v time.Time) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldNEQ(FieldCreatedAt, v))
+}
+
+// CreatedAtIn applies the In predicate on the "created_at" field.
+func CreatedAtIn(vs ...time.Time) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtNotIn applies the NotIn predicate on the "created_at" field.
+func CreatedAtNotIn(vs ...time.Time) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldNotIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtGT applies the GT predicate on the "created_at" field.
+func CreatedAtGT(v time.Time) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldGT(FieldCreatedAt, v))
+}
+
+// CreatedAtGTE applies the GTE predicate on the "created_at" field.
+func CreatedAtGTE(v time.Time) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldGTE(FieldCreatedAt, v))
+}
+
+// CreatedAtLT applies the LT predicate on the "created_at" field.
+func CreatedAtLT(v time.Time) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldLT(FieldCreatedAt, v))
+}
+
+// CreatedAtLTE applies the LTE predicate on the "created_at" field.
+func CreatedAtLTE(v time.Time) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldLTE(FieldCreatedAt, v))
+}
+
+// UpdatedAtEQ applies the EQ predicate on the "updated_at" field.
+func UpdatedAtEQ(v time.Time) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtNEQ applies the NEQ predicate on the "updated_at" field.
+func UpdatedAtNEQ(v time.Time) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldNEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtIn applies the In predicate on the "updated_at" field.
+func UpdatedAtIn(vs ...time.Time) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtNotIn applies the NotIn predicate on the "updated_at" field.
+func UpdatedAtNotIn(vs ...time.Time) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldNotIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtGT applies the GT predicate on the "updated_at" field.
+func UpdatedAtGT(v time.Time) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldGT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtGTE applies the GTE predicate on the "updated_at" field.
+func UpdatedAtGTE(v time.Time) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldGTE(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLT applies the LT predicate on the "updated_at" field.
+func UpdatedAtLT(v time.Time) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldLT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
+func UpdatedAtLTE(v time.Time) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldLTE(FieldUpdatedAt, v))
 }
 
 // And groups predicates with the AND operator between them.

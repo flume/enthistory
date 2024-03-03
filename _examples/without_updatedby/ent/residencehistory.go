@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/residencehistory"
 	"fmt"
 	"strings"
 	"time"
@@ -10,8 +11,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-
-	"_examples/without_updatedby/ent/residencehistory"
 
 	"github.com/flume/enthistory"
 )
@@ -27,12 +26,12 @@ type ResidenceHistory struct {
 	Operation enthistory.OpType `json:"operation,omitempty"`
 	// Ref holds the value of the "ref" field.
 	Ref uuid.UUID `json:"ref,omitempty"`
+	// Name holds the value of the "name" field.
+	Name string `json:"name,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// Name holds the value of the "name" field.
-	Name         string `json:"name,omitempty"`
+	UpdatedAt    time.Time `json:"updated_at,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -88,6 +87,12 @@ func (rh *ResidenceHistory) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				rh.Ref = *value
 			}
+		case residencehistory.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				rh.Name = value.String
+			}
 		case residencehistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -99,12 +104,6 @@ func (rh *ResidenceHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				rh.UpdatedAt = value.Time
-			}
-		case residencehistory.FieldName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field name", values[i])
-			} else if value.Valid {
-				rh.Name = value.String
 			}
 		default:
 			rh.selectValues.Set(columns[i], values[i])
@@ -151,14 +150,14 @@ func (rh *ResidenceHistory) String() string {
 	builder.WriteString("ref=")
 	builder.WriteString(fmt.Sprintf("%v", rh.Ref))
 	builder.WriteString(", ")
+	builder.WriteString("name=")
+	builder.WriteString(rh.Name)
+	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(rh.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(rh.UpdatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("name=")
-	builder.WriteString(rh.Name)
 	builder.WriteByte(')')
 	return builder.String()
 }

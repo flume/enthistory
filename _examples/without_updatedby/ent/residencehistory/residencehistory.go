@@ -22,12 +22,12 @@ const (
 	FieldOperation = "operation"
 	// FieldRef holds the string denoting the ref field in the database.
 	FieldRef = "ref"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
-	// FieldName holds the string denoting the name field in the database.
-	FieldName = "name"
 	// Table holds the table name of the residencehistory in the database.
 	Table = "residence_history"
 )
@@ -38,9 +38,9 @@ var Columns = []string{
 	FieldHistoryTime,
 	FieldOperation,
 	FieldRef,
+	FieldName,
 	FieldCreatedAt,
 	FieldUpdatedAt,
-	FieldName,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -95,6 +95,11 @@ func ByRef(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRef, opts...).ToFunc()
 }
 
+// ByName orders the results by the name field.
+func ByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
 // ByCreatedAt orders the results by the created_at field.
 func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
@@ -103,9 +108,4 @@ func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedAt orders the results by the updated_at field.
 func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
-}
-
-// ByName orders the results by the name field.
-func ByName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldName, opts...).ToFunc()
 }

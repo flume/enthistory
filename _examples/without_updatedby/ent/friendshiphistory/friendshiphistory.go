@@ -22,14 +22,14 @@ const (
 	FieldOperation = "operation"
 	// FieldRef holds the string denoting the ref field in the database.
 	FieldRef = "ref"
-	// FieldCreatedAt holds the string denoting the created_at field in the database.
-	FieldCreatedAt = "created_at"
-	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
-	FieldUpdatedAt = "updated_at"
 	// FieldCharacterID holds the string denoting the character_id field in the database.
 	FieldCharacterID = "character_id"
 	// FieldFriendID holds the string denoting the friend_id field in the database.
 	FieldFriendID = "friend_id"
+	// FieldCreatedAt holds the string denoting the created_at field in the database.
+	FieldCreatedAt = "created_at"
+	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
+	FieldUpdatedAt = "updated_at"
 	// Table holds the table name of the friendshiphistory in the database.
 	Table = "friendship_history"
 )
@@ -40,10 +40,10 @@ var Columns = []string{
 	FieldHistoryTime,
 	FieldOperation,
 	FieldRef,
-	FieldCreatedAt,
-	FieldUpdatedAt,
 	FieldCharacterID,
 	FieldFriendID,
+	FieldCreatedAt,
+	FieldUpdatedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -98,16 +98,6 @@ func ByRef(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRef, opts...).ToFunc()
 }
 
-// ByCreatedAt orders the results by the created_at field.
-func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
-}
-
-// ByUpdatedAt orders the results by the updated_at field.
-func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
-}
-
 // ByCharacterID orders the results by the character_id field.
 func ByCharacterID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCharacterID, opts...).ToFunc()
@@ -116,4 +106,14 @@ func ByCharacterID(opts ...sql.OrderTermOption) OrderOption {
 // ByFriendID orders the results by the friend_id field.
 func ByFriendID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFriendID, opts...).ToFunc()
+}
+
+// ByCreatedAt orders the results by the created_at field.
+func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
+}
+
+// ByUpdatedAt orders the results by the updated_at field.
+func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }

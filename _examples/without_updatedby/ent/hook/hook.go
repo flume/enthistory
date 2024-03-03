@@ -3,10 +3,9 @@
 package hook
 
 import (
+	"_examples/without_updatedby/ent"
 	"context"
 	"fmt"
-
-	"_examples/without_updatedby/ent"
 )
 
 // The CharacterFunc type is an adapter to allow the use of ordinary

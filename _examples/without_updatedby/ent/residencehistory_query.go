@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/predicate"
+	"_examples/without_updatedby/ent/residencehistory"
 	"context"
 	"fmt"
 	"math"
@@ -10,9 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"_examples/without_updatedby/ent/predicate"
-	"_examples/without_updatedby/ent/residencehistory"
 )
 
 // ResidenceHistoryQuery is the builder for querying ResidenceHistory entities.

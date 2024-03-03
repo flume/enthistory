@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/friendshiphistory"
 	"context"
 	"errors"
 	"fmt"
@@ -10,8 +11,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"_examples/without_updatedby/ent/friendshiphistory"
 
 	"github.com/flume/enthistory"
 )
@@ -57,6 +56,18 @@ func (fhc *FriendshipHistoryCreate) SetNillableRef(s *string) *FriendshipHistory
 	return fhc
 }
 
+// SetCharacterID sets the "character_id" field.
+func (fhc *FriendshipHistoryCreate) SetCharacterID(i int) *FriendshipHistoryCreate {
+	fhc.mutation.SetCharacterID(i)
+	return fhc
+}
+
+// SetFriendID sets the "friend_id" field.
+func (fhc *FriendshipHistoryCreate) SetFriendID(i int) *FriendshipHistoryCreate {
+	fhc.mutation.SetFriendID(i)
+	return fhc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (fhc *FriendshipHistoryCreate) SetCreatedAt(t time.Time) *FriendshipHistoryCreate {
 	fhc.mutation.SetCreatedAt(t)
@@ -82,18 +93,6 @@ func (fhc *FriendshipHistoryCreate) SetNillableUpdatedAt(t *time.Time) *Friendsh
 	if t != nil {
 		fhc.SetUpdatedAt(*t)
 	}
-	return fhc
-}
-
-// SetCharacterID sets the "character_id" field.
-func (fhc *FriendshipHistoryCreate) SetCharacterID(i int) *FriendshipHistoryCreate {
-	fhc.mutation.SetCharacterID(i)
-	return fhc
-}
-
-// SetFriendID sets the "friend_id" field.
-func (fhc *FriendshipHistoryCreate) SetFriendID(i int) *FriendshipHistoryCreate {
-	fhc.mutation.SetFriendID(i)
 	return fhc
 }
 
@@ -165,17 +164,17 @@ func (fhc *FriendshipHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`ent: validator failed for field "FriendshipHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := fhc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "FriendshipHistory.created_at"`)}
-	}
-	if _, ok := fhc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "FriendshipHistory.updated_at"`)}
-	}
 	if _, ok := fhc.mutation.CharacterID(); !ok {
 		return &ValidationError{Name: "character_id", err: errors.New(`ent: missing required field "FriendshipHistory.character_id"`)}
 	}
 	if _, ok := fhc.mutation.FriendID(); !ok {
 		return &ValidationError{Name: "friend_id", err: errors.New(`ent: missing required field "FriendshipHistory.friend_id"`)}
+	}
+	if _, ok := fhc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "FriendshipHistory.created_at"`)}
+	}
+	if _, ok := fhc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "FriendshipHistory.updated_at"`)}
 	}
 	return nil
 }
@@ -221,14 +220,6 @@ func (fhc *FriendshipHistoryCreate) createSpec() (*FriendshipHistory, *sqlgraph.
 		_spec.SetField(friendshiphistory.FieldRef, field.TypeString, value)
 		_node.Ref = value
 	}
-	if value, ok := fhc.mutation.CreatedAt(); ok {
-		_spec.SetField(friendshiphistory.FieldCreatedAt, field.TypeTime, value)
-		_node.CreatedAt = value
-	}
-	if value, ok := fhc.mutation.UpdatedAt(); ok {
-		_spec.SetField(friendshiphistory.FieldUpdatedAt, field.TypeTime, value)
-		_node.UpdatedAt = value
-	}
 	if value, ok := fhc.mutation.CharacterID(); ok {
 		_spec.SetField(friendshiphistory.FieldCharacterID, field.TypeInt, value)
 		_node.CharacterID = value
@@ -236,6 +227,14 @@ func (fhc *FriendshipHistoryCreate) createSpec() (*FriendshipHistory, *sqlgraph.
 	if value, ok := fhc.mutation.FriendID(); ok {
 		_spec.SetField(friendshiphistory.FieldFriendID, field.TypeInt, value)
 		_node.FriendID = value
+	}
+	if value, ok := fhc.mutation.CreatedAt(); ok {
+		_spec.SetField(friendshiphistory.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := fhc.mutation.UpdatedAt(); ok {
+		_spec.SetField(friendshiphistory.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
 	}
 	return _node, _spec
 }

@@ -3,12 +3,11 @@
 package residencehistory
 
 import (
+	"_examples/without_updatedby/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-
-	"_examples/without_updatedby/ent/predicate"
 
 	"github.com/flume/enthistory"
 )
@@ -68,6 +67,11 @@ func Ref(v uuid.UUID) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldEQ(FieldRef, v))
 }
 
+// Name applies equality check predicate on the "name" field. It's identical to NameEQ.
+func Name(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldEQ(FieldName, v))
+}
+
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v time.Time) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldEQ(FieldCreatedAt, v))
@@ -76,11 +80,6 @@ func CreatedAt(v time.Time) predicate.ResidenceHistory {
 // UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
 func UpdatedAt(v time.Time) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldEQ(FieldUpdatedAt, v))
-}
-
-// Name applies equality check predicate on the "name" field. It's identical to NameEQ.
-func Name(v string) predicate.ResidenceHistory {
-	return predicate.ResidenceHistory(sql.FieldEQ(FieldName, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -193,6 +192,71 @@ func RefNotNil() predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldNotNull(FieldRef))
 }
 
+// NameEQ applies the EQ predicate on the "name" field.
+func NameEQ(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldEQ(FieldName, v))
+}
+
+// NameNEQ applies the NEQ predicate on the "name" field.
+func NameNEQ(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldNEQ(FieldName, v))
+}
+
+// NameIn applies the In predicate on the "name" field.
+func NameIn(vs ...string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldIn(FieldName, vs...))
+}
+
+// NameNotIn applies the NotIn predicate on the "name" field.
+func NameNotIn(vs ...string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldNotIn(FieldName, vs...))
+}
+
+// NameGT applies the GT predicate on the "name" field.
+func NameGT(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldGT(FieldName, v))
+}
+
+// NameGTE applies the GTE predicate on the "name" field.
+func NameGTE(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldGTE(FieldName, v))
+}
+
+// NameLT applies the LT predicate on the "name" field.
+func NameLT(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldLT(FieldName, v))
+}
+
+// NameLTE applies the LTE predicate on the "name" field.
+func NameLTE(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldLTE(FieldName, v))
+}
+
+// NameContains applies the Contains predicate on the "name" field.
+func NameContains(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldContains(FieldName, v))
+}
+
+// NameHasPrefix applies the HasPrefix predicate on the "name" field.
+func NameHasPrefix(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldHasPrefix(FieldName, v))
+}
+
+// NameHasSuffix applies the HasSuffix predicate on the "name" field.
+func NameHasSuffix(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldHasSuffix(FieldName, v))
+}
+
+// NameEqualFold applies the EqualFold predicate on the "name" field.
+func NameEqualFold(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldEqualFold(FieldName, v))
+}
+
+// NameContainsFold applies the ContainsFold predicate on the "name" field.
+func NameContainsFold(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldContainsFold(FieldName, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldEQ(FieldCreatedAt, v))
@@ -271,71 +335,6 @@ func UpdatedAtLT(v time.Time) predicate.ResidenceHistory {
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
 func UpdatedAtLTE(v time.Time) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldLTE(FieldUpdatedAt, v))
-}
-
-// NameEQ applies the EQ predicate on the "name" field.
-func NameEQ(v string) predicate.ResidenceHistory {
-	return predicate.ResidenceHistory(sql.FieldEQ(FieldName, v))
-}
-
-// NameNEQ applies the NEQ predicate on the "name" field.
-func NameNEQ(v string) predicate.ResidenceHistory {
-	return predicate.ResidenceHistory(sql.FieldNEQ(FieldName, v))
-}
-
-// NameIn applies the In predicate on the "name" field.
-func NameIn(vs ...string) predicate.ResidenceHistory {
-	return predicate.ResidenceHistory(sql.FieldIn(FieldName, vs...))
-}
-
-// NameNotIn applies the NotIn predicate on the "name" field.
-func NameNotIn(vs ...string) predicate.ResidenceHistory {
-	return predicate.ResidenceHistory(sql.FieldNotIn(FieldName, vs...))
-}
-
-// NameGT applies the GT predicate on the "name" field.
-func NameGT(v string) predicate.ResidenceHistory {
-	return predicate.ResidenceHistory(sql.FieldGT(FieldName, v))
-}
-
-// NameGTE applies the GTE predicate on the "name" field.
-func NameGTE(v string) predicate.ResidenceHistory {
-	return predicate.ResidenceHistory(sql.FieldGTE(FieldName, v))
-}
-
-// NameLT applies the LT predicate on the "name" field.
-func NameLT(v string) predicate.ResidenceHistory {
-	return predicate.ResidenceHistory(sql.FieldLT(FieldName, v))
-}
-
-// NameLTE applies the LTE predicate on the "name" field.
-func NameLTE(v string) predicate.ResidenceHistory {
-	return predicate.ResidenceHistory(sql.FieldLTE(FieldName, v))
-}
-
-// NameContains applies the Contains predicate on the "name" field.
-func NameContains(v string) predicate.ResidenceHistory {
-	return predicate.ResidenceHistory(sql.FieldContains(FieldName, v))
-}
-
-// NameHasPrefix applies the HasPrefix predicate on the "name" field.
-func NameHasPrefix(v string) predicate.ResidenceHistory {
-	return predicate.ResidenceHistory(sql.FieldHasPrefix(FieldName, v))
-}
-
-// NameHasSuffix applies the HasSuffix predicate on the "name" field.
-func NameHasSuffix(v string) predicate.ResidenceHistory {
-	return predicate.ResidenceHistory(sql.FieldHasSuffix(FieldName, v))
-}
-
-// NameEqualFold applies the EqualFold predicate on the "name" field.
-func NameEqualFold(v string) predicate.ResidenceHistory {
-	return predicate.ResidenceHistory(sql.FieldEqualFold(FieldName, v))
-}
-
-// NameContainsFold applies the ContainsFold predicate on the "name" field.
-func NameContainsFold(v string) predicate.ResidenceHistory {
-	return predicate.ResidenceHistory(sql.FieldContainsFold(FieldName, v))
 }
 
 // And groups predicates with the AND operator between them.

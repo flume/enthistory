@@ -3,6 +3,10 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/character"
+	"_examples/without_updatedby/ent/friendship"
+	"_examples/without_updatedby/ent/predicate"
+	"_examples/without_updatedby/ent/residence"
 	"context"
 	"database/sql/driver"
 	"fmt"
@@ -12,11 +16,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-
-	"_examples/without_updatedby/ent/character"
-	"_examples/without_updatedby/ent/friendship"
-	"_examples/without_updatedby/ent/predicate"
-	"_examples/without_updatedby/ent/residence"
 )
 
 // CharacterQuery is the builder for querying Character entities.

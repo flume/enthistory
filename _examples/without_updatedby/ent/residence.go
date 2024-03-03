@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/residence"
 	"fmt"
 	"strings"
 	"time"
@@ -10,8 +11,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-
-	"_examples/without_updatedby/ent/residence"
 )
 
 // Residence is the model entity for the Residence schema.

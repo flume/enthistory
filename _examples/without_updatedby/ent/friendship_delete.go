@@ -3,14 +3,13 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/friendship"
+	"_examples/without_updatedby/ent/predicate"
 	"context"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"_examples/without_updatedby/ent/friendship"
-	"_examples/without_updatedby/ent/predicate"
 )
 
 // FriendshipDelete is the builder for deleting a Friendship entity.

@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/predicate"
+	"_examples/without_updatedby/ent/residencehistory"
 	"context"
 	"errors"
 	"fmt"
@@ -11,9 +13,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"_examples/without_updatedby/ent/predicate"
-	"_examples/without_updatedby/ent/residencehistory"
 )
 
 // ResidenceHistoryUpdate is the builder for updating ResidenceHistory entities.
@@ -39,20 +38,6 @@ func (rhu *ResidenceHistoryUpdate) SetUpdatedAt(t time.Time) *ResidenceHistoryUp
 func (rhu *ResidenceHistoryUpdate) SetNillableUpdatedAt(t *time.Time) *ResidenceHistoryUpdate {
 	if t != nil {
 		rhu.SetUpdatedAt(*t)
-	}
-	return rhu
-}
-
-// SetName sets the "name" field.
-func (rhu *ResidenceHistoryUpdate) SetName(s string) *ResidenceHistoryUpdate {
-	rhu.mutation.SetName(s)
-	return rhu
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (rhu *ResidenceHistoryUpdate) SetNillableName(s *string) *ResidenceHistoryUpdate {
-	if s != nil {
-		rhu.SetName(*s)
 	}
 	return rhu
 }
@@ -104,9 +89,6 @@ func (rhu *ResidenceHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if value, ok := rhu.mutation.UpdatedAt(); ok {
 		_spec.SetField(residencehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := rhu.mutation.Name(); ok {
-		_spec.SetField(residencehistory.FieldName, field.TypeString, value)
-	}
 	if n, err = sqlgraph.UpdateNodes(ctx, rhu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{residencehistory.Label}
@@ -137,20 +119,6 @@ func (rhuo *ResidenceHistoryUpdateOne) SetUpdatedAt(t time.Time) *ResidenceHisto
 func (rhuo *ResidenceHistoryUpdateOne) SetNillableUpdatedAt(t *time.Time) *ResidenceHistoryUpdateOne {
 	if t != nil {
 		rhuo.SetUpdatedAt(*t)
-	}
-	return rhuo
-}
-
-// SetName sets the "name" field.
-func (rhuo *ResidenceHistoryUpdateOne) SetName(s string) *ResidenceHistoryUpdateOne {
-	rhuo.mutation.SetName(s)
-	return rhuo
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (rhuo *ResidenceHistoryUpdateOne) SetNillableName(s *string) *ResidenceHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetName(*s)
 	}
 	return rhuo
 }
@@ -231,9 +199,6 @@ func (rhuo *ResidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Resi
 	}
 	if value, ok := rhuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(residencehistory.FieldUpdatedAt, field.TypeTime, value)
-	}
-	if value, ok := rhuo.mutation.Name(); ok {
-		_spec.SetField(residencehistory.FieldName, field.TypeString, value)
 	}
 	_node = &ResidenceHistory{config: rhuo.config}
 	_spec.Assign = _node.assignValues

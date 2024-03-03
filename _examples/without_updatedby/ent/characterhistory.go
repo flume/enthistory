@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/characterhistory"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -10,8 +11,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-
-	"_examples/without_updatedby/ent/characterhistory"
 
 	"github.com/flume/enthistory"
 )
@@ -27,10 +26,6 @@ type CharacterHistory struct {
 	Operation enthistory.OpType `json:"operation,omitempty"`
 	// Ref holds the value of the "ref" field.
 	Ref int `json:"ref,omitempty"`
-	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Age holds the value of the "age" field.
 	Age int `json:"age,omitempty"`
 	// Name holds the value of the "name" field.
@@ -38,7 +33,11 @@ type CharacterHistory struct {
 	// Nicknames holds the value of the "nicknames" field.
 	Nicknames []string `json:"nicknames,omitempty"`
 	// Info holds the value of the "info" field.
-	Info         map[string]interface{} `json:"info,omitempty"`
+	Info map[string]interface{} `json:"info,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt    time.Time `json:"updated_at,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -94,18 +93,6 @@ func (ch *CharacterHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ch.Ref = int(value.Int64)
 			}
-		case characterhistory.FieldCreatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field created_at", values[i])
-			} else if value.Valid {
-				ch.CreatedAt = value.Time
-			}
-		case characterhistory.FieldUpdatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
-			} else if value.Valid {
-				ch.UpdatedAt = value.Time
-			}
 		case characterhistory.FieldAge:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field age", values[i])
@@ -133,6 +120,18 @@ func (ch *CharacterHistory) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &ch.Info); err != nil {
 					return fmt.Errorf("unmarshal field info: %w", err)
 				}
+			}
+		case characterhistory.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				ch.CreatedAt = value.Time
+			}
+		case characterhistory.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				ch.UpdatedAt = value.Time
 			}
 		default:
 			ch.selectValues.Set(columns[i], values[i])
@@ -179,12 +178,6 @@ func (ch *CharacterHistory) String() string {
 	builder.WriteString("ref=")
 	builder.WriteString(fmt.Sprintf("%v", ch.Ref))
 	builder.WriteString(", ")
-	builder.WriteString("created_at=")
-	builder.WriteString(ch.CreatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("updated_at=")
-	builder.WriteString(ch.UpdatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
 	builder.WriteString("age=")
 	builder.WriteString(fmt.Sprintf("%v", ch.Age))
 	builder.WriteString(", ")
@@ -196,6 +189,12 @@ func (ch *CharacterHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("info=")
 	builder.WriteString(fmt.Sprintf("%v", ch.Info))
+	builder.WriteString(", ")
+	builder.WriteString("created_at=")
+	builder.WriteString(ch.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(ch.UpdatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

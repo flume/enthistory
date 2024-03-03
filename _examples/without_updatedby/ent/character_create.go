@@ -3,6 +3,9 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/character"
+	"_examples/without_updatedby/ent/friendship"
+	"_examples/without_updatedby/ent/residence"
 	"context"
 	"errors"
 	"fmt"
@@ -11,10 +14,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-
-	"_examples/without_updatedby/ent/character"
-	"_examples/without_updatedby/ent/friendship"
-	"_examples/without_updatedby/ent/residence"
 )
 
 // CharacterCreate is the builder for creating a Character entity.

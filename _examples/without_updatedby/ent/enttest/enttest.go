@@ -3,15 +3,15 @@
 package enttest
 
 import (
-	"context"
-
-	"entgo.io/ent/dialect/sql/schema"
-
 	"_examples/without_updatedby/ent"
-	"_examples/without_updatedby/ent/migrate"
+	"context"
 
 	// required by schema hooks.
 	_ "_examples/without_updatedby/ent/runtime"
+
+	"_examples/without_updatedby/ent/migrate"
+
+	"entgo.io/ent/dialect/sql/schema"
 )
 
 type (

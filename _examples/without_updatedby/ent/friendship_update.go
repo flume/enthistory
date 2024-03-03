@@ -3,6 +3,9 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/character"
+	"_examples/without_updatedby/ent/friendship"
+	"_examples/without_updatedby/ent/predicate"
 	"context"
 	"errors"
 	"fmt"
@@ -11,10 +14,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"_examples/without_updatedby/ent/character"
-	"_examples/without_updatedby/ent/friendship"
-	"_examples/without_updatedby/ent/predicate"
 )
 
 // FriendshipUpdate is the builder for updating Friendship entities.

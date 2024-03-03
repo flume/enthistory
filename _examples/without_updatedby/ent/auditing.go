@@ -11,11 +11,11 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/google/uuid"
-
 	"_examples/without_updatedby/ent/characterhistory"
 	"_examples/without_updatedby/ent/friendshiphistory"
 	"_examples/without_updatedby/ent/residencehistory"
+
+	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
 )
@@ -47,12 +47,6 @@ var (
 
 func (ch *CharacterHistory) changes(new *CharacterHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(ch.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(characterhistory.FieldCreatedAt, ch.CreatedAt, new.CreatedAt))
-	}
-	if !reflect.DeepEqual(ch.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(characterhistory.FieldUpdatedAt, ch.UpdatedAt, new.UpdatedAt))
-	}
 	if !reflect.DeepEqual(ch.Age, new.Age) {
 		changes = append(changes, NewChange(characterhistory.FieldAge, ch.Age, new.Age))
 	}
@@ -65,6 +59,12 @@ func (ch *CharacterHistory) changes(new *CharacterHistory) []Change {
 	if !reflect.DeepEqual(ch.Info, new.Info) {
 		changes = append(changes, NewChange(characterhistory.FieldInfo, ch.Info, new.Info))
 	}
+	if !reflect.DeepEqual(ch.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(characterhistory.FieldCreatedAt, ch.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(ch.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(characterhistory.FieldUpdatedAt, ch.UpdatedAt, new.UpdatedAt))
+	}
 	return changes
 }
 
@@ -73,9 +73,9 @@ func (ch *CharacterHistory) Diff(history *CharacterHistory) (*HistoryDiff[Charac
 		return nil, MismatchedRefError
 	}
 
-	chUnix, historyUnix := ch.HistoryTime.Unix(), history.HistoryTime.Unix()
-	chOlder := chUnix < historyUnix || (chUnix == historyUnix && ch.ID < history.ID)
-	historyOlder := chUnix > historyUnix || (chUnix == historyUnix && ch.ID > history.ID)
+	chUnix, historyUnix := ch.HistoryTime.UnixMilli(), history.HistoryTime.UnixMilli()
+	chOlder := chUnix < historyUnix
+	historyOlder := chUnix > historyUnix
 
 	if chOlder {
 		return &HistoryDiff[CharacterHistory]{
@@ -95,17 +95,17 @@ func (ch *CharacterHistory) Diff(history *CharacterHistory) (*HistoryDiff[Charac
 
 func (fh *FriendshipHistory) changes(new *FriendshipHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(fh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(friendshiphistory.FieldCreatedAt, fh.CreatedAt, new.CreatedAt))
-	}
-	if !reflect.DeepEqual(fh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(friendshiphistory.FieldUpdatedAt, fh.UpdatedAt, new.UpdatedAt))
-	}
 	if !reflect.DeepEqual(fh.CharacterID, new.CharacterID) {
 		changes = append(changes, NewChange(friendshiphistory.FieldCharacterID, fh.CharacterID, new.CharacterID))
 	}
 	if !reflect.DeepEqual(fh.FriendID, new.FriendID) {
 		changes = append(changes, NewChange(friendshiphistory.FieldFriendID, fh.FriendID, new.FriendID))
+	}
+	if !reflect.DeepEqual(fh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(friendshiphistory.FieldCreatedAt, fh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(fh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(friendshiphistory.FieldUpdatedAt, fh.UpdatedAt, new.UpdatedAt))
 	}
 	return changes
 }
@@ -115,9 +115,9 @@ func (fh *FriendshipHistory) Diff(history *FriendshipHistory) (*HistoryDiff[Frie
 		return nil, MismatchedRefError
 	}
 
-	fhUnix, historyUnix := fh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	fhOlder := fhUnix < historyUnix || (fhUnix == historyUnix && fh.ID < history.ID)
-	historyOlder := fhUnix > historyUnix || (fhUnix == historyUnix && fh.ID > history.ID)
+	fhUnix, historyUnix := fh.HistoryTime.UnixMilli(), history.HistoryTime.UnixMilli()
+	fhOlder := fhUnix < historyUnix
+	historyOlder := fhUnix > historyUnix
 
 	if fhOlder {
 		return &HistoryDiff[FriendshipHistory]{
@@ -137,14 +137,14 @@ func (fh *FriendshipHistory) Diff(history *FriendshipHistory) (*HistoryDiff[Frie
 
 func (rh *ResidenceHistory) changes(new *ResidenceHistory) []Change {
 	var changes []Change
+	if !reflect.DeepEqual(rh.Name, new.Name) {
+		changes = append(changes, NewChange(residencehistory.FieldName, rh.Name, new.Name))
+	}
 	if !reflect.DeepEqual(rh.CreatedAt, new.CreatedAt) {
 		changes = append(changes, NewChange(residencehistory.FieldCreatedAt, rh.CreatedAt, new.CreatedAt))
 	}
 	if !reflect.DeepEqual(rh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(residencehistory.FieldUpdatedAt, rh.UpdatedAt, new.UpdatedAt))
-	}
-	if !reflect.DeepEqual(rh.Name, new.Name) {
-		changes = append(changes, NewChange(residencehistory.FieldName, rh.Name, new.Name))
 	}
 	return changes
 }
@@ -154,9 +154,9 @@ func (rh *ResidenceHistory) Diff(history *ResidenceHistory) (*HistoryDiff[Reside
 		return nil, MismatchedRefError
 	}
 
-	rhUnix, historyUnix := rh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	rhOlder := rhUnix < historyUnix || (rhUnix == historyUnix && rh.ID < history.ID)
-	historyOlder := rhUnix > historyUnix || (rhUnix == historyUnix && rh.ID > history.ID)
+	rhUnix, historyUnix := rh.HistoryTime.UnixMilli(), history.HistoryTime.UnixMilli()
+	rhOlder := rhUnix < historyUnix
+	historyOlder := rhUnix > historyUnix
 
 	if rhOlder {
 		return &HistoryDiff[ResidenceHistory]{
@@ -282,7 +282,7 @@ func auditCharacterHistory(ctx context.Context, config config) ([][]string, erro
 
 		for i := 0; i < len(histories); i++ {
 			curr := histories[i]
-			record := record{
+			r := record{
 				Table:       "CharacterHistory",
 				RefId:       curr.Ref,
 				HistoryTime: curr.HistoryTime,
@@ -290,17 +290,17 @@ func auditCharacterHistory(ctx context.Context, config config) ([][]string, erro
 			}
 			switch curr.Operation {
 			case enthistory.OpTypeInsert:
-				record.Changes = (&CharacterHistory{}).changes(curr)
+				r.Changes = (&CharacterHistory{}).changes(curr)
 			case enthistory.OpTypeDelete:
-				record.Changes = curr.changes(&CharacterHistory{})
+				r.Changes = curr.changes(&CharacterHistory{})
 			default:
 				if i == 0 {
-					record.Changes = (&CharacterHistory{}).changes(curr)
+					r.Changes = (&CharacterHistory{}).changes(curr)
 				} else {
-					record.Changes = histories[i-1].changes(curr)
+					r.Changes = histories[i-1].changes(curr)
 				}
 			}
-			records = append(records, record.toRow())
+			records = append(records, r.toRow())
 		}
 	}
 	return records, nil
@@ -334,7 +334,7 @@ func auditFriendshipHistory(ctx context.Context, config config) ([][]string, err
 
 		for i := 0; i < len(histories); i++ {
 			curr := histories[i]
-			record := record{
+			r := record{
 				Table:       "FriendshipHistory",
 				RefId:       curr.Ref,
 				HistoryTime: curr.HistoryTime,
@@ -342,17 +342,17 @@ func auditFriendshipHistory(ctx context.Context, config config) ([][]string, err
 			}
 			switch curr.Operation {
 			case enthistory.OpTypeInsert:
-				record.Changes = (&FriendshipHistory{}).changes(curr)
+				r.Changes = (&FriendshipHistory{}).changes(curr)
 			case enthistory.OpTypeDelete:
-				record.Changes = curr.changes(&FriendshipHistory{})
+				r.Changes = curr.changes(&FriendshipHistory{})
 			default:
 				if i == 0 {
-					record.Changes = (&FriendshipHistory{}).changes(curr)
+					r.Changes = (&FriendshipHistory{}).changes(curr)
 				} else {
-					record.Changes = histories[i-1].changes(curr)
+					r.Changes = histories[i-1].changes(curr)
 				}
 			}
-			records = append(records, record.toRow())
+			records = append(records, r.toRow())
 		}
 	}
 	return records, nil
@@ -386,7 +386,7 @@ func auditResidenceHistory(ctx context.Context, config config) ([][]string, erro
 
 		for i := 0; i < len(histories); i++ {
 			curr := histories[i]
-			record := record{
+			r := record{
 				Table:       "ResidenceHistory",
 				RefId:       curr.Ref,
 				HistoryTime: curr.HistoryTime,
@@ -394,17 +394,17 @@ func auditResidenceHistory(ctx context.Context, config config) ([][]string, erro
 			}
 			switch curr.Operation {
 			case enthistory.OpTypeInsert:
-				record.Changes = (&ResidenceHistory{}).changes(curr)
+				r.Changes = (&ResidenceHistory{}).changes(curr)
 			case enthistory.OpTypeDelete:
-				record.Changes = curr.changes(&ResidenceHistory{})
+				r.Changes = curr.changes(&ResidenceHistory{})
 			default:
 				if i == 0 {
-					record.Changes = (&ResidenceHistory{}).changes(curr)
+					r.Changes = (&ResidenceHistory{}).changes(curr)
 				} else {
-					record.Changes = histories[i-1].changes(curr)
+					r.Changes = histories[i-1].changes(curr)
 				}
 			}
-			records = append(records, record.toRow())
+			records = append(records, r.toRow())
 		}
 	}
 	return records, nil

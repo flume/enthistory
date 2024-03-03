@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/residencehistory"
 	"context"
 	"errors"
 	"fmt"
@@ -11,8 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-
-	"_examples/without_updatedby/ent/residencehistory"
 
 	"github.com/flume/enthistory"
 )
@@ -58,6 +57,12 @@ func (rhc *ResidenceHistoryCreate) SetNillableRef(u *uuid.UUID) *ResidenceHistor
 	return rhc
 }
 
+// SetName sets the "name" field.
+func (rhc *ResidenceHistoryCreate) SetName(s string) *ResidenceHistoryCreate {
+	rhc.mutation.SetName(s)
+	return rhc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (rhc *ResidenceHistoryCreate) SetCreatedAt(t time.Time) *ResidenceHistoryCreate {
 	rhc.mutation.SetCreatedAt(t)
@@ -83,12 +88,6 @@ func (rhc *ResidenceHistoryCreate) SetNillableUpdatedAt(t *time.Time) *Residence
 	if t != nil {
 		rhc.SetUpdatedAt(*t)
 	}
-	return rhc
-}
-
-// SetName sets the "name" field.
-func (rhc *ResidenceHistoryCreate) SetName(s string) *ResidenceHistoryCreate {
-	rhc.mutation.SetName(s)
 	return rhc
 }
 
@@ -160,14 +159,14 @@ func (rhc *ResidenceHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`ent: validator failed for field "ResidenceHistory.operation": %w`, err)}
 		}
 	}
+	if _, ok := rhc.mutation.Name(); !ok {
+		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "ResidenceHistory.name"`)}
+	}
 	if _, ok := rhc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "ResidenceHistory.created_at"`)}
 	}
 	if _, ok := rhc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "ResidenceHistory.updated_at"`)}
-	}
-	if _, ok := rhc.mutation.Name(); !ok {
-		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "ResidenceHistory.name"`)}
 	}
 	return nil
 }
@@ -213,6 +212,10 @@ func (rhc *ResidenceHistoryCreate) createSpec() (*ResidenceHistory, *sqlgraph.Cr
 		_spec.SetField(residencehistory.FieldRef, field.TypeUUID, value)
 		_node.Ref = value
 	}
+	if value, ok := rhc.mutation.Name(); ok {
+		_spec.SetField(residencehistory.FieldName, field.TypeString, value)
+		_node.Name = value
+	}
 	if value, ok := rhc.mutation.CreatedAt(); ok {
 		_spec.SetField(residencehistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -220,10 +223,6 @@ func (rhc *ResidenceHistoryCreate) createSpec() (*ResidenceHistory, *sqlgraph.Cr
 	if value, ok := rhc.mutation.UpdatedAt(); ok {
 		_spec.SetField(residencehistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
-	}
-	if value, ok := rhc.mutation.Name(); ok {
-		_spec.SetField(residencehistory.FieldName, field.TypeString, value)
-		_node.Name = value
 	}
 	return _node, _spec
 }

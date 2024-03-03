@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/characterhistory"
 	"context"
 	"errors"
 	"fmt"
@@ -10,8 +11,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"_examples/without_updatedby/ent/characterhistory"
 
 	"github.com/flume/enthistory"
 )
@@ -57,6 +56,30 @@ func (chc *CharacterHistoryCreate) SetNillableRef(i *int) *CharacterHistoryCreat
 	return chc
 }
 
+// SetAge sets the "age" field.
+func (chc *CharacterHistoryCreate) SetAge(i int) *CharacterHistoryCreate {
+	chc.mutation.SetAge(i)
+	return chc
+}
+
+// SetName sets the "name" field.
+func (chc *CharacterHistoryCreate) SetName(s string) *CharacterHistoryCreate {
+	chc.mutation.SetName(s)
+	return chc
+}
+
+// SetNicknames sets the "nicknames" field.
+func (chc *CharacterHistoryCreate) SetNicknames(s []string) *CharacterHistoryCreate {
+	chc.mutation.SetNicknames(s)
+	return chc
+}
+
+// SetInfo sets the "info" field.
+func (chc *CharacterHistoryCreate) SetInfo(m map[string]interface{}) *CharacterHistoryCreate {
+	chc.mutation.SetInfo(m)
+	return chc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (chc *CharacterHistoryCreate) SetCreatedAt(t time.Time) *CharacterHistoryCreate {
 	chc.mutation.SetCreatedAt(t)
@@ -82,30 +105,6 @@ func (chc *CharacterHistoryCreate) SetNillableUpdatedAt(t *time.Time) *Character
 	if t != nil {
 		chc.SetUpdatedAt(*t)
 	}
-	return chc
-}
-
-// SetAge sets the "age" field.
-func (chc *CharacterHistoryCreate) SetAge(i int) *CharacterHistoryCreate {
-	chc.mutation.SetAge(i)
-	return chc
-}
-
-// SetName sets the "name" field.
-func (chc *CharacterHistoryCreate) SetName(s string) *CharacterHistoryCreate {
-	chc.mutation.SetName(s)
-	return chc
-}
-
-// SetNicknames sets the "nicknames" field.
-func (chc *CharacterHistoryCreate) SetNicknames(s []string) *CharacterHistoryCreate {
-	chc.mutation.SetNicknames(s)
-	return chc
-}
-
-// SetInfo sets the "info" field.
-func (chc *CharacterHistoryCreate) SetInfo(m map[string]interface{}) *CharacterHistoryCreate {
-	chc.mutation.SetInfo(m)
 	return chc
 }
 
@@ -171,22 +170,17 @@ func (chc *CharacterHistoryCreate) check() error {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`ent: validator failed for field "CharacterHistory.operation": %w`, err)}
 		}
 	}
+	if _, ok := chc.mutation.Age(); !ok {
+		return &ValidationError{Name: "age", err: errors.New(`ent: missing required field "CharacterHistory.age"`)}
+	}
+	if _, ok := chc.mutation.Name(); !ok {
+		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "CharacterHistory.name"`)}
+	}
 	if _, ok := chc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "CharacterHistory.created_at"`)}
 	}
 	if _, ok := chc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "CharacterHistory.updated_at"`)}
-	}
-	if _, ok := chc.mutation.Age(); !ok {
-		return &ValidationError{Name: "age", err: errors.New(`ent: missing required field "CharacterHistory.age"`)}
-	}
-	if v, ok := chc.mutation.Age(); ok {
-		if err := characterhistory.AgeValidator(v); err != nil {
-			return &ValidationError{Name: "age", err: fmt.Errorf(`ent: validator failed for field "CharacterHistory.age": %w`, err)}
-		}
-	}
-	if _, ok := chc.mutation.Name(); !ok {
-		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "CharacterHistory.name"`)}
 	}
 	return nil
 }
@@ -226,14 +220,6 @@ func (chc *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cr
 		_spec.SetField(characterhistory.FieldRef, field.TypeInt, value)
 		_node.Ref = value
 	}
-	if value, ok := chc.mutation.CreatedAt(); ok {
-		_spec.SetField(characterhistory.FieldCreatedAt, field.TypeTime, value)
-		_node.CreatedAt = value
-	}
-	if value, ok := chc.mutation.UpdatedAt(); ok {
-		_spec.SetField(characterhistory.FieldUpdatedAt, field.TypeTime, value)
-		_node.UpdatedAt = value
-	}
 	if value, ok := chc.mutation.Age(); ok {
 		_spec.SetField(characterhistory.FieldAge, field.TypeInt, value)
 		_node.Age = value
@@ -249,6 +235,14 @@ func (chc *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cr
 	if value, ok := chc.mutation.Info(); ok {
 		_spec.SetField(characterhistory.FieldInfo, field.TypeJSON, value)
 		_node.Info = value
+	}
+	if value, ok := chc.mutation.CreatedAt(); ok {
+		_spec.SetField(characterhistory.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := chc.mutation.UpdatedAt(); ok {
+		_spec.SetField(characterhistory.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
 	}
 	return _node, _spec
 }

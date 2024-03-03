@@ -3,6 +3,10 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/character"
+	"_examples/without_updatedby/ent/friendship"
+	"_examples/without_updatedby/ent/predicate"
+	"_examples/without_updatedby/ent/residence"
 	"context"
 	"errors"
 	"fmt"
@@ -13,11 +17,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-
-	"_examples/without_updatedby/ent/character"
-	"_examples/without_updatedby/ent/friendship"
-	"_examples/without_updatedby/ent/predicate"
-	"_examples/without_updatedby/ent/residence"
 )
 
 // CharacterUpdate is the builder for updating Character entities.

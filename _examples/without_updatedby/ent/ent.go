@@ -3,6 +3,12 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/character"
+	"_examples/without_updatedby/ent/characterhistory"
+	"_examples/without_updatedby/ent/friendship"
+	"_examples/without_updatedby/ent/friendshiphistory"
+	"_examples/without_updatedby/ent/residence"
+	"_examples/without_updatedby/ent/residencehistory"
 	"context"
 	"errors"
 	"fmt"
@@ -12,13 +18,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-
-	"_examples/without_updatedby/ent/character"
-	"_examples/without_updatedby/ent/characterhistory"
-	"_examples/without_updatedby/ent/friendship"
-	"_examples/without_updatedby/ent/friendshiphistory"
-	"_examples/without_updatedby/ent/residence"
-	"_examples/without_updatedby/ent/residencehistory"
 )
 
 // ent aliases to avoid import conflicts in user's code.

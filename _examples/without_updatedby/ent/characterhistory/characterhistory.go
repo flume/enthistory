@@ -22,10 +22,6 @@ const (
 	FieldOperation = "operation"
 	// FieldRef holds the string denoting the ref field in the database.
 	FieldRef = "ref"
-	// FieldCreatedAt holds the string denoting the created_at field in the database.
-	FieldCreatedAt = "created_at"
-	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
-	FieldUpdatedAt = "updated_at"
 	// FieldAge holds the string denoting the age field in the database.
 	FieldAge = "age"
 	// FieldName holds the string denoting the name field in the database.
@@ -34,6 +30,10 @@ const (
 	FieldNicknames = "nicknames"
 	// FieldInfo holds the string denoting the info field in the database.
 	FieldInfo = "info"
+	// FieldCreatedAt holds the string denoting the created_at field in the database.
+	FieldCreatedAt = "created_at"
+	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
+	FieldUpdatedAt = "updated_at"
 	// Table holds the table name of the characterhistory in the database.
 	Table = "character_history"
 )
@@ -44,12 +44,12 @@ var Columns = []string{
 	FieldHistoryTime,
 	FieldOperation,
 	FieldRef,
-	FieldCreatedAt,
-	FieldUpdatedAt,
 	FieldAge,
 	FieldName,
 	FieldNicknames,
 	FieldInfo,
+	FieldCreatedAt,
+	FieldUpdatedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -69,8 +69,6 @@ var (
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
 	DefaultUpdatedAt func() time.Time
-	// AgeValidator is a validator for the "age" field. It is called by the builders before save.
-	AgeValidator func(int) error
 )
 
 // OperationValidator is a validator for the "operation" field enum values. It is called by the builders before save.
@@ -106,16 +104,6 @@ func ByRef(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRef, opts...).ToFunc()
 }
 
-// ByCreatedAt orders the results by the created_at field.
-func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
-}
-
-// ByUpdatedAt orders the results by the updated_at field.
-func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
-}
-
 // ByAge orders the results by the age field.
 func ByAge(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAge, opts...).ToFunc()
@@ -124,4 +112,14 @@ func ByAge(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByCreatedAt orders the results by the created_at field.
+func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
+}
+
+// ByUpdatedAt orders the results by the updated_at field.
+func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
