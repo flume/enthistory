@@ -180,9 +180,9 @@ func entSQL(annot schema.Annotation) (ast.Expr, bool, error) {
 }
 
 func entGQL(annot schema.Annotation) (ast.Expr, bool, error) {
-	m := &entgql.Annotation{}
-	if err := mapstructure.Decode(annot, m); err != nil {
-		return nil, false, err
+	m, ok := annot.(entgql.Annotation)
+	if !ok {
+		return nil, false, fmt.Errorf("schemast: unexpected annotation type %T", annot)
 	}
 	c := &ast.CompositeLit{
 		Type: selectorLit("entgql", "Annotation"),
@@ -243,7 +243,7 @@ func entGQL(annot schema.Annotation) (ast.Expr, bool, error) {
 	}
 	if m.QueryField != nil {
 		qf := &ast.CompositeLit{
-			Type: selectorLit("entgql", "FieldConfig"),
+			Type: selectorLit("&entgql", "FieldConfig"),
 		}
 		if m.QueryField.Name != "" {
 			qf.Elts = append(qf.Elts, structAttr("Name", strLit(m.QueryField.Name)))
