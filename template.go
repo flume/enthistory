@@ -2,6 +2,9 @@ package enthistory
 
 import (
 	"strings"
+	"text/template"
+
+	"entgo.io/ent/entc/gen"
 )
 
 func extractUpdatedByKey(val any) string {
@@ -30,10 +33,6 @@ func extractUpdatedByValueType(val any) string {
 	}
 }
 
-// func fieldPropertiesNillable(config Config) bool {
-// 	return config.FieldProperties != nil && config.FieldProperties.Nillable
-// }
-
 func isSlice(typeString string) bool {
 	return strings.HasPrefix(typeString, "[]")
 }
@@ -47,14 +46,13 @@ func in(str string, list []string) bool {
 	return false
 }
 
-// func parseTemplate(name, path string) *gen.Template {
-// 	t := gen.NewTemplate(name)
-// 	t.Funcs(template.FuncMap{
-// 		"extractUpdatedByKey":       extractUpdatedByKey,
-// 		"extractUpdatedByValueType": extractUpdatedByValueType,
-// 		"fieldPropertiesNillable":   fieldPropertiesNillable,
-// 		"isSlice":                   isSlice,
-// 		"in":                        in,
-// 	})
-// 	return gen.MustParse(t.ParseFS(_templates, path))
-// }
+func parseTemplate(name, path string) *gen.Template {
+	t := gen.NewTemplate(name)
+	t.Funcs(template.FuncMap{
+		"extractUpdatedByKey":       extractUpdatedByKey,
+		"extractUpdatedByValueType": extractUpdatedByValueType,
+		"isSlice":                   isSlice,
+		"in":                        in,
+	})
+	return gen.MustParse(t.ParseFS(_templates, path))
+}

@@ -37,6 +37,9 @@ func main() {
 			Schema:  "_examples/testdata/debug/schema",
 			Package: "_examples/testdata/debug/internal/ent",
 		},
+		entc.Extensions(
+			enthistory.NewHistoryExtension(enthistory.WithAuditing()),
+		),
 	); err != nil {
 		log.Fatal("running ent codegen:", err)
 	}
