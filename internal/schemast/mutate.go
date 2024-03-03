@@ -63,7 +63,7 @@ func (u *UpsertSchema) Mutate(ctx *Context) error {
 			return err
 		}
 		if fld.Descriptor().Info.Type == field.TypeUUID {
-			ctx.appendImport(u.Name, "github.com/google/uuid")
+			ctx.appendImport(u.Name, `"github.com/google/uuid"`)
 		}
 		// Append any imported struct for JSON fields
 		if fld.Descriptor().Info.Type == field.TypeJSON {
