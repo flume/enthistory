@@ -9,8 +9,6 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-
-	"github.com/flume/enthistory"
 )
 
 // TestExclude holds the schema definition for the TestExclude entity.
@@ -37,9 +35,6 @@ func (TestExclude) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{
 			Table: "TestExclude",
-		},
-		enthistory.Annotations{
-			Exclude: true,
 		},
 	}
 }
