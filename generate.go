@@ -203,7 +203,35 @@ func handleAnnotation(schemaName string, ants []schema.Annotation) []schema.Anno
 			annotations[idx] = ant
 		}
 	}
-	return annotations
+
+	var mergedAnnotations []schema.Annotation
+	antMap := make(map[string][]schema.Annotation)
+	for _, a := range annotations {
+		name := a.Name()
+		if named, ok := antMap[name]; !ok {
+			antMap[name] = []schema.Annotation{a}
+		} else {
+			antMap[name] = append(named, a)
+		}
+	}
+
+	for _, a := range antMap {
+		if len(a) <= 1 {
+			mergedAnnotations = append(mergedAnnotations, a...)
+			continue
+		}
+		an0 := a[0]
+		if merger, ok := any(an0).(schema.Merger); ok {
+			for _, v := range a[1:] {
+				an0 = merger.Merge(v)
+			}
+			mergedAnnotations = append(mergedAnnotations, an0)
+		} else {
+			mergedAnnotations = append(mergedAnnotations, a...)
+		}
+	}
+
+	return mergedAnnotations
 }
 
 func historyFields(schema ent.Interface, opts HistoryOptions) ([]ent.Field, error) {
