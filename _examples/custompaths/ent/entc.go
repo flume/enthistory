@@ -3,7 +3,11 @@
 package main
 
 import (
+	"_examples/custompaths/ent/some/otherschema"
+	"fmt"
 	"log"
+
+	"entgo.io/ent"
 
 	"entgo.io/ent/entc/gen"
 
@@ -17,6 +21,12 @@ const (
 )
 
 func main() {
+	if err := enthistory.Generate(schemaPath, []ent.Interface{
+		&otherschema.Character{},
+		&otherschema.Friendship{},
+	}); err != nil {
+		log.Fatal(fmt.Sprintf("running enthistory codegen: %v", err))
+	}
 	if err := entc.Generate(schemaPath,
 		&gen.Config{
 			Target:  "../internal/ent",
@@ -24,9 +34,7 @@ func main() {
 			Package: "_examples/custompaths/internal/ent",
 		},
 		entc.Extensions(
-			enthistory.NewHistoryExtension(
-				enthistory.WithSchemaPath(schemaPath),
-			),
+			enthistory.NewHistoryExtension(),
 		),
 	); err != nil {
 		log.Fatal("running ent codegen:", err)
