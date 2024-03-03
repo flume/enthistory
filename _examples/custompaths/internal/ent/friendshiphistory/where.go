@@ -67,11 +67,6 @@ func Ref(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldEQ(FieldRef, v))
 }
 
-// UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
-func UpdatedBy(v int) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldEQ(FieldUpdatedBy, v))
-}
-
 // CharacterID applies equality check predicate on the "character_id" field. It's identical to CharacterIDEQ.
 func CharacterID(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldEQ(FieldCharacterID, v))
@@ -190,56 +185,6 @@ func RefIsNil() predicate.FriendshipHistory {
 // RefNotNil applies the NotNil predicate on the "ref" field.
 func RefNotNil() predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldNotNull(FieldRef))
-}
-
-// UpdatedByEQ applies the EQ predicate on the "updated_by" field.
-func UpdatedByEQ(v int) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldEQ(FieldUpdatedBy, v))
-}
-
-// UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
-func UpdatedByNEQ(v int) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldNEQ(FieldUpdatedBy, v))
-}
-
-// UpdatedByIn applies the In predicate on the "updated_by" field.
-func UpdatedByIn(vs ...int) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldIn(FieldUpdatedBy, vs...))
-}
-
-// UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
-func UpdatedByNotIn(vs ...int) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldNotIn(FieldUpdatedBy, vs...))
-}
-
-// UpdatedByGT applies the GT predicate on the "updated_by" field.
-func UpdatedByGT(v int) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldGT(FieldUpdatedBy, v))
-}
-
-// UpdatedByGTE applies the GTE predicate on the "updated_by" field.
-func UpdatedByGTE(v int) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldGTE(FieldUpdatedBy, v))
-}
-
-// UpdatedByLT applies the LT predicate on the "updated_by" field.
-func UpdatedByLT(v int) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldLT(FieldUpdatedBy, v))
-}
-
-// UpdatedByLTE applies the LTE predicate on the "updated_by" field.
-func UpdatedByLTE(v int) predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldLTE(FieldUpdatedBy, v))
-}
-
-// UpdatedByIsNil applies the IsNil predicate on the "updated_by" field.
-func UpdatedByIsNil() predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldIsNull(FieldUpdatedBy))
-}
-
-// UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
-func UpdatedByNotNil() predicate.FriendshipHistory {
-	return predicate.FriendshipHistory(sql.FieldNotNull(FieldUpdatedBy))
 }
 
 // CharacterIDEQ applies the EQ predicate on the "character_id" field.

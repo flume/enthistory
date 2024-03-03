@@ -64,12 +64,10 @@ func (e CharacterEdges) FriendsOrErr() ([]*Character, error) {
 // ResidenceOrErr returns the Residence value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e CharacterEdges) ResidenceOrErr() (*Residence, error) {
-	if e.loadedTypes[1] {
-		if e.Residence == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: residence.Label}
-		}
+	if e.Residence != nil {
 		return e.Residence, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: residence.Label}
 	}
 	return nil, &NotLoadedError{edge: "residence"}
 }

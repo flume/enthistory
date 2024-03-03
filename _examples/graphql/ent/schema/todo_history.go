@@ -48,5 +48,5 @@ func (TodoHistory) Edges() []ent.Edge {
 	return nil
 }
 func (TodoHistory) Annotations() []schema.Annotation {
-	return []schema.Annotation{entgql.Annotation{RelayConnection: true, QueryField: &entgql.FieldConfig{}, MutationInputs: []entgql.MutationConfig{entgql.MutationConfig{IsCreate: true}, entgql.MutationConfig{}}}, entsql.Annotation{Table: "todo_history"}}
+	return []schema.Annotation{entsql.Annotation{Table: "todo_history"}, entgql.Annotation{RelayConnection: true, QueryField: &entgql.FieldConfig{}, MutationInputs: []entgql.MutationConfig{entgql.MutationConfig{IsCreate: true}, entgql.MutationConfig{}}}}
 }

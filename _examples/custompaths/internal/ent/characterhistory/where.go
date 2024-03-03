@@ -67,11 +67,6 @@ func Ref(v uuid.UUID) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldEQ(FieldRef, v))
 }
 
-// UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
-func UpdatedBy(v int) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldEQ(FieldUpdatedBy, v))
-}
-
 // Age applies equality check predicate on the "age" field. It's identical to AgeEQ.
 func Age(v int) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldEQ(FieldAge, v))
@@ -190,56 +185,6 @@ func RefIsNil() predicate.CharacterHistory {
 // RefNotNil applies the NotNil predicate on the "ref" field.
 func RefNotNil() predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldNotNull(FieldRef))
-}
-
-// UpdatedByEQ applies the EQ predicate on the "updated_by" field.
-func UpdatedByEQ(v int) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldEQ(FieldUpdatedBy, v))
-}
-
-// UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
-func UpdatedByNEQ(v int) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldNEQ(FieldUpdatedBy, v))
-}
-
-// UpdatedByIn applies the In predicate on the "updated_by" field.
-func UpdatedByIn(vs ...int) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldIn(FieldUpdatedBy, vs...))
-}
-
-// UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
-func UpdatedByNotIn(vs ...int) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldNotIn(FieldUpdatedBy, vs...))
-}
-
-// UpdatedByGT applies the GT predicate on the "updated_by" field.
-func UpdatedByGT(v int) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldGT(FieldUpdatedBy, v))
-}
-
-// UpdatedByGTE applies the GTE predicate on the "updated_by" field.
-func UpdatedByGTE(v int) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldGTE(FieldUpdatedBy, v))
-}
-
-// UpdatedByLT applies the LT predicate on the "updated_by" field.
-func UpdatedByLT(v int) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldLT(FieldUpdatedBy, v))
-}
-
-// UpdatedByLTE applies the LTE predicate on the "updated_by" field.
-func UpdatedByLTE(v int) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldLTE(FieldUpdatedBy, v))
-}
-
-// UpdatedByIsNil applies the IsNil predicate on the "updated_by" field.
-func UpdatedByIsNil() predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldIsNull(FieldUpdatedBy))
-}
-
-// UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
-func UpdatedByNotNil() predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldNotNull(FieldUpdatedBy))
 }
 
 // AgeEQ applies the EQ predicate on the "age" field.

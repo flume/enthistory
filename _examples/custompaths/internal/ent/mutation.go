@@ -643,8 +643,6 @@ type CharacterHistoryMutation struct {
 	history_time  *time.Time
 	operation     *enthistory.OpType
 	ref           *uuid.UUID
-	updated_by    *int
-	addupdated_by *int
 	age           *int
 	addage        *int
 	name          *string
@@ -879,76 +877,6 @@ func (m *CharacterHistoryMutation) ResetRef() {
 	delete(m.clearedFields, characterhistory.FieldRef)
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (m *CharacterHistoryMutation) SetUpdatedBy(i int) {
-	m.updated_by = &i
-	m.addupdated_by = nil
-}
-
-// UpdatedBy returns the value of the "updated_by" field in the mutation.
-func (m *CharacterHistoryMutation) UpdatedBy() (r int, exists bool) {
-	v := m.updated_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUpdatedBy returns the old "updated_by" field's value of the CharacterHistory entity.
-// If the CharacterHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CharacterHistoryMutation) OldUpdatedBy(ctx context.Context) (v *int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
-	}
-	return oldValue.UpdatedBy, nil
-}
-
-// AddUpdatedBy adds i to the "updated_by" field.
-func (m *CharacterHistoryMutation) AddUpdatedBy(i int) {
-	if m.addupdated_by != nil {
-		*m.addupdated_by += i
-	} else {
-		m.addupdated_by = &i
-	}
-}
-
-// AddedUpdatedBy returns the value that was added to the "updated_by" field in this mutation.
-func (m *CharacterHistoryMutation) AddedUpdatedBy() (r int, exists bool) {
-	v := m.addupdated_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (m *CharacterHistoryMutation) ClearUpdatedBy() {
-	m.updated_by = nil
-	m.addupdated_by = nil
-	m.clearedFields[characterhistory.FieldUpdatedBy] = struct{}{}
-}
-
-// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
-func (m *CharacterHistoryMutation) UpdatedByCleared() bool {
-	_, ok := m.clearedFields[characterhistory.FieldUpdatedBy]
-	return ok
-}
-
-// ResetUpdatedBy resets all changes to the "updated_by" field.
-func (m *CharacterHistoryMutation) ResetUpdatedBy() {
-	m.updated_by = nil
-	m.addupdated_by = nil
-	delete(m.clearedFields, characterhistory.FieldUpdatedBy)
-}
-
 // SetAge sets the "age" field.
 func (m *CharacterHistoryMutation) SetAge(i int) {
 	m.age = &i
@@ -1075,7 +1003,7 @@ func (m *CharacterHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CharacterHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 5)
 	if m.history_time != nil {
 		fields = append(fields, characterhistory.FieldHistoryTime)
 	}
@@ -1084,9 +1012,6 @@ func (m *CharacterHistoryMutation) Fields() []string {
 	}
 	if m.ref != nil {
 		fields = append(fields, characterhistory.FieldRef)
-	}
-	if m.updated_by != nil {
-		fields = append(fields, characterhistory.FieldUpdatedBy)
 	}
 	if m.age != nil {
 		fields = append(fields, characterhistory.FieldAge)
@@ -1108,8 +1033,6 @@ func (m *CharacterHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Operation()
 	case characterhistory.FieldRef:
 		return m.Ref()
-	case characterhistory.FieldUpdatedBy:
-		return m.UpdatedBy()
 	case characterhistory.FieldAge:
 		return m.Age()
 	case characterhistory.FieldName:
@@ -1129,8 +1052,6 @@ func (m *CharacterHistoryMutation) OldField(ctx context.Context, name string) (e
 		return m.OldOperation(ctx)
 	case characterhistory.FieldRef:
 		return m.OldRef(ctx)
-	case characterhistory.FieldUpdatedBy:
-		return m.OldUpdatedBy(ctx)
 	case characterhistory.FieldAge:
 		return m.OldAge(ctx)
 	case characterhistory.FieldName:
@@ -1165,13 +1086,6 @@ func (m *CharacterHistoryMutation) SetField(name string, value ent.Value) error 
 		}
 		m.SetRef(v)
 		return nil
-	case characterhistory.FieldUpdatedBy:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUpdatedBy(v)
-		return nil
 	case characterhistory.FieldAge:
 		v, ok := value.(int)
 		if !ok {
@@ -1194,9 +1108,6 @@ func (m *CharacterHistoryMutation) SetField(name string, value ent.Value) error 
 // this mutation.
 func (m *CharacterHistoryMutation) AddedFields() []string {
 	var fields []string
-	if m.addupdated_by != nil {
-		fields = append(fields, characterhistory.FieldUpdatedBy)
-	}
 	if m.addage != nil {
 		fields = append(fields, characterhistory.FieldAge)
 	}
@@ -1208,8 +1119,6 @@ func (m *CharacterHistoryMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *CharacterHistoryMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case characterhistory.FieldUpdatedBy:
-		return m.AddedUpdatedBy()
 	case characterhistory.FieldAge:
 		return m.AddedAge()
 	}
@@ -1221,13 +1130,6 @@ func (m *CharacterHistoryMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *CharacterHistoryMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case characterhistory.FieldUpdatedBy:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddUpdatedBy(v)
-		return nil
 	case characterhistory.FieldAge:
 		v, ok := value.(int)
 		if !ok {
@@ -1246,9 +1148,6 @@ func (m *CharacterHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(characterhistory.FieldRef) {
 		fields = append(fields, characterhistory.FieldRef)
 	}
-	if m.FieldCleared(characterhistory.FieldUpdatedBy) {
-		fields = append(fields, characterhistory.FieldUpdatedBy)
-	}
 	return fields
 }
 
@@ -1266,9 +1165,6 @@ func (m *CharacterHistoryMutation) ClearField(name string) error {
 	case characterhistory.FieldRef:
 		m.ClearRef()
 		return nil
-	case characterhistory.FieldUpdatedBy:
-		m.ClearUpdatedBy()
-		return nil
 	}
 	return fmt.Errorf("unknown CharacterHistory nullable field %s", name)
 }
@@ -1285,9 +1181,6 @@ func (m *CharacterHistoryMutation) ResetField(name string) error {
 		return nil
 	case characterhistory.FieldRef:
 		m.ResetRef()
-		return nil
-	case characterhistory.FieldUpdatedBy:
-		m.ResetUpdatedBy()
 		return nil
 	case characterhistory.FieldAge:
 		m.ResetAge()
@@ -1842,8 +1735,6 @@ type FriendshipHistoryMutation struct {
 	history_time  *time.Time
 	operation     *enthistory.OpType
 	ref           *uuid.UUID
-	updated_by    *int
-	addupdated_by *int
 	character_id  *uuid.UUID
 	friend_id     *uuid.UUID
 	clearedFields map[string]struct{}
@@ -2077,76 +1968,6 @@ func (m *FriendshipHistoryMutation) ResetRef() {
 	delete(m.clearedFields, friendshiphistory.FieldRef)
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (m *FriendshipHistoryMutation) SetUpdatedBy(i int) {
-	m.updated_by = &i
-	m.addupdated_by = nil
-}
-
-// UpdatedBy returns the value of the "updated_by" field in the mutation.
-func (m *FriendshipHistoryMutation) UpdatedBy() (r int, exists bool) {
-	v := m.updated_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUpdatedBy returns the old "updated_by" field's value of the FriendshipHistory entity.
-// If the FriendshipHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FriendshipHistoryMutation) OldUpdatedBy(ctx context.Context) (v *int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
-	}
-	return oldValue.UpdatedBy, nil
-}
-
-// AddUpdatedBy adds i to the "updated_by" field.
-func (m *FriendshipHistoryMutation) AddUpdatedBy(i int) {
-	if m.addupdated_by != nil {
-		*m.addupdated_by += i
-	} else {
-		m.addupdated_by = &i
-	}
-}
-
-// AddedUpdatedBy returns the value that was added to the "updated_by" field in this mutation.
-func (m *FriendshipHistoryMutation) AddedUpdatedBy() (r int, exists bool) {
-	v := m.addupdated_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (m *FriendshipHistoryMutation) ClearUpdatedBy() {
-	m.updated_by = nil
-	m.addupdated_by = nil
-	m.clearedFields[friendshiphistory.FieldUpdatedBy] = struct{}{}
-}
-
-// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
-func (m *FriendshipHistoryMutation) UpdatedByCleared() bool {
-	_, ok := m.clearedFields[friendshiphistory.FieldUpdatedBy]
-	return ok
-}
-
-// ResetUpdatedBy resets all changes to the "updated_by" field.
-func (m *FriendshipHistoryMutation) ResetUpdatedBy() {
-	m.updated_by = nil
-	m.addupdated_by = nil
-	delete(m.clearedFields, friendshiphistory.FieldUpdatedBy)
-}
-
 // SetCharacterID sets the "character_id" field.
 func (m *FriendshipHistoryMutation) SetCharacterID(u uuid.UUID) {
 	m.character_id = &u
@@ -2253,7 +2074,7 @@ func (m *FriendshipHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *FriendshipHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 5)
 	if m.history_time != nil {
 		fields = append(fields, friendshiphistory.FieldHistoryTime)
 	}
@@ -2262,9 +2083,6 @@ func (m *FriendshipHistoryMutation) Fields() []string {
 	}
 	if m.ref != nil {
 		fields = append(fields, friendshiphistory.FieldRef)
-	}
-	if m.updated_by != nil {
-		fields = append(fields, friendshiphistory.FieldUpdatedBy)
 	}
 	if m.character_id != nil {
 		fields = append(fields, friendshiphistory.FieldCharacterID)
@@ -2286,8 +2104,6 @@ func (m *FriendshipHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Operation()
 	case friendshiphistory.FieldRef:
 		return m.Ref()
-	case friendshiphistory.FieldUpdatedBy:
-		return m.UpdatedBy()
 	case friendshiphistory.FieldCharacterID:
 		return m.CharacterID()
 	case friendshiphistory.FieldFriendID:
@@ -2307,8 +2123,6 @@ func (m *FriendshipHistoryMutation) OldField(ctx context.Context, name string) (
 		return m.OldOperation(ctx)
 	case friendshiphistory.FieldRef:
 		return m.OldRef(ctx)
-	case friendshiphistory.FieldUpdatedBy:
-		return m.OldUpdatedBy(ctx)
 	case friendshiphistory.FieldCharacterID:
 		return m.OldCharacterID(ctx)
 	case friendshiphistory.FieldFriendID:
@@ -2343,13 +2157,6 @@ func (m *FriendshipHistoryMutation) SetField(name string, value ent.Value) error
 		}
 		m.SetRef(v)
 		return nil
-	case friendshiphistory.FieldUpdatedBy:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUpdatedBy(v)
-		return nil
 	case friendshiphistory.FieldCharacterID:
 		v, ok := value.(uuid.UUID)
 		if !ok {
@@ -2371,21 +2178,13 @@ func (m *FriendshipHistoryMutation) SetField(name string, value ent.Value) error
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *FriendshipHistoryMutation) AddedFields() []string {
-	var fields []string
-	if m.addupdated_by != nil {
-		fields = append(fields, friendshiphistory.FieldUpdatedBy)
-	}
-	return fields
+	return nil
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *FriendshipHistoryMutation) AddedField(name string) (ent.Value, bool) {
-	switch name {
-	case friendshiphistory.FieldUpdatedBy:
-		return m.AddedUpdatedBy()
-	}
 	return nil, false
 }
 
@@ -2394,13 +2193,6 @@ func (m *FriendshipHistoryMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *FriendshipHistoryMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case friendshiphistory.FieldUpdatedBy:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddUpdatedBy(v)
-		return nil
 	}
 	return fmt.Errorf("unknown FriendshipHistory numeric field %s", name)
 }
@@ -2411,9 +2203,6 @@ func (m *FriendshipHistoryMutation) ClearedFields() []string {
 	var fields []string
 	if m.FieldCleared(friendshiphistory.FieldRef) {
 		fields = append(fields, friendshiphistory.FieldRef)
-	}
-	if m.FieldCleared(friendshiphistory.FieldUpdatedBy) {
-		fields = append(fields, friendshiphistory.FieldUpdatedBy)
 	}
 	return fields
 }
@@ -2432,9 +2221,6 @@ func (m *FriendshipHistoryMutation) ClearField(name string) error {
 	case friendshiphistory.FieldRef:
 		m.ClearRef()
 		return nil
-	case friendshiphistory.FieldUpdatedBy:
-		m.ClearUpdatedBy()
-		return nil
 	}
 	return fmt.Errorf("unknown FriendshipHistory nullable field %s", name)
 }
@@ -2451,9 +2237,6 @@ func (m *FriendshipHistoryMutation) ResetField(name string) error {
 		return nil
 	case friendshiphistory.FieldRef:
 		m.ResetRef()
-		return nil
-	case friendshiphistory.FieldUpdatedBy:
-		m.ResetUpdatedBy()
 		return nil
 	case friendshiphistory.FieldCharacterID:
 		m.ResetCharacterID()

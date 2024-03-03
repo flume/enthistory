@@ -57,20 +57,6 @@ func (chc *CharacterHistoryCreate) SetNillableRef(u *uuid.UUID) *CharacterHistor
 	return chc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (chc *CharacterHistoryCreate) SetUpdatedBy(i int) *CharacterHistoryCreate {
-	chc.mutation.SetUpdatedBy(i)
-	return chc
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (chc *CharacterHistoryCreate) SetNillableUpdatedBy(i *int) *CharacterHistoryCreate {
-	if i != nil {
-		chc.SetUpdatedBy(*i)
-	}
-	return chc
-}
-
 // SetAge sets the "age" field.
 func (chc *CharacterHistoryCreate) SetAge(i int) *CharacterHistoryCreate {
 	chc.mutation.SetAge(i)
@@ -192,10 +178,6 @@ func (chc *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cr
 	if value, ok := chc.mutation.Ref(); ok {
 		_spec.SetField(characterhistory.FieldRef, field.TypeUUID, value)
 		_node.Ref = value
-	}
-	if value, ok := chc.mutation.UpdatedBy(); ok {
-		_spec.SetField(characterhistory.FieldUpdatedBy, field.TypeInt, value)
-		_node.UpdatedBy = &value
 	}
 	if value, ok := chc.mutation.Age(); ok {
 		_spec.SetField(characterhistory.FieldAge, field.TypeInt, value)

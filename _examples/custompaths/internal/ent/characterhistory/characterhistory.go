@@ -22,8 +22,6 @@ const (
 	FieldOperation = "operation"
 	// FieldRef holds the string denoting the ref field in the database.
 	FieldRef = "ref"
-	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
-	FieldUpdatedBy = "updated_by"
 	// FieldAge holds the string denoting the age field in the database.
 	FieldAge = "age"
 	// FieldName holds the string denoting the name field in the database.
@@ -38,7 +36,6 @@ var Columns = []string{
 	FieldHistoryTime,
 	FieldOperation,
 	FieldRef,
-	FieldUpdatedBy,
 	FieldAge,
 	FieldName,
 }
@@ -89,11 +86,6 @@ func ByOperation(opts ...sql.OrderTermOption) OrderOption {
 // ByRef orders the results by the ref field.
 func ByRef(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRef, opts...).ToFunc()
-}
-
-// ByUpdatedBy orders the results by the updated_by field.
-func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
 // ByAge orders the results by the age field.

@@ -57,20 +57,6 @@ func (fhc *FriendshipHistoryCreate) SetNillableRef(u *uuid.UUID) *FriendshipHist
 	return fhc
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (fhc *FriendshipHistoryCreate) SetUpdatedBy(i int) *FriendshipHistoryCreate {
-	fhc.mutation.SetUpdatedBy(i)
-	return fhc
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (fhc *FriendshipHistoryCreate) SetNillableUpdatedBy(i *int) *FriendshipHistoryCreate {
-	if i != nil {
-		fhc.SetUpdatedBy(*i)
-	}
-	return fhc
-}
-
 // SetCharacterID sets the "character_id" field.
 func (fhc *FriendshipHistoryCreate) SetCharacterID(u uuid.UUID) *FriendshipHistoryCreate {
 	fhc.mutation.SetCharacterID(u)
@@ -192,10 +178,6 @@ func (fhc *FriendshipHistoryCreate) createSpec() (*FriendshipHistory, *sqlgraph.
 	if value, ok := fhc.mutation.Ref(); ok {
 		_spec.SetField(friendshiphistory.FieldRef, field.TypeUUID, value)
 		_node.Ref = value
-	}
-	if value, ok := fhc.mutation.UpdatedBy(); ok {
-		_spec.SetField(friendshiphistory.FieldUpdatedBy, field.TypeInt, value)
-		_node.UpdatedBy = &value
 	}
 	if value, ok := fhc.mutation.CharacterID(); ok {
 		_spec.SetField(friendshiphistory.FieldCharacterID, field.TypeUUID, value)

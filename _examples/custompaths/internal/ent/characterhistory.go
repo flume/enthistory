@@ -26,8 +26,6 @@ type CharacterHistory struct {
 	Operation enthistory.OpType `json:"operation,omitempty"`
 	// Ref holds the value of the "ref" field.
 	Ref uuid.UUID `json:"ref,omitempty"`
-	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy *int `json:"updated_by,omitempty"`
 	// Age holds the value of the "age" field.
 	Age int `json:"age,omitempty"`
 	// Name holds the value of the "name" field.
@@ -40,7 +38,7 @@ func (*CharacterHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case characterhistory.FieldID, characterhistory.FieldUpdatedBy, characterhistory.FieldAge:
+		case characterhistory.FieldID, characterhistory.FieldAge:
 			values[i] = new(sql.NullInt64)
 		case characterhistory.FieldOperation, characterhistory.FieldName:
 			values[i] = new(sql.NullString)
@@ -86,13 +84,6 @@ func (ch *CharacterHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value != nil {
 				ch.Ref = *value
-			}
-		case characterhistory.FieldUpdatedBy:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
-			} else if value.Valid {
-				ch.UpdatedBy = new(int)
-				*ch.UpdatedBy = int(value.Int64)
 			}
 		case characterhistory.FieldAge:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -150,11 +141,6 @@ func (ch *CharacterHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
 	builder.WriteString(fmt.Sprintf("%v", ch.Ref))
-	builder.WriteString(", ")
-	if v := ch.UpdatedBy; v != nil {
-		builder.WriteString("updated_by=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
-	}
 	builder.WriteString(", ")
 	builder.WriteString("age=")
 	builder.WriteString(fmt.Sprintf("%v", ch.Age))

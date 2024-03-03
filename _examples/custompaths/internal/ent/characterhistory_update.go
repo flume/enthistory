@@ -106,9 +106,6 @@ func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if chu.mutation.RefCleared() {
 		_spec.ClearField(characterhistory.FieldRef, field.TypeUUID)
 	}
-	if chu.mutation.UpdatedByCleared() {
-		_spec.ClearField(characterhistory.FieldUpdatedBy, field.TypeInt)
-	}
 	if value, ok := chu.mutation.Age(); ok {
 		_spec.SetField(characterhistory.FieldAge, field.TypeInt, value)
 	}
@@ -246,9 +243,6 @@ func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Char
 	}
 	if chuo.mutation.RefCleared() {
 		_spec.ClearField(characterhistory.FieldRef, field.TypeUUID)
-	}
-	if chuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(characterhistory.FieldUpdatedBy, field.TypeInt)
 	}
 	if value, ok := chuo.mutation.Age(); ok {
 		_spec.SetField(characterhistory.FieldAge, field.TypeInt, value)

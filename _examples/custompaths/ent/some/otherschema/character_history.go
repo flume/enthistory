@@ -33,11 +33,6 @@ func (CharacterHistory) Fields() []ent.Field {
 			Optional().
 			Immutable().
 			Annotations(entgql.Annotation{Type: "ID"}),
-		field.Int("updated_by").
-			Nillable().
-			Optional().
-			Immutable().
-			Annotations(entgql.Annotation{Type: "ID"}),
 		field.Int("age"),
 		field.String("name")}
 }

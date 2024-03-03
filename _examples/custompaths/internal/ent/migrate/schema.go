@@ -27,7 +27,6 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
 		{Name: "ref", Type: field.TypeUUID, Nullable: true},
-		{Name: "updated_by", Type: field.TypeInt, Nullable: true},
 		{Name: "age", Type: field.TypeInt},
 		{Name: "name", Type: field.TypeString},
 	}
@@ -76,7 +75,6 @@ var (
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
 		{Name: "ref", Type: field.TypeUUID, Nullable: true},
-		{Name: "updated_by", Type: field.TypeInt, Nullable: true},
 		{Name: "character_id", Type: field.TypeUUID},
 		{Name: "friend_id", Type: field.TypeUUID},
 	}

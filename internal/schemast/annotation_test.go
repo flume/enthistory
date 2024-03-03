@@ -294,7 +294,7 @@ func TestAnnotation(t *testing.T) {
 					},
 				},
 			},
-			expected:   `entgql.Annotation{QueryField: entgql.FieldConfig{Name: "name", Description: "description", Directives: []entgql.Directive{entgql.Directive{Name: "1"}, entgql.Directive{Name: "2"}}}}`,
+			expected:   `entgql.Annotation{QueryField: &entgql.FieldConfig{Name: "name", Description: "description", Directives: []entgql.Directive{entgql.Directive{Name: "1"}, entgql.Directive{Name: "2"}}}}`,
 			expectedOk: true,
 		},
 		{

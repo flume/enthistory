@@ -33,11 +33,6 @@ func (FriendshipHistory) Fields() []ent.Field {
 			Optional().
 			Immutable().
 			Annotations(entgql.Annotation{Type: "ID"}),
-		field.Int("updated_by").
-			Nillable().
-			Optional().
-			Immutable().
-			Annotations(entgql.Annotation{Type: "ID"}),
 		field.UUID("character_id", uuid.UUID{}),
 		field.UUID("friend_id", uuid.UUID{})}
 }
