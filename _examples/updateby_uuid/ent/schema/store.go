@@ -20,7 +20,7 @@ type Store struct {
 func (Store) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{
-			Table: "Store",
+			Table: "store",
 		},
 	}
 }
