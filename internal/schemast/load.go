@@ -135,7 +135,7 @@ func Load(path string, annotators map[string]Annotator) (*Context, error) {
 
 func (c *Context) syntax() []*ast.File {
 	var out []*ast.File
-	out = append(out, c.SchemaPackage.Syntax...)
+	// append new types, leave the original types (c.SchemaPackage.Syntax) out
 	for _, f := range c.newTypes {
 		out = append(out, f)
 	}
