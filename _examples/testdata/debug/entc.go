@@ -2,10 +2,11 @@ package main
 
 import (
 	"_examples/testdata/debug/schema"
-	"entgo.io/ent/entc"
-	"entgo.io/ent/entc/gen"
 	"fmt"
 	"log"
+
+	"entgo.io/ent/entc"
+	"entgo.io/ent/entc/gen"
 
 	"entgo.io/ent"
 
