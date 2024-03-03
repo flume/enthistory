@@ -111,7 +111,6 @@ func Generate(schemaPath string, schemas []ent.Interface, options ...Option) (er
 
 	opts := new(HistoryOptions)
 	opts.FieldProperties = new(FieldProperties)
-	opts.UpdatedBy = new(UpdatedBy)
 	for _, opt := range options {
 		opt(opts)
 	}
