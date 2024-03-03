@@ -4,8 +4,9 @@ package main
 
 import (
 	"_examples/graphql/ent/schema"
-	"entgo.io/ent"
 	"log"
+
+	"entgo.io/ent"
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent/entc/gen"
