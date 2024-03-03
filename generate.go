@@ -116,6 +116,10 @@ func Generate(schemaPath string, schemas []ent.Interface, options ...Option) (er
 		opt(opts)
 	}
 
+	if abs, aerr := filepath.Abs(schemaPath); aerr == nil {
+		schemaPath = abs
+	}
+
 	graph, err := entc.LoadGraph(schemaPath, &gen.Config{})
 	if err != nil {
 		return fmt.Errorf("failed loading ent graph: %v", err)
@@ -205,15 +209,19 @@ func handleAnnotation(schemaName string, ants []schema.Annotation) []schema.Anno
 
 func historyFields(schema ent.Interface, opts HistoryOptions) ([]ent.Field, error) {
 	var fields []ent.Field
-	var idField ent.Field = field.Int("ref").Immutable().Optional()
+	var idField ent.Field = field.Int("id").Immutable()
+	var managedId bool
 	for _, f := range schema.Fields() {
 		if f.Descriptor().Name == "id" {
+			managedId = true
 			if opts.InheritIdType {
 				idField = f
 			}
 		}
 	}
-	fields = append(fields, idField)
+	if managedId {
+		fields = append(fields, idField)
+	}
 	fields = append(fields, field.Time("history_time").Default(time.Now).Immutable())
 	fields = append(fields, field.Enum("operation").GoType(OpType("")).Immutable())
 	ref, err := refField(idField.Descriptor().Info, true)
@@ -257,9 +265,12 @@ func prepareField(opts HistoryOptions, f ent.Field) ent.Field {
 	descriptor := f.Descriptor()
 	descriptor.Validators = nil
 
-	if opts.FieldProperties.Nillable {
-		descriptor.Nillable = true
+	if descriptor.Info.Type != field.TypeJSON {
+		if opts.FieldProperties.Nillable {
+			descriptor.Nillable = true
+		}
 	}
+
 	if opts.FieldProperties.Immutable {
 		descriptor.Immutable = true
 	}

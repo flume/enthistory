@@ -28,6 +28,8 @@ import (
 	"entgo.io/ent/schema/field"
 )
 
+var replacer = strings.NewReplacer("interface {}", "any", "interface{}", "any")
+
 // Field converts a *field.Descriptor back into an *ast.CallExpr of the ent field package that can be used
 // to construct it.
 func Field(desc *field.Descriptor) (*ast.CallExpr, error) {
@@ -51,10 +53,12 @@ func Field(desc *field.Descriptor) (*ast.CallExpr, error) {
 				expr = "&" + expr
 			}
 		}
+		expr = replacer.Replace(expr)
 		exp, err := parser.ParseExpr(expr)
 		if err != nil {
 			return nil, fmt.Errorf("schemast: json field %s generation error %w", desc.Name, err)
 		}
+		// strings.ReplaceAll()
 		if c, ok := exp.(*ast.CompositeLit); ok {
 			if v, ok := c.Type.(*ast.StructType); ok {
 				v.Fields = &ast.FieldList{
