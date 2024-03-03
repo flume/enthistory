@@ -4,9 +4,10 @@ package main
 
 import (
 	"_examples/basic/ent/schema"
-	"entgo.io/ent"
 	"fmt"
 	"log"
+
+	"entgo.io/ent"
 
 	"entgo.io/ent/entc/gen"
 
@@ -24,7 +25,6 @@ func main() {
 		enthistory.WithUpdatedBy("userId", enthistory.ValueTypeInt),
 		enthistory.WithHistoryTimeIndex(),
 		enthistory.WithImmutableFields(),
-		enthistory.WithNillableFields(),
 	); err != nil {
 		log.Fatal(fmt.Sprintf("running enthistory codegen: %v", err))
 	}
