@@ -74,19 +74,23 @@ import (
                                     First(ctx)
                     }
 
-                    {{ if not (fieldPropertiesNillable $.Annotations.HistoryConfig) }}
                     func ({{ $h.Receiver }} *{{ $h.Name }}) Restore(ctx context.Context) (*{{ $n.Name }}, error) {
                         client := New{{ $n.Name }}Client({{ $h.Receiver }}.config)
                         return client.
                             UpdateOneID({{ $h.Receiver }}.Ref).
-                        {{- range $f := $n.Fields }}
-                        {{- if not $f.Immutable }}
-                            Set{{ if $f.Nillable }}Nillable{{ end }}{{ $f.StructField }}({{ $h.Receiver }}.{{ pascal $f.Name }}).
+                        {{- range $nf := $n.Fields }}
+                        {{- range $hf := $h.Fields }}
+                        {{- if eq $nf.Name $hf.Name }}
+                        {{- if eq $nf.Nillable $hf.Nillable }}
+                        {{- if not $nf.Immutable }}
+                            Set{{ if $nf.Nillable }}Nillable{{ end }}{{ $nf.StructField }}({{ $h.Receiver }}.{{ pascal $nf.Name }}).
+                        {{- end }}
+                        {{- end }}
+                        {{- end }}
                         {{- end }}
                         {{- end }}
                             Save(ctx)
                     }
-                    {{ end }}
                 {{ end }}
             {{ end }}
         {{ end }}

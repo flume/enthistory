@@ -34,6 +34,8 @@ type HistoryOptions struct {
 	HistoryTimeIndex bool
 }
 
+var updatedBy *UpdatedBy
+
 type UpdatedBy struct {
 	key       string
 	valueType ValueType
@@ -76,11 +78,12 @@ func WithImmutableFields() Option {
 // WithUpdatedBy sets the key and type for pulling updated_by from the context,
 // usually done via a middleware to track which users are making which changes
 func WithUpdatedBy(key string, valueType ValueType) Option {
+	updatedBy = &UpdatedBy{
+		key:       key,
+		valueType: valueType,
+	}
 	return func(config *HistoryOptions) {
-		config.UpdatedBy = &UpdatedBy{
-			key:       key,
-			valueType: valueType,
-		}
+		config.UpdatedBy = updatedBy
 	}
 }
 

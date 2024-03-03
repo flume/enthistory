@@ -77,9 +77,9 @@ func ({{ $h.Receiver }} *{{ $h.Name }}) Diff(history *{{ $h.Name }}) (*HistoryDi
         return nil, MismatchedRefError
     }
 
-    {{ $h.Receiver }}Unix, historyUnix := {{ $h.Receiver }}.HistoryTime.Unix(), history.HistoryTime.Unix()
-    {{ $h.Receiver }}Older := {{ $h.Receiver }}Unix < historyUnix || ({{ $h.Receiver }}Unix == historyUnix && {{ $h.Receiver }}.ID < history.ID)
-    historyOlder := {{ $h.Receiver }}Unix > historyUnix || ({{ $h.Receiver }}Unix == historyUnix && {{ $h.Receiver }}.ID > history.ID)
+    {{ $h.Receiver }}Unix, historyUnix := {{ $h.Receiver }}.HistoryTime.UnixMilli(), history.HistoryTime.UnixMilli()
+    {{ $h.Receiver }}Older := {{ $h.Receiver }}Unix < historyUnix
+    historyOlder := {{ $h.Receiver }}Unix > historyUnix
 
    if {{ $h.Receiver }}Older {
         return &HistoryDiff[{{ $h.Name }}]{
@@ -222,7 +222,7 @@ func audit{{ $n.Name }}(ctx context.Context, config config) ([][]string, error) 
 
 		for i := 0; i < len(histories); i++ {
 			curr := histories[i]
-			record := record{
+			r := record{
 				Table:       "{{ $n.Name }}",
 				RefId:       curr.Ref,
 				HistoryTime: curr.HistoryTime,
@@ -233,17 +233,17 @@ func audit{{ $n.Name }}(ctx context.Context, config config) ([][]string, error) 
 			}
 			switch curr.Operation {
 			case enthistory.OpTypeInsert:
-				record.Changes = (&{{ $n.Name }}{}).changes(curr)
+				r.Changes = (&{{ $n.Name }}{}).changes(curr)
 			case enthistory.OpTypeDelete:
-				record.Changes = curr.changes(&{{ $n.Name }}{})
+				r.Changes = curr.changes(&{{ $n.Name }}{})
 			default:
 				if i == 0 {
-					record.Changes = (&{{ $n.Name }}{}).changes(curr)
+					r.Changes = (&{{ $n.Name }}{}).changes(curr)
 				} else {
-					record.Changes = histories[i-1].changes(curr)
+					r.Changes = histories[i-1].changes(curr)
 				}
 			}
-			records = append(records, record.toRow())
+			records = append(records, r.toRow())
 		}
 	}
 	return records, nil

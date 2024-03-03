@@ -8,20 +8,20 @@ import (
 )
 
 func extractUpdatedByKey(val any) string {
-	updatedBy, ok := val.(*UpdatedBy)
-	if !ok || updatedBy == nil {
+	ub, ok := val.(*UpdatedBy)
+	if !ok || ub == nil {
 		return ""
 	}
-	return updatedBy.key
+	return ub.key
 }
 
 func extractUpdatedByValueType(val any) string {
-	updatedBy, ok := val.(*UpdatedBy)
-	if !ok || updatedBy == nil {
+	ub, ok := val.(*UpdatedBy)
+	if !ok || ub == nil {
 		return ""
 	}
 
-	switch updatedBy.valueType {
+	switch ub.valueType {
 	case ValueTypeInt:
 		return "int"
 	case ValueTypeString:

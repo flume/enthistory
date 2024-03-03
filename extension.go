@@ -13,7 +13,8 @@ var (
 )
 
 type Config struct {
-	Auditing bool
+	Auditing  bool
+	UpdatedBy *UpdatedBy
 }
 
 func (c Config) Name() string {
@@ -39,7 +40,8 @@ func NewHistoryExtension(opts ...ExtensionOption) *HistoryExtension {
 	extension := &HistoryExtension{
 		// Set configuration defaults that can get overridden with ExtensionOption
 		config: &Config{
-			Auditing: false,
+			Auditing:  false,
+			UpdatedBy: updatedBy,
 		},
 	}
 	for _, opt := range opts {
