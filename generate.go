@@ -210,10 +210,13 @@ func handleAnnotation(schemaName string, ants []schema.Annotation) []schema.Anno
 func historyFields(schema ent.Interface, opts HistoryOptions) ([]ent.Field, error) {
 	var fields []ent.Field
 	var idField ent.Field = field.Int("id").Immutable()
+	var ref = idField
+
 	var managedId bool
 	for _, f := range schema.Fields() {
 		if f.Descriptor().Name == "id" {
 			managedId = true
+			ref = f
 			if opts.InheritIdType {
 				idField = f
 			}
@@ -224,7 +227,7 @@ func historyFields(schema ent.Interface, opts HistoryOptions) ([]ent.Field, erro
 	}
 	fields = append(fields, field.Time("history_time").Default(time.Now).Immutable())
 	fields = append(fields, field.Enum("operation").GoType(OpType("")).Immutable())
-	ref, err := refField(idField.Descriptor().Info, true)
+	ref, err := refField(ref.Descriptor().Info, true)
 	if err != nil {
 		return nil, err
 	}
