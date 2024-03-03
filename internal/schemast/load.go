@@ -137,6 +137,7 @@ func (c *Context) syntax() []*ast.File {
 	var out []*ast.File
 	// append new types, leave the original types (c.SchemaPackage.Syntax) out
 	for _, f := range c.newTypes {
+		f.Name.Name = c.SchemaPackage.Name
 		out = append(out, f)
 	}
 	return out
