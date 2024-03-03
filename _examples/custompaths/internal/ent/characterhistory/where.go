@@ -7,8 +7,9 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/flume/enthistory"
 	"github.com/google/uuid"
+
+	"github.com/flume/enthistory"
 )
 
 // ID filters vertices based on their ID field.

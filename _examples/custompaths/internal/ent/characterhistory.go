@@ -10,8 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/flume/enthistory"
 	"github.com/google/uuid"
+
+	"github.com/flume/enthistory"
 )
 
 // CharacterHistory is the model entity for the CharacterHistory schema.

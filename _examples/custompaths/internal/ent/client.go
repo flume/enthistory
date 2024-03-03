@@ -20,8 +20,9 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/flume/enthistory"
 	"github.com/google/uuid"
+
+	"github.com/flume/enthistory"
 )
 
 // Client is the client that holds all ent builders.

@@ -3,13 +3,13 @@
 package enttest
 
 import (
-	"_examples/custompaths/internal/ent"
+	"_examples/updateby_uuid/ent"
 	"context"
 
 	// required by schema hooks.
-	_ "_examples/custompaths/internal/ent/runtime"
+	_ "_examples/updateby_uuid/ent/runtime"
 
-	"_examples/custompaths/internal/ent/migrate"
+	"_examples/updateby_uuid/ent/migrate"
 
 	"entgo.io/ent/dialect/sql/schema"
 )
