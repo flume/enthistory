@@ -15,11 +15,11 @@ import (
 	"github.com/flume/enthistory"
 )
 
-type TodoHistory struct {
+type TestSkipHistory struct {
 	ent.Schema
 }
 
-func (TodoHistory) Fields() []ent.Field {
+func (TestSkipHistory) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).
 			Default(uuid.New),
@@ -44,14 +44,9 @@ func (TodoHistory) Fields() []ent.Field {
 		field.String("name").
 			Annotations(entgql.Annotation{OrderField: "NAME"})}
 }
-func (TodoHistory) Edges() []ent.Edge {
+func (TestSkipHistory) Edges() []ent.Edge {
 	return nil
 }
-func (TodoHistory) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entgql.RelayConnection(),
-		entgql.QueryField(),
-		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
-		entsql.Annotation{Table: "todo_history"},
-	}
+func (TestSkipHistory) Annotations() []schema.Annotation {
+	return []schema.Annotation{entgql.Skip(), entsql.Annotation{Table: "testskip_history"}}
 }

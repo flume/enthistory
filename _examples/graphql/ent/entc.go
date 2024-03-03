@@ -4,9 +4,8 @@ package main
 
 import (
 	"_examples/graphql/ent/schema"
-	"log"
-
 	"entgo.io/ent"
+	"log"
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent/entc/gen"
@@ -17,6 +16,17 @@ import (
 )
 
 func main() {
+	err := enthistory.Generate("./ent/schema", []ent.Interface{
+		schema.TestSkip{},
+		schema.Todo{},
+	},
+		enthistory.WithUpdatedBy("userId", enthistory.ValueTypeUUID),
+		enthistory.WithInheritIdType(),
+	)
+	if err != nil {
+		log.Fatalf("failed to run enthistory codegen: %v", err)
+	}
+
 	gqlExtension, err := entgql.NewExtension(
 		// Generate a GraphQL schema for the Ent schema
 		// and save it as "query.graphql".
@@ -27,17 +37,6 @@ func main() {
 	)
 	if err != nil {
 		log.Fatalf("failed to create entgql extension: %v", err)
-	}
-
-	err = enthistory.Generate("./ent/schema", []ent.Interface{
-		schema.TestSkip{},
-		schema.Todo{},
-	},
-		enthistory.WithUpdatedBy("userId", enthistory.ValueTypeUUID),
-		enthistory.WithInheritIdType(),
-	)
-	if err != nil {
-		log.Fatalf("failed to run enthistory codegen: %v", err)
 	}
 
 	historyExtension := enthistory.NewHistoryExtension()

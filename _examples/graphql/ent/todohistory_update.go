@@ -94,20 +94,7 @@ func (thu *TodoHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (thu *TodoHistoryUpdate) check() error {
-	if v, ok := thu.mutation.Name(); ok {
-		if err := todohistory.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "TodoHistory.name": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (thu *TodoHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := thu.check(); err != nil {
-		return n, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(todohistory.Table, todohistory.Columns, sqlgraph.NewFieldSpec(todohistory.FieldID, field.TypeUUID))
 	if ps := thu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -230,20 +217,7 @@ func (thuo *TodoHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (thuo *TodoHistoryUpdateOne) check() error {
-	if v, ok := thuo.mutation.Name(); ok {
-		if err := todohistory.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "TodoHistory.name": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (thuo *TodoHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TodoHistory, err error) {
-	if err := thuo.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(todohistory.Table, todohistory.Columns, sqlgraph.NewFieldSpec(todohistory.FieldID, field.TypeUUID))
 	id, ok := thuo.mutation.ID()
 	if !ok {

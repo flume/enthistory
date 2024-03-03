@@ -13,8 +13,6 @@ import (
 	"entgo.io/ent"
 
 	"github.com/flume/enthistory"
-
-	"github.com/google/uuid"
 )
 
 var (
@@ -49,8 +47,6 @@ func (m *TestSkipMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		tx = nil
 	}
 
-	updatedBy, _ := ctx.Value("userId").(uuid.UUID)
-
 	id, ok := m.ID()
 	if !ok {
 		return rollback(tx, idNotFoundError)
@@ -65,9 +61,6 @@ func (m *TestSkipMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
-	if updatedBy != uuid.Nil {
-		create = create.SetUpdatedBy(updatedBy)
-	}
 
 	if otherID, exists := m.OtherID(); exists {
 		create = create.SetOtherID(otherID)
@@ -91,8 +84,6 @@ func (m *TestSkipMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 		tx = nil
 	}
 
-	updatedBy, _ := ctx.Value("userId").(uuid.UUID)
-
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return rollback(tx, fmt.Errorf("getting ids: %w", err))
@@ -113,9 +104,6 @@ func (m *TestSkipMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
-		if updatedBy != uuid.Nil {
-			create = create.SetUpdatedBy(updatedBy)
-		}
 
 		if otherID, exists := m.OtherID(); exists {
 			create = create.SetOtherID(otherID)
@@ -145,8 +133,6 @@ func (m *TestSkipMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		tx = nil
 	}
 
-	updatedBy, _ := ctx.Value("userId").(uuid.UUID)
-
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return rollback(tx, fmt.Errorf("getting ids: %w", err))
@@ -161,9 +147,6 @@ func (m *TestSkipMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		create := client.TestSkipHistory.Create()
 		if tx != nil {
 			create = tx.TestSkipHistory.Create()
-		}
-		if updatedBy != uuid.Nil {
-			create = create.SetUpdatedBy(updatedBy)
 		}
 
 		_, err = create.
@@ -188,8 +171,6 @@ func (m *TodoMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		tx = nil
 	}
 
-	updatedBy, _ := ctx.Value("userId").(uuid.UUID)
-
 	id, ok := m.ID()
 	if !ok {
 		return rollback(tx, idNotFoundError)
@@ -204,9 +185,6 @@ func (m *TodoMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
-	if updatedBy != uuid.Nil {
-		create = create.SetUpdatedBy(updatedBy)
-	}
 
 	if otherID, exists := m.OtherID(); exists {
 		create = create.SetOtherID(otherID)
@@ -230,8 +208,6 @@ func (m *TodoMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 		tx = nil
 	}
 
-	updatedBy, _ := ctx.Value("userId").(uuid.UUID)
-
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return rollback(tx, fmt.Errorf("getting ids: %w", err))
@@ -252,9 +228,6 @@ func (m *TodoMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
-		if updatedBy != uuid.Nil {
-			create = create.SetUpdatedBy(updatedBy)
-		}
 
 		if otherID, exists := m.OtherID(); exists {
 			create = create.SetOtherID(otherID)
@@ -284,8 +257,6 @@ func (m *TodoMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		tx = nil
 	}
 
-	updatedBy, _ := ctx.Value("userId").(uuid.UUID)
-
 	ids, err := m.IDs(ctx)
 	if err != nil {
 		return rollback(tx, fmt.Errorf("getting ids: %w", err))
@@ -300,9 +271,6 @@ func (m *TodoMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		create := client.TodoHistory.Create()
 		if tx != nil {
 			create = tx.TodoHistory.Create()
-		}
-		if updatedBy != uuid.Nil {
-			create = create.SetUpdatedBy(updatedBy)
 		}
 
 		_, err = create.
