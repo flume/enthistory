@@ -63,6 +63,8 @@ func (ch *CharacterHistory) Restore(ctx context.Context) (*Character, error) {
 	client := NewCharacterClient(ch.config)
 	return client.
 		UpdateOneID(ch.Ref).
+		SetNicknames(ch.Nicknames).
+		SetInfo(ch.Info).
 		Save(ctx)
 }
 

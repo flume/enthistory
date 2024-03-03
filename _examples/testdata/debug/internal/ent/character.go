@@ -4,6 +4,7 @@ package ent
 
 import (
 	"_examples/testdata/debug/internal/ent/character"
+	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -21,6 +22,10 @@ type Character struct {
 	Age int `json:"age,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
+	// Nicknames holds the value of the "nicknames" field.
+	Nicknames []string `json:"nicknames,omitempty"`
+	// Info holds the value of the "info" field.
+	Info map[string]interface{} `json:"info,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CharacterQuery when eager-loading is set.
 	Edges        CharacterEdges `json:"edges"`
@@ -61,6 +66,8 @@ func (*Character) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case character.FieldNicknames, character.FieldInfo:
+			values[i] = new([]byte)
 		case character.FieldAge:
 			values[i] = new(sql.NullInt64)
 		case character.FieldName:
@@ -99,6 +106,22 @@ func (c *Character) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
 				c.Name = value.String
+			}
+		case character.FieldNicknames:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field nicknames", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &c.Nicknames); err != nil {
+					return fmt.Errorf("unmarshal field nicknames: %w", err)
+				}
+			}
+		case character.FieldInfo:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field info", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &c.Info); err != nil {
+					return fmt.Errorf("unmarshal field info: %w", err)
+				}
 			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
@@ -151,6 +174,12 @@ func (c *Character) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(c.Name)
+	builder.WriteString(", ")
+	builder.WriteString("nicknames=")
+	builder.WriteString(fmt.Sprintf("%v", c.Nicknames))
+	builder.WriteString(", ")
+	builder.WriteString("info=")
+	builder.WriteString(fmt.Sprintf("%v", c.Info))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
 )
@@ -61,6 +62,36 @@ func (cu *CharacterUpdate) SetNillableName(s *string) *CharacterUpdate {
 	if s != nil {
 		cu.SetName(*s)
 	}
+	return cu
+}
+
+// SetNicknames sets the "nicknames" field.
+func (cu *CharacterUpdate) SetNicknames(s []string) *CharacterUpdate {
+	cu.mutation.SetNicknames(s)
+	return cu
+}
+
+// AppendNicknames appends s to the "nicknames" field.
+func (cu *CharacterUpdate) AppendNicknames(s []string) *CharacterUpdate {
+	cu.mutation.AppendNicknames(s)
+	return cu
+}
+
+// ClearNicknames clears the value of the "nicknames" field.
+func (cu *CharacterUpdate) ClearNicknames() *CharacterUpdate {
+	cu.mutation.ClearNicknames()
+	return cu
+}
+
+// SetInfo sets the "info" field.
+func (cu *CharacterUpdate) SetInfo(m map[string]interface{}) *CharacterUpdate {
+	cu.mutation.SetInfo(m)
+	return cu
+}
+
+// ClearInfo clears the value of the "info" field.
+func (cu *CharacterUpdate) ClearInfo() *CharacterUpdate {
+	cu.mutation.ClearInfo()
 	return cu
 }
 
@@ -198,6 +229,23 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := cu.mutation.Name(); ok {
 		_spec.SetField(character.FieldName, field.TypeString, value)
+	}
+	if value, ok := cu.mutation.Nicknames(); ok {
+		_spec.SetField(character.FieldNicknames, field.TypeJSON, value)
+	}
+	if value, ok := cu.mutation.AppendedNicknames(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, character.FieldNicknames, value)
+		})
+	}
+	if cu.mutation.NicknamesCleared() {
+		_spec.ClearField(character.FieldNicknames, field.TypeJSON)
+	}
+	if value, ok := cu.mutation.Info(); ok {
+		_spec.SetField(character.FieldInfo, field.TypeJSON, value)
+	}
+	if cu.mutation.InfoCleared() {
+		_spec.ClearField(character.FieldInfo, field.TypeJSON)
 	}
 	if cu.mutation.FriendsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -365,6 +413,36 @@ func (cuo *CharacterUpdateOne) SetNillableName(s *string) *CharacterUpdateOne {
 	return cuo
 }
 
+// SetNicknames sets the "nicknames" field.
+func (cuo *CharacterUpdateOne) SetNicknames(s []string) *CharacterUpdateOne {
+	cuo.mutation.SetNicknames(s)
+	return cuo
+}
+
+// AppendNicknames appends s to the "nicknames" field.
+func (cuo *CharacterUpdateOne) AppendNicknames(s []string) *CharacterUpdateOne {
+	cuo.mutation.AppendNicknames(s)
+	return cuo
+}
+
+// ClearNicknames clears the value of the "nicknames" field.
+func (cuo *CharacterUpdateOne) ClearNicknames() *CharacterUpdateOne {
+	cuo.mutation.ClearNicknames()
+	return cuo
+}
+
+// SetInfo sets the "info" field.
+func (cuo *CharacterUpdateOne) SetInfo(m map[string]interface{}) *CharacterUpdateOne {
+	cuo.mutation.SetInfo(m)
+	return cuo
+}
+
+// ClearInfo clears the value of the "info" field.
+func (cuo *CharacterUpdateOne) ClearInfo() *CharacterUpdateOne {
+	cuo.mutation.ClearInfo()
+	return cuo
+}
+
 // AddFriendIDs adds the "friends" edge to the Character entity by IDs.
 func (cuo *CharacterUpdateOne) AddFriendIDs(ids ...uuid.UUID) *CharacterUpdateOne {
 	cuo.mutation.AddFriendIDs(ids...)
@@ -529,6 +607,23 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 	}
 	if value, ok := cuo.mutation.Name(); ok {
 		_spec.SetField(character.FieldName, field.TypeString, value)
+	}
+	if value, ok := cuo.mutation.Nicknames(); ok {
+		_spec.SetField(character.FieldNicknames, field.TypeJSON, value)
+	}
+	if value, ok := cuo.mutation.AppendedNicknames(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, character.FieldNicknames, value)
+		})
+	}
+	if cuo.mutation.NicknamesCleared() {
+		_spec.ClearField(character.FieldNicknames, field.TypeJSON)
+	}
+	if value, ok := cuo.mutation.Info(); ok {
+		_spec.SetField(character.FieldInfo, field.TypeJSON, value)
+	}
+	if cuo.mutation.InfoCleared() {
+		_spec.ClearField(character.FieldInfo, field.TypeJSON)
 	}
 	if cuo.mutation.FriendsCleared() {
 		edge := &sqlgraph.EdgeSpec{

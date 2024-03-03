@@ -33,6 +33,18 @@ func (cc *CharacterCreate) SetName(s string) *CharacterCreate {
 	return cc
 }
 
+// SetNicknames sets the "nicknames" field.
+func (cc *CharacterCreate) SetNicknames(s []string) *CharacterCreate {
+	cc.mutation.SetNicknames(s)
+	return cc
+}
+
+// SetInfo sets the "info" field.
+func (cc *CharacterCreate) SetInfo(m map[string]interface{}) *CharacterCreate {
+	cc.mutation.SetInfo(m)
+	return cc
+}
+
 // SetID sets the "id" field.
 func (cc *CharacterCreate) SetID(u uuid.UUID) *CharacterCreate {
 	cc.mutation.SetID(u)
@@ -173,6 +185,14 @@ func (cc *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Name(); ok {
 		_spec.SetField(character.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if value, ok := cc.mutation.Nicknames(); ok {
+		_spec.SetField(character.FieldNicknames, field.TypeJSON, value)
+		_node.Nicknames = value
+	}
+	if value, ok := cc.mutation.Info(); ok {
+		_spec.SetField(character.FieldInfo, field.TypeJSON, value)
+		_node.Info = value
 	}
 	if nodes := cc.mutation.FriendsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

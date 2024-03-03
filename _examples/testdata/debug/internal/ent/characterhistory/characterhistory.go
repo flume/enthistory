@@ -29,6 +29,10 @@ const (
 	FieldAge = "age"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldNicknames holds the string denoting the nicknames field in the database.
+	FieldNicknames = "nicknames"
+	// FieldInfo holds the string denoting the info field in the database.
+	FieldInfo = "info"
 	// Table holds the table name of the characterhistory in the database.
 	Table = "character_history"
 )
@@ -42,6 +46,8 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldAge,
 	FieldName,
+	FieldNicknames,
+	FieldInfo,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

@@ -4,6 +4,7 @@ package ent
 
 import (
 	"_examples/testdata/debug/internal/ent/characterhistory"
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -31,7 +32,11 @@ type CharacterHistory struct {
 	// Age holds the value of the "age" field.
 	Age *int `json:"age,omitempty"`
 	// Name holds the value of the "name" field.
-	Name         *string `json:"name,omitempty"`
+	Name *string `json:"name,omitempty"`
+	// Nicknames holds the value of the "nicknames" field.
+	Nicknames []string `json:"nicknames,omitempty"`
+	// Info holds the value of the "info" field.
+	Info         map[string]interface{} `json:"info,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -42,6 +47,8 @@ func (*CharacterHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case characterhistory.FieldUpdatedBy:
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
+		case characterhistory.FieldNicknames, characterhistory.FieldInfo:
+			values[i] = new([]byte)
 		case characterhistory.FieldAge:
 			values[i] = new(sql.NullInt64)
 		case characterhistory.FieldOperation, characterhistory.FieldName:
@@ -110,6 +117,22 @@ func (ch *CharacterHistory) assignValues(columns []string, values []any) error {
 				ch.Name = new(string)
 				*ch.Name = value.String
 			}
+		case characterhistory.FieldNicknames:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field nicknames", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ch.Nicknames); err != nil {
+					return fmt.Errorf("unmarshal field nicknames: %w", err)
+				}
+			}
+		case characterhistory.FieldInfo:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field info", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ch.Info); err != nil {
+					return fmt.Errorf("unmarshal field info: %w", err)
+				}
+			}
 		default:
 			ch.selectValues.Set(columns[i], values[i])
 		}
@@ -169,6 +192,12 @@ func (ch *CharacterHistory) String() string {
 		builder.WriteString("name=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("nicknames=")
+	builder.WriteString(fmt.Sprintf("%v", ch.Nicknames))
+	builder.WriteString(", ")
+	builder.WriteString("info=")
+	builder.WriteString(fmt.Sprintf("%v", ch.Info))
 	builder.WriteByte(')')
 	return builder.String()
 }

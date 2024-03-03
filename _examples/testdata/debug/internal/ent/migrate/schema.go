@@ -14,6 +14,8 @@ var (
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "age", Type: field.TypeInt},
 		{Name: "name", Type: field.TypeString},
+		{Name: "nicknames", Type: field.TypeJSON, Nullable: true},
+		{Name: "info", Type: field.TypeJSON, Nullable: true},
 	}
 	// CharacterTable holds the schema information for the "character" table.
 	CharacterTable = &schema.Table{
@@ -30,6 +32,8 @@ var (
 		{Name: "updated_by", Type: field.TypeUUID, Nullable: true},
 		{Name: "age", Type: field.TypeInt},
 		{Name: "name", Type: field.TypeString},
+		{Name: "nicknames", Type: field.TypeJSON, Nullable: true},
+		{Name: "info", Type: field.TypeJSON, Nullable: true},
 	}
 	// CharacterHistoryTable holds the schema information for the "character_history" table.
 	CharacterHistoryTable = &schema.Table{

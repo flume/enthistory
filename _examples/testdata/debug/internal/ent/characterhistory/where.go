@@ -347,6 +347,26 @@ func NameContainsFold(v string) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldContainsFold(FieldName, v))
 }
 
+// NicknamesIsNil applies the IsNil predicate on the "nicknames" field.
+func NicknamesIsNil() predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldIsNull(FieldNicknames))
+}
+
+// NicknamesNotNil applies the NotNil predicate on the "nicknames" field.
+func NicknamesNotNil() predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldNotNull(FieldNicknames))
+}
+
+// InfoIsNil applies the IsNil predicate on the "info" field.
+func InfoIsNil() predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldIsNull(FieldInfo))
+}
+
+// InfoNotNil applies the NotNil predicate on the "info" field.
+func InfoNotNil() predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldNotNull(FieldInfo))
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.CharacterHistory) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.AndPredicates(predicates...))

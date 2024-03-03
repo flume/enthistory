@@ -77,6 +77,14 @@ func (m *CharacterMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetName(name)
 	}
 
+	if nicknames, exists := m.Nicknames(); exists {
+		create = create.SetNicknames(nicknames)
+	}
+
+	if info, exists := m.Info(); exists {
+		create = create.SetInfo(info)
+	}
+
 	_, err = create.Save(ctx)
 	if err != nil {
 		rollback(tx, err)
@@ -129,6 +137,18 @@ func (m *CharacterMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetName(character.Name)
 		}
 
+		if nicknames, exists := m.Nicknames(); exists {
+			create = create.SetNicknames(nicknames)
+		} else {
+			create = create.SetNicknames(character.Nicknames)
+		}
+
+		if info, exists := m.Info(); exists {
+			create = create.SetInfo(info)
+		} else {
+			create = create.SetInfo(character.Info)
+		}
+
 		_, err = create.Save(ctx)
 		if err != nil {
 			rollback(tx, err)
@@ -172,6 +192,8 @@ func (m *CharacterMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRef(id).
 			SetAge(character.Age).
 			SetName(character.Name).
+			SetNicknames(character.Nicknames).
+			SetInfo(character.Info).
 			Save(ctx)
 		if err != nil {
 			rollback(tx, err)
