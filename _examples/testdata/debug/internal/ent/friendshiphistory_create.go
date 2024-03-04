@@ -77,9 +77,25 @@ func (fhc *FriendshipHistoryCreate) SetCharacterID(u uuid.UUID) *FriendshipHisto
 	return fhc
 }
 
+// SetNillableCharacterID sets the "character_id" field if the given value is not nil.
+func (fhc *FriendshipHistoryCreate) SetNillableCharacterID(u *uuid.UUID) *FriendshipHistoryCreate {
+	if u != nil {
+		fhc.SetCharacterID(*u)
+	}
+	return fhc
+}
+
 // SetFriendID sets the "friend_id" field.
 func (fhc *FriendshipHistoryCreate) SetFriendID(u uuid.UUID) *FriendshipHistoryCreate {
 	fhc.mutation.SetFriendID(u)
+	return fhc
+}
+
+// SetNillableFriendID sets the "friend_id" field if the given value is not nil.
+func (fhc *FriendshipHistoryCreate) SetNillableFriendID(u *uuid.UUID) *FriendshipHistoryCreate {
+	if u != nil {
+		fhc.SetFriendID(*u)
+	}
 	return fhc
 }
 
@@ -154,12 +170,6 @@ func (fhc *FriendshipHistoryCreate) check() error {
 		if err := friendshiphistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`ent: validator failed for field "FriendshipHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := fhc.mutation.CharacterID(); !ok {
-		return &ValidationError{Name: "character_id", err: errors.New(`ent: missing required field "FriendshipHistory.character_id"`)}
-	}
-	if _, ok := fhc.mutation.FriendID(); !ok {
-		return &ValidationError{Name: "friend_id", err: errors.New(`ent: missing required field "FriendshipHistory.friend_id"`)}
 	}
 	return nil
 }

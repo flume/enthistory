@@ -74,6 +74,12 @@ func (fhu *FriendshipHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 	if fhu.mutation.UpdatedByCleared() {
 		_spec.ClearField(friendshiphistory.FieldUpdatedBy, field.TypeUUID)
 	}
+	if fhu.mutation.CharacterIDCleared() {
+		_spec.ClearField(friendshiphistory.FieldCharacterID, field.TypeUUID)
+	}
+	if fhu.mutation.FriendIDCleared() {
+		_spec.ClearField(friendshiphistory.FieldFriendID, field.TypeUUID)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, fhu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{friendshiphistory.Label}
@@ -170,6 +176,12 @@ func (fhuo *FriendshipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Fri
 	}
 	if fhuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(friendshiphistory.FieldUpdatedBy, field.TypeUUID)
+	}
+	if fhuo.mutation.CharacterIDCleared() {
+		_spec.ClearField(friendshiphistory.FieldCharacterID, field.TypeUUID)
+	}
+	if fhuo.mutation.FriendIDCleared() {
+		_spec.ClearField(friendshiphistory.FieldFriendID, field.TypeUUID)
 	}
 	_node = &FriendshipHistory{config: fhuo.config}
 	_spec.Assign = _node.assignValues

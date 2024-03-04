@@ -36,8 +36,8 @@ var (
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
 		{Name: "ref", Type: field.TypeUUID, Nullable: true},
 		{Name: "updated_by", Type: field.TypeUUID, Nullable: true},
-		{Name: "age", Type: field.TypeInt},
-		{Name: "name", Type: field.TypeString},
+		{Name: "age", Type: field.TypeInt, Nullable: true},
+		{Name: "name", Type: field.TypeString, Nullable: true},
 		{Name: "nicknames", Type: field.TypeJSON, Nullable: true},
 		{Name: "info", Type: field.TypeJSON, Nullable: true},
 	}
@@ -94,8 +94,8 @@ var (
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
 		{Name: "ref", Type: field.TypeUUID, Nullable: true},
 		{Name: "updated_by", Type: field.TypeUUID, Nullable: true},
-		{Name: "character_id", Type: field.TypeUUID},
-		{Name: "friend_id", Type: field.TypeUUID},
+		{Name: "character_id", Type: field.TypeUUID, Nullable: true},
+		{Name: "friend_id", Type: field.TypeUUID, Nullable: true},
 	}
 	// FriendshipHistoryTable holds the schema information for the "friendship_history" table.
 	FriendshipHistoryTable = &schema.Table{

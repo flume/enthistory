@@ -110,6 +110,12 @@ func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if chu.mutation.UpdatedByCleared() {
 		_spec.ClearField(characterhistory.FieldUpdatedBy, field.TypeUUID)
 	}
+	if chu.mutation.AgeCleared() {
+		_spec.ClearField(characterhistory.FieldAge, field.TypeInt)
+	}
+	if chu.mutation.NameCleared() {
+		_spec.ClearField(characterhistory.FieldName, field.TypeString)
+	}
 	if chu.mutation.NicknamesCleared() {
 		_spec.ClearField(characterhistory.FieldNicknames, field.TypeJSON)
 	}
@@ -247,6 +253,12 @@ func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Char
 	}
 	if chuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(characterhistory.FieldUpdatedBy, field.TypeUUID)
+	}
+	if chuo.mutation.AgeCleared() {
+		_spec.ClearField(characterhistory.FieldAge, field.TypeInt)
+	}
+	if chuo.mutation.NameCleared() {
+		_spec.ClearField(characterhistory.FieldName, field.TypeString)
 	}
 	if chuo.mutation.NicknamesCleared() {
 		_spec.ClearField(characterhistory.FieldNicknames, field.TypeJSON)

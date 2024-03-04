@@ -41,9 +41,11 @@ func (FriendshipHistory) Fields() []ent.Field {
 			Annotations(entgql.Annotation{Type: "ID"}),
 		field.UUID("character_id", uuid.UUID{}).
 			Nillable().
+			Optional().
 			Immutable(),
 		field.UUID("friend_id", uuid.UUID{}).
 			Nillable().
+			Optional().
 			Immutable()}
 }
 func (FriendshipHistory) Edges() []ent.Edge {

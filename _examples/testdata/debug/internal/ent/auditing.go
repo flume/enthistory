@@ -40,8 +40,7 @@ type HistoryDiff[T any] struct {
 }
 
 var (
-	MismatchedRefError    = errors.New("cannot take diff of histories with different Refs")
-	IdenticalHistoryError = errors.New("cannot take diff of identical history")
+	MismatchedRefError = errors.New("cannot take diff of histories with different Refs")
 )
 
 func (ch *CharacterHistory) changes(new *CharacterHistory) []Change {
@@ -75,24 +74,18 @@ func (ch *CharacterHistory) Diff(history *CharacterHistory) (*HistoryDiff[Charac
 		return nil, MismatchedRefError
 	}
 
-	chUnix, historyUnix := ch.HistoryTime.UnixMilli(), history.HistoryTime.UnixMilli()
-	chOlder := chUnix < historyUnix
-	historyOlder := chUnix > historyUnix
-
-	if chOlder {
-		return &HistoryDiff[CharacterHistory]{
-			Old:     ch,
-			New:     history,
-			Changes: ch.changes(history),
-		}, nil
-	} else if historyOlder {
+	if ch.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() {
 		return &HistoryDiff[CharacterHistory]{
 			Old:     history,
 			New:     ch,
 			Changes: history.changes(ch),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return &HistoryDiff[CharacterHistory]{
+		Old:     ch,
+		New:     history,
+		Changes: ch.changes(history),
+	}, nil
 }
 
 func (fh *FriendshipHistory) changes(new *FriendshipHistory) []Change {
@@ -111,24 +104,18 @@ func (fh *FriendshipHistory) Diff(history *FriendshipHistory) (*HistoryDiff[Frie
 		return nil, MismatchedRefError
 	}
 
-	fhUnix, historyUnix := fh.HistoryTime.UnixMilli(), history.HistoryTime.UnixMilli()
-	fhOlder := fhUnix < historyUnix
-	historyOlder := fhUnix > historyUnix
-
-	if fhOlder {
-		return &HistoryDiff[FriendshipHistory]{
-			Old:     fh,
-			New:     history,
-			Changes: fh.changes(history),
-		}, nil
-	} else if historyOlder {
+	if fh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() {
 		return &HistoryDiff[FriendshipHistory]{
 			Old:     history,
 			New:     fh,
 			Changes: history.changes(fh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return &HistoryDiff[FriendshipHistory]{
+		Old:     fh,
+		New:     history,
+		Changes: fh.changes(history),
+	}, nil
 }
 
 func (c Change) String(op enthistory.OpType) string {

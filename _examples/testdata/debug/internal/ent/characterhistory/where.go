@@ -442,6 +442,16 @@ func AgeLTE(v int) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldLTE(FieldAge, v))
 }
 
+// AgeIsNil applies the IsNil predicate on the "age" field.
+func AgeIsNil() predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldIsNull(FieldAge))
+}
+
+// AgeNotNil applies the NotNil predicate on the "age" field.
+func AgeNotNil() predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldNotNull(FieldAge))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldEQ(FieldName, v))
@@ -495,6 +505,16 @@ func NameHasPrefix(v string) predicate.CharacterHistory {
 // NameHasSuffix applies the HasSuffix predicate on the "name" field.
 func NameHasSuffix(v string) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldHasSuffix(FieldName, v))
+}
+
+// NameIsNil applies the IsNil predicate on the "name" field.
+func NameIsNil() predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldIsNull(FieldName))
+}
+
+// NameNotNil applies the NotNil predicate on the "name" field.
+func NameNotNil() predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldNotNull(FieldName))
 }
 
 // NameEqualFold applies the EqualFold predicate on the "name" field.

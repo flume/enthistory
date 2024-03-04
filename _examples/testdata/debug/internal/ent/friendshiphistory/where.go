@@ -282,6 +282,16 @@ func CharacterIDLTE(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldLTE(FieldCharacterID, v))
 }
 
+// CharacterIDIsNil applies the IsNil predicate on the "character_id" field.
+func CharacterIDIsNil() predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldIsNull(FieldCharacterID))
+}
+
+// CharacterIDNotNil applies the NotNil predicate on the "character_id" field.
+func CharacterIDNotNil() predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldNotNull(FieldCharacterID))
+}
+
 // FriendIDEQ applies the EQ predicate on the "friend_id" field.
 func FriendIDEQ(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldEQ(FieldFriendID, v))
@@ -320,6 +330,16 @@ func FriendIDLT(v uuid.UUID) predicate.FriendshipHistory {
 // FriendIDLTE applies the LTE predicate on the "friend_id" field.
 func FriendIDLTE(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldLTE(FieldFriendID, v))
+}
+
+// FriendIDIsNil applies the IsNil predicate on the "friend_id" field.
+func FriendIDIsNil() predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldIsNull(FieldFriendID))
+}
+
+// FriendIDNotNil applies the NotNil predicate on the "friend_id" field.
+func FriendIDNotNil() predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(sql.FieldNotNull(FieldFriendID))
 }
 
 // And groups predicates with the AND operator between them.

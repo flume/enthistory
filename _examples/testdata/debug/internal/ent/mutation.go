@@ -1419,10 +1419,24 @@ func (m *CharacterHistoryMutation) AddedAge() (r int, exists bool) {
 	return *v, true
 }
 
+// ClearAge clears the value of the "age" field.
+func (m *CharacterHistoryMutation) ClearAge() {
+	m.age = nil
+	m.addage = nil
+	m.clearedFields[characterhistory.FieldAge] = struct{}{}
+}
+
+// AgeCleared returns if the "age" field was cleared in this mutation.
+func (m *CharacterHistoryMutation) AgeCleared() bool {
+	_, ok := m.clearedFields[characterhistory.FieldAge]
+	return ok
+}
+
 // ResetAge resets all changes to the "age" field.
 func (m *CharacterHistoryMutation) ResetAge() {
 	m.age = nil
 	m.addage = nil
+	delete(m.clearedFields, characterhistory.FieldAge)
 }
 
 // SetName sets the "name" field.
@@ -1456,9 +1470,22 @@ func (m *CharacterHistoryMutation) OldName(ctx context.Context) (v *string, err 
 	return oldValue.Name, nil
 }
 
+// ClearName clears the value of the "name" field.
+func (m *CharacterHistoryMutation) ClearName() {
+	m.name = nil
+	m.clearedFields[characterhistory.FieldName] = struct{}{}
+}
+
+// NameCleared returns if the "name" field was cleared in this mutation.
+func (m *CharacterHistoryMutation) NameCleared() bool {
+	_, ok := m.clearedFields[characterhistory.FieldName]
+	return ok
+}
+
 // ResetName resets all changes to the "name" field.
 func (m *CharacterHistoryMutation) ResetName() {
 	m.name = nil
+	delete(m.clearedFields, characterhistory.FieldName)
 }
 
 // SetNicknames sets the "nicknames" field.
@@ -1841,6 +1868,12 @@ func (m *CharacterHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(characterhistory.FieldUpdatedBy) {
 		fields = append(fields, characterhistory.FieldUpdatedBy)
 	}
+	if m.FieldCleared(characterhistory.FieldAge) {
+		fields = append(fields, characterhistory.FieldAge)
+	}
+	if m.FieldCleared(characterhistory.FieldName) {
+		fields = append(fields, characterhistory.FieldName)
+	}
 	if m.FieldCleared(characterhistory.FieldNicknames) {
 		fields = append(fields, characterhistory.FieldNicknames)
 	}
@@ -1866,6 +1899,12 @@ func (m *CharacterHistoryMutation) ClearField(name string) error {
 		return nil
 	case characterhistory.FieldUpdatedBy:
 		m.ClearUpdatedBy()
+		return nil
+	case characterhistory.FieldAge:
+		m.ClearAge()
+		return nil
+	case characterhistory.FieldName:
+		m.ClearName()
 		return nil
 	case characterhistory.FieldNicknames:
 		m.ClearNicknames()
@@ -2775,9 +2814,22 @@ func (m *FriendshipHistoryMutation) OldCharacterID(ctx context.Context) (v *uuid
 	return oldValue.CharacterID, nil
 }
 
+// ClearCharacterID clears the value of the "character_id" field.
+func (m *FriendshipHistoryMutation) ClearCharacterID() {
+	m.character_id = nil
+	m.clearedFields[friendshiphistory.FieldCharacterID] = struct{}{}
+}
+
+// CharacterIDCleared returns if the "character_id" field was cleared in this mutation.
+func (m *FriendshipHistoryMutation) CharacterIDCleared() bool {
+	_, ok := m.clearedFields[friendshiphistory.FieldCharacterID]
+	return ok
+}
+
 // ResetCharacterID resets all changes to the "character_id" field.
 func (m *FriendshipHistoryMutation) ResetCharacterID() {
 	m.character_id = nil
+	delete(m.clearedFields, friendshiphistory.FieldCharacterID)
 }
 
 // SetFriendID sets the "friend_id" field.
@@ -2811,9 +2863,22 @@ func (m *FriendshipHistoryMutation) OldFriendID(ctx context.Context) (v *uuid.UU
 	return oldValue.FriendID, nil
 }
 
+// ClearFriendID clears the value of the "friend_id" field.
+func (m *FriendshipHistoryMutation) ClearFriendID() {
+	m.friend_id = nil
+	m.clearedFields[friendshiphistory.FieldFriendID] = struct{}{}
+}
+
+// FriendIDCleared returns if the "friend_id" field was cleared in this mutation.
+func (m *FriendshipHistoryMutation) FriendIDCleared() bool {
+	_, ok := m.clearedFields[friendshiphistory.FieldFriendID]
+	return ok
+}
+
 // ResetFriendID resets all changes to the "friend_id" field.
 func (m *FriendshipHistoryMutation) ResetFriendID() {
 	m.friend_id = nil
+	delete(m.clearedFields, friendshiphistory.FieldFriendID)
 }
 
 // Where appends a list predicates to the FriendshipHistoryMutation builder.
@@ -2997,6 +3062,12 @@ func (m *FriendshipHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(friendshiphistory.FieldUpdatedBy) {
 		fields = append(fields, friendshiphistory.FieldUpdatedBy)
 	}
+	if m.FieldCleared(friendshiphistory.FieldCharacterID) {
+		fields = append(fields, friendshiphistory.FieldCharacterID)
+	}
+	if m.FieldCleared(friendshiphistory.FieldFriendID) {
+		fields = append(fields, friendshiphistory.FieldFriendID)
+	}
 	return fields
 }
 
@@ -3016,6 +3087,12 @@ func (m *FriendshipHistoryMutation) ClearField(name string) error {
 		return nil
 	case friendshiphistory.FieldUpdatedBy:
 		m.ClearUpdatedBy()
+		return nil
+	case friendshiphistory.FieldCharacterID:
+		m.ClearCharacterID()
+		return nil
+	case friendshiphistory.FieldFriendID:
+		m.ClearFriendID()
 		return nil
 	}
 	return fmt.Errorf("unknown FriendshipHistory nullable field %s", name)

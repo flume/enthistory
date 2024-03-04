@@ -103,9 +103,25 @@ func (chc *CharacterHistoryCreate) SetAge(i int) *CharacterHistoryCreate {
 	return chc
 }
 
+// SetNillableAge sets the "age" field if the given value is not nil.
+func (chc *CharacterHistoryCreate) SetNillableAge(i *int) *CharacterHistoryCreate {
+	if i != nil {
+		chc.SetAge(*i)
+	}
+	return chc
+}
+
 // SetName sets the "name" field.
 func (chc *CharacterHistoryCreate) SetName(s string) *CharacterHistoryCreate {
 	chc.mutation.SetName(s)
+	return chc
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (chc *CharacterHistoryCreate) SetNillableName(s *string) *CharacterHistoryCreate {
+	if s != nil {
+		chc.SetName(*s)
+	}
 	return chc
 }
 
@@ -205,12 +221,6 @@ func (chc *CharacterHistoryCreate) check() error {
 		if err := characterhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`ent: validator failed for field "CharacterHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := chc.mutation.Age(); !ok {
-		return &ValidationError{Name: "age", err: errors.New(`ent: missing required field "CharacterHistory.age"`)}
-	}
-	if _, ok := chc.mutation.Name(); !ok {
-		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "CharacterHistory.name"`)}
 	}
 	return nil
 }

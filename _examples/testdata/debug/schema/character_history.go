@@ -42,9 +42,11 @@ func (CharacterHistory) Fields() []ent.Field {
 			Annotations(entgql.Annotation{Type: "ID"}),
 		field.Int("age").
 			Nillable().
+			Optional().
 			Immutable(),
 		field.String("name").
 			Nillable().
+			Optional().
 			Immutable(),
 		field.JSON("nicknames", []string{}).
 			Optional().
