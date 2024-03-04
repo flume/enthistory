@@ -232,6 +232,13 @@ func fromSimpleType(desc *field.Descriptor) (*ast.CallExpr, error) {
 		}
 		builder.method("Default", expr)
 	}
+	if desc.UpdateDefault != nil {
+		expr, err := defaultExpr(desc.Default)
+		if err != nil {
+			return nil, err
+		}
+		builder.method("UpdateDefault", expr)
+	}
 	// Unsupported features
 	var unsupported error
 	if len(desc.Validators) != 0 {
