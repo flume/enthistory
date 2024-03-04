@@ -374,6 +374,7 @@ func prepareField(opts HistoryOptions, f ent.Field) ent.Field {
 	if descriptor.Info.Type != field.TypeJSON {
 		if opts.FieldProperties.Nillable {
 			descriptor.Nillable = true
+			descriptor.Optional = true
 		}
 	}
 
