@@ -238,7 +238,7 @@ func handleAnnotation(schemaName string, ants []schema.Annotation) ([]schema.Ann
 	} else {
 		ant, ok := annotations[idx].(entsql.Annotation)
 		if ok {
-			ant.Table = fmt.Sprintf("%s_history", strings.ToLower(schemaName))
+			ant.Table = fmt.Sprintf("%s_history", strings.ToLower(ant.Table))
 			annotations[idx] = ant
 		}
 	}
