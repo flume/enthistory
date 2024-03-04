@@ -37,6 +37,10 @@ var (
 		methodName:    "Fields",
 		ifaceSelector: selectorLit("ent", "Field"),
 	}
+	kindMixin = kind{
+		methodName:    "Mixin",
+		ifaceSelector: selectorLit("ent", "Mixin"),
+	}
 	kindAnnot = kind{
 		methodName:    "Annotations",
 		ifaceSelector: selectorLit("schema", "Annotation"),

@@ -46,6 +46,7 @@ type UpsertSchema struct {
 	Edges       []ent.Edge
 	Indexes     []ent.Index
 	Annotations []schema.Annotation
+	Mixins      []ent.Mixin
 }
 
 // Mutate applies the UpsertSchema mutation to the Context.
@@ -70,6 +71,11 @@ func (u *UpsertSchema) Mutate(ctx *Context) error {
 			if fld.Descriptor().Info.RType != nil && fld.Descriptor().Info.RType.PkgPath != "" {
 				ctx.appendImport(u.Name, fld.Descriptor().Info.RType.PkgPath)
 			}
+		}
+	}
+	for _, mix := range u.Mixins {
+		if err := ctx.AppendMixin(u.Name, mix); err != nil {
+			return err
 		}
 	}
 	for _, edg := range u.Edges {
@@ -118,7 +124,14 @@ func (c *Context) appendReturnItem(k kind, typeName string, item ast.Expr) error
 }
 
 func (c *Context) appendImport(typeName, pkgPath string) {
+	importSpec := &ast.ImportSpec{Path: &ast.BasicLit{Value: pkgPath, Kind: token.STRING}}
 	if f, ok := c.newTypes[typeName]; ok {
-		f.Imports = append(f.Imports, &ast.ImportSpec{Path: &ast.BasicLit{Value: pkgPath, Kind: token.STRING}})
+		f.Imports = append(f.Imports, importSpec)
+		for _, decl := range f.Decls {
+			if gen, ok := decl.(*ast.GenDecl); ok && gen.Tok == token.IMPORT {
+				gen.Specs = append(gen.Specs, importSpec)
+				return
+			}
+		}
 	}
 }

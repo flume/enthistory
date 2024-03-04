@@ -77,19 +77,19 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 )
-type %s struct {
+type %[1]s struct {
 	ent.Schema
 }
-func (%s) Fields() []ent.Field {
+func (%[1]s) Fields() []ent.Field {
 	return nil
 }
-func (%s) Edges() []ent.Edge {
+func (%[1]s) Edges() []ent.Edge {
 	return nil
 }
-func (%s) Annotations() []schema.Annotation {
+func (%[1]s) Annotations() []schema.Annotation {
 	return nil
 }
-`, typeName, typeName, typeName, typeName)
+`, typeName)
 	fn := inflect.Underscore(typeName) + ".go"
 	f, err := parser.ParseFile(c.SchemaPackage.Fset, fn, body, 0)
 	if err != nil {

@@ -162,6 +162,10 @@ func Generate(schemaPath string, schemas []ent.Interface, options ...Option) (er
 			upsert.Indexes = append(upsert.Indexes, index.Fields("history_time"))
 		}
 
+		if len(s.Mixin()) > 0 {
+			upsert.Mixins = s.Mixin()
+		}
+
 		annotations, gerr := handleAnnotation(schemaName, s.Annotations())
 		if gerr != nil {
 			return gerr
@@ -305,10 +309,6 @@ func historyFields(schema ent.Interface, opts HistoryOptions) ([]ent.Field, erro
 		}
 
 		fields = append(fields, prepareField(opts, f))
-	}
-
-	for _, m := range schema.Mixin() {
-		fields = append(fields, m.Fields()...)
 	}
 
 	return fields, nil
