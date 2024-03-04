@@ -6,10 +6,13 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"regexp"
 	"runtime/debug"
 	"slices"
 	"strings"
 	"time"
+
+	"golang.org/x/tools/go/packages"
 
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
@@ -139,6 +142,36 @@ func Generate(schemaPath string, schemas []ent.Interface, options ...Option) (er
 		return fmt.Errorf("failed loading schema package: %v", err)
 	}
 
+	pkgs, err := packages.Load(&packages.Config{
+		Mode: packages.NeedName | packages.NeedTypes | packages.NeedFiles | packages.NeedCompiledGoFiles | packages.NeedSyntax,
+	}, schemaPath)
+	if err != nil {
+		return err
+	}
+	if len(pkgs) < 1 {
+		return fmt.Errorf("missing package information for: %s", schemaPath)
+	}
+
+	filenames := make(map[string]string)
+	for _, f := range pkgs[0].GoFiles {
+		readFile, rerr := os.ReadFile(f)
+		if rerr != nil {
+			return rerr
+		}
+		filecontent := string(readFile)
+		if strings.Contains(filecontent, "ent.Schema") {
+			submatch := regexp.MustCompile(`type ([a-zA-Z0-9_]+) struct`).FindAllStringSubmatch(filecontent, -1)
+			if len(submatch) > 0 {
+				if len(submatch[0]) > 1 {
+					split := strings.Split(f, "/")
+					if len(split) > 0 {
+						filename := strings.Split(split[len(split)-1], ".")[0]
+						filenames[submatch[0][len(submatch[0])-1]] = fmt.Sprintf("%s_history.go", filename)
+					}
+				}
+			}
+		}
+	}
 	var mutations []schemast.Mutator
 	for _, s := range schemas {
 		hfields, herr := historyFields(s, deref(opts))
@@ -153,9 +186,14 @@ func Generate(schemaPath string, schemas []ent.Interface, options ...Option) (er
 		} else {
 			schemaName = typeof.Name()
 		}
+
 		upsert := schemast.UpsertSchema{
 			Name:   fmt.Sprintf("%sHistory", schemaName),
 			Fields: hfields,
+		}
+
+		if filename, ok := filenames[schemaName]; ok {
+			upsert.FileName = filename
 		}
 
 		if opts.HistoryTimeIndex {

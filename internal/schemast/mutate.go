@@ -42,6 +42,7 @@ func Mutate(ctx *Context, mutations ...Mutator) error {
 // the type's Fields and Edges methods to return the desired fields and edges.
 type UpsertSchema struct {
 	Name        string
+	FileName    string
 	Fields      []ent.Field
 	Edges       []ent.Edge
 	Indexes     []ent.Index
@@ -52,7 +53,7 @@ type UpsertSchema struct {
 // Mutate applies the UpsertSchema mutation to the Context.
 func (u *UpsertSchema) Mutate(ctx *Context) error {
 	if !ctx.HasType(u.Name) {
-		if err := ctx.AddType(u.Name); err != nil {
+		if err := ctx.AddType(u.Name, u.FileName); err != nil {
 			return err
 		}
 	}

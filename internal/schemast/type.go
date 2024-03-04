@@ -71,7 +71,7 @@ func (c *Context) RemoveType(typeName string) error {
 	return nil
 }
 
-func (c *Context) AddType(typeName string) error {
+func (c *Context) AddType(typeName, filename string) error {
 	body := fmt.Sprintf(`package schema
 import (
 	"entgo.io/ent"
@@ -90,7 +90,10 @@ func (%[1]s) Annotations() []schema.Annotation {
 	return nil
 }
 `, typeName)
-	fn := inflect.Underscore(typeName) + ".go"
+	fn := filename
+	if fn == "" {
+		fn = inflect.Underscore(typeName) + ".go"
+	}
 	f, err := parser.ParseFile(c.SchemaPackage.Fset, fn, body, 0)
 	if err != nil {
 		return err
