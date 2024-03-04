@@ -71,8 +71,7 @@ func (ch *CharacterHistory) Diff(history *CharacterHistory) (*HistoryDiff[Charac
 	if ch.Ref != history.Ref {
 		return nil, MismatchedRefError
 	}
-
-	if ch.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() {
+	if ch.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (ch.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && ch.ID > history.ID) {
 		return &HistoryDiff[CharacterHistory]{
 			Old:     history,
 			New:     ch,
@@ -107,8 +106,7 @@ func (fh *FriendshipHistory) Diff(history *FriendshipHistory) (*HistoryDiff[Frie
 	if fh.Ref != history.Ref {
 		return nil, MismatchedRefError
 	}
-
-	if fh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() {
+	if fh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (fh.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && fh.ID > history.ID) {
 		return &HistoryDiff[FriendshipHistory]{
 			Old:     history,
 			New:     fh,
@@ -140,8 +138,7 @@ func (rh *ResidenceHistory) Diff(history *ResidenceHistory) (*HistoryDiff[Reside
 	if rh.Ref != history.Ref {
 		return nil, MismatchedRefError
 	}
-
-	if rh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() {
+	if rh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (rh.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && rh.ID > history.ID) {
 		return &HistoryDiff[ResidenceHistory]{
 			Old:     history,
 			New:     rh,

@@ -64,8 +64,7 @@ func (oh *OrganizationHistory) Diff(history *OrganizationHistory) (*HistoryDiff[
 	if oh.Ref != history.Ref {
 		return nil, MismatchedRefError
 	}
-
-	if oh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() {
+	if oh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (oh.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && oh.ID > history.ID) {
 		return &HistoryDiff[OrganizationHistory]{
 			Old:     history,
 			New:     oh,
@@ -103,8 +102,7 @@ func (sh *StoreHistory) Diff(history *StoreHistory) (*HistoryDiff[StoreHistory],
 	if sh.Ref != history.Ref {
 		return nil, MismatchedRefError
 	}
-
-	if sh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() {
+	if sh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (sh.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && sh.ID > history.ID) {
 		return &HistoryDiff[StoreHistory]{
 			Old:     history,
 			New:     sh,

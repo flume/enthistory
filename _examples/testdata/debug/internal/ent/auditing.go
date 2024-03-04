@@ -73,7 +73,6 @@ func (ch *CharacterHistory) Diff(history *CharacterHistory) (*HistoryDiff[Charac
 	if ch.Ref != history.Ref {
 		return nil, MismatchedRefError
 	}
-
 	if ch.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() {
 		return &HistoryDiff[CharacterHistory]{
 			Old:     history,
@@ -103,7 +102,6 @@ func (fh *FriendshipHistory) Diff(history *FriendshipHistory) (*HistoryDiff[Frie
 	if fh.Ref != history.Ref {
 		return nil, MismatchedRefError
 	}
-
 	if fh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() {
 		return &HistoryDiff[FriendshipHistory]{
 			Old:     history,

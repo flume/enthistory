@@ -4,6 +4,8 @@ import (
 	"strings"
 	"text/template"
 
+	"entgo.io/ent/schema/field"
+
 	"entgo.io/ent/entc/gen"
 )
 
@@ -46,6 +48,10 @@ func in(str string, list []string) bool {
 	return false
 }
 
+func isIdTypeUUID(node any) bool {
+	return node.(*gen.Type).IDType.Type == field.TypeUUID
+}
+
 func parseTemplate(name, path string) *gen.Template {
 	t := gen.NewTemplate(name)
 	t.Funcs(template.FuncMap{
@@ -53,6 +59,7 @@ func parseTemplate(name, path string) *gen.Template {
 		"extractUpdatedByValueType": extractUpdatedByValueType,
 		"isSlice":                   isSlice,
 		"in":                        in,
+		"isIdTypeUUID":              isIdTypeUUID,
 	})
 	return gen.MustParse(t.ParseFS(_templates, path))
 }
