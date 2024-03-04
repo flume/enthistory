@@ -370,6 +370,7 @@ func (c *cleanedField) Descriptor() *field.Descriptor {
 func prepareField(opts HistoryOptions, f ent.Field) ent.Field {
 	descriptor := f.Descriptor()
 	descriptor.Validators = nil
+	descriptor.Unique = false
 
 	if descriptor.Info.Type != field.TypeJSON {
 		if opts.FieldProperties.Nillable {
