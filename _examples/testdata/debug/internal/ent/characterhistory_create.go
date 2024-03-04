@@ -23,6 +23,32 @@ type CharacterHistoryCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (chc *CharacterHistoryCreate) SetCreatedAt(t time.Time) *CharacterHistoryCreate {
+	chc.mutation.SetCreatedAt(t)
+	return chc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (chc *CharacterHistoryCreate) SetNillableCreatedAt(t *time.Time) *CharacterHistoryCreate {
+	if t != nil {
+		chc.SetCreatedAt(*t)
+	}
+	return chc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (chc *CharacterHistoryCreate) SetUpdatedAt(t time.Time) *CharacterHistoryCreate {
+	chc.mutation.SetUpdatedAt(t)
+	return chc
+}
+
+// SetOther sets the "other" field.
+func (chc *CharacterHistoryCreate) SetOther(s string) *CharacterHistoryCreate {
+	chc.mutation.SetOther(s)
+	return chc
+}
+
 // SetHistoryTime sets the "history_time" field.
 func (chc *CharacterHistoryCreate) SetHistoryTime(t time.Time) *CharacterHistoryCreate {
 	chc.mutation.SetHistoryTime(t)
@@ -144,6 +170,10 @@ func (chc *CharacterHistoryCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (chc *CharacterHistoryCreate) defaults() {
+	if _, ok := chc.mutation.CreatedAt(); !ok {
+		v := characterhistory.DefaultCreatedAt()
+		chc.mutation.SetCreatedAt(v)
+	}
 	if _, ok := chc.mutation.HistoryTime(); !ok {
 		v := characterhistory.DefaultHistoryTime()
 		chc.mutation.SetHistoryTime(v)
@@ -156,6 +186,15 @@ func (chc *CharacterHistoryCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (chc *CharacterHistoryCreate) check() error {
+	if _, ok := chc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "CharacterHistory.created_at"`)}
+	}
+	if _, ok := chc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "CharacterHistory.updated_at"`)}
+	}
+	if _, ok := chc.mutation.Other(); !ok {
+		return &ValidationError{Name: "other", err: errors.New(`ent: missing required field "CharacterHistory.other"`)}
+	}
 	if _, ok := chc.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`ent: missing required field "CharacterHistory.history_time"`)}
 	}
@@ -207,6 +246,18 @@ func (chc *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cr
 	if id, ok := chc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
+	}
+	if value, ok := chc.mutation.CreatedAt(); ok {
+		_spec.SetField(characterhistory.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := chc.mutation.UpdatedAt(); ok {
+		_spec.SetField(characterhistory.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := chc.mutation.Other(); ok {
+		_spec.SetField(characterhistory.FieldOther, field.TypeString, value)
+		_node.Other = value
 	}
 	if value, ok := chc.mutation.HistoryTime(); ok {
 		_spec.SetField(characterhistory.FieldHistoryTime, field.TypeTime, value)

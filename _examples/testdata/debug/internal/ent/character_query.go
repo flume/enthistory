@@ -334,12 +334,12 @@ func (cq *CharacterQuery) WithFriendships(opts ...func(*FriendshipQuery)) *Chara
 // Example:
 //
 //	var v []struct {
-//		Age int `json:"age,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Character.Query().
-//		GroupBy(character.FieldAge).
+//		GroupBy(character.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (cq *CharacterQuery) GroupBy(field string, fields ...string) *CharacterGroupBy {
@@ -357,11 +357,11 @@ func (cq *CharacterQuery) GroupBy(field string, fields ...string) *CharacterGrou
 // Example:
 //
 //	var v []struct {
-//		Age int `json:"age,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.Character.Query().
-//		Select(character.FieldAge).
+//		Select(character.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (cq *CharacterQuery) Select(fields ...string) *CharacterSelect {
 	cq.ctx.Fields = append(cq.ctx.Fields, fields...)

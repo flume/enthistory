@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -18,6 +19,12 @@ type Character struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// Other holds the value of the "other" field.
+	Other string `json:"other,omitempty"`
 	// Age holds the value of the "age" field.
 	Age int `json:"age,omitempty"`
 	// Name holds the value of the "name" field.
@@ -70,8 +77,10 @@ func (*Character) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case character.FieldAge:
 			values[i] = new(sql.NullInt64)
-		case character.FieldName:
+		case character.FieldOther, character.FieldName:
 			values[i] = new(sql.NullString)
+		case character.FieldCreatedAt, character.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		case character.FieldID:
 			values[i] = new(uuid.UUID)
 		default:
@@ -94,6 +103,24 @@ func (c *Character) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
 				c.ID = *value
+			}
+		case character.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				c.CreatedAt = value.Time
+			}
+		case character.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				c.UpdatedAt = value.Time
+			}
+		case character.FieldOther:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field other", values[i])
+			} else if value.Valid {
+				c.Other = value.String
 			}
 		case character.FieldAge:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -169,6 +196,15 @@ func (c *Character) String() string {
 	var builder strings.Builder
 	builder.WriteString("Character(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", c.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(c.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(c.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("other=")
+	builder.WriteString(c.Other)
+	builder.WriteString(", ")
 	builder.WriteString("age=")
 	builder.WriteString(fmt.Sprintf("%v", c.Age))
 	builder.WriteString(", ")

@@ -28,26 +28,29 @@ func init() {
 	organization.DefaultCreatedAt = organizationDescCreatedAt.Default.(func() time.Time)
 	// organizationDescUpdatedAt is the schema descriptor for updated_at field.
 	organizationDescUpdatedAt := organizationMixinFields0[1].Descriptor()
-	// organization.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	organization.DefaultUpdatedAt = organizationDescUpdatedAt.Default.(func() time.Time)
+	// organization.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	organization.UpdateDefaultUpdatedAt = organizationDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// organizationDescID is the schema descriptor for id field.
 	organizationDescID := organizationFields[0].Descriptor()
 	// organization.DefaultID holds the default value on creation for the id field.
 	organization.DefaultID = organizationDescID.Default.(func() uuid.UUID)
+	organizationhistoryMixin := schema.OrganizationHistory{}.Mixin()
+	organizationhistoryMixinFields0 := organizationhistoryMixin[0].Fields()
+	_ = organizationhistoryMixinFields0
 	organizationhistoryFields := schema.OrganizationHistory{}.Fields()
 	_ = organizationhistoryFields
+	// organizationhistoryDescCreatedAt is the schema descriptor for created_at field.
+	organizationhistoryDescCreatedAt := organizationhistoryMixinFields0[0].Descriptor()
+	// organizationhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	organizationhistory.DefaultCreatedAt = organizationhistoryDescCreatedAt.Default.(func() time.Time)
+	// organizationhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	organizationhistoryDescUpdatedAt := organizationhistoryMixinFields0[1].Descriptor()
+	// organizationhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	organizationhistory.UpdateDefaultUpdatedAt = organizationhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// organizationhistoryDescHistoryTime is the schema descriptor for history_time field.
 	organizationhistoryDescHistoryTime := organizationhistoryFields[1].Descriptor()
 	// organizationhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
 	organizationhistory.DefaultHistoryTime = organizationhistoryDescHistoryTime.Default.(func() time.Time)
-	// organizationhistoryDescCreatedAt is the schema descriptor for created_at field.
-	organizationhistoryDescCreatedAt := organizationhistoryFields[7].Descriptor()
-	// organizationhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
-	organizationhistory.DefaultCreatedAt = organizationhistoryDescCreatedAt.Default.(func() time.Time)
-	// organizationhistoryDescUpdatedAt is the schema descriptor for updated_at field.
-	organizationhistoryDescUpdatedAt := organizationhistoryFields[8].Descriptor()
-	// organizationhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	organizationhistory.DefaultUpdatedAt = organizationhistoryDescUpdatedAt.Default.(func() time.Time)
 	storeMixin := schema.Store{}.Mixin()
 	storeMixinFields0 := storeMixin[0].Fields()
 	_ = storeMixinFields0
@@ -59,24 +62,27 @@ func init() {
 	store.DefaultCreatedAt = storeDescCreatedAt.Default.(func() time.Time)
 	// storeDescUpdatedAt is the schema descriptor for updated_at field.
 	storeDescUpdatedAt := storeMixinFields0[1].Descriptor()
-	// store.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	store.DefaultUpdatedAt = storeDescUpdatedAt.Default.(func() time.Time)
+	// store.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	store.UpdateDefaultUpdatedAt = storeDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// storeDescID is the schema descriptor for id field.
 	storeDescID := storeFields[0].Descriptor()
 	// store.DefaultID holds the default value on creation for the id field.
 	store.DefaultID = storeDescID.Default.(func() uuid.UUID)
+	storehistoryMixin := schema.StoreHistory{}.Mixin()
+	storehistoryMixinFields0 := storehistoryMixin[0].Fields()
+	_ = storehistoryMixinFields0
 	storehistoryFields := schema.StoreHistory{}.Fields()
 	_ = storehistoryFields
+	// storehistoryDescCreatedAt is the schema descriptor for created_at field.
+	storehistoryDescCreatedAt := storehistoryMixinFields0[0].Descriptor()
+	// storehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	storehistory.DefaultCreatedAt = storehistoryDescCreatedAt.Default.(func() time.Time)
+	// storehistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	storehistoryDescUpdatedAt := storehistoryMixinFields0[1].Descriptor()
+	// storehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	storehistory.UpdateDefaultUpdatedAt = storehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// storehistoryDescHistoryTime is the schema descriptor for history_time field.
 	storehistoryDescHistoryTime := storehistoryFields[1].Descriptor()
 	// storehistory.DefaultHistoryTime holds the default value on creation for the history_time field.
 	storehistory.DefaultHistoryTime = storehistoryDescHistoryTime.Default.(func() time.Time)
-	// storehistoryDescCreatedAt is the schema descriptor for created_at field.
-	storehistoryDescCreatedAt := storehistoryFields[8].Descriptor()
-	// storehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
-	storehistory.DefaultCreatedAt = storehistoryDescCreatedAt.Default.(func() time.Time)
-	// storehistoryDescUpdatedAt is the schema descriptor for updated_at field.
-	storehistoryDescUpdatedAt := storehistoryFields[9].Descriptor()
-	// storehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	storehistory.DefaultUpdatedAt = storehistoryDescUpdatedAt.Default.(func() time.Time)
 }

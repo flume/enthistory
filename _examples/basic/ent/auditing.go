@@ -47,6 +47,12 @@ var (
 
 func (ch *CharacterHistory) changes(new *CharacterHistory) []Change {
 	var changes []Change
+	if !reflect.DeepEqual(ch.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(characterhistory.FieldCreatedAt, ch.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(ch.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(characterhistory.FieldUpdatedAt, ch.UpdatedAt, new.UpdatedAt))
+	}
 	if !reflect.DeepEqual(ch.Age, new.Age) {
 		changes = append(changes, NewChange(characterhistory.FieldAge, ch.Age, new.Age))
 	}
@@ -58,12 +64,6 @@ func (ch *CharacterHistory) changes(new *CharacterHistory) []Change {
 	}
 	if !reflect.DeepEqual(ch.Info, new.Info) {
 		changes = append(changes, NewChange(characterhistory.FieldInfo, ch.Info, new.Info))
-	}
-	if !reflect.DeepEqual(ch.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(characterhistory.FieldCreatedAt, ch.CreatedAt, new.CreatedAt))
-	}
-	if !reflect.DeepEqual(ch.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(characterhistory.FieldUpdatedAt, ch.UpdatedAt, new.UpdatedAt))
 	}
 	return changes
 }
@@ -95,17 +95,17 @@ func (ch *CharacterHistory) Diff(history *CharacterHistory) (*HistoryDiff[Charac
 
 func (fh *FriendshipHistory) changes(new *FriendshipHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(fh.CharacterID, new.CharacterID) {
-		changes = append(changes, NewChange(friendshiphistory.FieldCharacterID, fh.CharacterID, new.CharacterID))
-	}
-	if !reflect.DeepEqual(fh.FriendID, new.FriendID) {
-		changes = append(changes, NewChange(friendshiphistory.FieldFriendID, fh.FriendID, new.FriendID))
-	}
 	if !reflect.DeepEqual(fh.CreatedAt, new.CreatedAt) {
 		changes = append(changes, NewChange(friendshiphistory.FieldCreatedAt, fh.CreatedAt, new.CreatedAt))
 	}
 	if !reflect.DeepEqual(fh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(friendshiphistory.FieldUpdatedAt, fh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(fh.CharacterID, new.CharacterID) {
+		changes = append(changes, NewChange(friendshiphistory.FieldCharacterID, fh.CharacterID, new.CharacterID))
+	}
+	if !reflect.DeepEqual(fh.FriendID, new.FriendID) {
+		changes = append(changes, NewChange(friendshiphistory.FieldFriendID, fh.FriendID, new.FriendID))
 	}
 	return changes
 }
@@ -137,14 +137,14 @@ func (fh *FriendshipHistory) Diff(history *FriendshipHistory) (*HistoryDiff[Frie
 
 func (rh *ResidenceHistory) changes(new *ResidenceHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(rh.Name, new.Name) {
-		changes = append(changes, NewChange(residencehistory.FieldName, rh.Name, new.Name))
-	}
 	if !reflect.DeepEqual(rh.CreatedAt, new.CreatedAt) {
 		changes = append(changes, NewChange(residencehistory.FieldCreatedAt, rh.CreatedAt, new.CreatedAt))
 	}
 	if !reflect.DeepEqual(rh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(residencehistory.FieldUpdatedAt, rh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(rh.Name, new.Name) {
+		changes = append(changes, NewChange(residencehistory.FieldName, rh.Name, new.Name))
 	}
 	return changes
 }

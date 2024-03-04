@@ -23,6 +23,26 @@ type OrganizationHistoryCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (ohc *OrganizationHistoryCreate) SetCreatedAt(t time.Time) *OrganizationHistoryCreate {
+	ohc.mutation.SetCreatedAt(t)
+	return ohc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (ohc *OrganizationHistoryCreate) SetNillableCreatedAt(t *time.Time) *OrganizationHistoryCreate {
+	if t != nil {
+		ohc.SetCreatedAt(*t)
+	}
+	return ohc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (ohc *OrganizationHistoryCreate) SetUpdatedAt(t time.Time) *OrganizationHistoryCreate {
+	ohc.mutation.SetUpdatedAt(t)
+	return ohc
+}
+
 // SetHistoryTime sets the "history_time" field.
 func (ohc *OrganizationHistoryCreate) SetHistoryTime(t time.Time) *OrganizationHistoryCreate {
 	ohc.mutation.SetHistoryTime(t)
@@ -83,34 +103,6 @@ func (ohc *OrganizationHistoryCreate) SetInfo(m map[string]interface{}) *Organiz
 	return ohc
 }
 
-// SetCreatedAt sets the "created_at" field.
-func (ohc *OrganizationHistoryCreate) SetCreatedAt(t time.Time) *OrganizationHistoryCreate {
-	ohc.mutation.SetCreatedAt(t)
-	return ohc
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableCreatedAt(t *time.Time) *OrganizationHistoryCreate {
-	if t != nil {
-		ohc.SetCreatedAt(*t)
-	}
-	return ohc
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (ohc *OrganizationHistoryCreate) SetUpdatedAt(t time.Time) *OrganizationHistoryCreate {
-	ohc.mutation.SetUpdatedAt(t)
-	return ohc
-}
-
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ohc *OrganizationHistoryCreate) SetNillableUpdatedAt(t *time.Time) *OrganizationHistoryCreate {
-	if t != nil {
-		ohc.SetUpdatedAt(*t)
-	}
-	return ohc
-}
-
 // SetID sets the "id" field.
 func (ohc *OrganizationHistoryCreate) SetID(i int) *OrganizationHistoryCreate {
 	ohc.mutation.SetID(i)
@@ -152,22 +144,24 @@ func (ohc *OrganizationHistoryCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (ohc *OrganizationHistoryCreate) defaults() {
-	if _, ok := ohc.mutation.HistoryTime(); !ok {
-		v := organizationhistory.DefaultHistoryTime()
-		ohc.mutation.SetHistoryTime(v)
-	}
 	if _, ok := ohc.mutation.CreatedAt(); !ok {
 		v := organizationhistory.DefaultCreatedAt()
 		ohc.mutation.SetCreatedAt(v)
 	}
-	if _, ok := ohc.mutation.UpdatedAt(); !ok {
-		v := organizationhistory.DefaultUpdatedAt()
-		ohc.mutation.SetUpdatedAt(v)
+	if _, ok := ohc.mutation.HistoryTime(); !ok {
+		v := organizationhistory.DefaultHistoryTime()
+		ohc.mutation.SetHistoryTime(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
 func (ohc *OrganizationHistoryCreate) check() error {
+	if _, ok := ohc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "OrganizationHistory.created_at"`)}
+	}
+	if _, ok := ohc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "OrganizationHistory.updated_at"`)}
+	}
 	if _, ok := ohc.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`ent: missing required field "OrganizationHistory.history_time"`)}
 	}
@@ -181,12 +175,6 @@ func (ohc *OrganizationHistoryCreate) check() error {
 	}
 	if _, ok := ohc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "OrganizationHistory.name"`)}
-	}
-	if _, ok := ohc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "OrganizationHistory.created_at"`)}
-	}
-	if _, ok := ohc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "OrganizationHistory.updated_at"`)}
 	}
 	return nil
 }
@@ -220,6 +208,14 @@ func (ohc *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgr
 		_node.ID = id
 		_spec.ID.Value = id
 	}
+	if value, ok := ohc.mutation.CreatedAt(); ok {
+		_spec.SetField(organizationhistory.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := ohc.mutation.UpdatedAt(); ok {
+		_spec.SetField(organizationhistory.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
 	if value, ok := ohc.mutation.HistoryTime(); ok {
 		_spec.SetField(organizationhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
@@ -243,14 +239,6 @@ func (ohc *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgr
 	if value, ok := ohc.mutation.Info(); ok {
 		_spec.SetField(organizationhistory.FieldInfo, field.TypeJSON, value)
 		_node.Info = value
-	}
-	if value, ok := ohc.mutation.CreatedAt(); ok {
-		_spec.SetField(organizationhistory.FieldCreatedAt, field.TypeTime, value)
-		_node.CreatedAt = value
-	}
-	if value, ok := ohc.mutation.UpdatedAt(); ok {
-		_spec.SetField(organizationhistory.FieldUpdatedAt, field.TypeTime, value)
-		_node.UpdatedAt = value
 	}
 	return _node, _spec
 }

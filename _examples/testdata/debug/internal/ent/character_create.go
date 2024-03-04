@@ -8,6 +8,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -19,6 +20,32 @@ type CharacterCreate struct {
 	config
 	mutation *CharacterMutation
 	hooks    []Hook
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (cc *CharacterCreate) SetCreatedAt(t time.Time) *CharacterCreate {
+	cc.mutation.SetCreatedAt(t)
+	return cc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (cc *CharacterCreate) SetNillableCreatedAt(t *time.Time) *CharacterCreate {
+	if t != nil {
+		cc.SetCreatedAt(*t)
+	}
+	return cc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (cc *CharacterCreate) SetUpdatedAt(t time.Time) *CharacterCreate {
+	cc.mutation.SetUpdatedAt(t)
+	return cc
+}
+
+// SetOther sets the "other" field.
+func (cc *CharacterCreate) SetOther(s string) *CharacterCreate {
+	cc.mutation.SetOther(s)
+	return cc
 }
 
 // SetAge sets the "age" field.
@@ -124,6 +151,10 @@ func (cc *CharacterCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (cc *CharacterCreate) defaults() {
+	if _, ok := cc.mutation.CreatedAt(); !ok {
+		v := character.DefaultCreatedAt()
+		cc.mutation.SetCreatedAt(v)
+	}
 	if _, ok := cc.mutation.ID(); !ok {
 		v := character.DefaultID()
 		cc.mutation.SetID(v)
@@ -132,6 +163,15 @@ func (cc *CharacterCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (cc *CharacterCreate) check() error {
+	if _, ok := cc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Character.created_at"`)}
+	}
+	if _, ok := cc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Character.updated_at"`)}
+	}
+	if _, ok := cc.mutation.Other(); !ok {
+		return &ValidationError{Name: "other", err: errors.New(`ent: missing required field "Character.other"`)}
+	}
 	if _, ok := cc.mutation.Age(); !ok {
 		return &ValidationError{Name: "age", err: errors.New(`ent: missing required field "Character.age"`)}
 	}
@@ -177,6 +217,18 @@ func (cc *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
 	if id, ok := cc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
+	}
+	if value, ok := cc.mutation.CreatedAt(); ok {
+		_spec.SetField(character.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := cc.mutation.UpdatedAt(); ok {
+		_spec.SetField(character.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := cc.mutation.Other(); ok {
+		_spec.SetField(character.FieldOther, field.TypeString, value)
+		_node.Other = value
 	}
 	if value, ok := cc.mutation.Age(); ok {
 		_spec.SetField(character.FieldAge, field.TypeInt, value)

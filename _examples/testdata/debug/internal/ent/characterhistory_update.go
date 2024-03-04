@@ -8,6 +8,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -27,6 +28,26 @@ func (chu *CharacterHistoryUpdate) Where(ps ...predicate.CharacterHistory) *Char
 	return chu
 }
 
+// SetUpdatedAt sets the "updated_at" field.
+func (chu *CharacterHistoryUpdate) SetUpdatedAt(t time.Time) *CharacterHistoryUpdate {
+	chu.mutation.SetUpdatedAt(t)
+	return chu
+}
+
+// SetOther sets the "other" field.
+func (chu *CharacterHistoryUpdate) SetOther(s string) *CharacterHistoryUpdate {
+	chu.mutation.SetOther(s)
+	return chu
+}
+
+// SetNillableOther sets the "other" field if the given value is not nil.
+func (chu *CharacterHistoryUpdate) SetNillableOther(s *string) *CharacterHistoryUpdate {
+	if s != nil {
+		chu.SetOther(*s)
+	}
+	return chu
+}
+
 // Mutation returns the CharacterHistoryMutation object of the builder.
 func (chu *CharacterHistoryUpdate) Mutation() *CharacterHistoryMutation {
 	return chu.mutation
@@ -34,6 +55,7 @@ func (chu *CharacterHistoryUpdate) Mutation() *CharacterHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (chu *CharacterHistoryUpdate) Save(ctx context.Context) (int, error) {
+	chu.defaults()
 	return withHooks(ctx, chu.sqlSave, chu.mutation, chu.hooks)
 }
 
@@ -59,6 +81,14 @@ func (chu *CharacterHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (chu *CharacterHistoryUpdate) defaults() {
+	if _, ok := chu.mutation.UpdatedAt(); !ok {
+		v := characterhistory.UpdateDefaultUpdatedAt()
+		chu.mutation.SetUpdatedAt(v)
+	}
+}
+
 func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(characterhistory.Table, characterhistory.Columns, sqlgraph.NewFieldSpec(characterhistory.FieldID, field.TypeUUID))
 	if ps := chu.mutation.predicates; len(ps) > 0 {
@@ -67,6 +97,12 @@ func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := chu.mutation.UpdatedAt(); ok {
+		_spec.SetField(characterhistory.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := chu.mutation.Other(); ok {
+		_spec.SetField(characterhistory.FieldOther, field.TypeString, value)
 	}
 	if chu.mutation.RefCleared() {
 		_spec.ClearField(characterhistory.FieldRef, field.TypeUUID)
@@ -100,6 +136,26 @@ type CharacterHistoryUpdateOne struct {
 	mutation *CharacterHistoryMutation
 }
 
+// SetUpdatedAt sets the "updated_at" field.
+func (chuo *CharacterHistoryUpdateOne) SetUpdatedAt(t time.Time) *CharacterHistoryUpdateOne {
+	chuo.mutation.SetUpdatedAt(t)
+	return chuo
+}
+
+// SetOther sets the "other" field.
+func (chuo *CharacterHistoryUpdateOne) SetOther(s string) *CharacterHistoryUpdateOne {
+	chuo.mutation.SetOther(s)
+	return chuo
+}
+
+// SetNillableOther sets the "other" field if the given value is not nil.
+func (chuo *CharacterHistoryUpdateOne) SetNillableOther(s *string) *CharacterHistoryUpdateOne {
+	if s != nil {
+		chuo.SetOther(*s)
+	}
+	return chuo
+}
+
 // Mutation returns the CharacterHistoryMutation object of the builder.
 func (chuo *CharacterHistoryUpdateOne) Mutation() *CharacterHistoryMutation {
 	return chuo.mutation
@@ -120,6 +176,7 @@ func (chuo *CharacterHistoryUpdateOne) Select(field string, fields ...string) *C
 
 // Save executes the query and returns the updated CharacterHistory entity.
 func (chuo *CharacterHistoryUpdateOne) Save(ctx context.Context) (*CharacterHistory, error) {
+	chuo.defaults()
 	return withHooks(ctx, chuo.sqlSave, chuo.mutation, chuo.hooks)
 }
 
@@ -142,6 +199,14 @@ func (chuo *CharacterHistoryUpdateOne) Exec(ctx context.Context) error {
 func (chuo *CharacterHistoryUpdateOne) ExecX(ctx context.Context) {
 	if err := chuo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (chuo *CharacterHistoryUpdateOne) defaults() {
+	if _, ok := chuo.mutation.UpdatedAt(); !ok {
+		v := characterhistory.UpdateDefaultUpdatedAt()
+		chuo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -170,6 +235,12 @@ func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Char
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := chuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(characterhistory.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := chuo.mutation.Other(); ok {
+		_spec.SetField(characterhistory.FieldOther, field.TypeString, value)
 	}
 	if chuo.mutation.RefCleared() {
 		_spec.ClearField(characterhistory.FieldRef, field.TypeUUID)

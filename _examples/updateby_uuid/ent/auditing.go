@@ -46,17 +46,17 @@ var (
 
 func (oh *OrganizationHistory) changes(new *OrganizationHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(oh.Name, new.Name) {
-		changes = append(changes, NewChange(organizationhistory.FieldName, oh.Name, new.Name))
-	}
-	if !reflect.DeepEqual(oh.Info, new.Info) {
-		changes = append(changes, NewChange(organizationhistory.FieldInfo, oh.Info, new.Info))
-	}
 	if !reflect.DeepEqual(oh.CreatedAt, new.CreatedAt) {
 		changes = append(changes, NewChange(organizationhistory.FieldCreatedAt, oh.CreatedAt, new.CreatedAt))
 	}
 	if !reflect.DeepEqual(oh.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(organizationhistory.FieldUpdatedAt, oh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(oh.Name, new.Name) {
+		changes = append(changes, NewChange(organizationhistory.FieldName, oh.Name, new.Name))
+	}
+	if !reflect.DeepEqual(oh.Info, new.Info) {
+		changes = append(changes, NewChange(organizationhistory.FieldInfo, oh.Info, new.Info))
 	}
 	return changes
 }
@@ -88,6 +88,12 @@ func (oh *OrganizationHistory) Diff(history *OrganizationHistory) (*HistoryDiff[
 
 func (sh *StoreHistory) changes(new *StoreHistory) []Change {
 	var changes []Change
+	if !reflect.DeepEqual(sh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(storehistory.FieldCreatedAt, sh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(sh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(storehistory.FieldUpdatedAt, sh.UpdatedAt, new.UpdatedAt))
+	}
 	if !reflect.DeepEqual(sh.Name, new.Name) {
 		changes = append(changes, NewChange(storehistory.FieldName, sh.Name, new.Name))
 	}
@@ -96,12 +102,6 @@ func (sh *StoreHistory) changes(new *StoreHistory) []Change {
 	}
 	if !reflect.DeepEqual(sh.OrganizationID, new.OrganizationID) {
 		changes = append(changes, NewChange(storehistory.FieldOrganizationID, sh.OrganizationID, new.OrganizationID))
-	}
-	if !reflect.DeepEqual(sh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(storehistory.FieldCreatedAt, sh.CreatedAt, new.CreatedAt))
-	}
-	if !reflect.DeepEqual(sh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(storehistory.FieldUpdatedAt, sh.UpdatedAt, new.UpdatedAt))
 	}
 	return changes
 }

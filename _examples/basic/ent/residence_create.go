@@ -42,14 +42,6 @@ func (rc *ResidenceCreate) SetUpdatedAt(t time.Time) *ResidenceCreate {
 	return rc
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (rc *ResidenceCreate) SetNillableUpdatedAt(t *time.Time) *ResidenceCreate {
-	if t != nil {
-		rc.SetUpdatedAt(*t)
-	}
-	return rc
-}
-
 // SetName sets the "name" field.
 func (rc *ResidenceCreate) SetName(s string) *ResidenceCreate {
 	rc.mutation.SetName(s)
@@ -123,10 +115,6 @@ func (rc *ResidenceCreate) defaults() {
 	if _, ok := rc.mutation.CreatedAt(); !ok {
 		v := residence.DefaultCreatedAt()
 		rc.mutation.SetCreatedAt(v)
-	}
-	if _, ok := rc.mutation.UpdatedAt(); !ok {
-		v := residence.DefaultUpdatedAt()
-		rc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := rc.mutation.ID(); !ok {
 		v := residence.DefaultID()

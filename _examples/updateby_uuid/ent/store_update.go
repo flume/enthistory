@@ -36,14 +36,6 @@ func (su *StoreUpdate) SetUpdatedAt(t time.Time) *StoreUpdate {
 	return su
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (su *StoreUpdate) SetNillableUpdatedAt(t *time.Time) *StoreUpdate {
-	if t != nil {
-		su.SetUpdatedAt(*t)
-	}
-	return su
-}
-
 // SetName sets the "name" field.
 func (su *StoreUpdate) SetName(s string) *StoreUpdate {
 	su.mutation.SetName(s)
@@ -104,6 +96,7 @@ func (su *StoreUpdate) ClearOrganization() *StoreUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (su *StoreUpdate) Save(ctx context.Context) (int, error) {
+	su.defaults()
 	return withHooks(ctx, su.sqlSave, su.mutation, su.hooks)
 }
 
@@ -126,6 +119,14 @@ func (su *StoreUpdate) Exec(ctx context.Context) error {
 func (su *StoreUpdate) ExecX(ctx context.Context) {
 	if err := su.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (su *StoreUpdate) defaults() {
+	if _, ok := su.mutation.UpdatedAt(); !ok {
+		v := store.UpdateDefaultUpdatedAt()
+		su.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -213,14 +214,6 @@ func (suo *StoreUpdateOne) SetUpdatedAt(t time.Time) *StoreUpdateOne {
 	return suo
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (suo *StoreUpdateOne) SetNillableUpdatedAt(t *time.Time) *StoreUpdateOne {
-	if t != nil {
-		suo.SetUpdatedAt(*t)
-	}
-	return suo
-}
-
 // SetName sets the "name" field.
 func (suo *StoreUpdateOne) SetName(s string) *StoreUpdateOne {
 	suo.mutation.SetName(s)
@@ -294,6 +287,7 @@ func (suo *StoreUpdateOne) Select(field string, fields ...string) *StoreUpdateOn
 
 // Save executes the query and returns the updated Store entity.
 func (suo *StoreUpdateOne) Save(ctx context.Context) (*Store, error) {
+	suo.defaults()
 	return withHooks(ctx, suo.sqlSave, suo.mutation, suo.hooks)
 }
 
@@ -316,6 +310,14 @@ func (suo *StoreUpdateOne) Exec(ctx context.Context) error {
 func (suo *StoreUpdateOne) ExecX(ctx context.Context) {
 	if err := suo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (suo *StoreUpdateOne) defaults() {
+	if _, ok := suo.mutation.UpdatedAt(); !ok {
+		v := store.UpdateDefaultUpdatedAt()
+		suo.mutation.SetUpdatedAt(v)
 	}
 }
 

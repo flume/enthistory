@@ -3,6 +3,7 @@
 package schema
 
 import (
+	"_examples/testdata/debug/schema/mixins"
 	"time"
 
 	"entgo.io/contrib/entgql"
@@ -57,6 +58,9 @@ func (CharacterHistory) Edges() []ent.Edge {
 }
 func (CharacterHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{entsql.Annotation{Table: "character_history"}}
+}
+func (CharacterHistory) Mixin() []ent.Mixin {
+	return []ent.Mixin{mixins.TimeMixin{}, OtherMixin{}}
 }
 func (CharacterHistory) Indexes() []ent.Index {
 	return []ent.Index{index.Fields("history_time")}

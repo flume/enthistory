@@ -17,6 +17,12 @@ const (
 	Label = "character_history"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldCreatedAt holds the string denoting the created_at field in the database.
+	FieldCreatedAt = "created_at"
+	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
+	FieldUpdatedAt = "updated_at"
+	// FieldOther holds the string denoting the other field in the database.
+	FieldOther = "other"
 	// FieldHistoryTime holds the string denoting the history_time field in the database.
 	FieldHistoryTime = "history_time"
 	// FieldOperation holds the string denoting the operation field in the database.
@@ -40,6 +46,9 @@ const (
 // Columns holds all SQL columns for characterhistory fields.
 var Columns = []string{
 	FieldID,
+	FieldCreatedAt,
+	FieldUpdatedAt,
+	FieldOther,
 	FieldHistoryTime,
 	FieldOperation,
 	FieldRef,
@@ -61,6 +70,10 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
+	DefaultCreatedAt func() time.Time
+	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
+	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultHistoryTime holds the default value on creation for the "history_time" field.
 	DefaultHistoryTime func() time.Time
 	// DefaultID holds the default value on creation for the "id" field.
@@ -83,6 +96,21 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByCreatedAt orders the results by the created_at field.
+func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
+}
+
+// ByUpdatedAt orders the results by the updated_at field.
+func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByOther orders the results by the other field.
+func ByOther(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOther, opts...).ToFunc()
 }
 
 // ByHistoryTime orders the results by the history_time field.

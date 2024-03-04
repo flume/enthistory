@@ -4,6 +4,7 @@ package character
 
 import (
 	"_examples/testdata/debug/internal/ent/predicate"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -55,6 +56,21 @@ func IDLTE(id uuid.UUID) predicate.Character {
 	return predicate.Character(sql.FieldLTE(FieldID, id))
 }
 
+// CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
+func CreatedAt(v time.Time) predicate.Character {
+	return predicate.Character(sql.FieldEQ(FieldCreatedAt, v))
+}
+
+// UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
+func UpdatedAt(v time.Time) predicate.Character {
+	return predicate.Character(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// Other applies equality check predicate on the "other" field. It's identical to OtherEQ.
+func Other(v string) predicate.Character {
+	return predicate.Character(sql.FieldEQ(FieldOther, v))
+}
+
 // Age applies equality check predicate on the "age" field. It's identical to AgeEQ.
 func Age(v int) predicate.Character {
 	return predicate.Character(sql.FieldEQ(FieldAge, v))
@@ -63,6 +79,151 @@ func Age(v int) predicate.Character {
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.Character {
 	return predicate.Character(sql.FieldEQ(FieldName, v))
+}
+
+// CreatedAtEQ applies the EQ predicate on the "created_at" field.
+func CreatedAtEQ(v time.Time) predicate.Character {
+	return predicate.Character(sql.FieldEQ(FieldCreatedAt, v))
+}
+
+// CreatedAtNEQ applies the NEQ predicate on the "created_at" field.
+func CreatedAtNEQ(v time.Time) predicate.Character {
+	return predicate.Character(sql.FieldNEQ(FieldCreatedAt, v))
+}
+
+// CreatedAtIn applies the In predicate on the "created_at" field.
+func CreatedAtIn(vs ...time.Time) predicate.Character {
+	return predicate.Character(sql.FieldIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtNotIn applies the NotIn predicate on the "created_at" field.
+func CreatedAtNotIn(vs ...time.Time) predicate.Character {
+	return predicate.Character(sql.FieldNotIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtGT applies the GT predicate on the "created_at" field.
+func CreatedAtGT(v time.Time) predicate.Character {
+	return predicate.Character(sql.FieldGT(FieldCreatedAt, v))
+}
+
+// CreatedAtGTE applies the GTE predicate on the "created_at" field.
+func CreatedAtGTE(v time.Time) predicate.Character {
+	return predicate.Character(sql.FieldGTE(FieldCreatedAt, v))
+}
+
+// CreatedAtLT applies the LT predicate on the "created_at" field.
+func CreatedAtLT(v time.Time) predicate.Character {
+	return predicate.Character(sql.FieldLT(FieldCreatedAt, v))
+}
+
+// CreatedAtLTE applies the LTE predicate on the "created_at" field.
+func CreatedAtLTE(v time.Time) predicate.Character {
+	return predicate.Character(sql.FieldLTE(FieldCreatedAt, v))
+}
+
+// UpdatedAtEQ applies the EQ predicate on the "updated_at" field.
+func UpdatedAtEQ(v time.Time) predicate.Character {
+	return predicate.Character(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtNEQ applies the NEQ predicate on the "updated_at" field.
+func UpdatedAtNEQ(v time.Time) predicate.Character {
+	return predicate.Character(sql.FieldNEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtIn applies the In predicate on the "updated_at" field.
+func UpdatedAtIn(vs ...time.Time) predicate.Character {
+	return predicate.Character(sql.FieldIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtNotIn applies the NotIn predicate on the "updated_at" field.
+func UpdatedAtNotIn(vs ...time.Time) predicate.Character {
+	return predicate.Character(sql.FieldNotIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtGT applies the GT predicate on the "updated_at" field.
+func UpdatedAtGT(v time.Time) predicate.Character {
+	return predicate.Character(sql.FieldGT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtGTE applies the GTE predicate on the "updated_at" field.
+func UpdatedAtGTE(v time.Time) predicate.Character {
+	return predicate.Character(sql.FieldGTE(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLT applies the LT predicate on the "updated_at" field.
+func UpdatedAtLT(v time.Time) predicate.Character {
+	return predicate.Character(sql.FieldLT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
+func UpdatedAtLTE(v time.Time) predicate.Character {
+	return predicate.Character(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// OtherEQ applies the EQ predicate on the "other" field.
+func OtherEQ(v string) predicate.Character {
+	return predicate.Character(sql.FieldEQ(FieldOther, v))
+}
+
+// OtherNEQ applies the NEQ predicate on the "other" field.
+func OtherNEQ(v string) predicate.Character {
+	return predicate.Character(sql.FieldNEQ(FieldOther, v))
+}
+
+// OtherIn applies the In predicate on the "other" field.
+func OtherIn(vs ...string) predicate.Character {
+	return predicate.Character(sql.FieldIn(FieldOther, vs...))
+}
+
+// OtherNotIn applies the NotIn predicate on the "other" field.
+func OtherNotIn(vs ...string) predicate.Character {
+	return predicate.Character(sql.FieldNotIn(FieldOther, vs...))
+}
+
+// OtherGT applies the GT predicate on the "other" field.
+func OtherGT(v string) predicate.Character {
+	return predicate.Character(sql.FieldGT(FieldOther, v))
+}
+
+// OtherGTE applies the GTE predicate on the "other" field.
+func OtherGTE(v string) predicate.Character {
+	return predicate.Character(sql.FieldGTE(FieldOther, v))
+}
+
+// OtherLT applies the LT predicate on the "other" field.
+func OtherLT(v string) predicate.Character {
+	return predicate.Character(sql.FieldLT(FieldOther, v))
+}
+
+// OtherLTE applies the LTE predicate on the "other" field.
+func OtherLTE(v string) predicate.Character {
+	return predicate.Character(sql.FieldLTE(FieldOther, v))
+}
+
+// OtherContains applies the Contains predicate on the "other" field.
+func OtherContains(v string) predicate.Character {
+	return predicate.Character(sql.FieldContains(FieldOther, v))
+}
+
+// OtherHasPrefix applies the HasPrefix predicate on the "other" field.
+func OtherHasPrefix(v string) predicate.Character {
+	return predicate.Character(sql.FieldHasPrefix(FieldOther, v))
+}
+
+// OtherHasSuffix applies the HasSuffix predicate on the "other" field.
+func OtherHasSuffix(v string) predicate.Character {
+	return predicate.Character(sql.FieldHasSuffix(FieldOther, v))
+}
+
+// OtherEqualFold applies the EqualFold predicate on the "other" field.
+func OtherEqualFold(v string) predicate.Character {
+	return predicate.Character(sql.FieldEqualFold(FieldOther, v))
+}
+
+// OtherContainsFold applies the ContainsFold predicate on the "other" field.
+func OtherContainsFold(v string) predicate.Character {
+	return predicate.Character(sql.FieldContainsFold(FieldOther, v))
 }
 
 // AgeEQ applies the EQ predicate on the "age" field.

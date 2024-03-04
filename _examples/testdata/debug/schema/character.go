@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"_examples/testdata/debug/schema/mixins"
+
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -42,5 +44,12 @@ func (Character) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("friends", Character.Type).
 			Through("friendships", Friendship.Type),
+	}
+}
+
+func (Character) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixins.TimeMixin{},
+		OtherMixin{},
 	}
 }

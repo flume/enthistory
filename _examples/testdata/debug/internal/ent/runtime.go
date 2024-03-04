@@ -17,8 +17,19 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	characterMixin := schema.Character{}.Mixin()
+	characterMixinFields0 := characterMixin[0].Fields()
+	_ = characterMixinFields0
 	characterFields := schema.Character{}.Fields()
 	_ = characterFields
+	// characterDescCreatedAt is the schema descriptor for created_at field.
+	characterDescCreatedAt := characterMixinFields0[0].Descriptor()
+	// character.DefaultCreatedAt holds the default value on creation for the created_at field.
+	character.DefaultCreatedAt = characterDescCreatedAt.Default.(func() time.Time)
+	// characterDescUpdatedAt is the schema descriptor for updated_at field.
+	characterDescUpdatedAt := characterMixinFields0[1].Descriptor()
+	// character.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	character.UpdateDefaultUpdatedAt = characterDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// characterDescAge is the schema descriptor for age field.
 	characterDescAge := characterFields[1].Descriptor()
 	// character.AgeValidator is a validator for the "age" field. It is called by the builders before save.
@@ -27,8 +38,19 @@ func init() {
 	characterDescID := characterFields[0].Descriptor()
 	// character.DefaultID holds the default value on creation for the id field.
 	character.DefaultID = characterDescID.Default.(func() uuid.UUID)
+	characterhistoryMixin := schema.CharacterHistory{}.Mixin()
+	characterhistoryMixinFields0 := characterhistoryMixin[0].Fields()
+	_ = characterhistoryMixinFields0
 	characterhistoryFields := schema.CharacterHistory{}.Fields()
 	_ = characterhistoryFields
+	// characterhistoryDescCreatedAt is the schema descriptor for created_at field.
+	characterhistoryDescCreatedAt := characterhistoryMixinFields0[0].Descriptor()
+	// characterhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	characterhistory.DefaultCreatedAt = characterhistoryDescCreatedAt.Default.(func() time.Time)
+	// characterhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	characterhistoryDescUpdatedAt := characterhistoryMixinFields0[1].Descriptor()
+	// characterhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	characterhistory.UpdateDefaultUpdatedAt = characterhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// characterhistoryDescHistoryTime is the schema descriptor for history_time field.
 	characterhistoryDescHistoryTime := characterhistoryFields[1].Descriptor()
 	// characterhistory.DefaultHistoryTime holds the default value on creation for the history_time field.

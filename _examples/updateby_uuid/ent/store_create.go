@@ -42,14 +42,6 @@ func (sc *StoreCreate) SetUpdatedAt(t time.Time) *StoreCreate {
 	return sc
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (sc *StoreCreate) SetNillableUpdatedAt(t *time.Time) *StoreCreate {
-	if t != nil {
-		sc.SetUpdatedAt(*t)
-	}
-	return sc
-}
-
 // SetName sets the "name" field.
 func (sc *StoreCreate) SetName(s string) *StoreCreate {
 	sc.mutation.SetName(s)
@@ -125,10 +117,6 @@ func (sc *StoreCreate) defaults() {
 	if _, ok := sc.mutation.CreatedAt(); !ok {
 		v := store.DefaultCreatedAt()
 		sc.mutation.SetCreatedAt(v)
-	}
-	if _, ok := sc.mutation.UpdatedAt(); !ok {
-		v := store.DefaultUpdatedAt()
-		sc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := sc.mutation.ID(); !ok {
 		v := store.DefaultID()

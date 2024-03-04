@@ -20,6 +20,10 @@ type ResidenceHistory struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// HistoryTime holds the value of the "history_time" field.
 	HistoryTime time.Time `json:"history_time,omitempty"`
 	// Operation holds the value of the "operation" field.
@@ -29,11 +33,7 @@ type ResidenceHistory struct {
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy *int `json:"updated_by,omitempty"`
 	// Name holds the value of the "name" field.
-	Name string `json:"name,omitempty"`
-	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt    time.Time `json:"updated_at,omitempty"`
+	Name         string `json:"name,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -46,7 +46,7 @@ func (*ResidenceHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case residencehistory.FieldOperation, residencehistory.FieldName:
 			values[i] = new(sql.NullString)
-		case residencehistory.FieldHistoryTime, residencehistory.FieldCreatedAt, residencehistory.FieldUpdatedAt:
+		case residencehistory.FieldCreatedAt, residencehistory.FieldUpdatedAt, residencehistory.FieldHistoryTime:
 			values[i] = new(sql.NullTime)
 		case residencehistory.FieldRef:
 			values[i] = new(uuid.UUID)
@@ -71,6 +71,18 @@ func (rh *ResidenceHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			rh.ID = int(value.Int64)
+		case residencehistory.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				rh.CreatedAt = value.Time
+			}
+		case residencehistory.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				rh.UpdatedAt = value.Time
+			}
 		case residencehistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
@@ -101,18 +113,6 @@ func (rh *ResidenceHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
 				rh.Name = value.String
-			}
-		case residencehistory.FieldCreatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field created_at", values[i])
-			} else if value.Valid {
-				rh.CreatedAt = value.Time
-			}
-		case residencehistory.FieldUpdatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
-			} else if value.Valid {
-				rh.UpdatedAt = value.Time
 			}
 		default:
 			rh.selectValues.Set(columns[i], values[i])
@@ -150,6 +150,12 @@ func (rh *ResidenceHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("ResidenceHistory(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", rh.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(rh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(rh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("history_time=")
 	builder.WriteString(rh.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
@@ -166,12 +172,6 @@ func (rh *ResidenceHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(rh.Name)
-	builder.WriteString(", ")
-	builder.WriteString("created_at=")
-	builder.WriteString(rh.CreatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("updated_at=")
-	builder.WriteString(rh.UpdatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }
