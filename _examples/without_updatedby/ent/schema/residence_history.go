@@ -3,6 +3,7 @@
 package schema
 
 import (
+	"_examples/basic/ent/schema/mixins"
 	"time"
 
 	"entgo.io/contrib/entgql"
@@ -35,18 +36,16 @@ func (ResidenceHistory) Fields() []ent.Field {
 			Immutable().
 			Annotations(entgql.Annotation{Type: "ID"}),
 		field.String("name").
-			Immutable(),
-		field.Time("created_at").
-			Immutable().
-			Default(time.Now),
-		field.Time("updated_at").
-			Default(time.Now)}
+			Immutable()}
 }
 func (ResidenceHistory) Edges() []ent.Edge {
 	return nil
 }
 func (ResidenceHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{entsql.Annotation{Table: "residence_history"}}
+}
+func (ResidenceHistory) Mixin() []ent.Mixin {
+	return []ent.Mixin{mixins.TimeMixin{}}
 }
 func (ResidenceHistory) Indexes() []ent.Index {
 	return []ent.Index{index.Fields("history_time")}

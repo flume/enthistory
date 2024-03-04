@@ -48,7 +48,6 @@ type HistoryDiff[T any] struct {
 
 var (
     MismatchedRefError = errors.New("cannot take diff of histories with different Refs")
-    IdenticalHistoryError = errors.New("cannot take diff of identical history")
 )
 
 	{{ range $n := $.Nodes }}
@@ -72,29 +71,25 @@ func ({{ $h.Receiver }} *{{ $h.Name }}) changes(new *{{ $h.Name }}) []Change {
     return changes
 }
 
+
+
 func ({{ $h.Receiver }} *{{ $h.Name }}) Diff(history *{{ $h.Name }}) (*HistoryDiff[{{ $h.Name }}], error) {
-    if {{ $h.Receiver }}.Ref != history.Ref {
-        return nil, MismatchedRefError
-    }
+	if {{ $h.Receiver }}.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
 
-    {{ $h.Receiver }}Unix, historyUnix := {{ $h.Receiver }}.HistoryTime.UnixMilli(), history.HistoryTime.UnixMilli()
-    {{ $h.Receiver }}Older := {{ $h.Receiver }}Unix < historyUnix
-    historyOlder := {{ $h.Receiver }}Unix > historyUnix
-
-   if {{ $h.Receiver }}Older {
-        return &HistoryDiff[{{ $h.Name }}]{
-            Old:     {{ $h.Receiver }},
-            New:     history,
-            Changes: {{ $h.Receiver }}.changes(history),
-        }, nil
-    } else if historyOlder {
-        return &HistoryDiff[{{ $h.Name }}]{
-            Old:     history,
-            New:     {{ $h.Receiver }},
-            Changes: history.changes({{ $h.Receiver }}),
-        }, nil
-    }
-    return nil, IdenticalHistoryError
+	if {{ $h.Receiver }}.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() {
+		return &HistoryDiff[{{ $h.Name }}]{
+			Old:     history,
+			New:     {{ $h.Receiver }},
+			Changes: history.changes({{ $h.Receiver }}),
+		}, nil
+	}
+	return &HistoryDiff[{{ $h.Name }}]{
+		Old:     {{ $h.Receiver }},
+		New:     history,
+		Changes: {{ $h.Receiver }}.changes(history),
+	}, nil
 }
                 {{ end }}
             {{ end }}

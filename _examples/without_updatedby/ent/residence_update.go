@@ -35,14 +35,6 @@ func (ru *ResidenceUpdate) SetUpdatedAt(t time.Time) *ResidenceUpdate {
 	return ru
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ru *ResidenceUpdate) SetNillableUpdatedAt(t *time.Time) *ResidenceUpdate {
-	if t != nil {
-		ru.SetUpdatedAt(*t)
-	}
-	return ru
-}
-
 // SetName sets the "name" field.
 func (ru *ResidenceUpdate) SetName(s string) *ResidenceUpdate {
 	ru.mutation.SetName(s)
@@ -100,6 +92,7 @@ func (ru *ResidenceUpdate) RemoveOccupants(c ...*Character) *ResidenceUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ru *ResidenceUpdate) Save(ctx context.Context) (int, error) {
+	ru.defaults()
 	return withHooks(ctx, ru.sqlSave, ru.mutation, ru.hooks)
 }
 
@@ -122,6 +115,14 @@ func (ru *ResidenceUpdate) Exec(ctx context.Context) error {
 func (ru *ResidenceUpdate) ExecX(ctx context.Context) {
 	if err := ru.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (ru *ResidenceUpdate) defaults() {
+	if _, ok := ru.mutation.UpdatedAt(); !ok {
+		v := residence.UpdateDefaultUpdatedAt()
+		ru.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -211,14 +212,6 @@ func (ruo *ResidenceUpdateOne) SetUpdatedAt(t time.Time) *ResidenceUpdateOne {
 	return ruo
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ruo *ResidenceUpdateOne) SetNillableUpdatedAt(t *time.Time) *ResidenceUpdateOne {
-	if t != nil {
-		ruo.SetUpdatedAt(*t)
-	}
-	return ruo
-}
-
 // SetName sets the "name" field.
 func (ruo *ResidenceUpdateOne) SetName(s string) *ResidenceUpdateOne {
 	ruo.mutation.SetName(s)
@@ -289,6 +282,7 @@ func (ruo *ResidenceUpdateOne) Select(field string, fields ...string) *Residence
 
 // Save executes the query and returns the updated Residence entity.
 func (ruo *ResidenceUpdateOne) Save(ctx context.Context) (*Residence, error) {
+	ruo.defaults()
 	return withHooks(ctx, ruo.sqlSave, ruo.mutation, ruo.hooks)
 }
 
@@ -311,6 +305,14 @@ func (ruo *ResidenceUpdateOne) Exec(ctx context.Context) error {
 func (ruo *ResidenceUpdateOne) ExecX(ctx context.Context) {
 	if err := ruo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (ruo *ResidenceUpdateOne) defaults() {
+	if _, ok := ruo.mutation.UpdatedAt(); !ok {
+		v := residence.UpdateDefaultUpdatedAt()
+		ruo.mutation.SetUpdatedAt(v)
 	}
 }
 

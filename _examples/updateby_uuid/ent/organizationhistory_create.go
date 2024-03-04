@@ -43,6 +43,14 @@ func (ohc *OrganizationHistoryCreate) SetUpdatedAt(t time.Time) *OrganizationHis
 	return ohc
 }
 
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (ohc *OrganizationHistoryCreate) SetNillableUpdatedAt(t *time.Time) *OrganizationHistoryCreate {
+	if t != nil {
+		ohc.SetUpdatedAt(*t)
+	}
+	return ohc
+}
+
 // SetHistoryTime sets the "history_time" field.
 func (ohc *OrganizationHistoryCreate) SetHistoryTime(t time.Time) *OrganizationHistoryCreate {
 	ohc.mutation.SetHistoryTime(t)
@@ -147,6 +155,10 @@ func (ohc *OrganizationHistoryCreate) defaults() {
 	if _, ok := ohc.mutation.CreatedAt(); !ok {
 		v := organizationhistory.DefaultCreatedAt()
 		ohc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := ohc.mutation.UpdatedAt(); !ok {
+		v := organizationhistory.DefaultUpdatedAt()
+		ohc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := ohc.mutation.HistoryTime(); !ok {
 		v := organizationhistory.DefaultHistoryTime()

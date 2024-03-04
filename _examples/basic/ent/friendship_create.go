@@ -41,6 +41,14 @@ func (fc *FriendshipCreate) SetUpdatedAt(t time.Time) *FriendshipCreate {
 	return fc
 }
 
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (fc *FriendshipCreate) SetNillableUpdatedAt(t *time.Time) *FriendshipCreate {
+	if t != nil {
+		fc.SetUpdatedAt(*t)
+	}
+	return fc
+}
+
 // SetCharacterID sets the "character_id" field.
 func (fc *FriendshipCreate) SetCharacterID(i int) *FriendshipCreate {
 	fc.mutation.SetCharacterID(i)
@@ -107,6 +115,10 @@ func (fc *FriendshipCreate) defaults() {
 	if _, ok := fc.mutation.CreatedAt(); !ok {
 		v := friendship.DefaultCreatedAt()
 		fc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := fc.mutation.UpdatedAt(); !ok {
+		v := friendship.DefaultUpdatedAt()
+		fc.mutation.SetUpdatedAt(v)
 	}
 }
 

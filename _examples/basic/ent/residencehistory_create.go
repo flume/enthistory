@@ -43,6 +43,14 @@ func (rhc *ResidenceHistoryCreate) SetUpdatedAt(t time.Time) *ResidenceHistoryCr
 	return rhc
 }
 
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (rhc *ResidenceHistoryCreate) SetNillableUpdatedAt(t *time.Time) *ResidenceHistoryCreate {
+	if t != nil {
+		rhc.SetUpdatedAt(*t)
+	}
+	return rhc
+}
+
 // SetHistoryTime sets the "history_time" field.
 func (rhc *ResidenceHistoryCreate) SetHistoryTime(t time.Time) *ResidenceHistoryCreate {
 	rhc.mutation.SetHistoryTime(t)
@@ -141,6 +149,10 @@ func (rhc *ResidenceHistoryCreate) defaults() {
 	if _, ok := rhc.mutation.CreatedAt(); !ok {
 		v := residencehistory.DefaultCreatedAt()
 		rhc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := rhc.mutation.UpdatedAt(); !ok {
+		v := residencehistory.DefaultUpdatedAt()
+		rhc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := rhc.mutation.HistoryTime(); !ok {
 		v := residencehistory.DefaultHistoryTime()

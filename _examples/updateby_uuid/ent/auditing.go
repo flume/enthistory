@@ -40,8 +40,7 @@ type HistoryDiff[T any] struct {
 }
 
 var (
-	MismatchedRefError    = errors.New("cannot take diff of histories with different Refs")
-	IdenticalHistoryError = errors.New("cannot take diff of identical history")
+	MismatchedRefError = errors.New("cannot take diff of histories with different Refs")
 )
 
 func (oh *OrganizationHistory) changes(new *OrganizationHistory) []Change {
@@ -66,24 +65,18 @@ func (oh *OrganizationHistory) Diff(history *OrganizationHistory) (*HistoryDiff[
 		return nil, MismatchedRefError
 	}
 
-	ohUnix, historyUnix := oh.HistoryTime.UnixMilli(), history.HistoryTime.UnixMilli()
-	ohOlder := ohUnix < historyUnix
-	historyOlder := ohUnix > historyUnix
-
-	if ohOlder {
-		return &HistoryDiff[OrganizationHistory]{
-			Old:     oh,
-			New:     history,
-			Changes: oh.changes(history),
-		}, nil
-	} else if historyOlder {
+	if oh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() {
 		return &HistoryDiff[OrganizationHistory]{
 			Old:     history,
 			New:     oh,
 			Changes: history.changes(oh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return &HistoryDiff[OrganizationHistory]{
+		Old:     oh,
+		New:     history,
+		Changes: oh.changes(history),
+	}, nil
 }
 
 func (sh *StoreHistory) changes(new *StoreHistory) []Change {
@@ -111,24 +104,18 @@ func (sh *StoreHistory) Diff(history *StoreHistory) (*HistoryDiff[StoreHistory],
 		return nil, MismatchedRefError
 	}
 
-	shUnix, historyUnix := sh.HistoryTime.UnixMilli(), history.HistoryTime.UnixMilli()
-	shOlder := shUnix < historyUnix
-	historyOlder := shUnix > historyUnix
-
-	if shOlder {
-		return &HistoryDiff[StoreHistory]{
-			Old:     sh,
-			New:     history,
-			Changes: sh.changes(history),
-		}, nil
-	} else if historyOlder {
+	if sh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() {
 		return &HistoryDiff[StoreHistory]{
 			Old:     history,
 			New:     sh,
 			Changes: history.changes(sh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return &HistoryDiff[StoreHistory]{
+		Old:     sh,
+		New:     history,
+		Changes: sh.changes(history),
+	}, nil
 }
 
 func (c Change) String(op enthistory.OpType) string {

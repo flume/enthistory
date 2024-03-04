@@ -37,6 +37,8 @@ var (
 	// CharacterHistoryColumns holds the columns for the "character_history" table.
 	CharacterHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
 		{Name: "ref", Type: field.TypeInt, Nullable: true},
@@ -44,8 +46,6 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "nicknames", Type: field.TypeJSON, Nullable: true},
 		{Name: "info", Type: field.TypeJSON, Nullable: true},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
 	}
 	// CharacterHistoryTable holds the schema information for the "character_history" table.
 	CharacterHistoryTable = &schema.Table{
@@ -56,7 +56,7 @@ var (
 			{
 				Name:    "characterhistory_history_time",
 				Unique:  false,
-				Columns: []*schema.Column{CharacterHistoryColumns[1]},
+				Columns: []*schema.Column{CharacterHistoryColumns[3]},
 			},
 		},
 	}
@@ -98,13 +98,13 @@ var (
 	// FriendshipHistoryColumns holds the columns for the "friendship_history" table.
 	FriendshipHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
 		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "character_id", Type: field.TypeInt},
 		{Name: "friend_id", Type: field.TypeInt},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
 	}
 	// FriendshipHistoryTable holds the schema information for the "friendship_history" table.
 	FriendshipHistoryTable = &schema.Table{
@@ -115,7 +115,7 @@ var (
 			{
 				Name:    "friendshiphistory_history_time",
 				Unique:  false,
-				Columns: []*schema.Column{FriendshipHistoryColumns[1]},
+				Columns: []*schema.Column{FriendshipHistoryColumns[3]},
 			},
 		},
 	}
@@ -135,12 +135,12 @@ var (
 	// ResidenceHistoryColumns holds the columns for the "residence_history" table.
 	ResidenceHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
 		{Name: "ref", Type: field.TypeUUID, Nullable: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
 	}
 	// ResidenceHistoryTable holds the schema information for the "residence_history" table.
 	ResidenceHistoryTable = &schema.Table{
@@ -151,7 +151,7 @@ var (
 			{
 				Name:    "residencehistory_history_time",
 				Unique:  false,
-				Columns: []*schema.Column{ResidenceHistoryColumns[1]},
+				Columns: []*schema.Column{ResidenceHistoryColumns[3]},
 			},
 		},
 	}

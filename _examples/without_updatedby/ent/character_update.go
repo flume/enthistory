@@ -38,14 +38,6 @@ func (cu *CharacterUpdate) SetUpdatedAt(t time.Time) *CharacterUpdate {
 	return cu
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (cu *CharacterUpdate) SetNillableUpdatedAt(t *time.Time) *CharacterUpdate {
-	if t != nil {
-		cu.SetUpdatedAt(*t)
-	}
-	return cu
-}
-
 // SetAge sets the "age" field.
 func (cu *CharacterUpdate) SetAge(i int) *CharacterUpdate {
 	cu.mutation.ResetAge()
@@ -215,6 +207,7 @@ func (cu *CharacterUpdate) RemoveFriendships(f ...*Friendship) *CharacterUpdate 
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (cu *CharacterUpdate) Save(ctx context.Context) (int, error) {
+	cu.defaults()
 	return withHooks(ctx, cu.sqlSave, cu.mutation, cu.hooks)
 }
 
@@ -237,6 +230,14 @@ func (cu *CharacterUpdate) Exec(ctx context.Context) error {
 func (cu *CharacterUpdate) ExecX(ctx context.Context) {
 	if err := cu.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (cu *CharacterUpdate) defaults() {
+	if _, ok := cu.mutation.UpdatedAt(); !ok {
+		v := character.UpdateDefaultUpdatedAt()
+		cu.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -448,14 +449,6 @@ func (cuo *CharacterUpdateOne) SetUpdatedAt(t time.Time) *CharacterUpdateOne {
 	return cuo
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (cuo *CharacterUpdateOne) SetNillableUpdatedAt(t *time.Time) *CharacterUpdateOne {
-	if t != nil {
-		cuo.SetUpdatedAt(*t)
-	}
-	return cuo
-}
-
 // SetAge sets the "age" field.
 func (cuo *CharacterUpdateOne) SetAge(i int) *CharacterUpdateOne {
 	cuo.mutation.ResetAge()
@@ -638,6 +631,7 @@ func (cuo *CharacterUpdateOne) Select(field string, fields ...string) *Character
 
 // Save executes the query and returns the updated Character entity.
 func (cuo *CharacterUpdateOne) Save(ctx context.Context) (*Character, error) {
+	cuo.defaults()
 	return withHooks(ctx, cuo.sqlSave, cuo.mutation, cuo.hooks)
 }
 
@@ -660,6 +654,14 @@ func (cuo *CharacterUpdateOne) Exec(ctx context.Context) error {
 func (cuo *CharacterUpdateOne) ExecX(ctx context.Context) {
 	if err := cuo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (cuo *CharacterUpdateOne) defaults() {
+	if _, ok := cuo.mutation.UpdatedAt(); !ok {
+		v := character.UpdateDefaultUpdatedAt()
+		cuo.mutation.SetUpdatedAt(v)
 	}
 }
 

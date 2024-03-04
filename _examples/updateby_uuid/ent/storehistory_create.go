@@ -43,6 +43,14 @@ func (shc *StoreHistoryCreate) SetUpdatedAt(t time.Time) *StoreHistoryCreate {
 	return shc
 }
 
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (shc *StoreHistoryCreate) SetNillableUpdatedAt(t *time.Time) *StoreHistoryCreate {
+	if t != nil {
+		shc.SetUpdatedAt(*t)
+	}
+	return shc
+}
+
 // SetHistoryTime sets the "history_time" field.
 func (shc *StoreHistoryCreate) SetHistoryTime(t time.Time) *StoreHistoryCreate {
 	shc.mutation.SetHistoryTime(t)
@@ -153,6 +161,10 @@ func (shc *StoreHistoryCreate) defaults() {
 	if _, ok := shc.mutation.CreatedAt(); !ok {
 		v := storehistory.DefaultCreatedAt()
 		shc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := shc.mutation.UpdatedAt(); !ok {
+		v := storehistory.DefaultUpdatedAt()
+		shc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := shc.mutation.HistoryTime(); !ok {
 		v := storehistory.DefaultHistoryTime()

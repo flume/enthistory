@@ -42,6 +42,14 @@ func (chc *CharacterHistoryCreate) SetUpdatedAt(t time.Time) *CharacterHistoryCr
 	return chc
 }
 
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (chc *CharacterHistoryCreate) SetNillableUpdatedAt(t *time.Time) *CharacterHistoryCreate {
+	if t != nil {
+		chc.SetUpdatedAt(*t)
+	}
+	return chc
+}
+
 // SetHistoryTime sets the "history_time" field.
 func (chc *CharacterHistoryCreate) SetHistoryTime(t time.Time) *CharacterHistoryCreate {
 	chc.mutation.SetHistoryTime(t)
@@ -152,6 +160,10 @@ func (chc *CharacterHistoryCreate) defaults() {
 	if _, ok := chc.mutation.CreatedAt(); !ok {
 		v := characterhistory.DefaultCreatedAt()
 		chc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := chc.mutation.UpdatedAt(); !ok {
+		v := characterhistory.DefaultUpdatedAt()
+		chc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := chc.mutation.HistoryTime(); !ok {
 		v := characterhistory.DefaultHistoryTime()

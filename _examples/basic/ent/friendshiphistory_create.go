@@ -42,6 +42,14 @@ func (fhc *FriendshipHistoryCreate) SetUpdatedAt(t time.Time) *FriendshipHistory
 	return fhc
 }
 
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (fhc *FriendshipHistoryCreate) SetNillableUpdatedAt(t *time.Time) *FriendshipHistoryCreate {
+	if t != nil {
+		fhc.SetUpdatedAt(*t)
+	}
+	return fhc
+}
+
 // SetHistoryTime sets the "history_time" field.
 func (fhc *FriendshipHistoryCreate) SetHistoryTime(t time.Time) *FriendshipHistoryCreate {
 	fhc.mutation.SetHistoryTime(t)
@@ -146,6 +154,10 @@ func (fhc *FriendshipHistoryCreate) defaults() {
 	if _, ok := fhc.mutation.CreatedAt(); !ok {
 		v := friendshiphistory.DefaultCreatedAt()
 		fhc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := fhc.mutation.UpdatedAt(); !ok {
+		v := friendshiphistory.DefaultUpdatedAt()
+		fhc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := fhc.mutation.HistoryTime(); !ok {
 		v := friendshiphistory.DefaultHistoryTime()

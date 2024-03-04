@@ -19,6 +19,10 @@ type FriendshipHistory struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// HistoryTime holds the value of the "history_time" field.
 	HistoryTime time.Time `json:"history_time,omitempty"`
 	// Operation holds the value of the "operation" field.
@@ -28,11 +32,7 @@ type FriendshipHistory struct {
 	// CharacterID holds the value of the "character_id" field.
 	CharacterID int `json:"character_id,omitempty"`
 	// FriendID holds the value of the "friend_id" field.
-	FriendID int `json:"friend_id,omitempty"`
-	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt    time.Time `json:"updated_at,omitempty"`
+	FriendID     int `json:"friend_id,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -45,7 +45,7 @@ func (*FriendshipHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case friendshiphistory.FieldOperation, friendshiphistory.FieldRef:
 			values[i] = new(sql.NullString)
-		case friendshiphistory.FieldHistoryTime, friendshiphistory.FieldCreatedAt, friendshiphistory.FieldUpdatedAt:
+		case friendshiphistory.FieldCreatedAt, friendshiphistory.FieldUpdatedAt, friendshiphistory.FieldHistoryTime:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -68,6 +68,18 @@ func (fh *FriendshipHistory) assignValues(columns []string, values []any) error 
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			fh.ID = int(value.Int64)
+		case friendshiphistory.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				fh.CreatedAt = value.Time
+			}
+		case friendshiphistory.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				fh.UpdatedAt = value.Time
+			}
 		case friendshiphistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
@@ -97,18 +109,6 @@ func (fh *FriendshipHistory) assignValues(columns []string, values []any) error 
 				return fmt.Errorf("unexpected type %T for field friend_id", values[i])
 			} else if value.Valid {
 				fh.FriendID = int(value.Int64)
-			}
-		case friendshiphistory.FieldCreatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field created_at", values[i])
-			} else if value.Valid {
-				fh.CreatedAt = value.Time
-			}
-		case friendshiphistory.FieldUpdatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
-			} else if value.Valid {
-				fh.UpdatedAt = value.Time
 			}
 		default:
 			fh.selectValues.Set(columns[i], values[i])
@@ -146,6 +146,12 @@ func (fh *FriendshipHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("FriendshipHistory(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", fh.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(fh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(fh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("history_time=")
 	builder.WriteString(fh.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
@@ -160,12 +166,6 @@ func (fh *FriendshipHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("friend_id=")
 	builder.WriteString(fmt.Sprintf("%v", fh.FriendID))
-	builder.WriteString(", ")
-	builder.WriteString("created_at=")
-	builder.WriteString(fh.CreatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("updated_at=")
-	builder.WriteString(fh.UpdatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -34,14 +34,6 @@ func (chu *CharacterHistoryUpdate) SetUpdatedAt(t time.Time) *CharacterHistoryUp
 	return chu
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (chu *CharacterHistoryUpdate) SetNillableUpdatedAt(t *time.Time) *CharacterHistoryUpdate {
-	if t != nil {
-		chu.SetUpdatedAt(*t)
-	}
-	return chu
-}
-
 // Mutation returns the CharacterHistoryMutation object of the builder.
 func (chu *CharacterHistoryUpdate) Mutation() *CharacterHistoryMutation {
 	return chu.mutation
@@ -49,6 +41,7 @@ func (chu *CharacterHistoryUpdate) Mutation() *CharacterHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (chu *CharacterHistoryUpdate) Save(ctx context.Context) (int, error) {
+	chu.defaults()
 	return withHooks(ctx, chu.sqlSave, chu.mutation, chu.hooks)
 }
 
@@ -74,6 +67,14 @@ func (chu *CharacterHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (chu *CharacterHistoryUpdate) defaults() {
+	if _, ok := chu.mutation.UpdatedAt(); !ok {
+		v := characterhistory.UpdateDefaultUpdatedAt()
+		chu.mutation.SetUpdatedAt(v)
+	}
+}
+
 func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(characterhistory.Table, characterhistory.Columns, sqlgraph.NewFieldSpec(characterhistory.FieldID, field.TypeInt))
 	if ps := chu.mutation.predicates; len(ps) > 0 {
@@ -83,6 +84,9 @@ func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 			}
 		}
 	}
+	if value, ok := chu.mutation.UpdatedAt(); ok {
+		_spec.SetField(characterhistory.FieldUpdatedAt, field.TypeTime, value)
+	}
 	if chu.mutation.RefCleared() {
 		_spec.ClearField(characterhistory.FieldRef, field.TypeInt)
 	}
@@ -91,9 +95,6 @@ func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if chu.mutation.InfoCleared() {
 		_spec.ClearField(characterhistory.FieldInfo, field.TypeJSON)
-	}
-	if value, ok := chu.mutation.UpdatedAt(); ok {
-		_spec.SetField(characterhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, chu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -121,14 +122,6 @@ func (chuo *CharacterHistoryUpdateOne) SetUpdatedAt(t time.Time) *CharacterHisto
 	return chuo
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (chuo *CharacterHistoryUpdateOne) SetNillableUpdatedAt(t *time.Time) *CharacterHistoryUpdateOne {
-	if t != nil {
-		chuo.SetUpdatedAt(*t)
-	}
-	return chuo
-}
-
 // Mutation returns the CharacterHistoryMutation object of the builder.
 func (chuo *CharacterHistoryUpdateOne) Mutation() *CharacterHistoryMutation {
 	return chuo.mutation
@@ -149,6 +142,7 @@ func (chuo *CharacterHistoryUpdateOne) Select(field string, fields ...string) *C
 
 // Save executes the query and returns the updated CharacterHistory entity.
 func (chuo *CharacterHistoryUpdateOne) Save(ctx context.Context) (*CharacterHistory, error) {
+	chuo.defaults()
 	return withHooks(ctx, chuo.sqlSave, chuo.mutation, chuo.hooks)
 }
 
@@ -171,6 +165,14 @@ func (chuo *CharacterHistoryUpdateOne) Exec(ctx context.Context) error {
 func (chuo *CharacterHistoryUpdateOne) ExecX(ctx context.Context) {
 	if err := chuo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (chuo *CharacterHistoryUpdateOne) defaults() {
+	if _, ok := chuo.mutation.UpdatedAt(); !ok {
+		v := characterhistory.UpdateDefaultUpdatedAt()
+		chuo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -200,6 +202,9 @@ func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Char
 			}
 		}
 	}
+	if value, ok := chuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(characterhistory.FieldUpdatedAt, field.TypeTime, value)
+	}
 	if chuo.mutation.RefCleared() {
 		_spec.ClearField(characterhistory.FieldRef, field.TypeInt)
 	}
@@ -208,9 +213,6 @@ func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Char
 	}
 	if chuo.mutation.InfoCleared() {
 		_spec.ClearField(characterhistory.FieldInfo, field.TypeJSON)
-	}
-	if value, ok := chuo.mutation.UpdatedAt(); ok {
-		_spec.SetField(characterhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
 	_node = &CharacterHistory{config: chuo.config}
 	_spec.Assign = _node.assignValues

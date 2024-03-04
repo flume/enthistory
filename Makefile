@@ -21,10 +21,7 @@ lint:
 # generate:
 #    Generate the examples code
 generate:
-	go generate ./_examples/basic/ent
-	go generate ./_examples/custompaths/ent
-	go generate ./_examples/updateby_uuid/ent
-	go generate ./_examples/graphql
+	(cd _examples && go generate ./... )
 	$(MAKE) fmt
 
 

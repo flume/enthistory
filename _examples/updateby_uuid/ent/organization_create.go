@@ -42,6 +42,14 @@ func (oc *OrganizationCreate) SetUpdatedAt(t time.Time) *OrganizationCreate {
 	return oc
 }
 
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableUpdatedAt(t *time.Time) *OrganizationCreate {
+	if t != nil {
+		oc.SetUpdatedAt(*t)
+	}
+	return oc
+}
+
 // SetName sets the "name" field.
 func (oc *OrganizationCreate) SetName(s string) *OrganizationCreate {
 	oc.mutation.SetName(s)
@@ -121,6 +129,10 @@ func (oc *OrganizationCreate) defaults() {
 	if _, ok := oc.mutation.CreatedAt(); !ok {
 		v := organization.DefaultCreatedAt()
 		oc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := oc.mutation.UpdatedAt(); !ok {
+		v := organization.DefaultUpdatedAt()
+		oc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := oc.mutation.ID(); !ok {
 		v := organization.DefaultID()

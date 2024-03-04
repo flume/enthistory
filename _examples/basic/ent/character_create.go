@@ -43,6 +43,14 @@ func (cc *CharacterCreate) SetUpdatedAt(t time.Time) *CharacterCreate {
 	return cc
 }
 
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (cc *CharacterCreate) SetNillableUpdatedAt(t *time.Time) *CharacterCreate {
+	if t != nil {
+		cc.SetUpdatedAt(*t)
+	}
+	return cc
+}
+
 // SetAge sets the "age" field.
 func (cc *CharacterCreate) SetAge(i int) *CharacterCreate {
 	cc.mutation.SetAge(i)
@@ -154,6 +162,10 @@ func (cc *CharacterCreate) defaults() {
 	if _, ok := cc.mutation.CreatedAt(); !ok {
 		v := character.DefaultCreatedAt()
 		cc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := cc.mutation.UpdatedAt(); !ok {
+		v := character.DefaultUpdatedAt()
+		cc.mutation.SetUpdatedAt(v)
 	}
 }
 
