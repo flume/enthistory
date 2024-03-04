@@ -11,7 +11,7 @@ go get github.com/flume/enthistory@latest
 ```
 
 In addition to installing enthistory, you need to create two files in your `ent` directory: `entc.go` and `generate.go`.
-The `entc.go` file should contain the following code:
+The `entc.go` file should contain code similar to below:
 
 ```go
 //go:build ignore
@@ -19,19 +19,39 @@ The `entc.go` file should contain the following code:
 package main
 
 import (
+	"_examples/basic/ent/schema"
+	"fmt"
 	"log"
+
+	"entgo.io/ent"
+
+	"entgo.io/ent/entc/gen"
+
 	"github.com/flume/enthistory"
+
 	"entgo.io/ent/entc"
 )
 
 func main() {
+	if err := enthistory.Generate("./schema", []ent.Interface{
+		// Add all the schemas you want history tracking on here
+		schema.Character{},
+		schema.Friendship{},
+		schema.Residence{},
+	},
+		enthistory.WithUpdatedBy("userId", enthistory.ValueTypeInt),
+		enthistory.WithHistoryTimeIndex(),
+		enthistory.WithImmutableFields(),
+	); err != nil {
+		log.Fatal(fmt.Sprintf("running enthistory codegen: %v", err))
+	}
+
 	if err := entc.Generate("./schema",
-		&gen.Config{},
+		&gen.Config{
+			Features: []gen.Feature{gen.FeatureSnapshot},
+		},
 		entc.Extensions(
-			enthistory.NewHistoryExtension(
-				enthistory.WithUpdatedBy("userId", enthistory.ValueTypeInt),
-				enthistory.WithAuditing(),
-			),
+			enthistory.NewHistoryExtension(enthistory.WithAuditing()),
 		),
 	); err != nil {
 		log.Fatal("running ent codegen:", err)
@@ -47,8 +67,8 @@ package ent
 //go:generate go run -mod=mod entc.go
 ```
 
-> **Note:** Starting from enthistory v0.8.0, ent v0.12.x or greater is required. If you are using an older version of
-> ent, install enthistory v0.7.0 instead by running `go get github.com/flume/enthistory@v0.7.0`.
+> **Note:** Breaking change introduced in enthistory version v0.12.0, if you are upgrading please see the example file above
+> for the new way to use the enthistory extension.
 
 ## Usage
 
@@ -165,7 +185,7 @@ The audit log contains six columns when user tracking is enabled. Here's an exam
 You can also build your own custom audit log using the `.Diff()` method on history models. The `Diff()` method returns
 the older history, the newer history, and the changes to fields when comparing the newer history to the older history.
 
-## Configuration Options
+## Schema Generation Configuration Options
 
 enthistory provides several configuration options to customize its behavior.
 
@@ -212,45 +232,12 @@ enthistory.WithUpdatedBy("userId", enthistory.ValueTypeUUID)
 enthistory.WithUpdatedBy("userEmail", enthistory.ValueTypeString)
 ```
 
+## Extenstion Configuration Options
+
 ### Auditing
 
 As mentioned earlier, you can enable auditing by using the `enthistory.WithAuditing()` configuration option when
 initializing the extension.
-
-### Excluding History on a Schema
-
-enthistory is designed to always track history, but in cases where you don't want to generate history tables for a
-particular schema, you can apply annotations to the schema to exclude it. Here's an example:
-
-```go
-func (Character) Annotations() []schema.Annotation {
-    return []schema.Annotation{
-        enthistory.Annotations{
-            // Exclude history tables for this schema
-            Exclude: true,
-        },
-    }
-}
-```
-
-### Setting a Schema Path
-
-If you want to set an alternative schema location other than `ent/schema`, you can use the `enthistory.WithSchemaPath()`
-configuration option. The schema path should be the same as the one set in the `entc.Generate` function. If you don't
-plan to set an alternative schema location, you can omit this option.
-
-```go
-func main() {
-    entc.Generate("./schema2",
-        &gen.Config{},
-        entc.Extensions(
-            enthistory.NewHistoryExtension(
-                enthistory.WithSchemaPath("./schema2")
-            ),
-        ),
-    )
-}
-```
 
 For a complete example of using a custom schema path, refer to the [custompaths](./_examples/custompaths/ent/entc.go)
 example.
