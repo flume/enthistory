@@ -15,6 +15,7 @@
 package schemast
 
 import (
+	"fmt"
 	"go/ast"
 	"go/token"
 
@@ -70,7 +71,8 @@ func (u *UpsertSchema) Mutate(ctx *Context) error {
 		// Append any imported struct for JSON fields
 		if fld.Descriptor().Info.Type == field.TypeJSON {
 			if fld.Descriptor().Info.RType != nil && fld.Descriptor().Info.RType.PkgPath != "" {
-				ctx.appendImport(u.Name, fld.Descriptor().Info.RType.PkgPath)
+				ctx.appendImport(u.Name, fmt.Sprintf("\"%s\"", fld.Descriptor().Info.PkgPath))
+				ctx.appendImport(u.Name, fmt.Sprintf("\"%s\"", fld.Descriptor().Info.RType.PkgPath))
 			}
 		}
 	}
