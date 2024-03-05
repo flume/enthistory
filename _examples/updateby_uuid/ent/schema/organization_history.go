@@ -6,7 +6,6 @@ import (
 	"_examples/basic/ent/schema/mixins"
 	"time"
 
-	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -33,13 +32,11 @@ func (OrganizationHistory) Fields() []ent.Field {
 			GoType(enthistory.OpType("")),
 		field.UUID("ref", uuid.UUID{}).
 			Optional().
-			Immutable().
-			Annotations(entgql.Annotation{Type: "ID"}),
+			Immutable(),
 		field.UUID("updated_by", uuid.UUID{}).
 			Nillable().
 			Optional().
-			Immutable().
-			Annotations(entgql.Annotation{Type: "ID"}),
+			Immutable(),
 		field.String("name"),
 		field.JSON("info", map[string]any{}).
 			Optional()}

@@ -24,6 +24,7 @@ type CharacterHistory struct {
 func (CharacterHistory) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).
+			Annotations(entgql.Annotation{Type: "ID"}).
 			Default(uuid.New),
 		field.Time("history_time").
 			Immutable().

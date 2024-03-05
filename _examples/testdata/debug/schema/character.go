@@ -3,6 +3,8 @@ package schema
 import (
 	"_examples/testdata/debug/schema/mixins"
 
+	"entgo.io/contrib/entgql"
+
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -28,7 +30,7 @@ func (Character) Annotations() []schema.Annotation {
 // Fields of the Character.
 func (Character) Fields() []ent.Field {
 	return []ent.Field{
-		field.UUID("id", uuid.New()).Default(uuid.New),
+		field.UUID("id", uuid.New()).Default(uuid.New).Annotations(entgql.Annotation{Type: "ID"}),
 		field.Int("age").
 			Positive(),
 		field.String("name"),

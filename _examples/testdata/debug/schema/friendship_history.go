@@ -5,7 +5,6 @@ package schema
 import (
 	"time"
 
-	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -32,13 +31,11 @@ func (FriendshipHistory) Fields() []ent.Field {
 			GoType(enthistory.OpType("")),
 		field.UUID("ref", uuid.UUID{}).
 			Optional().
-			Immutable().
-			Annotations(entgql.Annotation{Type: "ID"}),
+			Immutable(),
 		field.UUID("updated_by", uuid.UUID{}).
 			Nillable().
 			Optional().
-			Immutable().
-			Annotations(entgql.Annotation{Type: "ID"}),
+			Immutable(),
 		field.UUID("character_id", uuid.UUID{}).
 			Nillable().
 			Optional().
