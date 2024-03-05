@@ -5,7 +5,6 @@ package otherschema
 import (
 	"time"
 
-	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -31,8 +30,7 @@ func (CharacterHistory) Fields() []ent.Field {
 			GoType(enthistory.OpType("")),
 		field.UUID("ref", uuid.UUID{}).
 			Optional().
-			Immutable().
-			Annotations(entgql.Annotation{Type: "ID"}),
+			Immutable(),
 		field.Int("age"),
 		field.String("name")}
 }

@@ -6,7 +6,6 @@ import (
 	"_examples/basic/ent/schema/mixins"
 	"time"
 
-	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -32,8 +31,7 @@ func (FriendshipHistory) Fields() []ent.Field {
 			GoType(enthistory.OpType("")),
 		field.String("ref").
 			Optional().
-			Immutable().
-			Annotations(entgql.Annotation{Type: "ID"}),
+			Immutable(),
 		field.Int("character_id").
 			Immutable(),
 		field.Int("friend_id").
