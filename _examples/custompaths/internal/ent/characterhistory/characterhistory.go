@@ -53,8 +53,6 @@ func ValidColumn(column string) bool {
 var (
 	// DefaultHistoryTime holds the default value on creation for the "history_time" field.
 	DefaultHistoryTime func() time.Time
-	// AgeValidator is a validator for the "age" field. It is called by the builders before save.
-	AgeValidator func(int) error
 )
 
 // OperationValidator is a validator for the "operation" field enum values. It is called by the builders before save.

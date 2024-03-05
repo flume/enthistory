@@ -23,6 +23,34 @@ type ResidenceHistoryCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (rhc *ResidenceHistoryCreate) SetCreatedAt(t time.Time) *ResidenceHistoryCreate {
+	rhc.mutation.SetCreatedAt(t)
+	return rhc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (rhc *ResidenceHistoryCreate) SetNillableCreatedAt(t *time.Time) *ResidenceHistoryCreate {
+	if t != nil {
+		rhc.SetCreatedAt(*t)
+	}
+	return rhc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (rhc *ResidenceHistoryCreate) SetUpdatedAt(t time.Time) *ResidenceHistoryCreate {
+	rhc.mutation.SetUpdatedAt(t)
+	return rhc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (rhc *ResidenceHistoryCreate) SetNillableUpdatedAt(t *time.Time) *ResidenceHistoryCreate {
+	if t != nil {
+		rhc.SetUpdatedAt(*t)
+	}
+	return rhc
+}
+
 // SetHistoryTime sets the "history_time" field.
 func (rhc *ResidenceHistoryCreate) SetHistoryTime(t time.Time) *ResidenceHistoryCreate {
 	rhc.mutation.SetHistoryTime(t)
@@ -67,34 +95,6 @@ func (rhc *ResidenceHistoryCreate) SetUpdatedBy(i int) *ResidenceHistoryCreate {
 func (rhc *ResidenceHistoryCreate) SetNillableUpdatedBy(i *int) *ResidenceHistoryCreate {
 	if i != nil {
 		rhc.SetUpdatedBy(*i)
-	}
-	return rhc
-}
-
-// SetCreatedAt sets the "created_at" field.
-func (rhc *ResidenceHistoryCreate) SetCreatedAt(t time.Time) *ResidenceHistoryCreate {
-	rhc.mutation.SetCreatedAt(t)
-	return rhc
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (rhc *ResidenceHistoryCreate) SetNillableCreatedAt(t *time.Time) *ResidenceHistoryCreate {
-	if t != nil {
-		rhc.SetCreatedAt(*t)
-	}
-	return rhc
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (rhc *ResidenceHistoryCreate) SetUpdatedAt(t time.Time) *ResidenceHistoryCreate {
-	rhc.mutation.SetUpdatedAt(t)
-	return rhc
-}
-
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (rhc *ResidenceHistoryCreate) SetNillableUpdatedAt(t *time.Time) *ResidenceHistoryCreate {
-	if t != nil {
-		rhc.SetUpdatedAt(*t)
 	}
 	return rhc
 }
@@ -146,10 +146,6 @@ func (rhc *ResidenceHistoryCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (rhc *ResidenceHistoryCreate) defaults() {
-	if _, ok := rhc.mutation.HistoryTime(); !ok {
-		v := residencehistory.DefaultHistoryTime()
-		rhc.mutation.SetHistoryTime(v)
-	}
 	if _, ok := rhc.mutation.CreatedAt(); !ok {
 		v := residencehistory.DefaultCreatedAt()
 		rhc.mutation.SetCreatedAt(v)
@@ -158,10 +154,20 @@ func (rhc *ResidenceHistoryCreate) defaults() {
 		v := residencehistory.DefaultUpdatedAt()
 		rhc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := rhc.mutation.HistoryTime(); !ok {
+		v := residencehistory.DefaultHistoryTime()
+		rhc.mutation.SetHistoryTime(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
 func (rhc *ResidenceHistoryCreate) check() error {
+	if _, ok := rhc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "ResidenceHistory.created_at"`)}
+	}
+	if _, ok := rhc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "ResidenceHistory.updated_at"`)}
+	}
 	if _, ok := rhc.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`ent: missing required field "ResidenceHistory.history_time"`)}
 	}
@@ -172,12 +178,6 @@ func (rhc *ResidenceHistoryCreate) check() error {
 		if err := residencehistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`ent: validator failed for field "ResidenceHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := rhc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "ResidenceHistory.created_at"`)}
-	}
-	if _, ok := rhc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "ResidenceHistory.updated_at"`)}
 	}
 	if _, ok := rhc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "ResidenceHistory.name"`)}
@@ -214,6 +214,14 @@ func (rhc *ResidenceHistoryCreate) createSpec() (*ResidenceHistory, *sqlgraph.Cr
 		_node.ID = id
 		_spec.ID.Value = id
 	}
+	if value, ok := rhc.mutation.CreatedAt(); ok {
+		_spec.SetField(residencehistory.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := rhc.mutation.UpdatedAt(); ok {
+		_spec.SetField(residencehistory.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
 	if value, ok := rhc.mutation.HistoryTime(); ok {
 		_spec.SetField(residencehistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
@@ -229,14 +237,6 @@ func (rhc *ResidenceHistoryCreate) createSpec() (*ResidenceHistory, *sqlgraph.Cr
 	if value, ok := rhc.mutation.UpdatedBy(); ok {
 		_spec.SetField(residencehistory.FieldUpdatedBy, field.TypeInt, value)
 		_node.UpdatedBy = &value
-	}
-	if value, ok := rhc.mutation.CreatedAt(); ok {
-		_spec.SetField(residencehistory.FieldCreatedAt, field.TypeTime, value)
-		_node.CreatedAt = value
-	}
-	if value, ok := rhc.mutation.UpdatedAt(); ok {
-		_spec.SetField(residencehistory.FieldUpdatedAt, field.TypeTime, value)
-		_node.UpdatedAt = value
 	}
 	if value, ok := rhc.mutation.Name(); ok {
 		_spec.SetField(residencehistory.FieldName, field.TypeString, value)

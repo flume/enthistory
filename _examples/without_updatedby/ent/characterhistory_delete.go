@@ -3,14 +3,13 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/characterhistory"
+	"_examples/without_updatedby/ent/predicate"
 	"context"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"_examples/without_updatedby/ent/characterhistory"
-	"_examples/without_updatedby/ent/predicate"
 )
 
 // CharacterHistoryDelete is the builder for deleting a CharacterHistory entity.

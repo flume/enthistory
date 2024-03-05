@@ -3,6 +3,9 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/character"
+	"_examples/without_updatedby/ent/friendship"
+	"_examples/without_updatedby/ent/predicate"
 	"context"
 	"errors"
 	"fmt"
@@ -11,10 +14,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"_examples/without_updatedby/ent/character"
-	"_examples/without_updatedby/ent/friendship"
-	"_examples/without_updatedby/ent/predicate"
 )
 
 // FriendshipUpdate is the builder for updating Friendship entities.
@@ -33,14 +32,6 @@ func (fu *FriendshipUpdate) Where(ps ...predicate.Friendship) *FriendshipUpdate 
 // SetUpdatedAt sets the "updated_at" field.
 func (fu *FriendshipUpdate) SetUpdatedAt(t time.Time) *FriendshipUpdate {
 	fu.mutation.SetUpdatedAt(t)
-	return fu
-}
-
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (fu *FriendshipUpdate) SetNillableUpdatedAt(t *time.Time) *FriendshipUpdate {
-	if t != nil {
-		fu.SetUpdatedAt(*t)
-	}
 	return fu
 }
 
@@ -101,6 +92,7 @@ func (fu *FriendshipUpdate) ClearFriend() *FriendshipUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (fu *FriendshipUpdate) Save(ctx context.Context) (int, error) {
+	fu.defaults()
 	return withHooks(ctx, fu.sqlSave, fu.mutation, fu.hooks)
 }
 
@@ -123,6 +115,14 @@ func (fu *FriendshipUpdate) Exec(ctx context.Context) error {
 func (fu *FriendshipUpdate) ExecX(ctx context.Context) {
 	if err := fu.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (fu *FriendshipUpdate) defaults() {
+	if _, ok := fu.mutation.UpdatedAt(); !ok {
+		v := friendship.UpdateDefaultUpdatedAt()
+		fu.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -236,14 +236,6 @@ func (fuo *FriendshipUpdateOne) SetUpdatedAt(t time.Time) *FriendshipUpdateOne {
 	return fuo
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (fuo *FriendshipUpdateOne) SetNillableUpdatedAt(t *time.Time) *FriendshipUpdateOne {
-	if t != nil {
-		fuo.SetUpdatedAt(*t)
-	}
-	return fuo
-}
-
 // SetCharacterID sets the "character_id" field.
 func (fuo *FriendshipUpdateOne) SetCharacterID(i int) *FriendshipUpdateOne {
 	fuo.mutation.SetCharacterID(i)
@@ -314,6 +306,7 @@ func (fuo *FriendshipUpdateOne) Select(field string, fields ...string) *Friendsh
 
 // Save executes the query and returns the updated Friendship entity.
 func (fuo *FriendshipUpdateOne) Save(ctx context.Context) (*Friendship, error) {
+	fuo.defaults()
 	return withHooks(ctx, fuo.sqlSave, fuo.mutation, fuo.hooks)
 }
 
@@ -336,6 +329,14 @@ func (fuo *FriendshipUpdateOne) Exec(ctx context.Context) error {
 func (fuo *FriendshipUpdateOne) ExecX(ctx context.Context) {
 	if err := fuo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (fuo *FriendshipUpdateOne) defaults() {
+	if _, ok := fuo.mutation.UpdatedAt(); !ok {
+		v := friendship.UpdateDefaultUpdatedAt()
+		fuo.mutation.SetUpdatedAt(v)
 	}
 }
 

@@ -11,6 +11,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // FriendshipCreate is the builder for creating a Friendship entity.
@@ -21,14 +22,28 @@ type FriendshipCreate struct {
 }
 
 // SetCharacterID sets the "character_id" field.
-func (fc *FriendshipCreate) SetCharacterID(i int) *FriendshipCreate {
-	fc.mutation.SetCharacterID(i)
+func (fc *FriendshipCreate) SetCharacterID(u uuid.UUID) *FriendshipCreate {
+	fc.mutation.SetCharacterID(u)
 	return fc
 }
 
 // SetFriendID sets the "friend_id" field.
-func (fc *FriendshipCreate) SetFriendID(i int) *FriendshipCreate {
-	fc.mutation.SetFriendID(i)
+func (fc *FriendshipCreate) SetFriendID(u uuid.UUID) *FriendshipCreate {
+	fc.mutation.SetFriendID(u)
+	return fc
+}
+
+// SetID sets the "id" field.
+func (fc *FriendshipCreate) SetID(u uuid.UUID) *FriendshipCreate {
+	fc.mutation.SetID(u)
+	return fc
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (fc *FriendshipCreate) SetNillableID(u *uuid.UUID) *FriendshipCreate {
+	if u != nil {
+		fc.SetID(*u)
+	}
 	return fc
 }
 
@@ -49,6 +64,7 @@ func (fc *FriendshipCreate) Mutation() *FriendshipMutation {
 
 // Save creates the Friendship in the database.
 func (fc *FriendshipCreate) Save(ctx context.Context) (*Friendship, error) {
+	fc.defaults()
 	return withHooks(ctx, fc.sqlSave, fc.mutation, fc.hooks)
 }
 
@@ -71,6 +87,14 @@ func (fc *FriendshipCreate) Exec(ctx context.Context) error {
 func (fc *FriendshipCreate) ExecX(ctx context.Context) {
 	if err := fc.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (fc *FriendshipCreate) defaults() {
+	if _, ok := fc.mutation.ID(); !ok {
+		v := friendship.DefaultID()
+		fc.mutation.SetID(v)
 	}
 }
 
@@ -102,8 +126,13 @@ func (fc *FriendshipCreate) sqlSave(ctx context.Context) (*Friendship, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	fc.mutation.id = &_node.ID
 	fc.mutation.done = true
 	return _node, nil
@@ -112,8 +141,12 @@ func (fc *FriendshipCreate) sqlSave(ctx context.Context) (*Friendship, error) {
 func (fc *FriendshipCreate) createSpec() (*Friendship, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Friendship{config: fc.config}
-		_spec = sqlgraph.NewCreateSpec(friendship.Table, sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(friendship.Table, sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeUUID))
 	)
+	if id, ok := fc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
 	if nodes := fc.mutation.CharacterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -122,7 +155,7 @@ func (fc *FriendshipCreate) createSpec() (*Friendship, *sqlgraph.CreateSpec) {
 			Columns: []string{friendship.CharacterColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -139,7 +172,7 @@ func (fc *FriendshipCreate) createSpec() (*Friendship, *sqlgraph.CreateSpec) {
 			Columns: []string{friendship.FriendColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -169,6 +202,7 @@ func (fcb *FriendshipCreateBulk) Save(ctx context.Context) ([]*Friendship, error
 	for i := range fcb.builders {
 		func(i int, root context.Context) {
 			builder := fcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*FriendshipMutation)
 				if !ok {
@@ -195,10 +229,6 @@ func (fcb *FriendshipCreateBulk) Save(ctx context.Context) ([]*Friendship, error
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

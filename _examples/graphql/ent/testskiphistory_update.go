@@ -94,20 +94,7 @@ func (tshu *TestSkipHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (tshu *TestSkipHistoryUpdate) check() error {
-	if v, ok := tshu.mutation.Name(); ok {
-		if err := testskiphistory.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "TestSkipHistory.name": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (tshu *TestSkipHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := tshu.check(); err != nil {
-		return n, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(testskiphistory.Table, testskiphistory.Columns, sqlgraph.NewFieldSpec(testskiphistory.FieldID, field.TypeUUID))
 	if ps := tshu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -230,20 +217,7 @@ func (tshuo *TestSkipHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (tshuo *TestSkipHistoryUpdateOne) check() error {
-	if v, ok := tshuo.mutation.Name(); ok {
-		if err := testskiphistory.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "TestSkipHistory.name": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (tshuo *TestSkipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TestSkipHistory, err error) {
-	if err := tshuo.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(testskiphistory.Table, testskiphistory.Columns, sqlgraph.NewFieldSpec(testskiphistory.FieldID, field.TypeUUID))
 	id, ok := tshuo.mutation.ID()
 	if !ok {

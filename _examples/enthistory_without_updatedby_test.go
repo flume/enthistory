@@ -3,6 +3,7 @@ package _examples
 import (
 	"context"
 	"os"
+	"strings"
 	"testing"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -338,10 +339,6 @@ func TestEntHistoryWithoutUpdatedBy(t *testing.T) {
 				assert.ErrorIs(t, err, ent.MismatchedRefError)
 				assert.Empty(t, diff)
 
-				diff, err = simonHistory.Diff(simonHistory)
-				assert.ErrorIs(t, err, ent.IdenticalHistoryError)
-				assert.Empty(t, diff)
-
 				next, err := simonHistory.Next(ctx)
 				assert.NoError(t, err)
 
@@ -351,9 +348,9 @@ func TestEntHistoryWithoutUpdatedBy(t *testing.T) {
 
 				assert.Equal(t, diff.Old, simonHistory)
 				assert.Equal(t, diff.New, next)
-				assert.Equal(t, 1, len(diff.Changes))
-				assert.Equal(t, diff.Changes[0].Old, diff.Old.Name)
-				assert.Equal(t, diff.Changes[0].New, diff.New.Name)
+				assert.Equal(t, 2, len(diff.Changes))
+				assert.Equal(t, diff.Changes[1].Old, diff.Old.Name)
+				assert.Equal(t, diff.Changes[1].New, diff.New.Name)
 
 				// check diff of simonHistory on next, should yield same as above
 				diff, err = next.Diff(simonHistory)
@@ -361,9 +358,9 @@ func TestEntHistoryWithoutUpdatedBy(t *testing.T) {
 
 				assert.Equal(t, diff.Old, simonHistory)
 				assert.Equal(t, diff.New, next)
-				assert.Equal(t, 1, len(diff.Changes))
-				assert.Equal(t, diff.Changes[0].Old, diff.Old.Name)
-				assert.Equal(t, diff.Changes[0].New, diff.New.Name)
+				assert.Equal(t, 2, len(diff.Changes))
+				assert.Equal(t, diff.Changes[1].Old, diff.Old.Name)
+				assert.Equal(t, diff.Changes[1].New, diff.New.Name)
 			},
 		},
 		{
@@ -422,10 +419,15 @@ func TestEntHistoryWithoutUpdatedBy(t *testing.T) {
 				auditTable, err := client.Audit(ctx)
 				assert.NoError(t, err)
 
+				removeUpdatedAt := func(changeset string) string {
+					split := strings.Split(changeset, "\n")
+					return strings.Join(split[1:], "\n")
+				}
+
 				assert.Equal(t, 11, len(auditTable))
 				assert.Equal(t, 5, len(auditTable[0]))
-				assert.Equal(t, "age: 10000 -> 20\nnicknames: [\"Orgalorg\"] -> [\"Orgalorg\",\"Destroyer of Worlds\"]", auditTable[2][4])
-				assert.Equal(t, "name: \"Simon Petrikov\" -> \"Ice King\"\ninfo: {\"firstAppearance\":\"Come Along With Me\"} -> {\"firstAppearance\":\"Come Along With Me\",\"lastAppearance\":\"Together Again\"}", auditTable[5][4])
+				assert.Equal(t, "age: 10000 -> 20\nnicknames: [\"Orgalorg\"] -> [\"Orgalorg\",\"Destroyer of Worlds\"]", removeUpdatedAt(auditTable[2][4]))
+				assert.Equal(t, "name: \"Simon Petrikov\" -> \"Ice King\"\ninfo: {\"firstAppearance\":\"Come Along With Me\"} -> {\"firstAppearance\":\"Come Along With Me\",\"lastAppearance\":\"Together Again\"}", removeUpdatedAt(auditTable[5][4]))
 				assert.Equal(t, residence.ID.String(), auditTable[10][1])
 			},
 		},

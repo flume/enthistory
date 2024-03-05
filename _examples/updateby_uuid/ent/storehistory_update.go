@@ -35,14 +35,6 @@ func (shu *StoreHistoryUpdate) SetUpdatedAt(t time.Time) *StoreHistoryUpdate {
 	return shu
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (shu *StoreHistoryUpdate) SetNillableUpdatedAt(t *time.Time) *StoreHistoryUpdate {
-	if t != nil {
-		shu.SetUpdatedAt(*t)
-	}
-	return shu
-}
-
 // SetName sets the "name" field.
 func (shu *StoreHistoryUpdate) SetName(s string) *StoreHistoryUpdate {
 	shu.mutation.SetName(s)
@@ -92,6 +84,7 @@ func (shu *StoreHistoryUpdate) Mutation() *StoreHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (shu *StoreHistoryUpdate) Save(ctx context.Context) (int, error) {
+	shu.defaults()
 	return withHooks(ctx, shu.sqlSave, shu.mutation, shu.hooks)
 }
 
@@ -117,6 +110,14 @@ func (shu *StoreHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (shu *StoreHistoryUpdate) defaults() {
+	if _, ok := shu.mutation.UpdatedAt(); !ok {
+		v := storehistory.UpdateDefaultUpdatedAt()
+		shu.mutation.SetUpdatedAt(v)
+	}
+}
+
 func (shu *StoreHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(storehistory.Table, storehistory.Columns, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeInt))
 	if ps := shu.mutation.predicates; len(ps) > 0 {
@@ -126,14 +127,14 @@ func (shu *StoreHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := shu.mutation.UpdatedAt(); ok {
+		_spec.SetField(storehistory.FieldUpdatedAt, field.TypeTime, value)
+	}
 	if shu.mutation.RefCleared() {
 		_spec.ClearField(storehistory.FieldRef, field.TypeUUID)
 	}
 	if shu.mutation.UpdatedByCleared() {
 		_spec.ClearField(storehistory.FieldUpdatedBy, field.TypeUUID)
-	}
-	if value, ok := shu.mutation.UpdatedAt(); ok {
-		_spec.SetField(storehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := shu.mutation.Name(); ok {
 		_spec.SetField(storehistory.FieldName, field.TypeString, value)
@@ -167,14 +168,6 @@ type StoreHistoryUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (shuo *StoreHistoryUpdateOne) SetUpdatedAt(t time.Time) *StoreHistoryUpdateOne {
 	shuo.mutation.SetUpdatedAt(t)
-	return shuo
-}
-
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (shuo *StoreHistoryUpdateOne) SetNillableUpdatedAt(t *time.Time) *StoreHistoryUpdateOne {
-	if t != nil {
-		shuo.SetUpdatedAt(*t)
-	}
 	return shuo
 }
 
@@ -240,6 +233,7 @@ func (shuo *StoreHistoryUpdateOne) Select(field string, fields ...string) *Store
 
 // Save executes the query and returns the updated StoreHistory entity.
 func (shuo *StoreHistoryUpdateOne) Save(ctx context.Context) (*StoreHistory, error) {
+	shuo.defaults()
 	return withHooks(ctx, shuo.sqlSave, shuo.mutation, shuo.hooks)
 }
 
@@ -262,6 +256,14 @@ func (shuo *StoreHistoryUpdateOne) Exec(ctx context.Context) error {
 func (shuo *StoreHistoryUpdateOne) ExecX(ctx context.Context) {
 	if err := shuo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (shuo *StoreHistoryUpdateOne) defaults() {
+	if _, ok := shuo.mutation.UpdatedAt(); !ok {
+		v := storehistory.UpdateDefaultUpdatedAt()
+		shuo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -291,14 +293,14 @@ func (shuo *StoreHistoryUpdateOne) sqlSave(ctx context.Context) (_node *StoreHis
 			}
 		}
 	}
+	if value, ok := shuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(storehistory.FieldUpdatedAt, field.TypeTime, value)
+	}
 	if shuo.mutation.RefCleared() {
 		_spec.ClearField(storehistory.FieldRef, field.TypeUUID)
 	}
 	if shuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(storehistory.FieldUpdatedBy, field.TypeUUID)
-	}
-	if value, ok := shuo.mutation.UpdatedAt(); ok {
-		_spec.SetField(storehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := shuo.mutation.Name(); ok {
 		_spec.SetField(storehistory.FieldName, field.TypeString, value)

@@ -166,11 +166,6 @@ func (tshc *TestSkipHistoryCreate) check() error {
 	if _, ok := tshc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "TestSkipHistory.name"`)}
 	}
-	if v, ok := tshc.mutation.Name(); ok {
-		if err := testskiphistory.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "TestSkipHistory.name": %w`, err)}
-		}
-	}
 	return nil
 }
 

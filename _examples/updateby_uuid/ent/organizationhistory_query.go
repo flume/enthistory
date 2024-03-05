@@ -261,12 +261,12 @@ func (ohq *OrganizationHistoryQuery) Clone() *OrganizationHistoryQuery {
 // Example:
 //
 //	var v []struct {
-//		HistoryTime time.Time `json:"history_time,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.OrganizationHistory.Query().
-//		GroupBy(organizationhistory.FieldHistoryTime).
+//		GroupBy(organizationhistory.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (ohq *OrganizationHistoryQuery) GroupBy(field string, fields ...string) *OrganizationHistoryGroupBy {
@@ -284,11 +284,11 @@ func (ohq *OrganizationHistoryQuery) GroupBy(field string, fields ...string) *Or
 // Example:
 //
 //	var v []struct {
-//		HistoryTime time.Time `json:"history_time,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.OrganizationHistory.Query().
-//		Select(organizationhistory.FieldHistoryTime).
+//		Select(organizationhistory.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (ohq *OrganizationHistoryQuery) Select(fields ...string) *OrganizationHistorySelect {
 	ohq.ctx.Fields = append(ohq.ctx.Fields, fields...)

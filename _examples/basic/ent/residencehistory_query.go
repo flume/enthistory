@@ -261,12 +261,12 @@ func (rhq *ResidenceHistoryQuery) Clone() *ResidenceHistoryQuery {
 // Example:
 //
 //	var v []struct {
-//		HistoryTime time.Time `json:"history_time,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.ResidenceHistory.Query().
-//		GroupBy(residencehistory.FieldHistoryTime).
+//		GroupBy(residencehistory.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (rhq *ResidenceHistoryQuery) GroupBy(field string, fields ...string) *ResidenceHistoryGroupBy {
@@ -284,11 +284,11 @@ func (rhq *ResidenceHistoryQuery) GroupBy(field string, fields ...string) *Resid
 // Example:
 //
 //	var v []struct {
-//		HistoryTime time.Time `json:"history_time,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.ResidenceHistory.Query().
-//		Select(residencehistory.FieldHistoryTime).
+//		Select(residencehistory.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (rhq *ResidenceHistoryQuery) Select(fields ...string) *ResidenceHistorySelect {
 	rhq.ctx.Fields = append(rhq.ctx.Fields, fields...)

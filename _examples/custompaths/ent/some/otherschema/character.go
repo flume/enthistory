@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // Character holds the schema definition for the Character entity.
@@ -25,6 +26,7 @@ func (Character) Annotations() []schema.Annotation {
 // Fields of the Character.
 func (Character) Fields() []ent.Field {
 	return []ent.Field{
+		field.UUID("id", uuid.New()).Default(uuid.New),
 		field.Int("age").
 			Positive(),
 		field.String("name"),

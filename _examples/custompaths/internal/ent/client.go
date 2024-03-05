@@ -20,6 +20,7 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
 )
@@ -308,7 +309,7 @@ func (c *CharacterClient) UpdateOne(ch *Character) *CharacterUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *CharacterClient) UpdateOneID(id int) *CharacterUpdateOne {
+func (c *CharacterClient) UpdateOneID(id uuid.UUID) *CharacterUpdateOne {
 	mutation := newCharacterMutation(c.config, OpUpdateOne, withCharacterID(id))
 	return &CharacterUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -325,7 +326,7 @@ func (c *CharacterClient) DeleteOne(ch *Character) *CharacterDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *CharacterClient) DeleteOneID(id int) *CharacterDeleteOne {
+func (c *CharacterClient) DeleteOneID(id uuid.UUID) *CharacterDeleteOne {
 	builder := c.Delete().Where(character.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -342,12 +343,12 @@ func (c *CharacterClient) Query() *CharacterQuery {
 }
 
 // Get returns a Character entity by its id.
-func (c *CharacterClient) Get(ctx context.Context, id int) (*Character, error) {
+func (c *CharacterClient) Get(ctx context.Context, id uuid.UUID) (*Character, error) {
 	return c.Query().Where(character.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *CharacterClient) GetX(ctx context.Context, id int) *Character {
+func (c *CharacterClient) GetX(ctx context.Context, id uuid.UUID) *Character {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -606,7 +607,7 @@ func (c *FriendshipClient) UpdateOne(f *Friendship) *FriendshipUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *FriendshipClient) UpdateOneID(id int) *FriendshipUpdateOne {
+func (c *FriendshipClient) UpdateOneID(id uuid.UUID) *FriendshipUpdateOne {
 	mutation := newFriendshipMutation(c.config, OpUpdateOne, withFriendshipID(id))
 	return &FriendshipUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -623,7 +624,7 @@ func (c *FriendshipClient) DeleteOne(f *Friendship) *FriendshipDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *FriendshipClient) DeleteOneID(id int) *FriendshipDeleteOne {
+func (c *FriendshipClient) DeleteOneID(id uuid.UUID) *FriendshipDeleteOne {
 	builder := c.Delete().Where(friendship.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -640,12 +641,12 @@ func (c *FriendshipClient) Query() *FriendshipQuery {
 }
 
 // Get returns a Friendship entity by its id.
-func (c *FriendshipClient) Get(ctx context.Context, id int) (*Friendship, error) {
+func (c *FriendshipClient) Get(ctx context.Context, id uuid.UUID) (*Friendship, error) {
 	return c.Query().Where(friendship.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *FriendshipClient) GetX(ctx context.Context, id int) *Friendship {
+func (c *FriendshipClient) GetX(ctx context.Context, id uuid.UUID) *Friendship {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)

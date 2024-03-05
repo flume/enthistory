@@ -9,19 +9,20 @@ import (
 	"log"
 	"reflect"
 
-	"entgo.io/ent"
-	"entgo.io/ent/dialect"
-	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/google/uuid"
+	"_examples/without_updatedby/ent/migrate"
 
 	"_examples/without_updatedby/ent/character"
 	"_examples/without_updatedby/ent/characterhistory"
 	"_examples/without_updatedby/ent/friendship"
 	"_examples/without_updatedby/ent/friendshiphistory"
-	"_examples/without_updatedby/ent/migrate"
 	"_examples/without_updatedby/ent/residence"
 	"_examples/without_updatedby/ent/residencehistory"
+
+	"entgo.io/ent"
+	"entgo.io/ent/dialect"
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
 )

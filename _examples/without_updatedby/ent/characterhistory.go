@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/characterhistory"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -10,8 +11,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-
-	"_examples/without_updatedby/ent/characterhistory"
 
 	"github.com/flume/enthistory"
 )
@@ -21,16 +20,16 @@ type CharacterHistory struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// HistoryTime holds the value of the "history_time" field.
 	HistoryTime time.Time `json:"history_time,omitempty"`
 	// Operation holds the value of the "operation" field.
 	Operation enthistory.OpType `json:"operation,omitempty"`
 	// Ref holds the value of the "ref" field.
 	Ref int `json:"ref,omitempty"`
-	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Age holds the value of the "age" field.
 	Age int `json:"age,omitempty"`
 	// Name holds the value of the "name" field.
@@ -53,7 +52,7 @@ func (*CharacterHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case characterhistory.FieldOperation, characterhistory.FieldName:
 			values[i] = new(sql.NullString)
-		case characterhistory.FieldHistoryTime, characterhistory.FieldCreatedAt, characterhistory.FieldUpdatedAt:
+		case characterhistory.FieldCreatedAt, characterhistory.FieldUpdatedAt, characterhistory.FieldHistoryTime:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -76,6 +75,18 @@ func (ch *CharacterHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			ch.ID = int(value.Int64)
+		case characterhistory.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				ch.CreatedAt = value.Time
+			}
+		case characterhistory.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				ch.UpdatedAt = value.Time
+			}
 		case characterhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
@@ -93,18 +104,6 @@ func (ch *CharacterHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value.Valid {
 				ch.Ref = int(value.Int64)
-			}
-		case characterhistory.FieldCreatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field created_at", values[i])
-			} else if value.Valid {
-				ch.CreatedAt = value.Time
-			}
-		case characterhistory.FieldUpdatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
-			} else if value.Valid {
-				ch.UpdatedAt = value.Time
 			}
 		case characterhistory.FieldAge:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -170,6 +169,12 @@ func (ch *CharacterHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("CharacterHistory(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", ch.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(ch.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(ch.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("history_time=")
 	builder.WriteString(ch.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
@@ -178,12 +183,6 @@ func (ch *CharacterHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
 	builder.WriteString(fmt.Sprintf("%v", ch.Ref))
-	builder.WriteString(", ")
-	builder.WriteString("created_at=")
-	builder.WriteString(ch.CreatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("updated_at=")
-	builder.WriteString(ch.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("age=")
 	builder.WriteString(fmt.Sprintf("%v", ch.Age))

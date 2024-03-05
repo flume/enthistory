@@ -94,20 +94,7 @@ func (chu *CharacterHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (chu *CharacterHistoryUpdate) check() error {
-	if v, ok := chu.mutation.Age(); ok {
-		if err := characterhistory.AgeValidator(v); err != nil {
-			return &ValidationError{Name: "age", err: fmt.Errorf(`ent: validator failed for field "CharacterHistory.age": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := chu.check(); err != nil {
-		return n, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(characterhistory.Table, characterhistory.Columns, sqlgraph.NewFieldSpec(characterhistory.FieldID, field.TypeInt))
 	if ps := chu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -117,7 +104,7 @@ func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 		}
 	}
 	if chu.mutation.RefCleared() {
-		_spec.ClearField(characterhistory.FieldRef, field.TypeInt)
+		_spec.ClearField(characterhistory.FieldRef, field.TypeUUID)
 	}
 	if value, ok := chu.mutation.Age(); ok {
 		_spec.SetField(characterhistory.FieldAge, field.TypeInt, value)
@@ -228,20 +215,7 @@ func (chuo *CharacterHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (chuo *CharacterHistoryUpdateOne) check() error {
-	if v, ok := chuo.mutation.Age(); ok {
-		if err := characterhistory.AgeValidator(v); err != nil {
-			return &ValidationError{Name: "age", err: fmt.Errorf(`ent: validator failed for field "CharacterHistory.age": %w`, err)}
-		}
-	}
-	return nil
-}
-
 func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *CharacterHistory, err error) {
-	if err := chuo.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(characterhistory.Table, characterhistory.Columns, sqlgraph.NewFieldSpec(characterhistory.FieldID, field.TypeInt))
 	id, ok := chuo.mutation.ID()
 	if !ok {
@@ -268,7 +242,7 @@ func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Char
 		}
 	}
 	if chuo.mutation.RefCleared() {
-		_spec.ClearField(characterhistory.FieldRef, field.TypeInt)
+		_spec.ClearField(characterhistory.FieldRef, field.TypeUUID)
 	}
 	if value, ok := chuo.mutation.Age(); ok {
 		_spec.SetField(characterhistory.FieldAge, field.TypeInt, value)

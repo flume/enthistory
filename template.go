@@ -4,24 +4,26 @@ import (
 	"strings"
 	"text/template"
 
+	"entgo.io/ent/schema/field"
+
 	"entgo.io/ent/entc/gen"
 )
 
 func extractUpdatedByKey(val any) string {
-	updatedBy, ok := val.(*UpdatedBy)
-	if !ok || updatedBy == nil {
+	ub, ok := val.(*UpdatedBy)
+	if !ok || ub == nil {
 		return ""
 	}
-	return updatedBy.key
+	return ub.key
 }
 
 func extractUpdatedByValueType(val any) string {
-	updatedBy, ok := val.(*UpdatedBy)
-	if !ok || updatedBy == nil {
+	ub, ok := val.(*UpdatedBy)
+	if !ok || ub == nil {
 		return ""
 	}
 
-	switch updatedBy.valueType {
+	switch ub.valueType {
 	case ValueTypeInt:
 		return "int"
 	case ValueTypeString:
@@ -31,10 +33,6 @@ func extractUpdatedByValueType(val any) string {
 	default:
 		return ""
 	}
-}
-
-func fieldPropertiesNillable(config Config) bool {
-	return config.FieldProperties != nil && config.FieldProperties.Nillable
 }
 
 func isSlice(typeString string) bool {
@@ -50,14 +48,18 @@ func in(str string, list []string) bool {
 	return false
 }
 
+func isIdTypeUUID(node any) bool {
+	return node.(*gen.Type).IDType.Type == field.TypeUUID
+}
+
 func parseTemplate(name, path string) *gen.Template {
 	t := gen.NewTemplate(name)
 	t.Funcs(template.FuncMap{
 		"extractUpdatedByKey":       extractUpdatedByKey,
 		"extractUpdatedByValueType": extractUpdatedByValueType,
-		"fieldPropertiesNillable":   fieldPropertiesNillable,
 		"isSlice":                   isSlice,
 		"in":                        in,
+		"isIdTypeUUID":              isIdTypeUUID,
 	})
 	return gen.MustParse(t.ParseFS(_templates, path))
 }

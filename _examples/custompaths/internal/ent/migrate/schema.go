@@ -11,7 +11,7 @@ import (
 var (
 	// CharacterColumns holds the columns for the "character" table.
 	CharacterColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID},
 		{Name: "age", Type: field.TypeInt},
 		{Name: "name", Type: field.TypeString},
 	}
@@ -26,7 +26,7 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "ref", Type: field.TypeInt, Nullable: true},
+		{Name: "ref", Type: field.TypeUUID, Nullable: true},
 		{Name: "age", Type: field.TypeInt},
 		{Name: "name", Type: field.TypeString},
 	}
@@ -38,9 +38,9 @@ var (
 	}
 	// FriendshipColumns holds the columns for the "friendship" table.
 	FriendshipColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "character_id", Type: field.TypeInt},
-		{Name: "friend_id", Type: field.TypeInt},
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "character_id", Type: field.TypeUUID},
+		{Name: "friend_id", Type: field.TypeUUID},
 	}
 	// FriendshipTable holds the schema information for the "friendship" table.
 	FriendshipTable = &schema.Table{
@@ -74,9 +74,9 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "ref", Type: field.TypeInt, Nullable: true},
-		{Name: "character_id", Type: field.TypeInt},
-		{Name: "friend_id", Type: field.TypeInt},
+		{Name: "ref", Type: field.TypeUUID, Nullable: true},
+		{Name: "character_id", Type: field.TypeUUID},
+		{Name: "friend_id", Type: field.TypeUUID},
 	}
 	// FriendshipHistoryTable holds the schema information for the "friendship_history" table.
 	FriendshipHistoryTable = &schema.Table{

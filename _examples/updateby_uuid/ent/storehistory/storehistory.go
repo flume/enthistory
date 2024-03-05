@@ -16,6 +16,10 @@ const (
 	Label = "store_history"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldCreatedAt holds the string denoting the created_at field in the database.
+	FieldCreatedAt = "created_at"
+	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
+	FieldUpdatedAt = "updated_at"
 	// FieldHistoryTime holds the string denoting the history_time field in the database.
 	FieldHistoryTime = "history_time"
 	// FieldOperation holds the string denoting the operation field in the database.
@@ -24,10 +28,6 @@ const (
 	FieldRef = "ref"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
-	// FieldCreatedAt holds the string denoting the created_at field in the database.
-	FieldCreatedAt = "created_at"
-	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
-	FieldUpdatedAt = "updated_at"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldRegion holds the string denoting the region field in the database.
@@ -35,18 +35,18 @@ const (
 	// FieldOrganizationID holds the string denoting the organization_id field in the database.
 	FieldOrganizationID = "organization_id"
 	// Table holds the table name of the storehistory in the database.
-	Table = "Store_history"
+	Table = "store_history"
 )
 
 // Columns holds all SQL columns for storehistory fields.
 var Columns = []string{
 	FieldID,
+	FieldCreatedAt,
+	FieldUpdatedAt,
 	FieldHistoryTime,
 	FieldOperation,
 	FieldRef,
 	FieldUpdatedBy,
-	FieldCreatedAt,
-	FieldUpdatedAt,
 	FieldName,
 	FieldRegion,
 	FieldOrganizationID,
@@ -63,12 +63,14 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// DefaultHistoryTime holds the default value on creation for the "history_time" field.
-	DefaultHistoryTime func() time.Time
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
 	DefaultUpdatedAt func() time.Time
+	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
+	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultHistoryTime holds the default value on creation for the "history_time" field.
+	DefaultHistoryTime func() time.Time
 )
 
 // OperationValidator is a validator for the "operation" field enum values. It is called by the builders before save.
@@ -89,6 +91,16 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
+// ByCreatedAt orders the results by the created_at field.
+func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
+}
+
+// ByUpdatedAt orders the results by the updated_at field.
+func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
 // ByHistoryTime orders the results by the history_time field.
 func ByHistoryTime(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldHistoryTime, opts...).ToFunc()
@@ -107,16 +119,6 @@ func ByRef(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedBy orders the results by the updated_by field.
 func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
-}
-
-// ByCreatedAt orders the results by the created_at field.
-func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
-}
-
-// ByUpdatedAt orders the results by the updated_at field.
-func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

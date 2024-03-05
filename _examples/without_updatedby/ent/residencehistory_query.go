@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/predicate"
+	"_examples/without_updatedby/ent/residencehistory"
 	"context"
 	"fmt"
 	"math"
@@ -10,9 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"_examples/without_updatedby/ent/predicate"
-	"_examples/without_updatedby/ent/residencehistory"
 )
 
 // ResidenceHistoryQuery is the builder for querying ResidenceHistory entities.
@@ -262,12 +261,12 @@ func (rhq *ResidenceHistoryQuery) Clone() *ResidenceHistoryQuery {
 // Example:
 //
 //	var v []struct {
-//		HistoryTime time.Time `json:"history_time,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.ResidenceHistory.Query().
-//		GroupBy(residencehistory.FieldHistoryTime).
+//		GroupBy(residencehistory.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (rhq *ResidenceHistoryQuery) GroupBy(field string, fields ...string) *ResidenceHistoryGroupBy {
@@ -285,11 +284,11 @@ func (rhq *ResidenceHistoryQuery) GroupBy(field string, fields ...string) *Resid
 // Example:
 //
 //	var v []struct {
-//		HistoryTime time.Time `json:"history_time,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.ResidenceHistory.Query().
-//		Select(residencehistory.FieldHistoryTime).
+//		Select(residencehistory.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (rhq *ResidenceHistoryQuery) Select(fields ...string) *ResidenceHistorySelect {
 	rhq.ctx.Fields = append(rhq.ctx.Fields, fields...)

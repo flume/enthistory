@@ -11,6 +11,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
 )
@@ -43,15 +44,15 @@ func (chc *CharacterHistoryCreate) SetOperation(et enthistory.OpType) *Character
 }
 
 // SetRef sets the "ref" field.
-func (chc *CharacterHistoryCreate) SetRef(i int) *CharacterHistoryCreate {
-	chc.mutation.SetRef(i)
+func (chc *CharacterHistoryCreate) SetRef(u uuid.UUID) *CharacterHistoryCreate {
+	chc.mutation.SetRef(u)
 	return chc
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (chc *CharacterHistoryCreate) SetNillableRef(i *int) *CharacterHistoryCreate {
-	if i != nil {
-		chc.SetRef(*i)
+func (chc *CharacterHistoryCreate) SetNillableRef(u *uuid.UUID) *CharacterHistoryCreate {
+	if u != nil {
+		chc.SetRef(*u)
 	}
 	return chc
 }
@@ -65,6 +66,12 @@ func (chc *CharacterHistoryCreate) SetAge(i int) *CharacterHistoryCreate {
 // SetName sets the "name" field.
 func (chc *CharacterHistoryCreate) SetName(s string) *CharacterHistoryCreate {
 	chc.mutation.SetName(s)
+	return chc
+}
+
+// SetID sets the "id" field.
+func (chc *CharacterHistoryCreate) SetID(i int) *CharacterHistoryCreate {
+	chc.mutation.SetID(i)
 	return chc
 }
 
@@ -125,11 +132,6 @@ func (chc *CharacterHistoryCreate) check() error {
 	if _, ok := chc.mutation.Age(); !ok {
 		return &ValidationError{Name: "age", err: errors.New(`ent: missing required field "CharacterHistory.age"`)}
 	}
-	if v, ok := chc.mutation.Age(); ok {
-		if err := characterhistory.AgeValidator(v); err != nil {
-			return &ValidationError{Name: "age", err: fmt.Errorf(`ent: validator failed for field "CharacterHistory.age": %w`, err)}
-		}
-	}
 	if _, ok := chc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "CharacterHistory.name"`)}
 	}
@@ -147,8 +149,10 @@ func (chc *CharacterHistoryCreate) sqlSave(ctx context.Context) (*CharacterHisto
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int(id)
+	}
 	chc.mutation.id = &_node.ID
 	chc.mutation.done = true
 	return _node, nil
@@ -159,6 +163,10 @@ func (chc *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cr
 		_node = &CharacterHistory{config: chc.config}
 		_spec = sqlgraph.NewCreateSpec(characterhistory.Table, sqlgraph.NewFieldSpec(characterhistory.FieldID, field.TypeInt))
 	)
+	if id, ok := chc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := chc.mutation.HistoryTime(); ok {
 		_spec.SetField(characterhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
@@ -168,7 +176,7 @@ func (chc *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cr
 		_node.Operation = value
 	}
 	if value, ok := chc.mutation.Ref(); ok {
-		_spec.SetField(characterhistory.FieldRef, field.TypeInt, value)
+		_spec.SetField(characterhistory.FieldRef, field.TypeUUID, value)
 		_node.Ref = value
 	}
 	if value, ok := chc.mutation.Age(); ok {
@@ -227,7 +235,7 @@ func (chcb *CharacterHistoryCreateBulk) Save(ctx context.Context) ([]*CharacterH
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
 					nodes[i].ID = int(id)
 				}

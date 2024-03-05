@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/google/uuid"
 
@@ -108,12 +109,17 @@ func TestEntHistory(t *testing.T) {
 				auditTable, err := client.Audit(ctx)
 				assert.NoError(t, err)
 
+				removeUpdatedAt := func(changeset string) string {
+					split := strings.Split(changeset, "\n")
+					return strings.Join(split[1:], "\n")
+				}
+
 				assert.Equal(t, 5, len(auditTable))
 				assert.Equal(t, organization.ID.String(), auditTable[1][1])
 				assert.Equal(t, organization2.ID.String(), auditTable[2][1])
 				assert.Equal(t, store.ID.String(), auditTable[3][1])
 				assert.Equal(t, store.ID.String(), auditTable[4][1])
-				assert.Equal(t, fmt.Sprintf("organization_id: \"%s\" -> \"%s\"", organization.ID.String(), organization2.ID.String()), auditTable[4][4])
+				assert.Equal(t, fmt.Sprintf("organization_id: \"%s\" -> \"%s\"", organization.ID.String(), organization2.ID.String()), removeUpdatedAt(auditTable[4][4]))
 			},
 		},
 	}

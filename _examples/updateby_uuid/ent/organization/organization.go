@@ -26,12 +26,12 @@ const (
 	// EdgeOrganizationStores holds the string denoting the organization_stores edge name in mutations.
 	EdgeOrganizationStores = "organization_stores"
 	// Table holds the table name of the organization in the database.
-	Table = "Organization"
+	Table = "organization"
 	// OrganizationStoresTable is the table that holds the organization_stores relation/edge.
-	OrganizationStoresTable = "Store"
+	OrganizationStoresTable = "store"
 	// OrganizationStoresInverseTable is the table name for the Store entity.
 	// It exists in this package in order to avoid circular dependency with the "store" package.
-	OrganizationStoresInverseTable = "Store"
+	OrganizationStoresInverseTable = "store"
 	// OrganizationStoresColumn is the table column denoting the organization_stores relation/edge.
 	OrganizationStoresColumn = "organization_id"
 )
@@ -60,6 +60,8 @@ var (
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
 	DefaultUpdatedAt func() time.Time
+	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
+	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )

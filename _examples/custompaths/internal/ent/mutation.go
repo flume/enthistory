@@ -16,6 +16,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
 )
@@ -40,16 +41,16 @@ type CharacterMutation struct {
 	config
 	op                 Op
 	typ                string
-	id                 *int
+	id                 *uuid.UUID
 	age                *int
 	addage             *int
 	name               *string
 	clearedFields      map[string]struct{}
-	friends            map[int]struct{}
-	removedfriends     map[int]struct{}
+	friends            map[uuid.UUID]struct{}
+	removedfriends     map[uuid.UUID]struct{}
 	clearedfriends     bool
-	friendships        map[int]struct{}
-	removedfriendships map[int]struct{}
+	friendships        map[uuid.UUID]struct{}
+	removedfriendships map[uuid.UUID]struct{}
 	clearedfriendships bool
 	done               bool
 	oldValue           func(context.Context) (*Character, error)
@@ -76,7 +77,7 @@ func newCharacterMutation(c config, op Op, opts ...characterOption) *CharacterMu
 }
 
 // withCharacterID sets the ID field of the mutation.
-func withCharacterID(id int) characterOption {
+func withCharacterID(id uuid.UUID) characterOption {
 	return func(m *CharacterMutation) {
 		var (
 			err   error
@@ -126,9 +127,15 @@ func (m CharacterMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Character entities.
+func (m *CharacterMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *CharacterMutation) ID() (id int, exists bool) {
+func (m *CharacterMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -139,12 +146,12 @@ func (m *CharacterMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *CharacterMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *CharacterMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -247,9 +254,9 @@ func (m *CharacterMutation) ResetName() {
 }
 
 // AddFriendIDs adds the "friends" edge to the Character entity by ids.
-func (m *CharacterMutation) AddFriendIDs(ids ...int) {
+func (m *CharacterMutation) AddFriendIDs(ids ...uuid.UUID) {
 	if m.friends == nil {
-		m.friends = make(map[int]struct{})
+		m.friends = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		m.friends[ids[i]] = struct{}{}
@@ -267,9 +274,9 @@ func (m *CharacterMutation) FriendsCleared() bool {
 }
 
 // RemoveFriendIDs removes the "friends" edge to the Character entity by IDs.
-func (m *CharacterMutation) RemoveFriendIDs(ids ...int) {
+func (m *CharacterMutation) RemoveFriendIDs(ids ...uuid.UUID) {
 	if m.removedfriends == nil {
-		m.removedfriends = make(map[int]struct{})
+		m.removedfriends = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		delete(m.friends, ids[i])
@@ -278,7 +285,7 @@ func (m *CharacterMutation) RemoveFriendIDs(ids ...int) {
 }
 
 // RemovedFriends returns the removed IDs of the "friends" edge to the Character entity.
-func (m *CharacterMutation) RemovedFriendsIDs() (ids []int) {
+func (m *CharacterMutation) RemovedFriendsIDs() (ids []uuid.UUID) {
 	for id := range m.removedfriends {
 		ids = append(ids, id)
 	}
@@ -286,7 +293,7 @@ func (m *CharacterMutation) RemovedFriendsIDs() (ids []int) {
 }
 
 // FriendsIDs returns the "friends" edge IDs in the mutation.
-func (m *CharacterMutation) FriendsIDs() (ids []int) {
+func (m *CharacterMutation) FriendsIDs() (ids []uuid.UUID) {
 	for id := range m.friends {
 		ids = append(ids, id)
 	}
@@ -301,9 +308,9 @@ func (m *CharacterMutation) ResetFriends() {
 }
 
 // AddFriendshipIDs adds the "friendships" edge to the Friendship entity by ids.
-func (m *CharacterMutation) AddFriendshipIDs(ids ...int) {
+func (m *CharacterMutation) AddFriendshipIDs(ids ...uuid.UUID) {
 	if m.friendships == nil {
-		m.friendships = make(map[int]struct{})
+		m.friendships = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		m.friendships[ids[i]] = struct{}{}
@@ -321,9 +328,9 @@ func (m *CharacterMutation) FriendshipsCleared() bool {
 }
 
 // RemoveFriendshipIDs removes the "friendships" edge to the Friendship entity by IDs.
-func (m *CharacterMutation) RemoveFriendshipIDs(ids ...int) {
+func (m *CharacterMutation) RemoveFriendshipIDs(ids ...uuid.UUID) {
 	if m.removedfriendships == nil {
-		m.removedfriendships = make(map[int]struct{})
+		m.removedfriendships = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		delete(m.friendships, ids[i])
@@ -332,7 +339,7 @@ func (m *CharacterMutation) RemoveFriendshipIDs(ids ...int) {
 }
 
 // RemovedFriendships returns the removed IDs of the "friendships" edge to the Friendship entity.
-func (m *CharacterMutation) RemovedFriendshipsIDs() (ids []int) {
+func (m *CharacterMutation) RemovedFriendshipsIDs() (ids []uuid.UUID) {
 	for id := range m.removedfriendships {
 		ids = append(ids, id)
 	}
@@ -340,7 +347,7 @@ func (m *CharacterMutation) RemovedFriendshipsIDs() (ids []int) {
 }
 
 // FriendshipsIDs returns the "friendships" edge IDs in the mutation.
-func (m *CharacterMutation) FriendshipsIDs() (ids []int) {
+func (m *CharacterMutation) FriendshipsIDs() (ids []uuid.UUID) {
 	for id := range m.friendships {
 		ids = append(ids, id)
 	}
@@ -635,8 +642,7 @@ type CharacterHistoryMutation struct {
 	id            *int
 	history_time  *time.Time
 	operation     *enthistory.OpType
-	ref           *int
-	addref        *int
+	ref           *uuid.UUID
 	age           *int
 	addage        *int
 	name          *string
@@ -714,6 +720,12 @@ func (m CharacterHistoryMutation) Tx() (*Tx, error) {
 	tx := &Tx{config: m.config}
 	tx.init()
 	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of CharacterHistory entities.
+func (m *CharacterHistoryMutation) SetID(id int) {
+	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
@@ -817,13 +829,12 @@ func (m *CharacterHistoryMutation) ResetOperation() {
 }
 
 // SetRef sets the "ref" field.
-func (m *CharacterHistoryMutation) SetRef(i int) {
-	m.ref = &i
-	m.addref = nil
+func (m *CharacterHistoryMutation) SetRef(u uuid.UUID) {
+	m.ref = &u
 }
 
 // Ref returns the value of the "ref" field in the mutation.
-func (m *CharacterHistoryMutation) Ref() (r int, exists bool) {
+func (m *CharacterHistoryMutation) Ref() (r uuid.UUID, exists bool) {
 	v := m.ref
 	if v == nil {
 		return
@@ -834,7 +845,7 @@ func (m *CharacterHistoryMutation) Ref() (r int, exists bool) {
 // OldRef returns the old "ref" field's value of the CharacterHistory entity.
 // If the CharacterHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CharacterHistoryMutation) OldRef(ctx context.Context) (v int, err error) {
+func (m *CharacterHistoryMutation) OldRef(ctx context.Context) (v uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldRef is only allowed on UpdateOne operations")
 	}
@@ -848,28 +859,9 @@ func (m *CharacterHistoryMutation) OldRef(ctx context.Context) (v int, err error
 	return oldValue.Ref, nil
 }
 
-// AddRef adds i to the "ref" field.
-func (m *CharacterHistoryMutation) AddRef(i int) {
-	if m.addref != nil {
-		*m.addref += i
-	} else {
-		m.addref = &i
-	}
-}
-
-// AddedRef returns the value that was added to the "ref" field in this mutation.
-func (m *CharacterHistoryMutation) AddedRef() (r int, exists bool) {
-	v := m.addref
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearRef clears the value of the "ref" field.
 func (m *CharacterHistoryMutation) ClearRef() {
 	m.ref = nil
-	m.addref = nil
 	m.clearedFields[characterhistory.FieldRef] = struct{}{}
 }
 
@@ -882,7 +874,6 @@ func (m *CharacterHistoryMutation) RefCleared() bool {
 // ResetRef resets all changes to the "ref" field.
 func (m *CharacterHistoryMutation) ResetRef() {
 	m.ref = nil
-	m.addref = nil
 	delete(m.clearedFields, characterhistory.FieldRef)
 }
 
@@ -1089,7 +1080,7 @@ func (m *CharacterHistoryMutation) SetField(name string, value ent.Value) error 
 		m.SetOperation(v)
 		return nil
 	case characterhistory.FieldRef:
-		v, ok := value.(int)
+		v, ok := value.(uuid.UUID)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -1117,9 +1108,6 @@ func (m *CharacterHistoryMutation) SetField(name string, value ent.Value) error 
 // this mutation.
 func (m *CharacterHistoryMutation) AddedFields() []string {
 	var fields []string
-	if m.addref != nil {
-		fields = append(fields, characterhistory.FieldRef)
-	}
 	if m.addage != nil {
 		fields = append(fields, characterhistory.FieldAge)
 	}
@@ -1131,8 +1119,6 @@ func (m *CharacterHistoryMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *CharacterHistoryMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case characterhistory.FieldRef:
-		return m.AddedRef()
 	case characterhistory.FieldAge:
 		return m.AddedAge()
 	}
@@ -1144,13 +1130,6 @@ func (m *CharacterHistoryMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *CharacterHistoryMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case characterhistory.FieldRef:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddRef(v)
-		return nil
 	case characterhistory.FieldAge:
 		v, ok := value.(int)
 		if !ok {
@@ -1266,11 +1245,11 @@ type FriendshipMutation struct {
 	config
 	op               Op
 	typ              string
-	id               *int
+	id               *uuid.UUID
 	clearedFields    map[string]struct{}
-	character        *int
+	character        *uuid.UUID
 	clearedcharacter bool
-	friend           *int
+	friend           *uuid.UUID
 	clearedfriend    bool
 	done             bool
 	oldValue         func(context.Context) (*Friendship, error)
@@ -1297,7 +1276,7 @@ func newFriendshipMutation(c config, op Op, opts ...friendshipOption) *Friendshi
 }
 
 // withFriendshipID sets the ID field of the mutation.
-func withFriendshipID(id int) friendshipOption {
+func withFriendshipID(id uuid.UUID) friendshipOption {
 	return func(m *FriendshipMutation) {
 		var (
 			err   error
@@ -1347,9 +1326,15 @@ func (m FriendshipMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Friendship entities.
+func (m *FriendshipMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *FriendshipMutation) ID() (id int, exists bool) {
+func (m *FriendshipMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -1360,12 +1345,12 @@ func (m *FriendshipMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *FriendshipMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *FriendshipMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -1376,12 +1361,12 @@ func (m *FriendshipMutation) IDs(ctx context.Context) ([]int, error) {
 }
 
 // SetCharacterID sets the "character_id" field.
-func (m *FriendshipMutation) SetCharacterID(i int) {
-	m.character = &i
+func (m *FriendshipMutation) SetCharacterID(u uuid.UUID) {
+	m.character = &u
 }
 
 // CharacterID returns the value of the "character_id" field in the mutation.
-func (m *FriendshipMutation) CharacterID() (r int, exists bool) {
+func (m *FriendshipMutation) CharacterID() (r uuid.UUID, exists bool) {
 	v := m.character
 	if v == nil {
 		return
@@ -1392,7 +1377,7 @@ func (m *FriendshipMutation) CharacterID() (r int, exists bool) {
 // OldCharacterID returns the old "character_id" field's value of the Friendship entity.
 // If the Friendship object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FriendshipMutation) OldCharacterID(ctx context.Context) (v int, err error) {
+func (m *FriendshipMutation) OldCharacterID(ctx context.Context) (v uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldCharacterID is only allowed on UpdateOne operations")
 	}
@@ -1412,12 +1397,12 @@ func (m *FriendshipMutation) ResetCharacterID() {
 }
 
 // SetFriendID sets the "friend_id" field.
-func (m *FriendshipMutation) SetFriendID(i int) {
-	m.friend = &i
+func (m *FriendshipMutation) SetFriendID(u uuid.UUID) {
+	m.friend = &u
 }
 
 // FriendID returns the value of the "friend_id" field in the mutation.
-func (m *FriendshipMutation) FriendID() (r int, exists bool) {
+func (m *FriendshipMutation) FriendID() (r uuid.UUID, exists bool) {
 	v := m.friend
 	if v == nil {
 		return
@@ -1428,7 +1413,7 @@ func (m *FriendshipMutation) FriendID() (r int, exists bool) {
 // OldFriendID returns the old "friend_id" field's value of the Friendship entity.
 // If the Friendship object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FriendshipMutation) OldFriendID(ctx context.Context) (v int, err error) {
+func (m *FriendshipMutation) OldFriendID(ctx context.Context) (v uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldFriendID is only allowed on UpdateOne operations")
 	}
@@ -1461,7 +1446,7 @@ func (m *FriendshipMutation) CharacterCleared() bool {
 // CharacterIDs returns the "character" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // CharacterID instead. It exists only for internal usage by the builders.
-func (m *FriendshipMutation) CharacterIDs() (ids []int) {
+func (m *FriendshipMutation) CharacterIDs() (ids []uuid.UUID) {
 	if id := m.character; id != nil {
 		ids = append(ids, *id)
 	}
@@ -1488,7 +1473,7 @@ func (m *FriendshipMutation) FriendCleared() bool {
 // FriendIDs returns the "friend" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // FriendID instead. It exists only for internal usage by the builders.
-func (m *FriendshipMutation) FriendIDs() (ids []int) {
+func (m *FriendshipMutation) FriendIDs() (ids []uuid.UUID) {
 	if id := m.friend; id != nil {
 		ids = append(ids, *id)
 	}
@@ -1577,14 +1562,14 @@ func (m *FriendshipMutation) OldField(ctx context.Context, name string) (ent.Val
 func (m *FriendshipMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case friendship.FieldCharacterID:
-		v, ok := value.(int)
+		v, ok := value.(uuid.UUID)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCharacterID(v)
 		return nil
 	case friendship.FieldFriendID:
-		v, ok := value.(int)
+		v, ok := value.(uuid.UUID)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -1597,16 +1582,13 @@ func (m *FriendshipMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *FriendshipMutation) AddedFields() []string {
-	var fields []string
-	return fields
+	return nil
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *FriendshipMutation) AddedField(name string) (ent.Value, bool) {
-	switch name {
-	}
 	return nil, false
 }
 
@@ -1747,21 +1729,18 @@ func (m *FriendshipMutation) ResetEdge(name string) error {
 // FriendshipHistoryMutation represents an operation that mutates the FriendshipHistory nodes in the graph.
 type FriendshipHistoryMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *int
-	history_time    *time.Time
-	operation       *enthistory.OpType
-	ref             *int
-	addref          *int
-	character_id    *int
-	addcharacter_id *int
-	friend_id       *int
-	addfriend_id    *int
-	clearedFields   map[string]struct{}
-	done            bool
-	oldValue        func(context.Context) (*FriendshipHistory, error)
-	predicates      []predicate.FriendshipHistory
+	op            Op
+	typ           string
+	id            *int
+	history_time  *time.Time
+	operation     *enthistory.OpType
+	ref           *uuid.UUID
+	character_id  *uuid.UUID
+	friend_id     *uuid.UUID
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*FriendshipHistory, error)
+	predicates    []predicate.FriendshipHistory
 }
 
 var _ ent.Mutation = (*FriendshipHistoryMutation)(nil)
@@ -1832,6 +1811,12 @@ func (m FriendshipHistoryMutation) Tx() (*Tx, error) {
 	tx := &Tx{config: m.config}
 	tx.init()
 	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of FriendshipHistory entities.
+func (m *FriendshipHistoryMutation) SetID(id int) {
+	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
@@ -1935,13 +1920,12 @@ func (m *FriendshipHistoryMutation) ResetOperation() {
 }
 
 // SetRef sets the "ref" field.
-func (m *FriendshipHistoryMutation) SetRef(i int) {
-	m.ref = &i
-	m.addref = nil
+func (m *FriendshipHistoryMutation) SetRef(u uuid.UUID) {
+	m.ref = &u
 }
 
 // Ref returns the value of the "ref" field in the mutation.
-func (m *FriendshipHistoryMutation) Ref() (r int, exists bool) {
+func (m *FriendshipHistoryMutation) Ref() (r uuid.UUID, exists bool) {
 	v := m.ref
 	if v == nil {
 		return
@@ -1952,7 +1936,7 @@ func (m *FriendshipHistoryMutation) Ref() (r int, exists bool) {
 // OldRef returns the old "ref" field's value of the FriendshipHistory entity.
 // If the FriendshipHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FriendshipHistoryMutation) OldRef(ctx context.Context) (v int, err error) {
+func (m *FriendshipHistoryMutation) OldRef(ctx context.Context) (v uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldRef is only allowed on UpdateOne operations")
 	}
@@ -1966,28 +1950,9 @@ func (m *FriendshipHistoryMutation) OldRef(ctx context.Context) (v int, err erro
 	return oldValue.Ref, nil
 }
 
-// AddRef adds i to the "ref" field.
-func (m *FriendshipHistoryMutation) AddRef(i int) {
-	if m.addref != nil {
-		*m.addref += i
-	} else {
-		m.addref = &i
-	}
-}
-
-// AddedRef returns the value that was added to the "ref" field in this mutation.
-func (m *FriendshipHistoryMutation) AddedRef() (r int, exists bool) {
-	v := m.addref
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearRef clears the value of the "ref" field.
 func (m *FriendshipHistoryMutation) ClearRef() {
 	m.ref = nil
-	m.addref = nil
 	m.clearedFields[friendshiphistory.FieldRef] = struct{}{}
 }
 
@@ -2000,18 +1965,16 @@ func (m *FriendshipHistoryMutation) RefCleared() bool {
 // ResetRef resets all changes to the "ref" field.
 func (m *FriendshipHistoryMutation) ResetRef() {
 	m.ref = nil
-	m.addref = nil
 	delete(m.clearedFields, friendshiphistory.FieldRef)
 }
 
 // SetCharacterID sets the "character_id" field.
-func (m *FriendshipHistoryMutation) SetCharacterID(i int) {
-	m.character_id = &i
-	m.addcharacter_id = nil
+func (m *FriendshipHistoryMutation) SetCharacterID(u uuid.UUID) {
+	m.character_id = &u
 }
 
 // CharacterID returns the value of the "character_id" field in the mutation.
-func (m *FriendshipHistoryMutation) CharacterID() (r int, exists bool) {
+func (m *FriendshipHistoryMutation) CharacterID() (r uuid.UUID, exists bool) {
 	v := m.character_id
 	if v == nil {
 		return
@@ -2022,7 +1985,7 @@ func (m *FriendshipHistoryMutation) CharacterID() (r int, exists bool) {
 // OldCharacterID returns the old "character_id" field's value of the FriendshipHistory entity.
 // If the FriendshipHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FriendshipHistoryMutation) OldCharacterID(ctx context.Context) (v int, err error) {
+func (m *FriendshipHistoryMutation) OldCharacterID(ctx context.Context) (v uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldCharacterID is only allowed on UpdateOne operations")
 	}
@@ -2036,38 +1999,18 @@ func (m *FriendshipHistoryMutation) OldCharacterID(ctx context.Context) (v int, 
 	return oldValue.CharacterID, nil
 }
 
-// AddCharacterID adds i to the "character_id" field.
-func (m *FriendshipHistoryMutation) AddCharacterID(i int) {
-	if m.addcharacter_id != nil {
-		*m.addcharacter_id += i
-	} else {
-		m.addcharacter_id = &i
-	}
-}
-
-// AddedCharacterID returns the value that was added to the "character_id" field in this mutation.
-func (m *FriendshipHistoryMutation) AddedCharacterID() (r int, exists bool) {
-	v := m.addcharacter_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ResetCharacterID resets all changes to the "character_id" field.
 func (m *FriendshipHistoryMutation) ResetCharacterID() {
 	m.character_id = nil
-	m.addcharacter_id = nil
 }
 
 // SetFriendID sets the "friend_id" field.
-func (m *FriendshipHistoryMutation) SetFriendID(i int) {
-	m.friend_id = &i
-	m.addfriend_id = nil
+func (m *FriendshipHistoryMutation) SetFriendID(u uuid.UUID) {
+	m.friend_id = &u
 }
 
 // FriendID returns the value of the "friend_id" field in the mutation.
-func (m *FriendshipHistoryMutation) FriendID() (r int, exists bool) {
+func (m *FriendshipHistoryMutation) FriendID() (r uuid.UUID, exists bool) {
 	v := m.friend_id
 	if v == nil {
 		return
@@ -2078,7 +2021,7 @@ func (m *FriendshipHistoryMutation) FriendID() (r int, exists bool) {
 // OldFriendID returns the old "friend_id" field's value of the FriendshipHistory entity.
 // If the FriendshipHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FriendshipHistoryMutation) OldFriendID(ctx context.Context) (v int, err error) {
+func (m *FriendshipHistoryMutation) OldFriendID(ctx context.Context) (v uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldFriendID is only allowed on UpdateOne operations")
 	}
@@ -2092,28 +2035,9 @@ func (m *FriendshipHistoryMutation) OldFriendID(ctx context.Context) (v int, err
 	return oldValue.FriendID, nil
 }
 
-// AddFriendID adds i to the "friend_id" field.
-func (m *FriendshipHistoryMutation) AddFriendID(i int) {
-	if m.addfriend_id != nil {
-		*m.addfriend_id += i
-	} else {
-		m.addfriend_id = &i
-	}
-}
-
-// AddedFriendID returns the value that was added to the "friend_id" field in this mutation.
-func (m *FriendshipHistoryMutation) AddedFriendID() (r int, exists bool) {
-	v := m.addfriend_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ResetFriendID resets all changes to the "friend_id" field.
 func (m *FriendshipHistoryMutation) ResetFriendID() {
 	m.friend_id = nil
-	m.addfriend_id = nil
 }
 
 // Where appends a list predicates to the FriendshipHistoryMutation builder.
@@ -2227,21 +2151,21 @@ func (m *FriendshipHistoryMutation) SetField(name string, value ent.Value) error
 		m.SetOperation(v)
 		return nil
 	case friendshiphistory.FieldRef:
-		v, ok := value.(int)
+		v, ok := value.(uuid.UUID)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetRef(v)
 		return nil
 	case friendshiphistory.FieldCharacterID:
-		v, ok := value.(int)
+		v, ok := value.(uuid.UUID)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCharacterID(v)
 		return nil
 	case friendshiphistory.FieldFriendID:
-		v, ok := value.(int)
+		v, ok := value.(uuid.UUID)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -2254,31 +2178,13 @@ func (m *FriendshipHistoryMutation) SetField(name string, value ent.Value) error
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *FriendshipHistoryMutation) AddedFields() []string {
-	var fields []string
-	if m.addref != nil {
-		fields = append(fields, friendshiphistory.FieldRef)
-	}
-	if m.addcharacter_id != nil {
-		fields = append(fields, friendshiphistory.FieldCharacterID)
-	}
-	if m.addfriend_id != nil {
-		fields = append(fields, friendshiphistory.FieldFriendID)
-	}
-	return fields
+	return nil
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *FriendshipHistoryMutation) AddedField(name string) (ent.Value, bool) {
-	switch name {
-	case friendshiphistory.FieldRef:
-		return m.AddedRef()
-	case friendshiphistory.FieldCharacterID:
-		return m.AddedCharacterID()
-	case friendshiphistory.FieldFriendID:
-		return m.AddedFriendID()
-	}
 	return nil, false
 }
 
@@ -2287,27 +2193,6 @@ func (m *FriendshipHistoryMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *FriendshipHistoryMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case friendshiphistory.FieldRef:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddRef(v)
-		return nil
-	case friendshiphistory.FieldCharacterID:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddCharacterID(v)
-		return nil
-	case friendshiphistory.FieldFriendID:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddFriendID(v)
-		return nil
 	}
 	return fmt.Errorf("unknown FriendshipHistory numeric field %s", name)
 }

@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
 )
@@ -24,11 +25,11 @@ type FriendshipHistory struct {
 	// Operation holds the value of the "operation" field.
 	Operation enthistory.OpType `json:"operation,omitempty"`
 	// Ref holds the value of the "ref" field.
-	Ref int `json:"ref,omitempty"`
+	Ref uuid.UUID `json:"ref,omitempty"`
 	// CharacterID holds the value of the "character_id" field.
-	CharacterID int `json:"character_id,omitempty"`
+	CharacterID uuid.UUID `json:"character_id,omitempty"`
 	// FriendID holds the value of the "friend_id" field.
-	FriendID     int `json:"friend_id,omitempty"`
+	FriendID     uuid.UUID `json:"friend_id,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -37,12 +38,14 @@ func (*FriendshipHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case friendshiphistory.FieldID, friendshiphistory.FieldRef, friendshiphistory.FieldCharacterID, friendshiphistory.FieldFriendID:
+		case friendshiphistory.FieldID:
 			values[i] = new(sql.NullInt64)
 		case friendshiphistory.FieldOperation:
 			values[i] = new(sql.NullString)
 		case friendshiphistory.FieldHistoryTime:
 			values[i] = new(sql.NullTime)
+		case friendshiphistory.FieldRef, friendshiphistory.FieldCharacterID, friendshiphistory.FieldFriendID:
+			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -77,22 +80,22 @@ func (fh *FriendshipHistory) assignValues(columns []string, values []any) error 
 				fh.Operation = enthistory.OpType(value.String)
 			}
 		case friendshiphistory.FieldRef:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
-			} else if value.Valid {
-				fh.Ref = int(value.Int64)
+			} else if value != nil {
+				fh.Ref = *value
 			}
 		case friendshiphistory.FieldCharacterID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field character_id", values[i])
-			} else if value.Valid {
-				fh.CharacterID = int(value.Int64)
+			} else if value != nil {
+				fh.CharacterID = *value
 			}
 		case friendshiphistory.FieldFriendID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field friend_id", values[i])
-			} else if value.Valid {
-				fh.FriendID = int(value.Int64)
+			} else if value != nil {
+				fh.FriendID = *value
 			}
 		default:
 			fh.selectValues.Set(columns[i], values[i])

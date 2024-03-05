@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // FriendshipHistoryUpdate is the builder for updating FriendshipHistory entities.
@@ -28,44 +29,30 @@ func (fhu *FriendshipHistoryUpdate) Where(ps ...predicate.FriendshipHistory) *Fr
 }
 
 // SetCharacterID sets the "character_id" field.
-func (fhu *FriendshipHistoryUpdate) SetCharacterID(i int) *FriendshipHistoryUpdate {
-	fhu.mutation.ResetCharacterID()
-	fhu.mutation.SetCharacterID(i)
+func (fhu *FriendshipHistoryUpdate) SetCharacterID(u uuid.UUID) *FriendshipHistoryUpdate {
+	fhu.mutation.SetCharacterID(u)
 	return fhu
 }
 
 // SetNillableCharacterID sets the "character_id" field if the given value is not nil.
-func (fhu *FriendshipHistoryUpdate) SetNillableCharacterID(i *int) *FriendshipHistoryUpdate {
-	if i != nil {
-		fhu.SetCharacterID(*i)
+func (fhu *FriendshipHistoryUpdate) SetNillableCharacterID(u *uuid.UUID) *FriendshipHistoryUpdate {
+	if u != nil {
+		fhu.SetCharacterID(*u)
 	}
-	return fhu
-}
-
-// AddCharacterID adds i to the "character_id" field.
-func (fhu *FriendshipHistoryUpdate) AddCharacterID(i int) *FriendshipHistoryUpdate {
-	fhu.mutation.AddCharacterID(i)
 	return fhu
 }
 
 // SetFriendID sets the "friend_id" field.
-func (fhu *FriendshipHistoryUpdate) SetFriendID(i int) *FriendshipHistoryUpdate {
-	fhu.mutation.ResetFriendID()
-	fhu.mutation.SetFriendID(i)
+func (fhu *FriendshipHistoryUpdate) SetFriendID(u uuid.UUID) *FriendshipHistoryUpdate {
+	fhu.mutation.SetFriendID(u)
 	return fhu
 }
 
 // SetNillableFriendID sets the "friend_id" field if the given value is not nil.
-func (fhu *FriendshipHistoryUpdate) SetNillableFriendID(i *int) *FriendshipHistoryUpdate {
-	if i != nil {
-		fhu.SetFriendID(*i)
+func (fhu *FriendshipHistoryUpdate) SetNillableFriendID(u *uuid.UUID) *FriendshipHistoryUpdate {
+	if u != nil {
+		fhu.SetFriendID(*u)
 	}
-	return fhu
-}
-
-// AddFriendID adds i to the "friend_id" field.
-func (fhu *FriendshipHistoryUpdate) AddFriendID(i int) *FriendshipHistoryUpdate {
-	fhu.mutation.AddFriendID(i)
 	return fhu
 }
 
@@ -111,19 +98,13 @@ func (fhu *FriendshipHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 		}
 	}
 	if fhu.mutation.RefCleared() {
-		_spec.ClearField(friendshiphistory.FieldRef, field.TypeInt)
+		_spec.ClearField(friendshiphistory.FieldRef, field.TypeUUID)
 	}
 	if value, ok := fhu.mutation.CharacterID(); ok {
-		_spec.SetField(friendshiphistory.FieldCharacterID, field.TypeInt, value)
-	}
-	if value, ok := fhu.mutation.AddedCharacterID(); ok {
-		_spec.AddField(friendshiphistory.FieldCharacterID, field.TypeInt, value)
+		_spec.SetField(friendshiphistory.FieldCharacterID, field.TypeUUID, value)
 	}
 	if value, ok := fhu.mutation.FriendID(); ok {
-		_spec.SetField(friendshiphistory.FieldFriendID, field.TypeInt, value)
-	}
-	if value, ok := fhu.mutation.AddedFriendID(); ok {
-		_spec.AddField(friendshiphistory.FieldFriendID, field.TypeInt, value)
+		_spec.SetField(friendshiphistory.FieldFriendID, field.TypeUUID, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, fhu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -146,44 +127,30 @@ type FriendshipHistoryUpdateOne struct {
 }
 
 // SetCharacterID sets the "character_id" field.
-func (fhuo *FriendshipHistoryUpdateOne) SetCharacterID(i int) *FriendshipHistoryUpdateOne {
-	fhuo.mutation.ResetCharacterID()
-	fhuo.mutation.SetCharacterID(i)
+func (fhuo *FriendshipHistoryUpdateOne) SetCharacterID(u uuid.UUID) *FriendshipHistoryUpdateOne {
+	fhuo.mutation.SetCharacterID(u)
 	return fhuo
 }
 
 // SetNillableCharacterID sets the "character_id" field if the given value is not nil.
-func (fhuo *FriendshipHistoryUpdateOne) SetNillableCharacterID(i *int) *FriendshipHistoryUpdateOne {
-	if i != nil {
-		fhuo.SetCharacterID(*i)
+func (fhuo *FriendshipHistoryUpdateOne) SetNillableCharacterID(u *uuid.UUID) *FriendshipHistoryUpdateOne {
+	if u != nil {
+		fhuo.SetCharacterID(*u)
 	}
-	return fhuo
-}
-
-// AddCharacterID adds i to the "character_id" field.
-func (fhuo *FriendshipHistoryUpdateOne) AddCharacterID(i int) *FriendshipHistoryUpdateOne {
-	fhuo.mutation.AddCharacterID(i)
 	return fhuo
 }
 
 // SetFriendID sets the "friend_id" field.
-func (fhuo *FriendshipHistoryUpdateOne) SetFriendID(i int) *FriendshipHistoryUpdateOne {
-	fhuo.mutation.ResetFriendID()
-	fhuo.mutation.SetFriendID(i)
+func (fhuo *FriendshipHistoryUpdateOne) SetFriendID(u uuid.UUID) *FriendshipHistoryUpdateOne {
+	fhuo.mutation.SetFriendID(u)
 	return fhuo
 }
 
 // SetNillableFriendID sets the "friend_id" field if the given value is not nil.
-func (fhuo *FriendshipHistoryUpdateOne) SetNillableFriendID(i *int) *FriendshipHistoryUpdateOne {
-	if i != nil {
-		fhuo.SetFriendID(*i)
+func (fhuo *FriendshipHistoryUpdateOne) SetNillableFriendID(u *uuid.UUID) *FriendshipHistoryUpdateOne {
+	if u != nil {
+		fhuo.SetFriendID(*u)
 	}
-	return fhuo
-}
-
-// AddFriendID adds i to the "friend_id" field.
-func (fhuo *FriendshipHistoryUpdateOne) AddFriendID(i int) *FriendshipHistoryUpdateOne {
-	fhuo.mutation.AddFriendID(i)
 	return fhuo
 }
 
@@ -259,19 +226,13 @@ func (fhuo *FriendshipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Fri
 		}
 	}
 	if fhuo.mutation.RefCleared() {
-		_spec.ClearField(friendshiphistory.FieldRef, field.TypeInt)
+		_spec.ClearField(friendshiphistory.FieldRef, field.TypeUUID)
 	}
 	if value, ok := fhuo.mutation.CharacterID(); ok {
-		_spec.SetField(friendshiphistory.FieldCharacterID, field.TypeInt, value)
-	}
-	if value, ok := fhuo.mutation.AddedCharacterID(); ok {
-		_spec.AddField(friendshiphistory.FieldCharacterID, field.TypeInt, value)
+		_spec.SetField(friendshiphistory.FieldCharacterID, field.TypeUUID, value)
 	}
 	if value, ok := fhuo.mutation.FriendID(); ok {
-		_spec.SetField(friendshiphistory.FieldFriendID, field.TypeInt, value)
-	}
-	if value, ok := fhuo.mutation.AddedFriendID(); ok {
-		_spec.AddField(friendshiphistory.FieldFriendID, field.TypeInt, value)
+		_spec.SetField(friendshiphistory.FieldFriendID, field.TypeUUID, value)
 	}
 	_node = &FriendshipHistory{config: fhuo.config}
 	_spec.Assign = _node.assignValues

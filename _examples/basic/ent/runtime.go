@@ -32,6 +32,8 @@ func init() {
 	characterDescUpdatedAt := characterMixinFields0[1].Descriptor()
 	// character.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	character.DefaultUpdatedAt = characterDescUpdatedAt.Default.(func() time.Time)
+	// character.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	character.UpdateDefaultUpdatedAt = characterDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// characterDescAge is the schema descriptor for age field.
 	characterDescAge := characterFields[0].Descriptor()
 	// character.AgeValidator is a validator for the "age" field. It is called by the builders before save.
@@ -41,10 +43,6 @@ func init() {
 	_ = characterhistoryMixinFields0
 	characterhistoryFields := schema.CharacterHistory{}.Fields()
 	_ = characterhistoryFields
-	// characterhistoryDescHistoryTime is the schema descriptor for history_time field.
-	characterhistoryDescHistoryTime := characterhistoryFields[0].Descriptor()
-	// characterhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
-	characterhistory.DefaultHistoryTime = characterhistoryDescHistoryTime.Default.(func() time.Time)
 	// characterhistoryDescCreatedAt is the schema descriptor for created_at field.
 	characterhistoryDescCreatedAt := characterhistoryMixinFields0[0].Descriptor()
 	// characterhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
@@ -53,10 +51,12 @@ func init() {
 	characterhistoryDescUpdatedAt := characterhistoryMixinFields0[1].Descriptor()
 	// characterhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	characterhistory.DefaultUpdatedAt = characterhistoryDescUpdatedAt.Default.(func() time.Time)
-	// characterhistoryDescAge is the schema descriptor for age field.
-	characterhistoryDescAge := characterhistoryFields[4].Descriptor()
-	// characterhistory.AgeValidator is a validator for the "age" field. It is called by the builders before save.
-	characterhistory.AgeValidator = characterhistoryDescAge.Validators[0].(func(int) error)
+	// characterhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	characterhistory.UpdateDefaultUpdatedAt = characterhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// characterhistoryDescHistoryTime is the schema descriptor for history_time field.
+	characterhistoryDescHistoryTime := characterhistoryFields[0].Descriptor()
+	// characterhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	characterhistory.DefaultHistoryTime = characterhistoryDescHistoryTime.Default.(func() time.Time)
 	friendshipMixin := schema.Friendship{}.Mixin()
 	friendshipMixinFields0 := friendshipMixin[0].Fields()
 	_ = friendshipMixinFields0
@@ -70,15 +70,13 @@ func init() {
 	friendshipDescUpdatedAt := friendshipMixinFields0[1].Descriptor()
 	// friendship.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	friendship.DefaultUpdatedAt = friendshipDescUpdatedAt.Default.(func() time.Time)
+	// friendship.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	friendship.UpdateDefaultUpdatedAt = friendshipDescUpdatedAt.UpdateDefault.(func() time.Time)
 	friendshiphistoryMixin := schema.FriendshipHistory{}.Mixin()
 	friendshiphistoryMixinFields0 := friendshiphistoryMixin[0].Fields()
 	_ = friendshiphistoryMixinFields0
 	friendshiphistoryFields := schema.FriendshipHistory{}.Fields()
 	_ = friendshiphistoryFields
-	// friendshiphistoryDescHistoryTime is the schema descriptor for history_time field.
-	friendshiphistoryDescHistoryTime := friendshiphistoryFields[0].Descriptor()
-	// friendshiphistory.DefaultHistoryTime holds the default value on creation for the history_time field.
-	friendshiphistory.DefaultHistoryTime = friendshiphistoryDescHistoryTime.Default.(func() time.Time)
 	// friendshiphistoryDescCreatedAt is the schema descriptor for created_at field.
 	friendshiphistoryDescCreatedAt := friendshiphistoryMixinFields0[0].Descriptor()
 	// friendshiphistory.DefaultCreatedAt holds the default value on creation for the created_at field.
@@ -87,6 +85,12 @@ func init() {
 	friendshiphistoryDescUpdatedAt := friendshiphistoryMixinFields0[1].Descriptor()
 	// friendshiphistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	friendshiphistory.DefaultUpdatedAt = friendshiphistoryDescUpdatedAt.Default.(func() time.Time)
+	// friendshiphistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	friendshiphistory.UpdateDefaultUpdatedAt = friendshiphistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// friendshiphistoryDescHistoryTime is the schema descriptor for history_time field.
+	friendshiphistoryDescHistoryTime := friendshiphistoryFields[1].Descriptor()
+	// friendshiphistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	friendshiphistory.DefaultHistoryTime = friendshiphistoryDescHistoryTime.Default.(func() time.Time)
 	residenceMixin := schema.Residence{}.Mixin()
 	residenceMixinFields0 := residenceMixin[0].Fields()
 	_ = residenceMixinFields0
@@ -100,6 +104,8 @@ func init() {
 	residenceDescUpdatedAt := residenceMixinFields0[1].Descriptor()
 	// residence.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	residence.DefaultUpdatedAt = residenceDescUpdatedAt.Default.(func() time.Time)
+	// residence.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	residence.UpdateDefaultUpdatedAt = residenceDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// residenceDescID is the schema descriptor for id field.
 	residenceDescID := residenceFields[0].Descriptor()
 	// residence.DefaultID holds the default value on creation for the id field.
@@ -109,10 +115,6 @@ func init() {
 	_ = residencehistoryMixinFields0
 	residencehistoryFields := schema.ResidenceHistory{}.Fields()
 	_ = residencehistoryFields
-	// residencehistoryDescHistoryTime is the schema descriptor for history_time field.
-	residencehistoryDescHistoryTime := residencehistoryFields[0].Descriptor()
-	// residencehistory.DefaultHistoryTime holds the default value on creation for the history_time field.
-	residencehistory.DefaultHistoryTime = residencehistoryDescHistoryTime.Default.(func() time.Time)
 	// residencehistoryDescCreatedAt is the schema descriptor for created_at field.
 	residencehistoryDescCreatedAt := residencehistoryMixinFields0[0].Descriptor()
 	// residencehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
@@ -121,4 +123,10 @@ func init() {
 	residencehistoryDescUpdatedAt := residencehistoryMixinFields0[1].Descriptor()
 	// residencehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	residencehistory.DefaultUpdatedAt = residencehistoryDescUpdatedAt.Default.(func() time.Time)
+	// residencehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	residencehistory.UpdateDefaultUpdatedAt = residencehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// residencehistoryDescHistoryTime is the schema descriptor for history_time field.
+	residencehistoryDescHistoryTime := residencehistoryFields[1].Descriptor()
+	// residencehistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	residencehistory.DefaultHistoryTime = residencehistoryDescHistoryTime.Default.(func() time.Time)
 }

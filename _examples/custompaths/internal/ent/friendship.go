@@ -10,17 +10,18 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // Friendship is the model entity for the Friendship schema.
 type Friendship struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID uuid.UUID `json:"id,omitempty"`
 	// CharacterID holds the value of the "character_id" field.
-	CharacterID int `json:"character_id,omitempty"`
+	CharacterID uuid.UUID `json:"character_id,omitempty"`
 	// FriendID holds the value of the "friend_id" field.
-	FriendID int `json:"friend_id,omitempty"`
+	FriendID uuid.UUID `json:"friend_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FriendshipQuery when eager-loading is set.
 	Edges        FriendshipEdges `json:"edges"`
@@ -41,12 +42,10 @@ type FriendshipEdges struct {
 // CharacterOrErr returns the Character value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e FriendshipEdges) CharacterOrErr() (*Character, error) {
-	if e.loadedTypes[0] {
-		if e.Character == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: character.Label}
-		}
+	if e.Character != nil {
 		return e.Character, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: character.Label}
 	}
 	return nil, &NotLoadedError{edge: "character"}
 }
@@ -54,12 +53,10 @@ func (e FriendshipEdges) CharacterOrErr() (*Character, error) {
 // FriendOrErr returns the Friend value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e FriendshipEdges) FriendOrErr() (*Character, error) {
-	if e.loadedTypes[1] {
-		if e.Friend == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: character.Label}
-		}
+	if e.Friend != nil {
 		return e.Friend, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: character.Label}
 	}
 	return nil, &NotLoadedError{edge: "friend"}
 }
@@ -70,7 +67,7 @@ func (*Friendship) scanValues(columns []string) ([]any, error) {
 	for i := range columns {
 		switch columns[i] {
 		case friendship.FieldID, friendship.FieldCharacterID, friendship.FieldFriendID:
-			values[i] = new(sql.NullInt64)
+			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -87,22 +84,22 @@ func (f *Friendship) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case friendship.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				f.ID = *value
 			}
-			f.ID = int(value.Int64)
 		case friendship.FieldCharacterID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field character_id", values[i])
-			} else if value.Valid {
-				f.CharacterID = int(value.Int64)
+			} else if value != nil {
+				f.CharacterID = *value
 			}
 		case friendship.FieldFriendID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field friend_id", values[i])
-			} else if value.Valid {
-				f.FriendID = int(value.Int64)
+			} else if value != nil {
+				f.FriendID = *value
 			}
 		default:
 			f.selectValues.Set(columns[i], values[i])

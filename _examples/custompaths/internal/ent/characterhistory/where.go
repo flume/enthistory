@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
 )
@@ -62,7 +63,7 @@ func HistoryTime(v time.Time) predicate.CharacterHistory {
 }
 
 // Ref applies equality check predicate on the "ref" field. It's identical to RefEQ.
-func Ref(v int) predicate.CharacterHistory {
+func Ref(v uuid.UUID) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldEQ(FieldRef, v))
 }
 
@@ -137,42 +138,42 @@ func OperationNotIn(vs ...enthistory.OpType) predicate.CharacterHistory {
 }
 
 // RefEQ applies the EQ predicate on the "ref" field.
-func RefEQ(v int) predicate.CharacterHistory {
+func RefEQ(v uuid.UUID) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldEQ(FieldRef, v))
 }
 
 // RefNEQ applies the NEQ predicate on the "ref" field.
-func RefNEQ(v int) predicate.CharacterHistory {
+func RefNEQ(v uuid.UUID) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldNEQ(FieldRef, v))
 }
 
 // RefIn applies the In predicate on the "ref" field.
-func RefIn(vs ...int) predicate.CharacterHistory {
+func RefIn(vs ...uuid.UUID) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldIn(FieldRef, vs...))
 }
 
 // RefNotIn applies the NotIn predicate on the "ref" field.
-func RefNotIn(vs ...int) predicate.CharacterHistory {
+func RefNotIn(vs ...uuid.UUID) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldNotIn(FieldRef, vs...))
 }
 
 // RefGT applies the GT predicate on the "ref" field.
-func RefGT(v int) predicate.CharacterHistory {
+func RefGT(v uuid.UUID) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldGT(FieldRef, v))
 }
 
 // RefGTE applies the GTE predicate on the "ref" field.
-func RefGTE(v int) predicate.CharacterHistory {
+func RefGTE(v uuid.UUID) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldGTE(FieldRef, v))
 }
 
 // RefLT applies the LT predicate on the "ref" field.
-func RefLT(v int) predicate.CharacterHistory {
+func RefLT(v uuid.UUID) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldLT(FieldRef, v))
 }
 
 // RefLTE applies the LTE predicate on the "ref" field.
-func RefLTE(v int) predicate.CharacterHistory {
+func RefLTE(v uuid.UUID) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldLTE(FieldRef, v))
 }
 

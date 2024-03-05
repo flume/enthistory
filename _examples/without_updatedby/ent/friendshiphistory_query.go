@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/friendshiphistory"
+	"_examples/without_updatedby/ent/predicate"
 	"context"
 	"fmt"
 	"math"
@@ -10,9 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"_examples/without_updatedby/ent/friendshiphistory"
-	"_examples/without_updatedby/ent/predicate"
 )
 
 // FriendshipHistoryQuery is the builder for querying FriendshipHistory entities.
@@ -262,12 +261,12 @@ func (fhq *FriendshipHistoryQuery) Clone() *FriendshipHistoryQuery {
 // Example:
 //
 //	var v []struct {
-//		HistoryTime time.Time `json:"history_time,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.FriendshipHistory.Query().
-//		GroupBy(friendshiphistory.FieldHistoryTime).
+//		GroupBy(friendshiphistory.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (fhq *FriendshipHistoryQuery) GroupBy(field string, fields ...string) *FriendshipHistoryGroupBy {
@@ -285,11 +284,11 @@ func (fhq *FriendshipHistoryQuery) GroupBy(field string, fields ...string) *Frie
 // Example:
 //
 //	var v []struct {
-//		HistoryTime time.Time `json:"history_time,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.FriendshipHistory.Query().
-//		Select(friendshiphistory.FieldHistoryTime).
+//		Select(friendshiphistory.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (fhq *FriendshipHistoryQuery) Select(fields ...string) *FriendshipHistorySelect {
 	fhq.ctx.Fields = append(fhq.ctx.Fields, fields...)

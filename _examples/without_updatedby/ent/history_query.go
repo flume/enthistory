@@ -7,11 +7,11 @@ import (
 	"context"
 	"time"
 
-	"entgo.io/ent/dialect/sql"
-
 	"_examples/without_updatedby/ent/characterhistory"
 	"_examples/without_updatedby/ent/friendshiphistory"
 	"_examples/without_updatedby/ent/residencehistory"
+
+	"entgo.io/ent/dialect/sql"
 )
 
 func (c *Character) History() *CharacterHistoryQuery {

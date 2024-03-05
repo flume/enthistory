@@ -11,6 +11,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // CharacterCreate is the builder for creating a Character entity.
@@ -32,15 +33,29 @@ func (cc *CharacterCreate) SetName(s string) *CharacterCreate {
 	return cc
 }
 
+// SetID sets the "id" field.
+func (cc *CharacterCreate) SetID(u uuid.UUID) *CharacterCreate {
+	cc.mutation.SetID(u)
+	return cc
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (cc *CharacterCreate) SetNillableID(u *uuid.UUID) *CharacterCreate {
+	if u != nil {
+		cc.SetID(*u)
+	}
+	return cc
+}
+
 // AddFriendIDs adds the "friends" edge to the Character entity by IDs.
-func (cc *CharacterCreate) AddFriendIDs(ids ...int) *CharacterCreate {
+func (cc *CharacterCreate) AddFriendIDs(ids ...uuid.UUID) *CharacterCreate {
 	cc.mutation.AddFriendIDs(ids...)
 	return cc
 }
 
 // AddFriends adds the "friends" edges to the Character entity.
 func (cc *CharacterCreate) AddFriends(c ...*Character) *CharacterCreate {
-	ids := make([]int, len(c))
+	ids := make([]uuid.UUID, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
@@ -48,14 +63,14 @@ func (cc *CharacterCreate) AddFriends(c ...*Character) *CharacterCreate {
 }
 
 // AddFriendshipIDs adds the "friendships" edge to the Friendship entity by IDs.
-func (cc *CharacterCreate) AddFriendshipIDs(ids ...int) *CharacterCreate {
+func (cc *CharacterCreate) AddFriendshipIDs(ids ...uuid.UUID) *CharacterCreate {
 	cc.mutation.AddFriendshipIDs(ids...)
 	return cc
 }
 
 // AddFriendships adds the "friendships" edges to the Friendship entity.
 func (cc *CharacterCreate) AddFriendships(f ...*Friendship) *CharacterCreate {
-	ids := make([]int, len(f))
+	ids := make([]uuid.UUID, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
 	}
@@ -69,6 +84,7 @@ func (cc *CharacterCreate) Mutation() *CharacterMutation {
 
 // Save creates the Character in the database.
 func (cc *CharacterCreate) Save(ctx context.Context) (*Character, error) {
+	cc.defaults()
 	return withHooks(ctx, cc.sqlSave, cc.mutation, cc.hooks)
 }
 
@@ -91,6 +107,14 @@ func (cc *CharacterCreate) Exec(ctx context.Context) error {
 func (cc *CharacterCreate) ExecX(ctx context.Context) {
 	if err := cc.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (cc *CharacterCreate) defaults() {
+	if _, ok := cc.mutation.ID(); !ok {
+		v := character.DefaultID()
+		cc.mutation.SetID(v)
 	}
 }
 
@@ -121,8 +145,13 @@ func (cc *CharacterCreate) sqlSave(ctx context.Context) (*Character, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	cc.mutation.id = &_node.ID
 	cc.mutation.done = true
 	return _node, nil
@@ -131,8 +160,12 @@ func (cc *CharacterCreate) sqlSave(ctx context.Context) (*Character, error) {
 func (cc *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Character{config: cc.config}
-		_spec = sqlgraph.NewCreateSpec(character.Table, sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(character.Table, sqlgraph.NewFieldSpec(character.FieldID, field.TypeUUID))
 	)
+	if id, ok := cc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
 	if value, ok := cc.mutation.Age(); ok {
 		_spec.SetField(character.FieldAge, field.TypeInt, value)
 		_node.Age = value
@@ -149,11 +182,18 @@ func (cc *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
 			Columns: character.FriendsPrimaryKey,
 			Bidi:    true,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &FriendshipCreate{config: cc.config, mutation: newFriendshipMutation(cc.config, OpCreate)}
+		createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
@@ -165,7 +205,7 @@ func (cc *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
 			Columns: []string{character.FriendshipsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -194,6 +234,7 @@ func (ccb *CharacterCreateBulk) Save(ctx context.Context) ([]*Character, error) 
 	for i := range ccb.builders {
 		func(i int, root context.Context) {
 			builder := ccb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*CharacterMutation)
 				if !ok {
@@ -220,10 +261,6 @@ func (ccb *CharacterCreateBulk) Save(ctx context.Context) ([]*Character, error) 
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

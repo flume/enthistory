@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // CharacterQuery is the builder for querying Character entities.
@@ -129,8 +130,8 @@ func (cq *CharacterQuery) FirstX(ctx context.Context) *Character {
 
 // FirstID returns the first Character ID from the query.
 // Returns a *NotFoundError when no Character ID was found.
-func (cq *CharacterQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (cq *CharacterQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = cq.Limit(1).IDs(setContextOp(ctx, cq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -142,7 +143,7 @@ func (cq *CharacterQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (cq *CharacterQuery) FirstIDX(ctx context.Context) int {
+func (cq *CharacterQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := cq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -180,8 +181,8 @@ func (cq *CharacterQuery) OnlyX(ctx context.Context) *Character {
 // OnlyID is like Only, but returns the only Character ID in the query.
 // Returns a *NotSingularError when more than one Character ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (cq *CharacterQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (cq *CharacterQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = cq.Limit(2).IDs(setContextOp(ctx, cq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -197,7 +198,7 @@ func (cq *CharacterQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (cq *CharacterQuery) OnlyIDX(ctx context.Context) int {
+func (cq *CharacterQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := cq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -225,7 +226,7 @@ func (cq *CharacterQuery) AllX(ctx context.Context) []*Character {
 }
 
 // IDs executes the query and returns a list of Character IDs.
-func (cq *CharacterQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (cq *CharacterQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if cq.ctx.Unique == nil && cq.path != nil {
 		cq.Unique(true)
 	}
@@ -237,7 +238,7 @@ func (cq *CharacterQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (cq *CharacterQuery) IDsX(ctx context.Context) []int {
+func (cq *CharacterQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := cq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -447,8 +448,8 @@ func (cq *CharacterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Ch
 
 func (cq *CharacterQuery) loadFriends(ctx context.Context, query *CharacterQuery, nodes []*Character, init func(*Character), assign func(*Character, *Character)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[int]*Character)
-	nids := make(map[int]map[*Character]struct{})
+	byID := make(map[uuid.UUID]*Character)
+	nids := make(map[uuid.UUID]map[*Character]struct{})
 	for i, node := range nodes {
 		edgeIDs[i] = node.ID
 		byID[node.ID] = node
@@ -477,11 +478,11 @@ func (cq *CharacterQuery) loadFriends(ctx context.Context, query *CharacterQuery
 				if err != nil {
 					return nil, err
 				}
-				return append([]any{new(sql.NullInt64)}, values...), nil
+				return append([]any{new(uuid.UUID)}, values...), nil
 			}
 			spec.Assign = func(columns []string, values []any) error {
-				outValue := int(values[0].(*sql.NullInt64).Int64)
-				inValue := int(values[1].(*sql.NullInt64).Int64)
+				outValue := *values[0].(*uuid.UUID)
+				inValue := *values[1].(*uuid.UUID)
 				if nids[inValue] == nil {
 					nids[inValue] = map[*Character]struct{}{byID[outValue]: {}}
 					return assign(columns[1:], values[1:])
@@ -508,7 +509,7 @@ func (cq *CharacterQuery) loadFriends(ctx context.Context, query *CharacterQuery
 }
 func (cq *CharacterQuery) loadFriendships(ctx context.Context, query *FriendshipQuery, nodes []*Character, init func(*Character), assign func(*Character, *Friendship)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Character)
+	nodeids := make(map[uuid.UUID]*Character)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -547,7 +548,7 @@ func (cq *CharacterQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (cq *CharacterQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(character.Table, character.Columns, sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(character.Table, character.Columns, sqlgraph.NewFieldSpec(character.FieldID, field.TypeUUID))
 	_spec.From = cq.sql
 	if unique := cq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

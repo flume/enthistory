@@ -34,14 +34,6 @@ func (ohu *OrganizationHistoryUpdate) SetUpdatedAt(t time.Time) *OrganizationHis
 	return ohu
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ohu *OrganizationHistoryUpdate) SetNillableUpdatedAt(t *time.Time) *OrganizationHistoryUpdate {
-	if t != nil {
-		ohu.SetUpdatedAt(*t)
-	}
-	return ohu
-}
-
 // SetName sets the "name" field.
 func (ohu *OrganizationHistoryUpdate) SetName(s string) *OrganizationHistoryUpdate {
 	ohu.mutation.SetName(s)
@@ -75,6 +67,7 @@ func (ohu *OrganizationHistoryUpdate) Mutation() *OrganizationHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ohu *OrganizationHistoryUpdate) Save(ctx context.Context) (int, error) {
+	ohu.defaults()
 	return withHooks(ctx, ohu.sqlSave, ohu.mutation, ohu.hooks)
 }
 
@@ -100,6 +93,14 @@ func (ohu *OrganizationHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (ohu *OrganizationHistoryUpdate) defaults() {
+	if _, ok := ohu.mutation.UpdatedAt(); !ok {
+		v := organizationhistory.UpdateDefaultUpdatedAt()
+		ohu.mutation.SetUpdatedAt(v)
+	}
+}
+
 func (ohu *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(organizationhistory.Table, organizationhistory.Columns, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeInt))
 	if ps := ohu.mutation.predicates; len(ps) > 0 {
@@ -109,14 +110,14 @@ func (ohu *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 			}
 		}
 	}
+	if value, ok := ohu.mutation.UpdatedAt(); ok {
+		_spec.SetField(organizationhistory.FieldUpdatedAt, field.TypeTime, value)
+	}
 	if ohu.mutation.RefCleared() {
 		_spec.ClearField(organizationhistory.FieldRef, field.TypeUUID)
 	}
 	if ohu.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationhistory.FieldUpdatedBy, field.TypeUUID)
-	}
-	if value, ok := ohu.mutation.UpdatedAt(); ok {
-		_spec.SetField(organizationhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := ohu.mutation.Name(); ok {
 		_spec.SetField(organizationhistory.FieldName, field.TypeString, value)
@@ -150,14 +151,6 @@ type OrganizationHistoryUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (ohuo *OrganizationHistoryUpdateOne) SetUpdatedAt(t time.Time) *OrganizationHistoryUpdateOne {
 	ohuo.mutation.SetUpdatedAt(t)
-	return ohuo
-}
-
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ohuo *OrganizationHistoryUpdateOne) SetNillableUpdatedAt(t *time.Time) *OrganizationHistoryUpdateOne {
-	if t != nil {
-		ohuo.SetUpdatedAt(*t)
-	}
 	return ohuo
 }
 
@@ -207,6 +200,7 @@ func (ohuo *OrganizationHistoryUpdateOne) Select(field string, fields ...string)
 
 // Save executes the query and returns the updated OrganizationHistory entity.
 func (ohuo *OrganizationHistoryUpdateOne) Save(ctx context.Context) (*OrganizationHistory, error) {
+	ohuo.defaults()
 	return withHooks(ctx, ohuo.sqlSave, ohuo.mutation, ohuo.hooks)
 }
 
@@ -229,6 +223,14 @@ func (ohuo *OrganizationHistoryUpdateOne) Exec(ctx context.Context) error {
 func (ohuo *OrganizationHistoryUpdateOne) ExecX(ctx context.Context) {
 	if err := ohuo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (ohuo *OrganizationHistoryUpdateOne) defaults() {
+	if _, ok := ohuo.mutation.UpdatedAt(); !ok {
+		v := organizationhistory.UpdateDefaultUpdatedAt()
+		ohuo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -258,14 +260,14 @@ func (ohuo *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *O
 			}
 		}
 	}
+	if value, ok := ohuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(organizationhistory.FieldUpdatedAt, field.TypeTime, value)
+	}
 	if ohuo.mutation.RefCleared() {
 		_spec.ClearField(organizationhistory.FieldRef, field.TypeUUID)
 	}
 	if ohuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationhistory.FieldUpdatedBy, field.TypeUUID)
-	}
-	if value, ok := ohuo.mutation.UpdatedAt(); ok {
-		_spec.SetField(organizationhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
 	if value, ok := ohuo.mutation.Name(); ok {
 		_spec.SetField(organizationhistory.FieldName, field.TypeString, value)

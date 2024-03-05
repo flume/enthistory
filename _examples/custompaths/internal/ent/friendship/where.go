@@ -7,100 +7,101 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Friendship {
+func ID(id uuid.UUID) predicate.Friendship {
 	return predicate.Friendship(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Friendship {
+func IDEQ(id uuid.UUID) predicate.Friendship {
 	return predicate.Friendship(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Friendship {
+func IDNEQ(id uuid.UUID) predicate.Friendship {
 	return predicate.Friendship(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Friendship {
+func IDIn(ids ...uuid.UUID) predicate.Friendship {
 	return predicate.Friendship(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Friendship {
+func IDNotIn(ids ...uuid.UUID) predicate.Friendship {
 	return predicate.Friendship(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Friendship {
+func IDGT(id uuid.UUID) predicate.Friendship {
 	return predicate.Friendship(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Friendship {
+func IDGTE(id uuid.UUID) predicate.Friendship {
 	return predicate.Friendship(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Friendship {
+func IDLT(id uuid.UUID) predicate.Friendship {
 	return predicate.Friendship(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Friendship {
+func IDLTE(id uuid.UUID) predicate.Friendship {
 	return predicate.Friendship(sql.FieldLTE(FieldID, id))
 }
 
 // CharacterID applies equality check predicate on the "character_id" field. It's identical to CharacterIDEQ.
-func CharacterID(v int) predicate.Friendship {
+func CharacterID(v uuid.UUID) predicate.Friendship {
 	return predicate.Friendship(sql.FieldEQ(FieldCharacterID, v))
 }
 
 // FriendID applies equality check predicate on the "friend_id" field. It's identical to FriendIDEQ.
-func FriendID(v int) predicate.Friendship {
+func FriendID(v uuid.UUID) predicate.Friendship {
 	return predicate.Friendship(sql.FieldEQ(FieldFriendID, v))
 }
 
 // CharacterIDEQ applies the EQ predicate on the "character_id" field.
-func CharacterIDEQ(v int) predicate.Friendship {
+func CharacterIDEQ(v uuid.UUID) predicate.Friendship {
 	return predicate.Friendship(sql.FieldEQ(FieldCharacterID, v))
 }
 
 // CharacterIDNEQ applies the NEQ predicate on the "character_id" field.
-func CharacterIDNEQ(v int) predicate.Friendship {
+func CharacterIDNEQ(v uuid.UUID) predicate.Friendship {
 	return predicate.Friendship(sql.FieldNEQ(FieldCharacterID, v))
 }
 
 // CharacterIDIn applies the In predicate on the "character_id" field.
-func CharacterIDIn(vs ...int) predicate.Friendship {
+func CharacterIDIn(vs ...uuid.UUID) predicate.Friendship {
 	return predicate.Friendship(sql.FieldIn(FieldCharacterID, vs...))
 }
 
 // CharacterIDNotIn applies the NotIn predicate on the "character_id" field.
-func CharacterIDNotIn(vs ...int) predicate.Friendship {
+func CharacterIDNotIn(vs ...uuid.UUID) predicate.Friendship {
 	return predicate.Friendship(sql.FieldNotIn(FieldCharacterID, vs...))
 }
 
 // FriendIDEQ applies the EQ predicate on the "friend_id" field.
-func FriendIDEQ(v int) predicate.Friendship {
+func FriendIDEQ(v uuid.UUID) predicate.Friendship {
 	return predicate.Friendship(sql.FieldEQ(FieldFriendID, v))
 }
 
 // FriendIDNEQ applies the NEQ predicate on the "friend_id" field.
-func FriendIDNEQ(v int) predicate.Friendship {
+func FriendIDNEQ(v uuid.UUID) predicate.Friendship {
 	return predicate.Friendship(sql.FieldNEQ(FieldFriendID, v))
 }
 
 // FriendIDIn applies the In predicate on the "friend_id" field.
-func FriendIDIn(vs ...int) predicate.Friendship {
+func FriendIDIn(vs ...uuid.UUID) predicate.Friendship {
 	return predicate.Friendship(sql.FieldIn(FieldFriendID, vs...))
 }
 
 // FriendIDNotIn applies the NotIn predicate on the "friend_id" field.
-func FriendIDNotIn(vs ...int) predicate.Friendship {
+func FriendIDNotIn(vs ...uuid.UUID) predicate.Friendship {
 	return predicate.Friendship(sql.FieldNotIn(FieldFriendID, vs...))
 }
 

@@ -166,11 +166,6 @@ func (thc *TodoHistoryCreate) check() error {
 	if _, ok := thc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "TodoHistory.name"`)}
 	}
-	if v, ok := thc.mutation.Name(); ok {
-		if err := todohistory.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "TodoHistory.name": %w`, err)}
-		}
-	}
 	return nil
 }
 

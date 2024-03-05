@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	// OrganizationColumns holds the columns for the "Organization" table.
+	// OrganizationColumns holds the columns for the "organization" table.
 	OrganizationColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "created_at", Type: field.TypeTime},
@@ -17,38 +17,38 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "info", Type: field.TypeJSON, Nullable: true},
 	}
-	// OrganizationTable holds the schema information for the "Organization" table.
+	// OrganizationTable holds the schema information for the "organization" table.
 	OrganizationTable = &schema.Table{
-		Name:       "Organization",
+		Name:       "organization",
 		Columns:    OrganizationColumns,
 		PrimaryKey: []*schema.Column{OrganizationColumns[0]},
 	}
-	// OrganizationHistoryColumns holds the columns for the "Organization_history" table.
+	// OrganizationHistoryColumns holds the columns for the "organization_history" table.
 	OrganizationHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
 		{Name: "ref", Type: field.TypeUUID, Nullable: true},
 		{Name: "updated_by", Type: field.TypeUUID, Nullable: true},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "name", Type: field.TypeString},
 		{Name: "info", Type: field.TypeJSON, Nullable: true},
 	}
-	// OrganizationHistoryTable holds the schema information for the "Organization_history" table.
+	// OrganizationHistoryTable holds the schema information for the "organization_history" table.
 	OrganizationHistoryTable = &schema.Table{
-		Name:       "Organization_history",
+		Name:       "organization_history",
 		Columns:    OrganizationHistoryColumns,
 		PrimaryKey: []*schema.Column{OrganizationHistoryColumns[0]},
 		Indexes: []*schema.Index{
 			{
 				Name:    "organizationhistory_history_time",
 				Unique:  false,
-				Columns: []*schema.Column{OrganizationHistoryColumns[1]},
+				Columns: []*schema.Column{OrganizationHistoryColumns[3]},
 			},
 		},
 	}
-	// StoreColumns holds the columns for the "Store" table.
+	// StoreColumns holds the columns for the "store" table.
 	StoreColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "created_at", Type: field.TypeTime},
@@ -57,43 +57,43 @@ var (
 		{Name: "region", Type: field.TypeString},
 		{Name: "organization_id", Type: field.TypeUUID},
 	}
-	// StoreTable holds the schema information for the "Store" table.
+	// StoreTable holds the schema information for the "store" table.
 	StoreTable = &schema.Table{
-		Name:       "Store",
+		Name:       "store",
 		Columns:    StoreColumns,
 		PrimaryKey: []*schema.Column{StoreColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "Store_Organization_organization_stores",
+				Symbol:     "store_organization_organization_stores",
 				Columns:    []*schema.Column{StoreColumns[5]},
 				RefColumns: []*schema.Column{OrganizationColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
 	}
-	// StoreHistoryColumns holds the columns for the "Store_history" table.
+	// StoreHistoryColumns holds the columns for the "store_history" table.
 	StoreHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
 		{Name: "ref", Type: field.TypeUUID, Nullable: true},
 		{Name: "updated_by", Type: field.TypeUUID, Nullable: true},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "name", Type: field.TypeString},
 		{Name: "region", Type: field.TypeString},
 		{Name: "organization_id", Type: field.TypeUUID},
 	}
-	// StoreHistoryTable holds the schema information for the "Store_history" table.
+	// StoreHistoryTable holds the schema information for the "store_history" table.
 	StoreHistoryTable = &schema.Table{
-		Name:       "Store_history",
+		Name:       "store_history",
 		Columns:    StoreHistoryColumns,
 		PrimaryKey: []*schema.Column{StoreHistoryColumns[0]},
 		Indexes: []*schema.Index{
 			{
 				Name:    "storehistory_history_time",
 				Unique:  false,
-				Columns: []*schema.Column{StoreHistoryColumns[1]},
+				Columns: []*schema.Column{StoreHistoryColumns[3]},
 			},
 		},
 	}
@@ -108,16 +108,16 @@ var (
 
 func init() {
 	OrganizationTable.Annotation = &entsql.Annotation{
-		Table: "Organization",
+		Table: "organization",
 	}
 	OrganizationHistoryTable.Annotation = &entsql.Annotation{
-		Table: "Organization_history",
+		Table: "organization_history",
 	}
 	StoreTable.ForeignKeys[0].RefTable = OrganizationTable
 	StoreTable.Annotation = &entsql.Annotation{
-		Table: "Store",
+		Table: "store",
 	}
 	StoreHistoryTable.Annotation = &entsql.Annotation{
-		Table: "Store_history",
+		Table: "store_history",
 	}
 }

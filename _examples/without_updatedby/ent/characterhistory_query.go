@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/characterhistory"
+	"_examples/without_updatedby/ent/predicate"
 	"context"
 	"fmt"
 	"math"
@@ -10,9 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"_examples/without_updatedby/ent/characterhistory"
-	"_examples/without_updatedby/ent/predicate"
 )
 
 // CharacterHistoryQuery is the builder for querying CharacterHistory entities.
@@ -262,12 +261,12 @@ func (chq *CharacterHistoryQuery) Clone() *CharacterHistoryQuery {
 // Example:
 //
 //	var v []struct {
-//		HistoryTime time.Time `json:"history_time,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.CharacterHistory.Query().
-//		GroupBy(characterhistory.FieldHistoryTime).
+//		GroupBy(characterhistory.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (chq *CharacterHistoryQuery) GroupBy(field string, fields ...string) *CharacterHistoryGroupBy {
@@ -285,11 +284,11 @@ func (chq *CharacterHistoryQuery) GroupBy(field string, fields ...string) *Chara
 // Example:
 //
 //	var v []struct {
-//		HistoryTime time.Time `json:"history_time,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.CharacterHistory.Query().
-//		Select(characterhistory.FieldHistoryTime).
+//		Select(characterhistory.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (chq *CharacterHistoryQuery) Select(fields ...string) *CharacterHistorySelect {
 	chq.ctx.Fields = append(chq.ctx.Fields, fields...)

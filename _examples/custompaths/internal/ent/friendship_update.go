@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // FriendshipUpdate is the builder for updating Friendship entities.
@@ -29,29 +30,29 @@ func (fu *FriendshipUpdate) Where(ps ...predicate.Friendship) *FriendshipUpdate 
 }
 
 // SetCharacterID sets the "character_id" field.
-func (fu *FriendshipUpdate) SetCharacterID(i int) *FriendshipUpdate {
-	fu.mutation.SetCharacterID(i)
+func (fu *FriendshipUpdate) SetCharacterID(u uuid.UUID) *FriendshipUpdate {
+	fu.mutation.SetCharacterID(u)
 	return fu
 }
 
 // SetNillableCharacterID sets the "character_id" field if the given value is not nil.
-func (fu *FriendshipUpdate) SetNillableCharacterID(i *int) *FriendshipUpdate {
-	if i != nil {
-		fu.SetCharacterID(*i)
+func (fu *FriendshipUpdate) SetNillableCharacterID(u *uuid.UUID) *FriendshipUpdate {
+	if u != nil {
+		fu.SetCharacterID(*u)
 	}
 	return fu
 }
 
 // SetFriendID sets the "friend_id" field.
-func (fu *FriendshipUpdate) SetFriendID(i int) *FriendshipUpdate {
-	fu.mutation.SetFriendID(i)
+func (fu *FriendshipUpdate) SetFriendID(u uuid.UUID) *FriendshipUpdate {
+	fu.mutation.SetFriendID(u)
 	return fu
 }
 
 // SetNillableFriendID sets the "friend_id" field if the given value is not nil.
-func (fu *FriendshipUpdate) SetNillableFriendID(i *int) *FriendshipUpdate {
-	if i != nil {
-		fu.SetFriendID(*i)
+func (fu *FriendshipUpdate) SetNillableFriendID(u *uuid.UUID) *FriendshipUpdate {
+	if u != nil {
+		fu.SetFriendID(*u)
 	}
 	return fu
 }
@@ -125,7 +126,7 @@ func (fu *FriendshipUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := fu.check(); err != nil {
 		return n, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(friendship.Table, friendship.Columns, sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(friendship.Table, friendship.Columns, sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeUUID))
 	if ps := fu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -141,7 +142,7 @@ func (fu *FriendshipUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{friendship.CharacterColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -154,7 +155,7 @@ func (fu *FriendshipUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{friendship.CharacterColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -170,7 +171,7 @@ func (fu *FriendshipUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{friendship.FriendColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -183,7 +184,7 @@ func (fu *FriendshipUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{friendship.FriendColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -212,29 +213,29 @@ type FriendshipUpdateOne struct {
 }
 
 // SetCharacterID sets the "character_id" field.
-func (fuo *FriendshipUpdateOne) SetCharacterID(i int) *FriendshipUpdateOne {
-	fuo.mutation.SetCharacterID(i)
+func (fuo *FriendshipUpdateOne) SetCharacterID(u uuid.UUID) *FriendshipUpdateOne {
+	fuo.mutation.SetCharacterID(u)
 	return fuo
 }
 
 // SetNillableCharacterID sets the "character_id" field if the given value is not nil.
-func (fuo *FriendshipUpdateOne) SetNillableCharacterID(i *int) *FriendshipUpdateOne {
-	if i != nil {
-		fuo.SetCharacterID(*i)
+func (fuo *FriendshipUpdateOne) SetNillableCharacterID(u *uuid.UUID) *FriendshipUpdateOne {
+	if u != nil {
+		fuo.SetCharacterID(*u)
 	}
 	return fuo
 }
 
 // SetFriendID sets the "friend_id" field.
-func (fuo *FriendshipUpdateOne) SetFriendID(i int) *FriendshipUpdateOne {
-	fuo.mutation.SetFriendID(i)
+func (fuo *FriendshipUpdateOne) SetFriendID(u uuid.UUID) *FriendshipUpdateOne {
+	fuo.mutation.SetFriendID(u)
 	return fuo
 }
 
 // SetNillableFriendID sets the "friend_id" field if the given value is not nil.
-func (fuo *FriendshipUpdateOne) SetNillableFriendID(i *int) *FriendshipUpdateOne {
-	if i != nil {
-		fuo.SetFriendID(*i)
+func (fuo *FriendshipUpdateOne) SetNillableFriendID(u *uuid.UUID) *FriendshipUpdateOne {
+	if u != nil {
+		fuo.SetFriendID(*u)
 	}
 	return fuo
 }
@@ -321,7 +322,7 @@ func (fuo *FriendshipUpdateOne) sqlSave(ctx context.Context) (_node *Friendship,
 	if err := fuo.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(friendship.Table, friendship.Columns, sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(friendship.Table, friendship.Columns, sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeUUID))
 	id, ok := fuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Friendship.id" for update`)}
@@ -354,7 +355,7 @@ func (fuo *FriendshipUpdateOne) sqlSave(ctx context.Context) (_node *Friendship,
 			Columns: []string{friendship.CharacterColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -367,7 +368,7 @@ func (fuo *FriendshipUpdateOne) sqlSave(ctx context.Context) (_node *Friendship,
 			Columns: []string{friendship.CharacterColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -383,7 +384,7 @@ func (fuo *FriendshipUpdateOne) sqlSave(ctx context.Context) (_node *Friendship,
 			Columns: []string{friendship.FriendColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -396,7 +397,7 @@ func (fuo *FriendshipUpdateOne) sqlSave(ctx context.Context) (_node *Friendship,
 			Columns: []string{friendship.FriendColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

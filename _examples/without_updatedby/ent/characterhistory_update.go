@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/characterhistory"
+	"_examples/without_updatedby/ent/predicate"
 	"context"
 	"errors"
 	"fmt"
@@ -10,11 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-
-	"_examples/without_updatedby/ent/characterhistory"
-	"_examples/without_updatedby/ent/predicate"
 )
 
 // CharacterHistoryUpdate is the builder for updating CharacterHistory entities.
@@ -36,79 +34,6 @@ func (chu *CharacterHistoryUpdate) SetUpdatedAt(t time.Time) *CharacterHistoryUp
 	return chu
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (chu *CharacterHistoryUpdate) SetNillableUpdatedAt(t *time.Time) *CharacterHistoryUpdate {
-	if t != nil {
-		chu.SetUpdatedAt(*t)
-	}
-	return chu
-}
-
-// SetAge sets the "age" field.
-func (chu *CharacterHistoryUpdate) SetAge(i int) *CharacterHistoryUpdate {
-	chu.mutation.ResetAge()
-	chu.mutation.SetAge(i)
-	return chu
-}
-
-// SetNillableAge sets the "age" field if the given value is not nil.
-func (chu *CharacterHistoryUpdate) SetNillableAge(i *int) *CharacterHistoryUpdate {
-	if i != nil {
-		chu.SetAge(*i)
-	}
-	return chu
-}
-
-// AddAge adds i to the "age" field.
-func (chu *CharacterHistoryUpdate) AddAge(i int) *CharacterHistoryUpdate {
-	chu.mutation.AddAge(i)
-	return chu
-}
-
-// SetName sets the "name" field.
-func (chu *CharacterHistoryUpdate) SetName(s string) *CharacterHistoryUpdate {
-	chu.mutation.SetName(s)
-	return chu
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (chu *CharacterHistoryUpdate) SetNillableName(s *string) *CharacterHistoryUpdate {
-	if s != nil {
-		chu.SetName(*s)
-	}
-	return chu
-}
-
-// SetNicknames sets the "nicknames" field.
-func (chu *CharacterHistoryUpdate) SetNicknames(s []string) *CharacterHistoryUpdate {
-	chu.mutation.SetNicknames(s)
-	return chu
-}
-
-// AppendNicknames appends s to the "nicknames" field.
-func (chu *CharacterHistoryUpdate) AppendNicknames(s []string) *CharacterHistoryUpdate {
-	chu.mutation.AppendNicknames(s)
-	return chu
-}
-
-// ClearNicknames clears the value of the "nicknames" field.
-func (chu *CharacterHistoryUpdate) ClearNicknames() *CharacterHistoryUpdate {
-	chu.mutation.ClearNicknames()
-	return chu
-}
-
-// SetInfo sets the "info" field.
-func (chu *CharacterHistoryUpdate) SetInfo(m map[string]interface{}) *CharacterHistoryUpdate {
-	chu.mutation.SetInfo(m)
-	return chu
-}
-
-// ClearInfo clears the value of the "info" field.
-func (chu *CharacterHistoryUpdate) ClearInfo() *CharacterHistoryUpdate {
-	chu.mutation.ClearInfo()
-	return chu
-}
-
 // Mutation returns the CharacterHistoryMutation object of the builder.
 func (chu *CharacterHistoryUpdate) Mutation() *CharacterHistoryMutation {
 	return chu.mutation
@@ -116,6 +41,7 @@ func (chu *CharacterHistoryUpdate) Mutation() *CharacterHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (chu *CharacterHistoryUpdate) Save(ctx context.Context) (int, error) {
+	chu.defaults()
 	return withHooks(ctx, chu.sqlSave, chu.mutation, chu.hooks)
 }
 
@@ -141,20 +67,15 @@ func (chu *CharacterHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (chu *CharacterHistoryUpdate) check() error {
-	if v, ok := chu.mutation.Age(); ok {
-		if err := characterhistory.AgeValidator(v); err != nil {
-			return &ValidationError{Name: "age", err: fmt.Errorf(`ent: validator failed for field "CharacterHistory.age": %w`, err)}
-		}
+// defaults sets the default values of the builder before save.
+func (chu *CharacterHistoryUpdate) defaults() {
+	if _, ok := chu.mutation.UpdatedAt(); !ok {
+		v := characterhistory.UpdateDefaultUpdatedAt()
+		chu.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := chu.check(); err != nil {
-		return n, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(characterhistory.Table, characterhistory.Columns, sqlgraph.NewFieldSpec(characterhistory.FieldID, field.TypeInt))
 	if ps := chu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -163,34 +84,14 @@ func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 			}
 		}
 	}
-	if chu.mutation.RefCleared() {
-		_spec.ClearField(characterhistory.FieldRef, field.TypeInt)
-	}
 	if value, ok := chu.mutation.UpdatedAt(); ok {
 		_spec.SetField(characterhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := chu.mutation.Age(); ok {
-		_spec.SetField(characterhistory.FieldAge, field.TypeInt, value)
-	}
-	if value, ok := chu.mutation.AddedAge(); ok {
-		_spec.AddField(characterhistory.FieldAge, field.TypeInt, value)
-	}
-	if value, ok := chu.mutation.Name(); ok {
-		_spec.SetField(characterhistory.FieldName, field.TypeString, value)
-	}
-	if value, ok := chu.mutation.Nicknames(); ok {
-		_spec.SetField(characterhistory.FieldNicknames, field.TypeJSON, value)
-	}
-	if value, ok := chu.mutation.AppendedNicknames(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, characterhistory.FieldNicknames, value)
-		})
+	if chu.mutation.RefCleared() {
+		_spec.ClearField(characterhistory.FieldRef, field.TypeInt)
 	}
 	if chu.mutation.NicknamesCleared() {
 		_spec.ClearField(characterhistory.FieldNicknames, field.TypeJSON)
-	}
-	if value, ok := chu.mutation.Info(); ok {
-		_spec.SetField(characterhistory.FieldInfo, field.TypeJSON, value)
 	}
 	if chu.mutation.InfoCleared() {
 		_spec.ClearField(characterhistory.FieldInfo, field.TypeJSON)
@@ -221,79 +122,6 @@ func (chuo *CharacterHistoryUpdateOne) SetUpdatedAt(t time.Time) *CharacterHisto
 	return chuo
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (chuo *CharacterHistoryUpdateOne) SetNillableUpdatedAt(t *time.Time) *CharacterHistoryUpdateOne {
-	if t != nil {
-		chuo.SetUpdatedAt(*t)
-	}
-	return chuo
-}
-
-// SetAge sets the "age" field.
-func (chuo *CharacterHistoryUpdateOne) SetAge(i int) *CharacterHistoryUpdateOne {
-	chuo.mutation.ResetAge()
-	chuo.mutation.SetAge(i)
-	return chuo
-}
-
-// SetNillableAge sets the "age" field if the given value is not nil.
-func (chuo *CharacterHistoryUpdateOne) SetNillableAge(i *int) *CharacterHistoryUpdateOne {
-	if i != nil {
-		chuo.SetAge(*i)
-	}
-	return chuo
-}
-
-// AddAge adds i to the "age" field.
-func (chuo *CharacterHistoryUpdateOne) AddAge(i int) *CharacterHistoryUpdateOne {
-	chuo.mutation.AddAge(i)
-	return chuo
-}
-
-// SetName sets the "name" field.
-func (chuo *CharacterHistoryUpdateOne) SetName(s string) *CharacterHistoryUpdateOne {
-	chuo.mutation.SetName(s)
-	return chuo
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (chuo *CharacterHistoryUpdateOne) SetNillableName(s *string) *CharacterHistoryUpdateOne {
-	if s != nil {
-		chuo.SetName(*s)
-	}
-	return chuo
-}
-
-// SetNicknames sets the "nicknames" field.
-func (chuo *CharacterHistoryUpdateOne) SetNicknames(s []string) *CharacterHistoryUpdateOne {
-	chuo.mutation.SetNicknames(s)
-	return chuo
-}
-
-// AppendNicknames appends s to the "nicknames" field.
-func (chuo *CharacterHistoryUpdateOne) AppendNicknames(s []string) *CharacterHistoryUpdateOne {
-	chuo.mutation.AppendNicknames(s)
-	return chuo
-}
-
-// ClearNicknames clears the value of the "nicknames" field.
-func (chuo *CharacterHistoryUpdateOne) ClearNicknames() *CharacterHistoryUpdateOne {
-	chuo.mutation.ClearNicknames()
-	return chuo
-}
-
-// SetInfo sets the "info" field.
-func (chuo *CharacterHistoryUpdateOne) SetInfo(m map[string]interface{}) *CharacterHistoryUpdateOne {
-	chuo.mutation.SetInfo(m)
-	return chuo
-}
-
-// ClearInfo clears the value of the "info" field.
-func (chuo *CharacterHistoryUpdateOne) ClearInfo() *CharacterHistoryUpdateOne {
-	chuo.mutation.ClearInfo()
-	return chuo
-}
-
 // Mutation returns the CharacterHistoryMutation object of the builder.
 func (chuo *CharacterHistoryUpdateOne) Mutation() *CharacterHistoryMutation {
 	return chuo.mutation
@@ -314,6 +142,7 @@ func (chuo *CharacterHistoryUpdateOne) Select(field string, fields ...string) *C
 
 // Save executes the query and returns the updated CharacterHistory entity.
 func (chuo *CharacterHistoryUpdateOne) Save(ctx context.Context) (*CharacterHistory, error) {
+	chuo.defaults()
 	return withHooks(ctx, chuo.sqlSave, chuo.mutation, chuo.hooks)
 }
 
@@ -339,20 +168,15 @@ func (chuo *CharacterHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (chuo *CharacterHistoryUpdateOne) check() error {
-	if v, ok := chuo.mutation.Age(); ok {
-		if err := characterhistory.AgeValidator(v); err != nil {
-			return &ValidationError{Name: "age", err: fmt.Errorf(`ent: validator failed for field "CharacterHistory.age": %w`, err)}
-		}
+// defaults sets the default values of the builder before save.
+func (chuo *CharacterHistoryUpdateOne) defaults() {
+	if _, ok := chuo.mutation.UpdatedAt(); !ok {
+		v := characterhistory.UpdateDefaultUpdatedAt()
+		chuo.mutation.SetUpdatedAt(v)
 	}
-	return nil
 }
 
 func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *CharacterHistory, err error) {
-	if err := chuo.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(characterhistory.Table, characterhistory.Columns, sqlgraph.NewFieldSpec(characterhistory.FieldID, field.TypeInt))
 	id, ok := chuo.mutation.ID()
 	if !ok {
@@ -378,34 +202,14 @@ func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Char
 			}
 		}
 	}
-	if chuo.mutation.RefCleared() {
-		_spec.ClearField(characterhistory.FieldRef, field.TypeInt)
-	}
 	if value, ok := chuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(characterhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := chuo.mutation.Age(); ok {
-		_spec.SetField(characterhistory.FieldAge, field.TypeInt, value)
-	}
-	if value, ok := chuo.mutation.AddedAge(); ok {
-		_spec.AddField(characterhistory.FieldAge, field.TypeInt, value)
-	}
-	if value, ok := chuo.mutation.Name(); ok {
-		_spec.SetField(characterhistory.FieldName, field.TypeString, value)
-	}
-	if value, ok := chuo.mutation.Nicknames(); ok {
-		_spec.SetField(characterhistory.FieldNicknames, field.TypeJSON, value)
-	}
-	if value, ok := chuo.mutation.AppendedNicknames(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, characterhistory.FieldNicknames, value)
-		})
+	if chuo.mutation.RefCleared() {
+		_spec.ClearField(characterhistory.FieldRef, field.TypeInt)
 	}
 	if chuo.mutation.NicknamesCleared() {
 		_spec.ClearField(characterhistory.FieldNicknames, field.TypeJSON)
-	}
-	if value, ok := chuo.mutation.Info(); ok {
-		_spec.SetField(characterhistory.FieldInfo, field.TypeJSON, value)
 	}
 	if chuo.mutation.InfoCleared() {
 		_spec.ClearField(characterhistory.FieldInfo, field.TypeJSON)

@@ -34,28 +34,6 @@ func (rhu *ResidenceHistoryUpdate) SetUpdatedAt(t time.Time) *ResidenceHistoryUp
 	return rhu
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (rhu *ResidenceHistoryUpdate) SetNillableUpdatedAt(t *time.Time) *ResidenceHistoryUpdate {
-	if t != nil {
-		rhu.SetUpdatedAt(*t)
-	}
-	return rhu
-}
-
-// SetName sets the "name" field.
-func (rhu *ResidenceHistoryUpdate) SetName(s string) *ResidenceHistoryUpdate {
-	rhu.mutation.SetName(s)
-	return rhu
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (rhu *ResidenceHistoryUpdate) SetNillableName(s *string) *ResidenceHistoryUpdate {
-	if s != nil {
-		rhu.SetName(*s)
-	}
-	return rhu
-}
-
 // Mutation returns the ResidenceHistoryMutation object of the builder.
 func (rhu *ResidenceHistoryUpdate) Mutation() *ResidenceHistoryMutation {
 	return rhu.mutation
@@ -63,6 +41,7 @@ func (rhu *ResidenceHistoryUpdate) Mutation() *ResidenceHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (rhu *ResidenceHistoryUpdate) Save(ctx context.Context) (int, error) {
+	rhu.defaults()
 	return withHooks(ctx, rhu.sqlSave, rhu.mutation, rhu.hooks)
 }
 
@@ -88,6 +67,14 @@ func (rhu *ResidenceHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (rhu *ResidenceHistoryUpdate) defaults() {
+	if _, ok := rhu.mutation.UpdatedAt(); !ok {
+		v := residencehistory.UpdateDefaultUpdatedAt()
+		rhu.mutation.SetUpdatedAt(v)
+	}
+}
+
 func (rhu *ResidenceHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(residencehistory.Table, residencehistory.Columns, sqlgraph.NewFieldSpec(residencehistory.FieldID, field.TypeInt))
 	if ps := rhu.mutation.predicates; len(ps) > 0 {
@@ -97,17 +84,14 @@ func (rhu *ResidenceHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 			}
 		}
 	}
+	if value, ok := rhu.mutation.UpdatedAt(); ok {
+		_spec.SetField(residencehistory.FieldUpdatedAt, field.TypeTime, value)
+	}
 	if rhu.mutation.RefCleared() {
 		_spec.ClearField(residencehistory.FieldRef, field.TypeUUID)
 	}
 	if rhu.mutation.UpdatedByCleared() {
 		_spec.ClearField(residencehistory.FieldUpdatedBy, field.TypeInt)
-	}
-	if value, ok := rhu.mutation.UpdatedAt(); ok {
-		_spec.SetField(residencehistory.FieldUpdatedAt, field.TypeTime, value)
-	}
-	if value, ok := rhu.mutation.Name(); ok {
-		_spec.SetField(residencehistory.FieldName, field.TypeString, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, rhu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -135,28 +119,6 @@ func (rhuo *ResidenceHistoryUpdateOne) SetUpdatedAt(t time.Time) *ResidenceHisto
 	return rhuo
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (rhuo *ResidenceHistoryUpdateOne) SetNillableUpdatedAt(t *time.Time) *ResidenceHistoryUpdateOne {
-	if t != nil {
-		rhuo.SetUpdatedAt(*t)
-	}
-	return rhuo
-}
-
-// SetName sets the "name" field.
-func (rhuo *ResidenceHistoryUpdateOne) SetName(s string) *ResidenceHistoryUpdateOne {
-	rhuo.mutation.SetName(s)
-	return rhuo
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (rhuo *ResidenceHistoryUpdateOne) SetNillableName(s *string) *ResidenceHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetName(*s)
-	}
-	return rhuo
-}
-
 // Mutation returns the ResidenceHistoryMutation object of the builder.
 func (rhuo *ResidenceHistoryUpdateOne) Mutation() *ResidenceHistoryMutation {
 	return rhuo.mutation
@@ -177,6 +139,7 @@ func (rhuo *ResidenceHistoryUpdateOne) Select(field string, fields ...string) *R
 
 // Save executes the query and returns the updated ResidenceHistory entity.
 func (rhuo *ResidenceHistoryUpdateOne) Save(ctx context.Context) (*ResidenceHistory, error) {
+	rhuo.defaults()
 	return withHooks(ctx, rhuo.sqlSave, rhuo.mutation, rhuo.hooks)
 }
 
@@ -199,6 +162,14 @@ func (rhuo *ResidenceHistoryUpdateOne) Exec(ctx context.Context) error {
 func (rhuo *ResidenceHistoryUpdateOne) ExecX(ctx context.Context) {
 	if err := rhuo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (rhuo *ResidenceHistoryUpdateOne) defaults() {
+	if _, ok := rhuo.mutation.UpdatedAt(); !ok {
+		v := residencehistory.UpdateDefaultUpdatedAt()
+		rhuo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -228,17 +199,14 @@ func (rhuo *ResidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Resi
 			}
 		}
 	}
+	if value, ok := rhuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(residencehistory.FieldUpdatedAt, field.TypeTime, value)
+	}
 	if rhuo.mutation.RefCleared() {
 		_spec.ClearField(residencehistory.FieldRef, field.TypeUUID)
 	}
 	if rhuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(residencehistory.FieldUpdatedBy, field.TypeInt)
-	}
-	if value, ok := rhuo.mutation.UpdatedAt(); ok {
-		_spec.SetField(residencehistory.FieldUpdatedAt, field.TypeTime, value)
-	}
-	if value, ok := rhuo.mutation.Name(); ok {
-		_spec.SetField(residencehistory.FieldName, field.TypeString, value)
 	}
 	_node = &ResidenceHistory{config: rhuo.config}
 	_spec.Assign = _node.assignValues

@@ -36,14 +36,6 @@ func (ou *OrganizationUpdate) SetUpdatedAt(t time.Time) *OrganizationUpdate {
 	return ou
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ou *OrganizationUpdate) SetNillableUpdatedAt(t *time.Time) *OrganizationUpdate {
-	if t != nil {
-		ou.SetUpdatedAt(*t)
-	}
-	return ou
-}
-
 // SetName sets the "name" field.
 func (ou *OrganizationUpdate) SetName(s string) *OrganizationUpdate {
 	ou.mutation.SetName(s)
@@ -113,6 +105,7 @@ func (ou *OrganizationUpdate) RemoveOrganizationStores(s ...*Store) *Organizatio
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ou *OrganizationUpdate) Save(ctx context.Context) (int, error) {
+	ou.defaults()
 	return withHooks(ctx, ou.sqlSave, ou.mutation, ou.hooks)
 }
 
@@ -135,6 +128,14 @@ func (ou *OrganizationUpdate) Exec(ctx context.Context) error {
 func (ou *OrganizationUpdate) ExecX(ctx context.Context) {
 	if err := ou.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (ou *OrganizationUpdate) defaults() {
+	if _, ok := ou.mutation.UpdatedAt(); !ok {
+		v := organization.UpdateDefaultUpdatedAt()
+		ou.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -230,14 +231,6 @@ func (ouo *OrganizationUpdateOne) SetUpdatedAt(t time.Time) *OrganizationUpdateO
 	return ouo
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (ouo *OrganizationUpdateOne) SetNillableUpdatedAt(t *time.Time) *OrganizationUpdateOne {
-	if t != nil {
-		ouo.SetUpdatedAt(*t)
-	}
-	return ouo
-}
-
 // SetName sets the "name" field.
 func (ouo *OrganizationUpdateOne) SetName(s string) *OrganizationUpdateOne {
 	ouo.mutation.SetName(s)
@@ -320,6 +313,7 @@ func (ouo *OrganizationUpdateOne) Select(field string, fields ...string) *Organi
 
 // Save executes the query and returns the updated Organization entity.
 func (ouo *OrganizationUpdateOne) Save(ctx context.Context) (*Organization, error) {
+	ouo.defaults()
 	return withHooks(ctx, ouo.sqlSave, ouo.mutation, ouo.hooks)
 }
 
@@ -342,6 +336,14 @@ func (ouo *OrganizationUpdateOne) Exec(ctx context.Context) error {
 func (ouo *OrganizationUpdateOne) ExecX(ctx context.Context) {
 	if err := ouo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (ouo *OrganizationUpdateOne) defaults() {
+	if _, ok := ouo.mutation.UpdatedAt(); !ok {
+		v := organization.UpdateDefaultUpdatedAt()
+		ouo.mutation.SetUpdatedAt(v)
 	}
 }
 

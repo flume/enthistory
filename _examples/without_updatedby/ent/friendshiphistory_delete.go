@@ -3,14 +3,13 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/friendshiphistory"
+	"_examples/without_updatedby/ent/predicate"
 	"context"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"_examples/without_updatedby/ent/friendshiphistory"
-	"_examples/without_updatedby/ent/predicate"
 )
 
 // FriendshipHistoryDelete is the builder for deleting a FriendshipHistory entity.

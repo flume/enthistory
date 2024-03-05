@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
 )
@@ -24,7 +25,7 @@ type CharacterHistory struct {
 	// Operation holds the value of the "operation" field.
 	Operation enthistory.OpType `json:"operation,omitempty"`
 	// Ref holds the value of the "ref" field.
-	Ref int `json:"ref,omitempty"`
+	Ref uuid.UUID `json:"ref,omitempty"`
 	// Age holds the value of the "age" field.
 	Age int `json:"age,omitempty"`
 	// Name holds the value of the "name" field.
@@ -37,12 +38,14 @@ func (*CharacterHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case characterhistory.FieldID, characterhistory.FieldRef, characterhistory.FieldAge:
+		case characterhistory.FieldID, characterhistory.FieldAge:
 			values[i] = new(sql.NullInt64)
 		case characterhistory.FieldOperation, characterhistory.FieldName:
 			values[i] = new(sql.NullString)
 		case characterhistory.FieldHistoryTime:
 			values[i] = new(sql.NullTime)
+		case characterhistory.FieldRef:
+			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -77,10 +80,10 @@ func (ch *CharacterHistory) assignValues(columns []string, values []any) error {
 				ch.Operation = enthistory.OpType(value.String)
 			}
 		case characterhistory.FieldRef:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
-			} else if value.Valid {
-				ch.Ref = int(value.Int64)
+			} else if value != nil {
+				ch.Ref = *value
 			}
 		case characterhistory.FieldAge:
 			if value, ok := values[i].(*sql.NullInt64); !ok {

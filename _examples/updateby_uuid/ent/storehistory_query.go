@@ -261,12 +261,12 @@ func (shq *StoreHistoryQuery) Clone() *StoreHistoryQuery {
 // Example:
 //
 //	var v []struct {
-//		HistoryTime time.Time `json:"history_time,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.StoreHistory.Query().
-//		GroupBy(storehistory.FieldHistoryTime).
+//		GroupBy(storehistory.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (shq *StoreHistoryQuery) GroupBy(field string, fields ...string) *StoreHistoryGroupBy {
@@ -284,11 +284,11 @@ func (shq *StoreHistoryQuery) GroupBy(field string, fields ...string) *StoreHist
 // Example:
 //
 //	var v []struct {
-//		HistoryTime time.Time `json:"history_time,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.StoreHistory.Query().
-//		Select(storehistory.FieldHistoryTime).
+//		Select(storehistory.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (shq *StoreHistoryQuery) Select(fields ...string) *StoreHistorySelect {
 	shq.ctx.Fields = append(shq.ctx.Fields, fields...)

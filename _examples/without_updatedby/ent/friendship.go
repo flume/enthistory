@@ -3,15 +3,14 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/character"
+	"_examples/without_updatedby/ent/friendship"
 	"fmt"
 	"strings"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-
-	"_examples/without_updatedby/ent/character"
-	"_examples/without_updatedby/ent/friendship"
 )
 
 // Friendship is the model entity for the Friendship schema.
@@ -47,12 +46,10 @@ type FriendshipEdges struct {
 // CharacterOrErr returns the Character value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e FriendshipEdges) CharacterOrErr() (*Character, error) {
-	if e.loadedTypes[0] {
-		if e.Character == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: character.Label}
-		}
+	if e.Character != nil {
 		return e.Character, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: character.Label}
 	}
 	return nil, &NotLoadedError{edge: "character"}
 }
@@ -60,12 +57,10 @@ func (e FriendshipEdges) CharacterOrErr() (*Character, error) {
 // FriendOrErr returns the Friend value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e FriendshipEdges) FriendOrErr() (*Character, error) {
-	if e.loadedTypes[1] {
-		if e.Friend == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: character.Label}
-		}
+	if e.Friend != nil {
 		return e.Friend, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: character.Label}
 	}
 	return nil, &NotLoadedError{edge: "friend"}
 }

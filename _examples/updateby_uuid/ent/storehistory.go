@@ -20,6 +20,10 @@ type StoreHistory struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// HistoryTime holds the value of the "history_time" field.
 	HistoryTime time.Time `json:"history_time,omitempty"`
 	// Operation holds the value of the "operation" field.
@@ -28,10 +32,6 @@ type StoreHistory struct {
 	Ref uuid.UUID `json:"ref,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy *uuid.UUID `json:"updated_by,omitempty"`
-	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// Region holds the value of the "region" field.
@@ -52,7 +52,7 @@ func (*StoreHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case storehistory.FieldOperation, storehistory.FieldName, storehistory.FieldRegion:
 			values[i] = new(sql.NullString)
-		case storehistory.FieldHistoryTime, storehistory.FieldCreatedAt, storehistory.FieldUpdatedAt:
+		case storehistory.FieldCreatedAt, storehistory.FieldUpdatedAt, storehistory.FieldHistoryTime:
 			values[i] = new(sql.NullTime)
 		case storehistory.FieldRef, storehistory.FieldOrganizationID:
 			values[i] = new(uuid.UUID)
@@ -77,6 +77,18 @@ func (sh *StoreHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			sh.ID = int(value.Int64)
+		case storehistory.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				sh.CreatedAt = value.Time
+			}
+		case storehistory.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				sh.UpdatedAt = value.Time
+			}
 		case storehistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
@@ -101,18 +113,6 @@ func (sh *StoreHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sh.UpdatedBy = new(uuid.UUID)
 				*sh.UpdatedBy = *value.S.(*uuid.UUID)
-			}
-		case storehistory.FieldCreatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field created_at", values[i])
-			} else if value.Valid {
-				sh.CreatedAt = value.Time
-			}
-		case storehistory.FieldUpdatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
-			} else if value.Valid {
-				sh.UpdatedAt = value.Time
 			}
 		case storehistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -168,6 +168,12 @@ func (sh *StoreHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("StoreHistory(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", sh.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(sh.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(sh.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
 	builder.WriteString("history_time=")
 	builder.WriteString(sh.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
@@ -181,12 +187,6 @@ func (sh *StoreHistory) String() string {
 		builder.WriteString("updated_by=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
-	builder.WriteString(", ")
-	builder.WriteString("created_at=")
-	builder.WriteString(sh.CreatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("updated_at=")
-	builder.WriteString(sh.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(sh.Name)

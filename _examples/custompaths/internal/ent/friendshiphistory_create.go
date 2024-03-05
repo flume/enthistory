@@ -11,6 +11,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
 )
@@ -43,28 +44,34 @@ func (fhc *FriendshipHistoryCreate) SetOperation(et enthistory.OpType) *Friendsh
 }
 
 // SetRef sets the "ref" field.
-func (fhc *FriendshipHistoryCreate) SetRef(i int) *FriendshipHistoryCreate {
-	fhc.mutation.SetRef(i)
+func (fhc *FriendshipHistoryCreate) SetRef(u uuid.UUID) *FriendshipHistoryCreate {
+	fhc.mutation.SetRef(u)
 	return fhc
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (fhc *FriendshipHistoryCreate) SetNillableRef(i *int) *FriendshipHistoryCreate {
-	if i != nil {
-		fhc.SetRef(*i)
+func (fhc *FriendshipHistoryCreate) SetNillableRef(u *uuid.UUID) *FriendshipHistoryCreate {
+	if u != nil {
+		fhc.SetRef(*u)
 	}
 	return fhc
 }
 
 // SetCharacterID sets the "character_id" field.
-func (fhc *FriendshipHistoryCreate) SetCharacterID(i int) *FriendshipHistoryCreate {
-	fhc.mutation.SetCharacterID(i)
+func (fhc *FriendshipHistoryCreate) SetCharacterID(u uuid.UUID) *FriendshipHistoryCreate {
+	fhc.mutation.SetCharacterID(u)
 	return fhc
 }
 
 // SetFriendID sets the "friend_id" field.
-func (fhc *FriendshipHistoryCreate) SetFriendID(i int) *FriendshipHistoryCreate {
-	fhc.mutation.SetFriendID(i)
+func (fhc *FriendshipHistoryCreate) SetFriendID(u uuid.UUID) *FriendshipHistoryCreate {
+	fhc.mutation.SetFriendID(u)
+	return fhc
+}
+
+// SetID sets the "id" field.
+func (fhc *FriendshipHistoryCreate) SetID(i int) *FriendshipHistoryCreate {
+	fhc.mutation.SetID(i)
 	return fhc
 }
 
@@ -142,8 +149,10 @@ func (fhc *FriendshipHistoryCreate) sqlSave(ctx context.Context) (*FriendshipHis
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int(id)
+	}
 	fhc.mutation.id = &_node.ID
 	fhc.mutation.done = true
 	return _node, nil
@@ -154,6 +163,10 @@ func (fhc *FriendshipHistoryCreate) createSpec() (*FriendshipHistory, *sqlgraph.
 		_node = &FriendshipHistory{config: fhc.config}
 		_spec = sqlgraph.NewCreateSpec(friendshiphistory.Table, sqlgraph.NewFieldSpec(friendshiphistory.FieldID, field.TypeInt))
 	)
+	if id, ok := fhc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := fhc.mutation.HistoryTime(); ok {
 		_spec.SetField(friendshiphistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
@@ -163,15 +176,15 @@ func (fhc *FriendshipHistoryCreate) createSpec() (*FriendshipHistory, *sqlgraph.
 		_node.Operation = value
 	}
 	if value, ok := fhc.mutation.Ref(); ok {
-		_spec.SetField(friendshiphistory.FieldRef, field.TypeInt, value)
+		_spec.SetField(friendshiphistory.FieldRef, field.TypeUUID, value)
 		_node.Ref = value
 	}
 	if value, ok := fhc.mutation.CharacterID(); ok {
-		_spec.SetField(friendshiphistory.FieldCharacterID, field.TypeInt, value)
+		_spec.SetField(friendshiphistory.FieldCharacterID, field.TypeUUID, value)
 		_node.CharacterID = value
 	}
 	if value, ok := fhc.mutation.FriendID(); ok {
-		_spec.SetField(friendshiphistory.FieldFriendID, field.TypeInt, value)
+		_spec.SetField(friendshiphistory.FieldFriendID, field.TypeUUID, value)
 		_node.FriendID = value
 	}
 	return _node, _spec
@@ -222,7 +235,7 @@ func (fhcb *FriendshipHistoryCreateBulk) Save(ctx context.Context) ([]*Friendshi
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
 					nodes[i].ID = int(id)
 				}

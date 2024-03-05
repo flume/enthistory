@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // FriendshipQuery is the builder for querying Friendship entities.
@@ -128,8 +129,8 @@ func (fq *FriendshipQuery) FirstX(ctx context.Context) *Friendship {
 
 // FirstID returns the first Friendship ID from the query.
 // Returns a *NotFoundError when no Friendship ID was found.
-func (fq *FriendshipQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (fq *FriendshipQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = fq.Limit(1).IDs(setContextOp(ctx, fq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -141,7 +142,7 @@ func (fq *FriendshipQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (fq *FriendshipQuery) FirstIDX(ctx context.Context) int {
+func (fq *FriendshipQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := fq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -179,8 +180,8 @@ func (fq *FriendshipQuery) OnlyX(ctx context.Context) *Friendship {
 // OnlyID is like Only, but returns the only Friendship ID in the query.
 // Returns a *NotSingularError when more than one Friendship ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (fq *FriendshipQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (fq *FriendshipQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = fq.Limit(2).IDs(setContextOp(ctx, fq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -196,7 +197,7 @@ func (fq *FriendshipQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (fq *FriendshipQuery) OnlyIDX(ctx context.Context) int {
+func (fq *FriendshipQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := fq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -224,7 +225,7 @@ func (fq *FriendshipQuery) AllX(ctx context.Context) []*Friendship {
 }
 
 // IDs executes the query and returns a list of Friendship IDs.
-func (fq *FriendshipQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (fq *FriendshipQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if fq.ctx.Unique == nil && fq.path != nil {
 		fq.Unique(true)
 	}
@@ -236,7 +237,7 @@ func (fq *FriendshipQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (fq *FriendshipQuery) IDsX(ctx context.Context) []int {
+func (fq *FriendshipQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := fq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -332,7 +333,7 @@ func (fq *FriendshipQuery) WithFriend(opts ...func(*CharacterQuery)) *Friendship
 // Example:
 //
 //	var v []struct {
-//		CharacterID int `json:"character_id,omitempty"`
+//		CharacterID uuid.UUID `json:"character_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -355,7 +356,7 @@ func (fq *FriendshipQuery) GroupBy(field string, fields ...string) *FriendshipGr
 // Example:
 //
 //	var v []struct {
-//		CharacterID int `json:"character_id,omitempty"`
+//		CharacterID uuid.UUID `json:"character_id,omitempty"`
 //	}
 //
 //	client.Friendship.Query().
@@ -443,8 +444,8 @@ func (fq *FriendshipQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*F
 }
 
 func (fq *FriendshipQuery) loadCharacter(ctx context.Context, query *CharacterQuery, nodes []*Friendship, init func(*Friendship), assign func(*Friendship, *Character)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*Friendship)
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*Friendship)
 	for i := range nodes {
 		fk := nodes[i].CharacterID
 		if _, ok := nodeids[fk]; !ok {
@@ -472,8 +473,8 @@ func (fq *FriendshipQuery) loadCharacter(ctx context.Context, query *CharacterQu
 	return nil
 }
 func (fq *FriendshipQuery) loadFriend(ctx context.Context, query *CharacterQuery, nodes []*Friendship, init func(*Friendship), assign func(*Friendship, *Character)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*Friendship)
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*Friendship)
 	for i := range nodes {
 		fk := nodes[i].FriendID
 		if _, ok := nodeids[fk]; !ok {
@@ -511,7 +512,7 @@ func (fq *FriendshipQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (fq *FriendshipQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(friendship.Table, friendship.Columns, sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(friendship.Table, friendship.Columns, sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeUUID))
 	_spec.From = fq.sql
 	if unique := fq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

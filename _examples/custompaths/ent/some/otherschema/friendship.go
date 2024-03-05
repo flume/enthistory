@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // Friendship holds the schema definition for the Friendship entity.
@@ -25,8 +26,9 @@ func (Friendship) Annotations() []schema.Annotation {
 // Fields of the Friendship.
 func (Friendship) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int("character_id"),
-		field.Int("friend_id"),
+		field.UUID("id", uuid.New()).Default(uuid.New),
+		field.UUID("character_id", uuid.New()),
+		field.UUID("friend_id", uuid.New()),
 	}
 }
 

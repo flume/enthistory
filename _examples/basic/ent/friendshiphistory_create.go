@@ -22,6 +22,34 @@ type FriendshipHistoryCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (fhc *FriendshipHistoryCreate) SetCreatedAt(t time.Time) *FriendshipHistoryCreate {
+	fhc.mutation.SetCreatedAt(t)
+	return fhc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (fhc *FriendshipHistoryCreate) SetNillableCreatedAt(t *time.Time) *FriendshipHistoryCreate {
+	if t != nil {
+		fhc.SetCreatedAt(*t)
+	}
+	return fhc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (fhc *FriendshipHistoryCreate) SetUpdatedAt(t time.Time) *FriendshipHistoryCreate {
+	fhc.mutation.SetUpdatedAt(t)
+	return fhc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (fhc *FriendshipHistoryCreate) SetNillableUpdatedAt(t *time.Time) *FriendshipHistoryCreate {
+	if t != nil {
+		fhc.SetUpdatedAt(*t)
+	}
+	return fhc
+}
+
 // SetHistoryTime sets the "history_time" field.
 func (fhc *FriendshipHistoryCreate) SetHistoryTime(t time.Time) *FriendshipHistoryCreate {
 	fhc.mutation.SetHistoryTime(t)
@@ -66,34 +94,6 @@ func (fhc *FriendshipHistoryCreate) SetUpdatedBy(i int) *FriendshipHistoryCreate
 func (fhc *FriendshipHistoryCreate) SetNillableUpdatedBy(i *int) *FriendshipHistoryCreate {
 	if i != nil {
 		fhc.SetUpdatedBy(*i)
-	}
-	return fhc
-}
-
-// SetCreatedAt sets the "created_at" field.
-func (fhc *FriendshipHistoryCreate) SetCreatedAt(t time.Time) *FriendshipHistoryCreate {
-	fhc.mutation.SetCreatedAt(t)
-	return fhc
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (fhc *FriendshipHistoryCreate) SetNillableCreatedAt(t *time.Time) *FriendshipHistoryCreate {
-	if t != nil {
-		fhc.SetCreatedAt(*t)
-	}
-	return fhc
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (fhc *FriendshipHistoryCreate) SetUpdatedAt(t time.Time) *FriendshipHistoryCreate {
-	fhc.mutation.SetUpdatedAt(t)
-	return fhc
-}
-
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (fhc *FriendshipHistoryCreate) SetNillableUpdatedAt(t *time.Time) *FriendshipHistoryCreate {
-	if t != nil {
-		fhc.SetUpdatedAt(*t)
 	}
 	return fhc
 }
@@ -151,10 +151,6 @@ func (fhc *FriendshipHistoryCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (fhc *FriendshipHistoryCreate) defaults() {
-	if _, ok := fhc.mutation.HistoryTime(); !ok {
-		v := friendshiphistory.DefaultHistoryTime()
-		fhc.mutation.SetHistoryTime(v)
-	}
 	if _, ok := fhc.mutation.CreatedAt(); !ok {
 		v := friendshiphistory.DefaultCreatedAt()
 		fhc.mutation.SetCreatedAt(v)
@@ -163,10 +159,20 @@ func (fhc *FriendshipHistoryCreate) defaults() {
 		v := friendshiphistory.DefaultUpdatedAt()
 		fhc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := fhc.mutation.HistoryTime(); !ok {
+		v := friendshiphistory.DefaultHistoryTime()
+		fhc.mutation.SetHistoryTime(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
 func (fhc *FriendshipHistoryCreate) check() error {
+	if _, ok := fhc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "FriendshipHistory.created_at"`)}
+	}
+	if _, ok := fhc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "FriendshipHistory.updated_at"`)}
+	}
 	if _, ok := fhc.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`ent: missing required field "FriendshipHistory.history_time"`)}
 	}
@@ -177,12 +183,6 @@ func (fhc *FriendshipHistoryCreate) check() error {
 		if err := friendshiphistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`ent: validator failed for field "FriendshipHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := fhc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "FriendshipHistory.created_at"`)}
-	}
-	if _, ok := fhc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "FriendshipHistory.updated_at"`)}
 	}
 	if _, ok := fhc.mutation.CharacterID(); !ok {
 		return &ValidationError{Name: "character_id", err: errors.New(`ent: missing required field "FriendshipHistory.character_id"`)}
@@ -222,6 +222,14 @@ func (fhc *FriendshipHistoryCreate) createSpec() (*FriendshipHistory, *sqlgraph.
 		_node.ID = id
 		_spec.ID.Value = id
 	}
+	if value, ok := fhc.mutation.CreatedAt(); ok {
+		_spec.SetField(friendshiphistory.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := fhc.mutation.UpdatedAt(); ok {
+		_spec.SetField(friendshiphistory.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
 	if value, ok := fhc.mutation.HistoryTime(); ok {
 		_spec.SetField(friendshiphistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
@@ -237,14 +245,6 @@ func (fhc *FriendshipHistoryCreate) createSpec() (*FriendshipHistory, *sqlgraph.
 	if value, ok := fhc.mutation.UpdatedBy(); ok {
 		_spec.SetField(friendshiphistory.FieldUpdatedBy, field.TypeInt, value)
 		_node.UpdatedBy = &value
-	}
-	if value, ok := fhc.mutation.CreatedAt(); ok {
-		_spec.SetField(friendshiphistory.FieldCreatedAt, field.TypeTime, value)
-		_node.CreatedAt = value
-	}
-	if value, ok := fhc.mutation.UpdatedAt(); ok {
-		_spec.SetField(friendshiphistory.FieldUpdatedAt, field.TypeTime, value)
-		_node.UpdatedAt = value
 	}
 	if value, ok := fhc.mutation.CharacterID(); ok {
 		_spec.SetField(friendshiphistory.FieldCharacterID, field.TypeInt, value)

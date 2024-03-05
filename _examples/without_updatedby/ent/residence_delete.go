@@ -3,14 +3,13 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/predicate"
+	"_examples/without_updatedby/ent/residence"
 	"context"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"_examples/without_updatedby/ent/predicate"
-	"_examples/without_updatedby/ent/residence"
 )
 
 // ResidenceDelete is the builder for deleting a Residence entity.

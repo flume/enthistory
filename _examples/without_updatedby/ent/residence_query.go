@@ -3,6 +3,9 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/character"
+	"_examples/without_updatedby/ent/predicate"
+	"_examples/without_updatedby/ent/residence"
 	"context"
 	"database/sql/driver"
 	"fmt"
@@ -12,10 +15,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
-
-	"_examples/without_updatedby/ent/character"
-	"_examples/without_updatedby/ent/predicate"
-	"_examples/without_updatedby/ent/residence"
 )
 
 // ResidenceQuery is the builder for querying Residence entities.

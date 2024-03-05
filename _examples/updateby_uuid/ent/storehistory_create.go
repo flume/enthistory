@@ -23,6 +23,34 @@ type StoreHistoryCreate struct {
 	hooks    []Hook
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (shc *StoreHistoryCreate) SetCreatedAt(t time.Time) *StoreHistoryCreate {
+	shc.mutation.SetCreatedAt(t)
+	return shc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (shc *StoreHistoryCreate) SetNillableCreatedAt(t *time.Time) *StoreHistoryCreate {
+	if t != nil {
+		shc.SetCreatedAt(*t)
+	}
+	return shc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (shc *StoreHistoryCreate) SetUpdatedAt(t time.Time) *StoreHistoryCreate {
+	shc.mutation.SetUpdatedAt(t)
+	return shc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (shc *StoreHistoryCreate) SetNillableUpdatedAt(t *time.Time) *StoreHistoryCreate {
+	if t != nil {
+		shc.SetUpdatedAt(*t)
+	}
+	return shc
+}
+
 // SetHistoryTime sets the "history_time" field.
 func (shc *StoreHistoryCreate) SetHistoryTime(t time.Time) *StoreHistoryCreate {
 	shc.mutation.SetHistoryTime(t)
@@ -67,34 +95,6 @@ func (shc *StoreHistoryCreate) SetUpdatedBy(u uuid.UUID) *StoreHistoryCreate {
 func (shc *StoreHistoryCreate) SetNillableUpdatedBy(u *uuid.UUID) *StoreHistoryCreate {
 	if u != nil {
 		shc.SetUpdatedBy(*u)
-	}
-	return shc
-}
-
-// SetCreatedAt sets the "created_at" field.
-func (shc *StoreHistoryCreate) SetCreatedAt(t time.Time) *StoreHistoryCreate {
-	shc.mutation.SetCreatedAt(t)
-	return shc
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (shc *StoreHistoryCreate) SetNillableCreatedAt(t *time.Time) *StoreHistoryCreate {
-	if t != nil {
-		shc.SetCreatedAt(*t)
-	}
-	return shc
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (shc *StoreHistoryCreate) SetUpdatedAt(t time.Time) *StoreHistoryCreate {
-	shc.mutation.SetUpdatedAt(t)
-	return shc
-}
-
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (shc *StoreHistoryCreate) SetNillableUpdatedAt(t *time.Time) *StoreHistoryCreate {
-	if t != nil {
-		shc.SetUpdatedAt(*t)
 	}
 	return shc
 }
@@ -158,10 +158,6 @@ func (shc *StoreHistoryCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (shc *StoreHistoryCreate) defaults() {
-	if _, ok := shc.mutation.HistoryTime(); !ok {
-		v := storehistory.DefaultHistoryTime()
-		shc.mutation.SetHistoryTime(v)
-	}
 	if _, ok := shc.mutation.CreatedAt(); !ok {
 		v := storehistory.DefaultCreatedAt()
 		shc.mutation.SetCreatedAt(v)
@@ -170,10 +166,20 @@ func (shc *StoreHistoryCreate) defaults() {
 		v := storehistory.DefaultUpdatedAt()
 		shc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := shc.mutation.HistoryTime(); !ok {
+		v := storehistory.DefaultHistoryTime()
+		shc.mutation.SetHistoryTime(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
 func (shc *StoreHistoryCreate) check() error {
+	if _, ok := shc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "StoreHistory.created_at"`)}
+	}
+	if _, ok := shc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "StoreHistory.updated_at"`)}
+	}
 	if _, ok := shc.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`ent: missing required field "StoreHistory.history_time"`)}
 	}
@@ -184,12 +190,6 @@ func (shc *StoreHistoryCreate) check() error {
 		if err := storehistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`ent: validator failed for field "StoreHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := shc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "StoreHistory.created_at"`)}
-	}
-	if _, ok := shc.mutation.UpdatedAt(); !ok {
-		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "StoreHistory.updated_at"`)}
 	}
 	if _, ok := shc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "StoreHistory.name"`)}
@@ -232,6 +232,14 @@ func (shc *StoreHistoryCreate) createSpec() (*StoreHistory, *sqlgraph.CreateSpec
 		_node.ID = id
 		_spec.ID.Value = id
 	}
+	if value, ok := shc.mutation.CreatedAt(); ok {
+		_spec.SetField(storehistory.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := shc.mutation.UpdatedAt(); ok {
+		_spec.SetField(storehistory.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
 	if value, ok := shc.mutation.HistoryTime(); ok {
 		_spec.SetField(storehistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
@@ -247,14 +255,6 @@ func (shc *StoreHistoryCreate) createSpec() (*StoreHistory, *sqlgraph.CreateSpec
 	if value, ok := shc.mutation.UpdatedBy(); ok {
 		_spec.SetField(storehistory.FieldUpdatedBy, field.TypeUUID, value)
 		_node.UpdatedBy = &value
-	}
-	if value, ok := shc.mutation.CreatedAt(); ok {
-		_spec.SetField(storehistory.FieldCreatedAt, field.TypeTime, value)
-		_node.CreatedAt = value
-	}
-	if value, ok := shc.mutation.UpdatedAt(); ok {
-		_spec.SetField(storehistory.FieldUpdatedAt, field.TypeTime, value)
-		_node.UpdatedAt = value
 	}
 	if value, ok := shc.mutation.Name(); ok {
 		_spec.SetField(storehistory.FieldName, field.TypeString, value)

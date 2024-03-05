@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"_examples/without_updatedby/ent/character"
+	"_examples/without_updatedby/ent/friendship"
 	"context"
 	"errors"
 	"fmt"
@@ -10,9 +12,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-
-	"_examples/without_updatedby/ent/character"
-	"_examples/without_updatedby/ent/friendship"
 )
 
 // FriendshipCreate is the builder for creating a Friendship entity.

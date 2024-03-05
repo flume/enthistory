@@ -40,8 +40,7 @@ type HistoryDiff[T any] struct {
 }
 
 var (
-	MismatchedRefError    = errors.New("cannot take diff of histories with different Refs")
-	IdenticalHistoryError = errors.New("cannot take diff of identical history")
+	MismatchedRefError = errors.New("cannot take diff of histories with different Refs")
 )
 
 func (oh *OrganizationHistory) changes(new *OrganizationHistory) []Change {
@@ -65,25 +64,18 @@ func (oh *OrganizationHistory) Diff(history *OrganizationHistory) (*HistoryDiff[
 	if oh.Ref != history.Ref {
 		return nil, MismatchedRefError
 	}
-
-	ohUnix, historyUnix := oh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	ohOlder := ohUnix < historyUnix || (ohUnix == historyUnix && oh.ID < history.ID)
-	historyOlder := ohUnix > historyUnix || (ohUnix == historyUnix && oh.ID > history.ID)
-
-	if ohOlder {
-		return &HistoryDiff[OrganizationHistory]{
-			Old:     oh,
-			New:     history,
-			Changes: oh.changes(history),
-		}, nil
-	} else if historyOlder {
+	if oh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (oh.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && oh.ID > history.ID) {
 		return &HistoryDiff[OrganizationHistory]{
 			Old:     history,
 			New:     oh,
 			Changes: history.changes(oh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return &HistoryDiff[OrganizationHistory]{
+		Old:     oh,
+		New:     history,
+		Changes: oh.changes(history),
+	}, nil
 }
 
 func (sh *StoreHistory) changes(new *StoreHistory) []Change {
@@ -110,25 +102,18 @@ func (sh *StoreHistory) Diff(history *StoreHistory) (*HistoryDiff[StoreHistory],
 	if sh.Ref != history.Ref {
 		return nil, MismatchedRefError
 	}
-
-	shUnix, historyUnix := sh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	shOlder := shUnix < historyUnix || (shUnix == historyUnix && sh.ID < history.ID)
-	historyOlder := shUnix > historyUnix || (shUnix == historyUnix && sh.ID > history.ID)
-
-	if shOlder {
-		return &HistoryDiff[StoreHistory]{
-			Old:     sh,
-			New:     history,
-			Changes: sh.changes(history),
-		}, nil
-	} else if historyOlder {
+	if sh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (sh.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && sh.ID > history.ID) {
 		return &HistoryDiff[StoreHistory]{
 			Old:     history,
 			New:     sh,
 			Changes: history.changes(sh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return &HistoryDiff[StoreHistory]{
+		Old:     sh,
+		New:     history,
+		Changes: sh.changes(history),
+	}, nil
 }
 
 func (c Change) String(op enthistory.OpType) string {
@@ -237,7 +222,7 @@ func auditOrganizationHistory(ctx context.Context, config config) ([][]string, e
 
 		for i := 0; i < len(histories); i++ {
 			curr := histories[i]
-			record := record{
+			r := record{
 				Table:       "OrganizationHistory",
 				RefId:       curr.Ref,
 				HistoryTime: curr.HistoryTime,
@@ -246,17 +231,17 @@ func auditOrganizationHistory(ctx context.Context, config config) ([][]string, e
 			}
 			switch curr.Operation {
 			case enthistory.OpTypeInsert:
-				record.Changes = (&OrganizationHistory{}).changes(curr)
+				r.Changes = (&OrganizationHistory{}).changes(curr)
 			case enthistory.OpTypeDelete:
-				record.Changes = curr.changes(&OrganizationHistory{})
+				r.Changes = curr.changes(&OrganizationHistory{})
 			default:
 				if i == 0 {
-					record.Changes = (&OrganizationHistory{}).changes(curr)
+					r.Changes = (&OrganizationHistory{}).changes(curr)
 				} else {
-					record.Changes = histories[i-1].changes(curr)
+					r.Changes = histories[i-1].changes(curr)
 				}
 			}
-			records = append(records, record.toRow())
+			records = append(records, r.toRow())
 		}
 	}
 	return records, nil
@@ -290,7 +275,7 @@ func auditStoreHistory(ctx context.Context, config config) ([][]string, error) {
 
 		for i := 0; i < len(histories); i++ {
 			curr := histories[i]
-			record := record{
+			r := record{
 				Table:       "StoreHistory",
 				RefId:       curr.Ref,
 				HistoryTime: curr.HistoryTime,
@@ -299,17 +284,17 @@ func auditStoreHistory(ctx context.Context, config config) ([][]string, error) {
 			}
 			switch curr.Operation {
 			case enthistory.OpTypeInsert:
-				record.Changes = (&StoreHistory{}).changes(curr)
+				r.Changes = (&StoreHistory{}).changes(curr)
 			case enthistory.OpTypeDelete:
-				record.Changes = curr.changes(&StoreHistory{})
+				r.Changes = curr.changes(&StoreHistory{})
 			default:
 				if i == 0 {
-					record.Changes = (&StoreHistory{}).changes(curr)
+					r.Changes = (&StoreHistory{}).changes(curr)
 				} else {
-					record.Changes = histories[i-1].changes(curr)
+					r.Changes = histories[i-1].changes(curr)
 				}
 			}
-			records = append(records, record.toRow())
+			records = append(records, r.toRow())
 		}
 	}
 	return records, nil

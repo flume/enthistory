@@ -41,8 +41,7 @@ type HistoryDiff[T any] struct {
 }
 
 var (
-	MismatchedRefError    = errors.New("cannot take diff of histories with different Refs")
-	IdenticalHistoryError = errors.New("cannot take diff of identical history")
+	MismatchedRefError = errors.New("cannot take diff of histories with different Refs")
 )
 
 func (ch *CharacterHistory) changes(new *CharacterHistory) []Change {
@@ -72,25 +71,18 @@ func (ch *CharacterHistory) Diff(history *CharacterHistory) (*HistoryDiff[Charac
 	if ch.Ref != history.Ref {
 		return nil, MismatchedRefError
 	}
-
-	chUnix, historyUnix := ch.HistoryTime.Unix(), history.HistoryTime.Unix()
-	chOlder := chUnix < historyUnix || (chUnix == historyUnix && ch.ID < history.ID)
-	historyOlder := chUnix > historyUnix || (chUnix == historyUnix && ch.ID > history.ID)
-
-	if chOlder {
-		return &HistoryDiff[CharacterHistory]{
-			Old:     ch,
-			New:     history,
-			Changes: ch.changes(history),
-		}, nil
-	} else if historyOlder {
+	if ch.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (ch.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && ch.ID > history.ID) {
 		return &HistoryDiff[CharacterHistory]{
 			Old:     history,
 			New:     ch,
 			Changes: history.changes(ch),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return &HistoryDiff[CharacterHistory]{
+		Old:     ch,
+		New:     history,
+		Changes: ch.changes(history),
+	}, nil
 }
 
 func (fh *FriendshipHistory) changes(new *FriendshipHistory) []Change {
@@ -114,25 +106,18 @@ func (fh *FriendshipHistory) Diff(history *FriendshipHistory) (*HistoryDiff[Frie
 	if fh.Ref != history.Ref {
 		return nil, MismatchedRefError
 	}
-
-	fhUnix, historyUnix := fh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	fhOlder := fhUnix < historyUnix || (fhUnix == historyUnix && fh.ID < history.ID)
-	historyOlder := fhUnix > historyUnix || (fhUnix == historyUnix && fh.ID > history.ID)
-
-	if fhOlder {
-		return &HistoryDiff[FriendshipHistory]{
-			Old:     fh,
-			New:     history,
-			Changes: fh.changes(history),
-		}, nil
-	} else if historyOlder {
+	if fh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (fh.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && fh.ID > history.ID) {
 		return &HistoryDiff[FriendshipHistory]{
 			Old:     history,
 			New:     fh,
 			Changes: history.changes(fh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return &HistoryDiff[FriendshipHistory]{
+		Old:     fh,
+		New:     history,
+		Changes: fh.changes(history),
+	}, nil
 }
 
 func (rh *ResidenceHistory) changes(new *ResidenceHistory) []Change {
@@ -153,25 +138,18 @@ func (rh *ResidenceHistory) Diff(history *ResidenceHistory) (*HistoryDiff[Reside
 	if rh.Ref != history.Ref {
 		return nil, MismatchedRefError
 	}
-
-	rhUnix, historyUnix := rh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	rhOlder := rhUnix < historyUnix || (rhUnix == historyUnix && rh.ID < history.ID)
-	historyOlder := rhUnix > historyUnix || (rhUnix == historyUnix && rh.ID > history.ID)
-
-	if rhOlder {
-		return &HistoryDiff[ResidenceHistory]{
-			Old:     rh,
-			New:     history,
-			Changes: rh.changes(history),
-		}, nil
-	} else if historyOlder {
+	if rh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (rh.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && rh.ID > history.ID) {
 		return &HistoryDiff[ResidenceHistory]{
 			Old:     history,
 			New:     rh,
 			Changes: history.changes(rh),
 		}, nil
 	}
-	return nil, IdenticalHistoryError
+	return &HistoryDiff[ResidenceHistory]{
+		Old:     rh,
+		New:     history,
+		Changes: rh.changes(history),
+	}, nil
 }
 
 func (c Change) String(op enthistory.OpType) string {
@@ -286,7 +264,7 @@ func auditCharacterHistory(ctx context.Context, config config) ([][]string, erro
 
 		for i := 0; i < len(histories); i++ {
 			curr := histories[i]
-			record := record{
+			r := record{
 				Table:       "CharacterHistory",
 				RefId:       curr.Ref,
 				HistoryTime: curr.HistoryTime,
@@ -295,17 +273,17 @@ func auditCharacterHistory(ctx context.Context, config config) ([][]string, erro
 			}
 			switch curr.Operation {
 			case enthistory.OpTypeInsert:
-				record.Changes = (&CharacterHistory{}).changes(curr)
+				r.Changes = (&CharacterHistory{}).changes(curr)
 			case enthistory.OpTypeDelete:
-				record.Changes = curr.changes(&CharacterHistory{})
+				r.Changes = curr.changes(&CharacterHistory{})
 			default:
 				if i == 0 {
-					record.Changes = (&CharacterHistory{}).changes(curr)
+					r.Changes = (&CharacterHistory{}).changes(curr)
 				} else {
-					record.Changes = histories[i-1].changes(curr)
+					r.Changes = histories[i-1].changes(curr)
 				}
 			}
-			records = append(records, record.toRow())
+			records = append(records, r.toRow())
 		}
 	}
 	return records, nil
@@ -339,7 +317,7 @@ func auditFriendshipHistory(ctx context.Context, config config) ([][]string, err
 
 		for i := 0; i < len(histories); i++ {
 			curr := histories[i]
-			record := record{
+			r := record{
 				Table:       "FriendshipHistory",
 				RefId:       curr.Ref,
 				HistoryTime: curr.HistoryTime,
@@ -348,17 +326,17 @@ func auditFriendshipHistory(ctx context.Context, config config) ([][]string, err
 			}
 			switch curr.Operation {
 			case enthistory.OpTypeInsert:
-				record.Changes = (&FriendshipHistory{}).changes(curr)
+				r.Changes = (&FriendshipHistory{}).changes(curr)
 			case enthistory.OpTypeDelete:
-				record.Changes = curr.changes(&FriendshipHistory{})
+				r.Changes = curr.changes(&FriendshipHistory{})
 			default:
 				if i == 0 {
-					record.Changes = (&FriendshipHistory{}).changes(curr)
+					r.Changes = (&FriendshipHistory{}).changes(curr)
 				} else {
-					record.Changes = histories[i-1].changes(curr)
+					r.Changes = histories[i-1].changes(curr)
 				}
 			}
-			records = append(records, record.toRow())
+			records = append(records, r.toRow())
 		}
 	}
 	return records, nil
@@ -392,7 +370,7 @@ func auditResidenceHistory(ctx context.Context, config config) ([][]string, erro
 
 		for i := 0; i < len(histories); i++ {
 			curr := histories[i]
-			record := record{
+			r := record{
 				Table:       "ResidenceHistory",
 				RefId:       curr.Ref,
 				HistoryTime: curr.HistoryTime,
@@ -401,17 +379,17 @@ func auditResidenceHistory(ctx context.Context, config config) ([][]string, erro
 			}
 			switch curr.Operation {
 			case enthistory.OpTypeInsert:
-				record.Changes = (&ResidenceHistory{}).changes(curr)
+				r.Changes = (&ResidenceHistory{}).changes(curr)
 			case enthistory.OpTypeDelete:
-				record.Changes = curr.changes(&ResidenceHistory{})
+				r.Changes = curr.changes(&ResidenceHistory{})
 			default:
 				if i == 0 {
-					record.Changes = (&ResidenceHistory{}).changes(curr)
+					r.Changes = (&ResidenceHistory{}).changes(curr)
 				} else {
-					record.Changes = histories[i-1].changes(curr)
+					r.Changes = histories[i-1].changes(curr)
 				}
 			}
-			records = append(records, record.toRow())
+			records = append(records, r.toRow())
 		}
 	}
 	return records, nil

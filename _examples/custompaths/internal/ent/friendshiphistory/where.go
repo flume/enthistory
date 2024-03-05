@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
 )
@@ -62,17 +63,17 @@ func HistoryTime(v time.Time) predicate.FriendshipHistory {
 }
 
 // Ref applies equality check predicate on the "ref" field. It's identical to RefEQ.
-func Ref(v int) predicate.FriendshipHistory {
+func Ref(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldEQ(FieldRef, v))
 }
 
 // CharacterID applies equality check predicate on the "character_id" field. It's identical to CharacterIDEQ.
-func CharacterID(v int) predicate.FriendshipHistory {
+func CharacterID(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldEQ(FieldCharacterID, v))
 }
 
 // FriendID applies equality check predicate on the "friend_id" field. It's identical to FriendIDEQ.
-func FriendID(v int) predicate.FriendshipHistory {
+func FriendID(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldEQ(FieldFriendID, v))
 }
 
@@ -137,42 +138,42 @@ func OperationNotIn(vs ...enthistory.OpType) predicate.FriendshipHistory {
 }
 
 // RefEQ applies the EQ predicate on the "ref" field.
-func RefEQ(v int) predicate.FriendshipHistory {
+func RefEQ(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldEQ(FieldRef, v))
 }
 
 // RefNEQ applies the NEQ predicate on the "ref" field.
-func RefNEQ(v int) predicate.FriendshipHistory {
+func RefNEQ(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldNEQ(FieldRef, v))
 }
 
 // RefIn applies the In predicate on the "ref" field.
-func RefIn(vs ...int) predicate.FriendshipHistory {
+func RefIn(vs ...uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldIn(FieldRef, vs...))
 }
 
 // RefNotIn applies the NotIn predicate on the "ref" field.
-func RefNotIn(vs ...int) predicate.FriendshipHistory {
+func RefNotIn(vs ...uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldNotIn(FieldRef, vs...))
 }
 
 // RefGT applies the GT predicate on the "ref" field.
-func RefGT(v int) predicate.FriendshipHistory {
+func RefGT(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldGT(FieldRef, v))
 }
 
 // RefGTE applies the GTE predicate on the "ref" field.
-func RefGTE(v int) predicate.FriendshipHistory {
+func RefGTE(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldGTE(FieldRef, v))
 }
 
 // RefLT applies the LT predicate on the "ref" field.
-func RefLT(v int) predicate.FriendshipHistory {
+func RefLT(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldLT(FieldRef, v))
 }
 
 // RefLTE applies the LTE predicate on the "ref" field.
-func RefLTE(v int) predicate.FriendshipHistory {
+func RefLTE(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldLTE(FieldRef, v))
 }
 
@@ -187,82 +188,82 @@ func RefNotNil() predicate.FriendshipHistory {
 }
 
 // CharacterIDEQ applies the EQ predicate on the "character_id" field.
-func CharacterIDEQ(v int) predicate.FriendshipHistory {
+func CharacterIDEQ(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldEQ(FieldCharacterID, v))
 }
 
 // CharacterIDNEQ applies the NEQ predicate on the "character_id" field.
-func CharacterIDNEQ(v int) predicate.FriendshipHistory {
+func CharacterIDNEQ(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldNEQ(FieldCharacterID, v))
 }
 
 // CharacterIDIn applies the In predicate on the "character_id" field.
-func CharacterIDIn(vs ...int) predicate.FriendshipHistory {
+func CharacterIDIn(vs ...uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldIn(FieldCharacterID, vs...))
 }
 
 // CharacterIDNotIn applies the NotIn predicate on the "character_id" field.
-func CharacterIDNotIn(vs ...int) predicate.FriendshipHistory {
+func CharacterIDNotIn(vs ...uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldNotIn(FieldCharacterID, vs...))
 }
 
 // CharacterIDGT applies the GT predicate on the "character_id" field.
-func CharacterIDGT(v int) predicate.FriendshipHistory {
+func CharacterIDGT(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldGT(FieldCharacterID, v))
 }
 
 // CharacterIDGTE applies the GTE predicate on the "character_id" field.
-func CharacterIDGTE(v int) predicate.FriendshipHistory {
+func CharacterIDGTE(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldGTE(FieldCharacterID, v))
 }
 
 // CharacterIDLT applies the LT predicate on the "character_id" field.
-func CharacterIDLT(v int) predicate.FriendshipHistory {
+func CharacterIDLT(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldLT(FieldCharacterID, v))
 }
 
 // CharacterIDLTE applies the LTE predicate on the "character_id" field.
-func CharacterIDLTE(v int) predicate.FriendshipHistory {
+func CharacterIDLTE(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldLTE(FieldCharacterID, v))
 }
 
 // FriendIDEQ applies the EQ predicate on the "friend_id" field.
-func FriendIDEQ(v int) predicate.FriendshipHistory {
+func FriendIDEQ(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldEQ(FieldFriendID, v))
 }
 
 // FriendIDNEQ applies the NEQ predicate on the "friend_id" field.
-func FriendIDNEQ(v int) predicate.FriendshipHistory {
+func FriendIDNEQ(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldNEQ(FieldFriendID, v))
 }
 
 // FriendIDIn applies the In predicate on the "friend_id" field.
-func FriendIDIn(vs ...int) predicate.FriendshipHistory {
+func FriendIDIn(vs ...uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldIn(FieldFriendID, vs...))
 }
 
 // FriendIDNotIn applies the NotIn predicate on the "friend_id" field.
-func FriendIDNotIn(vs ...int) predicate.FriendshipHistory {
+func FriendIDNotIn(vs ...uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldNotIn(FieldFriendID, vs...))
 }
 
 // FriendIDGT applies the GT predicate on the "friend_id" field.
-func FriendIDGT(v int) predicate.FriendshipHistory {
+func FriendIDGT(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldGT(FieldFriendID, v))
 }
 
 // FriendIDGTE applies the GTE predicate on the "friend_id" field.
-func FriendIDGTE(v int) predicate.FriendshipHistory {
+func FriendIDGTE(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldGTE(FieldFriendID, v))
 }
 
 // FriendIDLT applies the LT predicate on the "friend_id" field.
-func FriendIDLT(v int) predicate.FriendshipHistory {
+func FriendIDLT(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldLT(FieldFriendID, v))
 }
 
 // FriendIDLTE applies the LTE predicate on the "friend_id" field.
-func FriendIDLTE(v int) predicate.FriendshipHistory {
+func FriendIDLTE(v uuid.UUID) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldLTE(FieldFriendID, v))
 }
 

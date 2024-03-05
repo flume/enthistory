@@ -34,56 +34,6 @@ func (fhu *FriendshipHistoryUpdate) SetUpdatedAt(t time.Time) *FriendshipHistory
 	return fhu
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (fhu *FriendshipHistoryUpdate) SetNillableUpdatedAt(t *time.Time) *FriendshipHistoryUpdate {
-	if t != nil {
-		fhu.SetUpdatedAt(*t)
-	}
-	return fhu
-}
-
-// SetCharacterID sets the "character_id" field.
-func (fhu *FriendshipHistoryUpdate) SetCharacterID(i int) *FriendshipHistoryUpdate {
-	fhu.mutation.ResetCharacterID()
-	fhu.mutation.SetCharacterID(i)
-	return fhu
-}
-
-// SetNillableCharacterID sets the "character_id" field if the given value is not nil.
-func (fhu *FriendshipHistoryUpdate) SetNillableCharacterID(i *int) *FriendshipHistoryUpdate {
-	if i != nil {
-		fhu.SetCharacterID(*i)
-	}
-	return fhu
-}
-
-// AddCharacterID adds i to the "character_id" field.
-func (fhu *FriendshipHistoryUpdate) AddCharacterID(i int) *FriendshipHistoryUpdate {
-	fhu.mutation.AddCharacterID(i)
-	return fhu
-}
-
-// SetFriendID sets the "friend_id" field.
-func (fhu *FriendshipHistoryUpdate) SetFriendID(i int) *FriendshipHistoryUpdate {
-	fhu.mutation.ResetFriendID()
-	fhu.mutation.SetFriendID(i)
-	return fhu
-}
-
-// SetNillableFriendID sets the "friend_id" field if the given value is not nil.
-func (fhu *FriendshipHistoryUpdate) SetNillableFriendID(i *int) *FriendshipHistoryUpdate {
-	if i != nil {
-		fhu.SetFriendID(*i)
-	}
-	return fhu
-}
-
-// AddFriendID adds i to the "friend_id" field.
-func (fhu *FriendshipHistoryUpdate) AddFriendID(i int) *FriendshipHistoryUpdate {
-	fhu.mutation.AddFriendID(i)
-	return fhu
-}
-
 // Mutation returns the FriendshipHistoryMutation object of the builder.
 func (fhu *FriendshipHistoryUpdate) Mutation() *FriendshipHistoryMutation {
 	return fhu.mutation
@@ -91,6 +41,7 @@ func (fhu *FriendshipHistoryUpdate) Mutation() *FriendshipHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (fhu *FriendshipHistoryUpdate) Save(ctx context.Context) (int, error) {
+	fhu.defaults()
 	return withHooks(ctx, fhu.sqlSave, fhu.mutation, fhu.hooks)
 }
 
@@ -116,6 +67,14 @@ func (fhu *FriendshipHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (fhu *FriendshipHistoryUpdate) defaults() {
+	if _, ok := fhu.mutation.UpdatedAt(); !ok {
+		v := friendshiphistory.UpdateDefaultUpdatedAt()
+		fhu.mutation.SetUpdatedAt(v)
+	}
+}
+
 func (fhu *FriendshipHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(friendshiphistory.Table, friendshiphistory.Columns, sqlgraph.NewFieldSpec(friendshiphistory.FieldID, field.TypeInt))
 	if ps := fhu.mutation.predicates; len(ps) > 0 {
@@ -125,26 +84,14 @@ func (fhu *FriendshipHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 			}
 		}
 	}
+	if value, ok := fhu.mutation.UpdatedAt(); ok {
+		_spec.SetField(friendshiphistory.FieldUpdatedAt, field.TypeTime, value)
+	}
 	if fhu.mutation.RefCleared() {
 		_spec.ClearField(friendshiphistory.FieldRef, field.TypeString)
 	}
 	if fhu.mutation.UpdatedByCleared() {
 		_spec.ClearField(friendshiphistory.FieldUpdatedBy, field.TypeInt)
-	}
-	if value, ok := fhu.mutation.UpdatedAt(); ok {
-		_spec.SetField(friendshiphistory.FieldUpdatedAt, field.TypeTime, value)
-	}
-	if value, ok := fhu.mutation.CharacterID(); ok {
-		_spec.SetField(friendshiphistory.FieldCharacterID, field.TypeInt, value)
-	}
-	if value, ok := fhu.mutation.AddedCharacterID(); ok {
-		_spec.AddField(friendshiphistory.FieldCharacterID, field.TypeInt, value)
-	}
-	if value, ok := fhu.mutation.FriendID(); ok {
-		_spec.SetField(friendshiphistory.FieldFriendID, field.TypeInt, value)
-	}
-	if value, ok := fhu.mutation.AddedFriendID(); ok {
-		_spec.AddField(friendshiphistory.FieldFriendID, field.TypeInt, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, fhu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -172,56 +119,6 @@ func (fhuo *FriendshipHistoryUpdateOne) SetUpdatedAt(t time.Time) *FriendshipHis
 	return fhuo
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (fhuo *FriendshipHistoryUpdateOne) SetNillableUpdatedAt(t *time.Time) *FriendshipHistoryUpdateOne {
-	if t != nil {
-		fhuo.SetUpdatedAt(*t)
-	}
-	return fhuo
-}
-
-// SetCharacterID sets the "character_id" field.
-func (fhuo *FriendshipHistoryUpdateOne) SetCharacterID(i int) *FriendshipHistoryUpdateOne {
-	fhuo.mutation.ResetCharacterID()
-	fhuo.mutation.SetCharacterID(i)
-	return fhuo
-}
-
-// SetNillableCharacterID sets the "character_id" field if the given value is not nil.
-func (fhuo *FriendshipHistoryUpdateOne) SetNillableCharacterID(i *int) *FriendshipHistoryUpdateOne {
-	if i != nil {
-		fhuo.SetCharacterID(*i)
-	}
-	return fhuo
-}
-
-// AddCharacterID adds i to the "character_id" field.
-func (fhuo *FriendshipHistoryUpdateOne) AddCharacterID(i int) *FriendshipHistoryUpdateOne {
-	fhuo.mutation.AddCharacterID(i)
-	return fhuo
-}
-
-// SetFriendID sets the "friend_id" field.
-func (fhuo *FriendshipHistoryUpdateOne) SetFriendID(i int) *FriendshipHistoryUpdateOne {
-	fhuo.mutation.ResetFriendID()
-	fhuo.mutation.SetFriendID(i)
-	return fhuo
-}
-
-// SetNillableFriendID sets the "friend_id" field if the given value is not nil.
-func (fhuo *FriendshipHistoryUpdateOne) SetNillableFriendID(i *int) *FriendshipHistoryUpdateOne {
-	if i != nil {
-		fhuo.SetFriendID(*i)
-	}
-	return fhuo
-}
-
-// AddFriendID adds i to the "friend_id" field.
-func (fhuo *FriendshipHistoryUpdateOne) AddFriendID(i int) *FriendshipHistoryUpdateOne {
-	fhuo.mutation.AddFriendID(i)
-	return fhuo
-}
-
 // Mutation returns the FriendshipHistoryMutation object of the builder.
 func (fhuo *FriendshipHistoryUpdateOne) Mutation() *FriendshipHistoryMutation {
 	return fhuo.mutation
@@ -242,6 +139,7 @@ func (fhuo *FriendshipHistoryUpdateOne) Select(field string, fields ...string) *
 
 // Save executes the query and returns the updated FriendshipHistory entity.
 func (fhuo *FriendshipHistoryUpdateOne) Save(ctx context.Context) (*FriendshipHistory, error) {
+	fhuo.defaults()
 	return withHooks(ctx, fhuo.sqlSave, fhuo.mutation, fhuo.hooks)
 }
 
@@ -264,6 +162,14 @@ func (fhuo *FriendshipHistoryUpdateOne) Exec(ctx context.Context) error {
 func (fhuo *FriendshipHistoryUpdateOne) ExecX(ctx context.Context) {
 	if err := fhuo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (fhuo *FriendshipHistoryUpdateOne) defaults() {
+	if _, ok := fhuo.mutation.UpdatedAt(); !ok {
+		v := friendshiphistory.UpdateDefaultUpdatedAt()
+		fhuo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -293,26 +199,14 @@ func (fhuo *FriendshipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Fri
 			}
 		}
 	}
+	if value, ok := fhuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(friendshiphistory.FieldUpdatedAt, field.TypeTime, value)
+	}
 	if fhuo.mutation.RefCleared() {
 		_spec.ClearField(friendshiphistory.FieldRef, field.TypeString)
 	}
 	if fhuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(friendshiphistory.FieldUpdatedBy, field.TypeInt)
-	}
-	if value, ok := fhuo.mutation.UpdatedAt(); ok {
-		_spec.SetField(friendshiphistory.FieldUpdatedAt, field.TypeTime, value)
-	}
-	if value, ok := fhuo.mutation.CharacterID(); ok {
-		_spec.SetField(friendshiphistory.FieldCharacterID, field.TypeInt, value)
-	}
-	if value, ok := fhuo.mutation.AddedCharacterID(); ok {
-		_spec.AddField(friendshiphistory.FieldCharacterID, field.TypeInt, value)
-	}
-	if value, ok := fhuo.mutation.FriendID(); ok {
-		_spec.SetField(friendshiphistory.FieldFriendID, field.TypeInt, value)
-	}
-	if value, ok := fhuo.mutation.AddedFriendID(); ok {
-		_spec.AddField(friendshiphistory.FieldFriendID, field.TypeInt, value)
 	}
 	_node = &FriendshipHistory{config: fhuo.config}
 	_spec.Assign = _node.assignValues
