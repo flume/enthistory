@@ -320,12 +320,21 @@ func historyFields(schema ent.Interface, opts HistoryOptions) ([]ent.Field, erro
 	var ref = idField
 
 	var managedId bool
+	entgqlEnabled := false
+
 	for _, f := range schema.Fields() {
-		if f.Descriptor().Name == "id" {
+		descriptor := f.Descriptor()
+		if descriptor.Name == "id" {
 			managedId = true
 			ref = f
 			if opts.InheritIdType {
 				idField = f
+			}
+		}
+		for _, ant := range descriptor.Annotations {
+			if _, ok := ant.(entgql.Annotation); ok {
+				entgqlEnabled = true
+				break
 			}
 		}
 	}
@@ -334,14 +343,14 @@ func historyFields(schema ent.Interface, opts HistoryOptions) ([]ent.Field, erro
 	}
 	fields = append(fields, field.Time("history_time").Default(time.Now).Immutable())
 	fields = append(fields, field.Enum("operation").GoType(OpType("")).Immutable())
-	ref, err := refField(ref.Descriptor().Info, true)
+	ref, err := refField(ref.Descriptor().Info, entgqlEnabled)
 	if err != nil {
 		return nil, err
 	}
 	fields = append(fields, ref)
 
 	if opts.UpdatedBy != nil {
-		ubf, uerr := updatedByField(opts.UpdatedBy.valueType, true)
+		ubf, uerr := updatedByField(opts.UpdatedBy.valueType, entgqlEnabled)
 		if uerr != nil {
 			return nil, uerr
 		}
