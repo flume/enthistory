@@ -19,6 +19,8 @@ import (
 	"go/ast"
 	"sort"
 
+	"entgo.io/ent/schema/field"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -297,6 +299,35 @@ func gqlDirectiveLit(directives []entgql.Directive) ast.Expr {
 		c.Elts = append(c.Elts, dir)
 	}
 	return c
+}
+
+func fieldAnnotation(annot schema.Annotation) (ast.Expr, bool, error) {
+	fieldAnt, ok := annot.(field.Annotation)
+	if !ok {
+		return nil, false, fmt.Errorf("schemast: unexpected annotation type %T", annot)
+	}
+	c := &ast.CompositeLit{
+		Type: selectorLit("field", "Annotation"),
+	}
+	if len(fieldAnt.ID) > 0 {
+		c.Elts = append(c.Elts, structAttr("ID", strSliceLit(fieldAnt.ID)))
+	}
+	if fieldAnt.StructTag != nil && len(fieldAnt.StructTag) > 0 {
+		st := &ast.CompositeLit{
+			Type: &ast.MapType{
+				Key:   ast.NewIdent("string"),
+				Value: ast.NewIdent("string"),
+			},
+		}
+		for k, v := range fieldAnt.StructTag {
+			st.Elts = append(st.Elts, &ast.KeyValueExpr{
+				Key:   strLit(k),
+				Value: strLit(v),
+			})
+		}
+		c.Elts = append(c.Elts, structAttr("StructTag", st))
+	}
+	return c, true, nil
 }
 
 func toAnnotASTs(annots []schema.Annotation) ([]ast.Expr, error) {

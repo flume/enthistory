@@ -30,6 +30,7 @@ var annotators = map[string]Annotator{
 	entproto.EnumAnnotation:    protoEnum,
 	"EntSQL":                   entSQL,
 	"EntGQL":                   entGQL,
+	"Fields":                   fieldAnnotation,
 }
 
 // Context represents an ent schema directory, parsed and loaded as ASTs, such that schema type declarations

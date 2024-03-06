@@ -280,6 +280,17 @@ func handleAnnotation(schemaName string, ants []schema.Annotation) ([]schema.Ann
 				return nil, err
 			}
 			mergedAnnotations = append(mergedAnnotations, mergeAnnotations[entsql.Annotation](typed...))
+		case "Fields":
+			merged := reduce(a, func(agg field.Annotation, item schema.Annotation) field.Annotation {
+				merged := agg.Merge(item)
+				return merged.(field.Annotation)
+			}, field.Annotation{})
+			if len(merged.ID) > 0 {
+				merged.ID = nil
+			}
+			if len(merged.StructTag) > 0 {
+				mergedAnnotations = append(mergedAnnotations, merged)
+			}
 		case "EntGQL":
 			merged := reduce(a, func(agg entgql.Annotation, item schema.Annotation) entgql.Annotation {
 				merged := agg.Merge(item)
