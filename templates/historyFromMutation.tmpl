@@ -13,9 +13,11 @@ import (
         "errors"
         "fmt"
         {{- range $n := $.Nodes }}
+            {{- if and $n.ID (ne $n.ID.Type nil) }}
             {{- if eq $n.ID.Type.String "string" }}
                 "strings"
                 {{- break }}
+            {{- end }}
             {{- end }}
         {{- end }}
         "time"
@@ -25,9 +27,11 @@ import (
         "github.com/flume/enthistory"
 
     {{ range $n := $.Nodes }}
+        {{- if and $n.ID (ne $n.ID.Type nil) }}
         {{ if eq $n.ID.Type.String "uuid.UUID" }}
             "github.com/google/uuid"
             {{- break }}
+        {{- end }}
         {{- end }}
     {{- end }}
     )
@@ -57,11 +61,13 @@ import (
     }
 
 {{ range $n := $.Nodes }}
+    {{- if and $n.ID (ne $n.ID.Type nil) }}
     {{ if eq $n.ID.Type.String "string" }}
         func genHistoryId(id string, op ent.Op, now time.Time) string {
             return fmt.Sprintf("%s-%s-%d", id, strings.ToLower(EntOpToHistoryOp(op).String()), time.Now().UnixNano())
         }
         {{- break }}
+    {{- end }}
     {{- end }}
 {{- end }}
 
