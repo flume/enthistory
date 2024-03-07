@@ -10,12 +10,32 @@ import (
 )
 
 type Annotations struct {
-	Exclude   bool `json:"exclude,omitempty"`   // Will exclude history tracking for this schema
-	IsHistory bool `json:"isHistory,omitempty"` // DO NOT APPLY TO ANYTHING EXCEPT HISTORY SCHEMAS
+	IsHistory bool `json:"isHistory,omitempty"`
+
+	// Deprecated: Has no effect anymore, models must be tracked manually in the entc config
+	Exclude bool `json:"exclude,omitempty"`
 }
 
 func (Annotations) Name() string {
 	return "History"
+}
+
+func (m Annotations) Merge(other schema.Annotation) schema.Annotation {
+	var ant Annotations
+	switch o := other.(type) {
+	case Annotations:
+		ant = o
+	case *Annotations:
+		if o != nil {
+			ant = *o
+		}
+	default:
+		return m
+	}
+	if m.IsHistory == false {
+		m.IsHistory = ant.IsHistory
+	}
+	return m
 }
 
 func entHistory(annot schema.Annotation) (ast.Expr, bool, error) {
@@ -28,9 +48,6 @@ func entHistory(annot schema.Annotation) (ast.Expr, bool, error) {
 	}
 	if m.IsHistory {
 		c.Elts = append(c.Elts, structAttr("IsHistory", boolLit(m.IsHistory)))
-	}
-	if m.Exclude {
-		c.Elts = append(c.Elts, structAttr("Exclude", boolLit(m.Exclude)))
 	}
 	return c, true, nil
 }

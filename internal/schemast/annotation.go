@@ -44,7 +44,7 @@ type Annotator func(schema.Annotation) (ast.Expr, bool, error)
 // Annotation is an Annotator that searches a map of well-known ent annotation (entproto, entsql, etc.) and
 // invokes that Annotator if found.
 func Annotation(annot schema.Annotation) (ast.Expr, bool, error) {
-	fn, ok := annotators[annot.Name()]
+	fn, ok := Annotators[annot.Name()]
 	if !ok {
 		return nil, false, &UnsupportedAnnotationError{annot: annot}
 	}

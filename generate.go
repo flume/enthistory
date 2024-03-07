@@ -244,7 +244,7 @@ func handleAnnotation(schemaName string, ants []schema.Annotation) ([]schema.Ann
 	}
 
 	idx = slices.IndexFunc(annotations, func(sc schema.Annotation) bool {
-		_, ok := sc.(entsql.Annotation)
+		_, ok := sc.(Annotations)
 		return ok
 	})
 	if idx == -1 {
@@ -280,6 +280,12 @@ func handleAnnotation(schemaName string, ants []schema.Annotation) ([]schema.Ann
 				return nil, err
 			}
 			mergedAnnotations = append(mergedAnnotations, mergeAnnotations[entsql.Annotation](typed...))
+		case "History":
+			typed, err := typedSliceToType[schema.Annotation, Annotations](a)
+			if err != nil {
+				return nil, err
+			}
+			mergedAnnotations = append(mergedAnnotations, mergeAnnotations[Annotations](typed...))
 		case "Fields":
 			merged := reduce(a, func(agg field.Annotation, item schema.Annotation) field.Annotation {
 				merged := agg.Merge(item)
