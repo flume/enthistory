@@ -182,7 +182,20 @@ func Generate(schemaPath string, schemas []ent.Interface, options ...Option) (er
 		if gerr != nil {
 			return gerr
 		}
+		historyAnt := reduce(annotations, func(agg Annotations, item schema.Annotation) Annotations {
+			if item.Name() == "History" {
+				ant := agg.Merge(item)
+				agg = ant.(Annotations)
+			}
+			return agg
+		}, Annotations{Annotations: []schema.Annotation{Annotations{IsHistory: true}}})
+		if len(historyAnt.Mixins) > 0 {
+			upsert.Mixins = historyAnt.Mixins
+		}
 		upsert.Annotations = annotations
+		if len(historyAnt.Annotations) > 1 {
+			upsert.Annotations = historyAnt.Annotations
+		}
 		mutations = append(mutations, &upsert)
 	}
 
@@ -257,6 +270,10 @@ func handleAnnotation(schemaName string, ants []schema.Annotation) ([]schema.Ann
 		}
 	}
 
+	return cleanAnnotations(annotations)
+}
+
+func cleanAnnotations(annotations []schema.Annotation) ([]schema.Annotation, error) {
 	var mergedAnnotations []schema.Annotation
 	antMap := make(map[string][]schema.Annotation)
 	for _, a := range annotations {

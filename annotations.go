@@ -5,12 +5,16 @@ import (
 	"go/token"
 	"strconv"
 
+	"entgo.io/ent"
+
 	"entgo.io/ent/schema"
 	"github.com/mitchellh/mapstructure"
 )
 
 type Annotations struct {
-	IsHistory bool `json:"isHistory,omitempty"`
+	IsHistory   bool `json:"isHistory,omitempty"`
+	Annotations []schema.Annotation
+	Mixins      []ent.Mixin
 
 	// Deprecated: Has no effect anymore, models must be tracked manually in the entc config
 	Exclude bool `json:"exclude,omitempty"`
@@ -34,6 +38,16 @@ func (m Annotations) Merge(other schema.Annotation) schema.Annotation {
 	}
 	if m.IsHistory == false {
 		m.IsHistory = ant.IsHistory
+	}
+	if len(ant.Annotations) > 0 {
+		m.Annotations = append(m.Annotations, ant.Annotations...)
+		cleaned, err := cleanAnnotations(m.Annotations)
+		if err == nil {
+			m.Annotations = cleaned
+		}
+	}
+	if len(ant.Mixins) > 0 {
+		m.Mixins = append(m.Mixins, ant.Mixins...)
 	}
 	return m
 }
