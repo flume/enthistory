@@ -41,7 +41,7 @@ func (FriendshipHistory) Edges() []ent.Edge {
 	return nil
 }
 func (FriendshipHistory) Annotations() []schema.Annotation {
-	return []schema.Annotation{entsql.Annotation{Table: "friendship_history"}}
+	return []schema.Annotation{entsql.Annotation{Table: "friendship_history"}, enthistory.Annotations{IsHistory: true}}
 }
 func (FriendshipHistory) Mixin() []ent.Mixin {
 	return []ent.Mixin{mixins.TimeMixin{}}

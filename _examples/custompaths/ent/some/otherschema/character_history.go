@@ -38,5 +38,5 @@ func (CharacterHistory) Edges() []ent.Edge {
 	return nil
 }
 func (CharacterHistory) Annotations() []schema.Annotation {
-	return []schema.Annotation{entsql.Annotation{Table: "character_history"}}
+	return []schema.Annotation{entsql.Annotation{Table: "character_history"}, enthistory.Annotations{IsHistory: true}}
 }

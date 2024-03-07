@@ -45,7 +45,7 @@ func (OrganizationHistory) Edges() []ent.Edge {
 	return nil
 }
 func (OrganizationHistory) Annotations() []schema.Annotation {
-	return []schema.Annotation{entsql.Annotation{Table: "organization_history"}}
+	return []schema.Annotation{entsql.Annotation{Table: "organization_history"}, enthistory.Annotations{IsHistory: true}}
 }
 func (OrganizationHistory) Mixin() []ent.Mixin {
 	return []ent.Mixin{mixins.TimeMixin{}}

@@ -44,7 +44,7 @@ func (ResidenceHistory) Edges() []ent.Edge {
 	return nil
 }
 func (ResidenceHistory) Annotations() []schema.Annotation {
-	return []schema.Annotation{entsql.Annotation{Table: "residence_history"}}
+	return []schema.Annotation{entsql.Annotation{Table: "residence_history"}, enthistory.Annotations{IsHistory: true}}
 }
 func (ResidenceHistory) Mixin() []ent.Mixin {
 	return []ent.Mixin{mixins.TimeMixin{}}
