@@ -34,20 +34,6 @@ func (chu *CharacterHistoryUpdate) SetUpdatedAt(t time.Time) *CharacterHistoryUp
 	return chu
 }
 
-// SetOther sets the "other" field.
-func (chu *CharacterHistoryUpdate) SetOther(s string) *CharacterHistoryUpdate {
-	chu.mutation.SetOther(s)
-	return chu
-}
-
-// SetNillableOther sets the "other" field if the given value is not nil.
-func (chu *CharacterHistoryUpdate) SetNillableOther(s *string) *CharacterHistoryUpdate {
-	if s != nil {
-		chu.SetOther(*s)
-	}
-	return chu
-}
-
 // Mutation returns the CharacterHistoryMutation object of the builder.
 func (chu *CharacterHistoryUpdate) Mutation() *CharacterHistoryMutation {
 	return chu.mutation
@@ -101,9 +87,6 @@ func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if value, ok := chu.mutation.UpdatedAt(); ok {
 		_spec.SetField(characterhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := chu.mutation.Other(); ok {
-		_spec.SetField(characterhistory.FieldOther, field.TypeString, value)
-	}
 	if chu.mutation.RefCleared() {
 		_spec.ClearField(characterhistory.FieldRef, field.TypeUUID)
 	}
@@ -145,20 +128,6 @@ type CharacterHistoryUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (chuo *CharacterHistoryUpdateOne) SetUpdatedAt(t time.Time) *CharacterHistoryUpdateOne {
 	chuo.mutation.SetUpdatedAt(t)
-	return chuo
-}
-
-// SetOther sets the "other" field.
-func (chuo *CharacterHistoryUpdateOne) SetOther(s string) *CharacterHistoryUpdateOne {
-	chuo.mutation.SetOther(s)
-	return chuo
-}
-
-// SetNillableOther sets the "other" field if the given value is not nil.
-func (chuo *CharacterHistoryUpdateOne) SetNillableOther(s *string) *CharacterHistoryUpdateOne {
-	if s != nil {
-		chuo.SetOther(*s)
-	}
 	return chuo
 }
 
@@ -244,9 +213,6 @@ func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Char
 	}
 	if value, ok := chuo.mutation.UpdatedAt(); ok {
 		_spec.SetField(characterhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
-	if value, ok := chuo.mutation.Other(); ok {
-		_spec.SetField(characterhistory.FieldOther, field.TypeString, value)
 	}
 	if chuo.mutation.RefCleared() {
 		_spec.ClearField(characterhistory.FieldRef, field.TypeUUID)

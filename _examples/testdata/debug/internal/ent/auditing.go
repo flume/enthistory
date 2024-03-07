@@ -51,9 +51,6 @@ func (ch *CharacterHistory) changes(new *CharacterHistory) []Change {
 	if !reflect.DeepEqual(ch.UpdatedAt, new.UpdatedAt) {
 		changes = append(changes, NewChange(characterhistory.FieldUpdatedAt, ch.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(ch.Other, new.Other) {
-		changes = append(changes, NewChange(characterhistory.FieldOther, ch.Other, new.Other))
-	}
 	if !reflect.DeepEqual(ch.Age, new.Age) {
 		changes = append(changes, NewChange(characterhistory.FieldAge, ch.Age, new.Age))
 	}

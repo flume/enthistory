@@ -64,7 +64,6 @@ func (ch *CharacterHistory) Restore(ctx context.Context) (*Character, error) {
 	return client.
 		UpdateOneID(ch.Ref).
 		SetUpdatedAt(ch.UpdatedAt).
-		SetOther(ch.Other).
 		SetNicknames(ch.Nicknames).
 		SetInfo(ch.Info).
 		Save(ctx)
