@@ -188,13 +188,14 @@ func Generate(schemaPath string, schemas []ent.Interface, options ...Option) (er
 				agg = ant.(Annotations)
 			}
 			return agg
-		}, Annotations{Annotations: []schema.Annotation{Annotations{IsHistory: true}}})
-		if len(historyAnt.Mixins) > 0 {
+		}, Annotations{})
+		if historyAnt.Mixins != nil {
 			upsert.Mixins = historyAnt.Mixins
 		}
 		upsert.Annotations = annotations
-		if len(historyAnt.Annotations) > 1 {
-			upsert.Annotations = historyAnt.Annotations
+		if historyAnt.Annotations != nil {
+			withIsHist := historyAnt.Merge(Annotations{Annotations: []schema.Annotation{Annotations{IsHistory: true}}})
+			upsert.Annotations = withIsHist.(Annotations).Annotations
 		}
 		mutations = append(mutations, &upsert)
 	}
