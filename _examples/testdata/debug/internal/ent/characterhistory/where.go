@@ -67,11 +67,6 @@ func UpdatedAt(v time.Time) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
-// Other applies equality check predicate on the "other" field. It's identical to OtherEQ.
-func Other(v string) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldEQ(FieldOther, v))
-}
-
 // HistoryTime applies equality check predicate on the "history_time" field. It's identical to HistoryTimeEQ.
 func HistoryTime(v time.Time) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -175,71 +170,6 @@ func UpdatedAtLT(v time.Time) predicate.CharacterHistory {
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
 func UpdatedAtLTE(v time.Time) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldLTE(FieldUpdatedAt, v))
-}
-
-// OtherEQ applies the EQ predicate on the "other" field.
-func OtherEQ(v string) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldEQ(FieldOther, v))
-}
-
-// OtherNEQ applies the NEQ predicate on the "other" field.
-func OtherNEQ(v string) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldNEQ(FieldOther, v))
-}
-
-// OtherIn applies the In predicate on the "other" field.
-func OtherIn(vs ...string) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldIn(FieldOther, vs...))
-}
-
-// OtherNotIn applies the NotIn predicate on the "other" field.
-func OtherNotIn(vs ...string) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldNotIn(FieldOther, vs...))
-}
-
-// OtherGT applies the GT predicate on the "other" field.
-func OtherGT(v string) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldGT(FieldOther, v))
-}
-
-// OtherGTE applies the GTE predicate on the "other" field.
-func OtherGTE(v string) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldGTE(FieldOther, v))
-}
-
-// OtherLT applies the LT predicate on the "other" field.
-func OtherLT(v string) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldLT(FieldOther, v))
-}
-
-// OtherLTE applies the LTE predicate on the "other" field.
-func OtherLTE(v string) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldLTE(FieldOther, v))
-}
-
-// OtherContains applies the Contains predicate on the "other" field.
-func OtherContains(v string) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldContains(FieldOther, v))
-}
-
-// OtherHasPrefix applies the HasPrefix predicate on the "other" field.
-func OtherHasPrefix(v string) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldHasPrefix(FieldOther, v))
-}
-
-// OtherHasSuffix applies the HasSuffix predicate on the "other" field.
-func OtherHasSuffix(v string) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldHasSuffix(FieldOther, v))
-}
-
-// OtherEqualFold applies the EqualFold predicate on the "other" field.
-func OtherEqualFold(v string) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldEqualFold(FieldOther, v))
-}
-
-// OtherContainsFold applies the ContainsFold predicate on the "other" field.
-func OtherContainsFold(v string) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldContainsFold(FieldOther, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.

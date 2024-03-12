@@ -3,6 +3,8 @@ package schema
 import (
 	"_examples/testdata/debug/schema/mixins"
 
+	"github.com/flume/enthistory"
+
 	"entgo.io/contrib/entgql"
 
 	"entgo.io/ent"
@@ -23,6 +25,12 @@ func (Character) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{
 			Table: "character",
+		},
+		enthistory.Annotations{
+			Mixins: []ent.Mixin{mixins.TimeMixin{}},
+			Annotations: []schema.Annotation{
+				entsql.Annotation{Table: "character_history"},
+			},
 		},
 	}
 }

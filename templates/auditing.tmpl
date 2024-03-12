@@ -192,7 +192,11 @@ func (r *record) toRow() []string {
 {{ $sameNodeType := hasPrefix $n.Name (printf "%sHistory" $h.Name) }}
 {{- if $sameNodeType }}
 type {{ lower $n.Name }}ref struct {
+	{{- if and $h.ID (ne $h.ID.Type nil) }}
 	Ref {{ $h.ID.Type }}
+	{{- else }}
+	Ref int
+	{{- end }}
 }
 {{- end }}
 {{- end }}

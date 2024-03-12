@@ -60,10 +60,10 @@ func (CharacterHistory) Edges() []ent.Edge {
 	return nil
 }
 func (CharacterHistory) Annotations() []schema.Annotation {
-	return []schema.Annotation{entsql.Annotation{Table: "character_history"}}
+	return []schema.Annotation{entsql.Annotation{Table: "character_history"}, enthistory.Annotations{IsHistory: true}}
 }
 func (CharacterHistory) Mixin() []ent.Mixin {
-	return []ent.Mixin{mixins.TimeMixin{}, OtherMixin{}}
+	return []ent.Mixin{mixins.TimeMixin{}}
 }
 func (CharacterHistory) Indexes() []ent.Index {
 	return []ent.Index{index.Fields("history_time")}

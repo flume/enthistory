@@ -5,17 +5,55 @@ import (
 	"go/token"
 	"strconv"
 
+	"entgo.io/ent"
+
 	"entgo.io/ent/schema"
 	"github.com/mitchellh/mapstructure"
 )
 
 type Annotations struct {
-	Exclude   bool `json:"exclude,omitempty"`   // Will exclude history tracking for this schema
-	IsHistory bool `json:"isHistory,omitempty"` // DO NOT APPLY TO ANYTHING EXCEPT HISTORY SCHEMAS
+	IsHistory bool `json:"isHistory,omitempty"`
+	// If you would like to add custom annotations to the history table,
+	// otherwise it will default to the same annotations as the original table
+	Annotations []schema.Annotation
+	// if you would like to add custom mixins to the history table,
+	// otherwise it will default to the same mixins as the original table
+	Mixins []ent.Mixin
+
+	// Deprecated: Has no effect anymore, models must be tracked manually in the entc config
+	Exclude bool `json:"exclude,omitempty"`
 }
 
 func (Annotations) Name() string {
 	return "History"
+}
+
+func (m Annotations) Merge(other schema.Annotation) schema.Annotation {
+	var ant Annotations
+	switch o := other.(type) {
+	case Annotations:
+		ant = o
+	case *Annotations:
+		if o != nil {
+			ant = *o
+		}
+	default:
+		return m
+	}
+	if !m.IsHistory {
+		m.IsHistory = ant.IsHistory
+	}
+	if len(ant.Annotations) > 0 {
+		m.Annotations = append(m.Annotations, ant.Annotations...)
+		cleaned, err := cleanAnnotations(m.Annotations)
+		if err == nil {
+			m.Annotations = cleaned
+		}
+	}
+	if len(ant.Mixins) > 0 {
+		m.Mixins = append(m.Mixins, ant.Mixins...)
+	}
+	return m
 }
 
 func entHistory(annot schema.Annotation) (ast.Expr, bool, error) {
@@ -28,9 +66,6 @@ func entHistory(annot schema.Annotation) (ast.Expr, bool, error) {
 	}
 	if m.IsHistory {
 		c.Elts = append(c.Elts, structAttr("IsHistory", boolLit(m.IsHistory)))
-	}
-	if m.Exclude {
-		c.Elts = append(c.Elts, structAttr("Exclude", boolLit(m.Exclude)))
 	}
 	return c, true, nil
 }

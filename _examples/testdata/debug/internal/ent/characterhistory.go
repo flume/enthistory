@@ -25,8 +25,6 @@ type CharacterHistory struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// Other holds the value of the "other" field.
-	Other string `json:"other,omitempty"`
 	// HistoryTime holds the value of the "history_time" field.
 	HistoryTime time.Time `json:"history_time,omitempty"`
 	// Operation holds the value of the "operation" field.
@@ -57,7 +55,7 @@ func (*CharacterHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case characterhistory.FieldAge:
 			values[i] = new(sql.NullInt64)
-		case characterhistory.FieldOther, characterhistory.FieldOperation, characterhistory.FieldName:
+		case characterhistory.FieldOperation, characterhistory.FieldName:
 			values[i] = new(sql.NullString)
 		case characterhistory.FieldCreatedAt, characterhistory.FieldUpdatedAt, characterhistory.FieldHistoryTime:
 			values[i] = new(sql.NullTime)
@@ -95,12 +93,6 @@ func (ch *CharacterHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
 				ch.UpdatedAt = value.Time
-			}
-		case characterhistory.FieldOther:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field other", values[i])
-			} else if value.Valid {
-				ch.Other = value.String
 			}
 		case characterhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -198,9 +190,6 @@ func (ch *CharacterHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
 	builder.WriteString(ch.UpdatedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("other=")
-	builder.WriteString(ch.Other)
 	builder.WriteString(", ")
 	builder.WriteString("history_time=")
 	builder.WriteString(ch.HistoryTime.Format(time.ANSIC))

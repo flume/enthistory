@@ -43,12 +43,6 @@ func (chc *CharacterHistoryCreate) SetUpdatedAt(t time.Time) *CharacterHistoryCr
 	return chc
 }
 
-// SetOther sets the "other" field.
-func (chc *CharacterHistoryCreate) SetOther(s string) *CharacterHistoryCreate {
-	chc.mutation.SetOther(s)
-	return chc
-}
-
 // SetHistoryTime sets the "history_time" field.
 func (chc *CharacterHistoryCreate) SetHistoryTime(t time.Time) *CharacterHistoryCreate {
 	chc.mutation.SetHistoryTime(t)
@@ -208,9 +202,6 @@ func (chc *CharacterHistoryCreate) check() error {
 	if _, ok := chc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "CharacterHistory.updated_at"`)}
 	}
-	if _, ok := chc.mutation.Other(); !ok {
-		return &ValidationError{Name: "other", err: errors.New(`ent: missing required field "CharacterHistory.other"`)}
-	}
 	if _, ok := chc.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`ent: missing required field "CharacterHistory.history_time"`)}
 	}
@@ -264,10 +255,6 @@ func (chc *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cr
 	if value, ok := chc.mutation.UpdatedAt(); ok {
 		_spec.SetField(characterhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
-	}
-	if value, ok := chc.mutation.Other(); ok {
-		_spec.SetField(characterhistory.FieldOther, field.TypeString, value)
-		_node.Other = value
 	}
 	if value, ok := chc.mutation.HistoryTime(); ok {
 		_spec.SetField(characterhistory.FieldHistoryTime, field.TypeTime, value)

@@ -18,6 +18,8 @@ import (
 	"fmt"
 	"go/ast"
 	"go/token"
+	"slices"
+	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
@@ -86,6 +88,9 @@ func (u *UpsertSchema) Mutate(ctx *Context) error {
 			return err
 		}
 	}
+	slices.SortStableFunc(u.Annotations, func(a schema.Annotation, b schema.Annotation) int {
+		return strings.Compare(a.Name(), b.Name())
+	})
 	for _, annot := range u.Annotations {
 		if err := ctx.AppendTypeAnnotation(u.Name, annot); err != nil {
 			return err

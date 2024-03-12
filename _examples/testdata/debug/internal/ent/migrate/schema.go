@@ -31,7 +31,6 @@ var (
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "other", Type: field.TypeString},
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
 		{Name: "ref", Type: field.TypeUUID, Nullable: true},
@@ -50,7 +49,7 @@ var (
 			{
 				Name:    "characterhistory_history_time",
 				Unique:  false,
-				Columns: []*schema.Column{CharacterHistoryColumns[4]},
+				Columns: []*schema.Column{CharacterHistoryColumns[3]},
 			},
 		},
 	}

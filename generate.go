@@ -182,7 +182,21 @@ func Generate(schemaPath string, schemas []ent.Interface, options ...Option) (er
 		if gerr != nil {
 			return gerr
 		}
+		historyAnt := reduce(annotations, func(agg Annotations, item schema.Annotation) Annotations {
+			if item.Name() == "History" {
+				ant := agg.Merge(item)
+				agg = ant.(Annotations)
+			}
+			return agg
+		}, Annotations{})
+		if historyAnt.Mixins != nil {
+			upsert.Mixins = historyAnt.Mixins
+		}
 		upsert.Annotations = annotations
+		if historyAnt.Annotations != nil {
+			withIsHist := historyAnt.Merge(Annotations{Annotations: []schema.Annotation{Annotations{IsHistory: true}}})
+			upsert.Annotations = withIsHist.(Annotations).Annotations
+		}
 		mutations = append(mutations, &upsert)
 	}
 
@@ -244,7 +258,7 @@ func handleAnnotation(schemaName string, ants []schema.Annotation) ([]schema.Ann
 	}
 
 	idx = slices.IndexFunc(annotations, func(sc schema.Annotation) bool {
-		_, ok := sc.(entsql.Annotation)
+		_, ok := sc.(Annotations)
 		return ok
 	})
 	if idx == -1 {
@@ -257,6 +271,10 @@ func handleAnnotation(schemaName string, ants []schema.Annotation) ([]schema.Ann
 		}
 	}
 
+	return cleanAnnotations(annotations)
+}
+
+func cleanAnnotations(annotations []schema.Annotation) ([]schema.Annotation, error) {
 	var mergedAnnotations []schema.Annotation
 	antMap := make(map[string][]schema.Annotation)
 	for _, a := range annotations {
@@ -280,6 +298,23 @@ func handleAnnotation(schemaName string, ants []schema.Annotation) ([]schema.Ann
 				return nil, err
 			}
 			mergedAnnotations = append(mergedAnnotations, mergeAnnotations[entsql.Annotation](typed...))
+		case "History":
+			typed, err := typedSliceToType[schema.Annotation, Annotations](a)
+			if err != nil {
+				return nil, err
+			}
+			mergedAnnotations = append(mergedAnnotations, mergeAnnotations[Annotations](typed...))
+		case "Fields":
+			merged := reduce(a, func(agg field.Annotation, item schema.Annotation) field.Annotation {
+				merged := agg.Merge(item)
+				return merged.(field.Annotation)
+			}, field.Annotation{})
+			if len(merged.ID) > 0 {
+				merged.ID = nil
+			}
+			if len(merged.StructTag) > 0 {
+				mergedAnnotations = append(mergedAnnotations, merged)
+			}
 		case "EntGQL":
 			merged := reduce(a, func(agg entgql.Annotation, item schema.Annotation) entgql.Annotation {
 				merged := agg.Merge(item)

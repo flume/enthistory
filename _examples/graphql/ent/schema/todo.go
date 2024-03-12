@@ -5,9 +5,12 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
+
+	"github.com/flume/enthistory"
 )
 
 // Todo holds the schema definition for the Todo entity.
@@ -31,5 +34,13 @@ func (Todo) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
+		enthistory.Annotations{
+			Annotations: []schema.Annotation{
+				// no mutations on TodoHistory
+				entgql.RelayConnection(),
+				entgql.QueryField(),
+				entsql.Annotation{Table: "todo_history"},
+			},
+		},
 	}
 }

@@ -23,13 +23,14 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-var annotators = map[string]Annotator{
+var Annotators = map[string]Annotator{
 	entproto.MessageAnnotation: protoMsg,
 	entproto.ServiceAnnotation: protoSvc,
 	entproto.FieldAnnotation:   protoField,
 	entproto.EnumAnnotation:    protoEnum,
 	"EntSQL":                   entSQL,
 	"EntGQL":                   entGQL,
+	"Fields":                   fieldAnnotation,
 }
 
 // Context represents an ent schema directory, parsed and loaded as ASTs, such that schema type declarations
@@ -128,7 +129,7 @@ func Load(path string, annotators map[string]Annotator) (*Context, error) {
 		newTypes:      make(map[string]*ast.File),
 	}
 	for k, v := range annotators {
-		annotators[k] = v
+		Annotators[k] = v
 	}
 	return &ctx, nil
 }
