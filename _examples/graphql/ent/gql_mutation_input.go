@@ -3,11 +3,7 @@
 package ent
 
 import (
-	"time"
-
 	"github.com/google/uuid"
-
-	"github.com/flume/enthistory"
 )
 
 // CreateTodoInput represents a mutation input for creating todos.
@@ -58,72 +54,6 @@ func (c *TodoUpdate) SetInput(i UpdateTodoInput) *TodoUpdate {
 
 // SetInput applies the change-set in the UpdateTodoInput on the TodoUpdateOne builder.
 func (c *TodoUpdateOne) SetInput(i UpdateTodoInput) *TodoUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// CreateTodoHistoryInput represents a mutation input for creating todohistories.
-type CreateTodoHistoryInput struct {
-	HistoryTime *time.Time
-	Operation   enthistory.OpType
-	Ref         *uuid.UUID
-	UpdatedBy   *uuid.UUID
-	OtherID     *uuid.UUID
-	Name        string
-}
-
-// Mutate applies the CreateTodoHistoryInput on the TodoHistoryMutation builder.
-func (i *CreateTodoHistoryInput) Mutate(m *TodoHistoryMutation) {
-	if v := i.HistoryTime; v != nil {
-		m.SetHistoryTime(*v)
-	}
-	m.SetOperation(i.Operation)
-	if v := i.Ref; v != nil {
-		m.SetRef(*v)
-	}
-	if v := i.UpdatedBy; v != nil {
-		m.SetUpdatedBy(*v)
-	}
-	if v := i.OtherID; v != nil {
-		m.SetOtherID(*v)
-	}
-	m.SetName(i.Name)
-}
-
-// SetInput applies the change-set in the CreateTodoHistoryInput on the TodoHistoryCreate builder.
-func (c *TodoHistoryCreate) SetInput(i CreateTodoHistoryInput) *TodoHistoryCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateTodoHistoryInput represents a mutation input for updating todohistories.
-type UpdateTodoHistoryInput struct {
-	ClearOtherID bool
-	OtherID      *uuid.UUID
-	Name         *string
-}
-
-// Mutate applies the UpdateTodoHistoryInput on the TodoHistoryMutation builder.
-func (i *UpdateTodoHistoryInput) Mutate(m *TodoHistoryMutation) {
-	if i.ClearOtherID {
-		m.ClearOtherID()
-	}
-	if v := i.OtherID; v != nil {
-		m.SetOtherID(*v)
-	}
-	if v := i.Name; v != nil {
-		m.SetName(*v)
-	}
-}
-
-// SetInput applies the change-set in the UpdateTodoHistoryInput on the TodoHistoryUpdate builder.
-func (c *TodoHistoryUpdate) SetInput(i UpdateTodoHistoryInput) *TodoHistoryUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateTodoHistoryInput on the TodoHistoryUpdateOne builder.
-func (c *TodoHistoryUpdateOne) SetInput(i UpdateTodoHistoryInput) *TodoHistoryUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

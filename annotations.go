@@ -40,7 +40,7 @@ func (m Annotations) Merge(other schema.Annotation) schema.Annotation {
 	default:
 		return m
 	}
-	if m.IsHistory == false {
+	if !m.IsHistory {
 		m.IsHistory = ant.IsHistory
 	}
 	if len(ant.Annotations) > 0 {
