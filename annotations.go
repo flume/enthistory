@@ -12,9 +12,13 @@ import (
 )
 
 type Annotations struct {
-	IsHistory   bool `json:"isHistory,omitempty"`
+	IsHistory bool `json:"isHistory,omitempty"`
+	// If you would like to add custom annotations to the history table,
+	// otherwise it will default to the same annotations as the original table
 	Annotations []schema.Annotation
-	Mixins      []ent.Mixin
+	// if you would like to add custom mixins to the history table,
+	// otherwise it will default to the same mixins as the original table
+	Mixins []ent.Mixin
 
 	// Deprecated: Has no effect anymore, models must be tracked manually in the entc config
 	Exclude bool `json:"exclude,omitempty"`

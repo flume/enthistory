@@ -72,6 +72,24 @@ package ent
 
 ## Usage
 
+### Customizing History Schemas
+
+You can customize the history tables to an extent by using `enthistory.Annotations{}` annotation on the original schema.
+You can set custom annotations for the history schemas or add custom mixins. Adding custom annotations or mixins 
+will overwrite the default annotations and mixins inherited from the original schema, so you need to include them if you 
+want to keep the original annotations and mixins. Custom Mixins add the ability to add history specific 
+policies, hooks, interceptors, etc. to the history table as well.
+```go
+type Annotations struct {
+	// If you would like to add custom annotations to the history table,
+	// otherwise it will default to the same annotations as the original table
+	Annotations []schema.Annotation
+	// if you would like to add custom mixins to the history table,
+	// otherwise it will default to the same mixins as the original table
+	Mixins []ent.Mixin
+}
+```
+
 ### Querying History
 
 After generating your history tables from your schema, you can use the ent client to query the history tables. The
