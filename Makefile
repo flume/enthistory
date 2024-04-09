@@ -24,6 +24,13 @@ generate:
 	(cd _examples && go generate ./... )
 	$(MAKE) fmt
 
+.PHONY: upgrade-deps
+# upgrade-deps:
+#    Upgrade the dependencies
+upgrade-deps:
+	(cd _examples && go get -u -t ./... && go mod tidy)
+	(go get -u -t ./... && go mod tidy)
+	go work sync ./...
 
 .PHONY: test
 # test:
