@@ -27,6 +27,7 @@ func main() {
 		enthistory.WithUpdatedBy("userid", enthistory.ValueTypeUUID),
 		enthistory.WithImmutableFields(),
 		enthistory.WithNillableFields(),
+		enthistory.WithTriggers(enthistory.OpTypeInsert),
 	); err != nil {
 		log.Fatal(fmt.Sprintf("running enthistory codegen: %v", err))
 	}

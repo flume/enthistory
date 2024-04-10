@@ -31,6 +31,7 @@ func (Character) Annotations() []schema.Annotation {
 			Annotations: []schema.Annotation{
 				entsql.Annotation{Table: "character_history"},
 			},
+			Triggers: []enthistory.OpType{enthistory.OpTypeUpdate},
 		},
 	}
 }
