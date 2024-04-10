@@ -35,6 +35,7 @@ type HistoryOptions struct {
 	UpdatedBy        *UpdatedBy
 	FieldProperties  *FieldProperties
 	HistoryTimeIndex bool
+	Triggers         []OpType
 }
 
 var updatedBy *UpdatedBy
@@ -102,6 +103,14 @@ func WithHistoryTimeIndex() Option {
 func WithInheritIdType() Option {
 	return func(config *HistoryOptions) {
 		config.InheritIdType = true
+	}
+}
+
+// WithTriggers allows you to set the triggers for tracking history, can be any combination of OpTypeInsert, OpTypeUpdate, OpTypeDelete,
+// nil value will default to all triggers, to exclude all triggers set to an empty slice
+func WithTriggers(triggers ...OpType) Option {
+	return func(config *HistoryOptions) {
+		config.Triggers = triggers
 	}
 }
 
@@ -178,7 +187,7 @@ func Generate(schemaPath string, schemas []ent.Interface, options ...Option) (er
 			upsert.Mixins = s.Mixin()
 		}
 
-		annotations, gerr := handleAnnotation(schemaName, s.Annotations())
+		annotations, gerr := handleAnnotation(schemaName, s.Annotations(), opts.Triggers)
 		if gerr != nil {
 			return gerr
 		}
@@ -194,7 +203,11 @@ func Generate(schemaPath string, schemas []ent.Interface, options ...Option) (er
 		}
 		upsert.Annotations = annotations
 		if historyAnt.Annotations != nil {
-			withIsHist := historyAnt.Merge(Annotations{Annotations: []schema.Annotation{Annotations{IsHistory: true}}})
+			triggers := []OpType{OpTypeInsert, OpTypeUpdate, OpTypeDelete}
+			if historyAnt.Triggers != nil {
+				triggers = historyAnt.Triggers
+			}
+			withIsHist := historyAnt.Merge(Annotations{Annotations: []schema.Annotation{Annotations{IsHistory: true, Triggers: triggers}}})
 			upsert.Annotations = withIsHist.(Annotations).Annotations
 		}
 		mutations = append(mutations, &upsert)
@@ -239,7 +252,10 @@ func getFileNames(schemaPath string) (map[string]string, error) {
 	return filenames, nil
 }
 
-func handleAnnotation(schemaName string, ants []schema.Annotation) ([]schema.Annotation, error) {
+func handleAnnotation(schemaName string, ants []schema.Annotation, triggers []OpType) ([]schema.Annotation, error) {
+	if triggers == nil {
+		triggers = []OpType{OpTypeInsert, OpTypeUpdate, OpTypeDelete}
+	}
 	annotations := slices.Clone(ants)
 
 	idx := slices.IndexFunc(annotations, func(sc schema.Annotation) bool {
@@ -262,11 +278,14 @@ func handleAnnotation(schemaName string, ants []schema.Annotation) ([]schema.Ann
 		return ok
 	})
 	if idx == -1 {
-		annotations = append(annotations, Annotations{IsHistory: true})
+		annotations = append(annotations, Annotations{IsHistory: true, Triggers: triggers})
 	} else {
 		ant, ok := annotations[idx].(Annotations)
 		if ok {
 			ant.IsHistory = true
+			if ant.Triggers == nil {
+				ant.Triggers = triggers
+			}
 			annotations[idx] = ant
 		}
 	}
@@ -335,7 +354,7 @@ type mergeable interface {
 }
 
 func mergeAnnotations[T mergeable](from ...T) schema.Annotation {
-	var t T
+	var t = *new(T)
 	if _, ok := any(t).(schema.Merger); !ok {
 		return t
 	}

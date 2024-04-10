@@ -54,3 +54,16 @@ func (op *OpType) UnmarshalGQL(val any) error {
 		return fmt.Errorf("%s is not a valid history operation type", str)
 	}
 }
+
+func (op OpType) Name() (string, error) {
+	switch op {
+	case OpTypeInsert:
+		return "OpTypeInsert", nil
+	case OpTypeUpdate:
+		return "OpTypeUpdate", nil
+	case OpTypeDelete:
+		return "OpTypeDelete", nil
+	default:
+		return "", fmt.Errorf("%s is not a valid history operation type", op)
+	}
+}
