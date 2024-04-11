@@ -30,12 +30,16 @@ func On(hk ent.Hook, op ent.Op) ent.Hook {
 	}
 }
 
-func HistoryHooks[T Mutation]() []ent.Hook {
-	return []ent.Hook{
-		On(historyHookCreate[T](), ent.OpCreate),
-		On(historyHookUpdate[T](), ent.OpUpdate|ent.OpUpdateOne),
-		On(historyHookDelete[T](), ent.OpDelete|ent.OpDeleteOne),
-	}
+func HistoryTriggerInsert[T Mutation]() ent.Hook {
+	return On(historyHookCreate[T](), ent.OpCreate)
+}
+
+func HistoryTriggerUpdate[T Mutation]() ent.Hook {
+	return On(historyHookUpdate[T](), ent.OpUpdate|ent.OpUpdateOne)
+}
+
+func HistoryTriggerDelete[T Mutation]() ent.Hook {
+	return On(historyHookDelete[T](), ent.OpDelete|ent.OpDeleteOne)
 }
 
 func getTypedMutation[T Mutation](m ent.Mutation) (T, error) {

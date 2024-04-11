@@ -42,6 +42,8 @@ func main() {
 		enthistory.WithUpdatedBy("userId", enthistory.ValueTypeInt),
 		enthistory.WithHistoryTimeIndex(),
 		enthistory.WithImmutableFields(),
+		// Without this line, all triggers will be used as the default
+		enthistory.WithTriggers(enthistory.OpTypeInsert),
 	); err != nil {
 		log.Fatal(fmt.Sprintf("running enthistory codegen: %v", err))
 	}
@@ -78,7 +80,9 @@ You can customize the history tables to an extent by using `enthistory.Annotatio
 You can set custom annotations for the history schemas or add custom mixins. Adding custom annotations or mixins 
 will overwrite the default annotations and mixins inherited from the original schema, so you need to include them if you 
 want to keep the original annotations and mixins. Custom Mixins add the ability to add history specific 
-policies, hooks, interceptors, etc. to the history table as well.
+policies, hooks, interceptors, etc. to the history table as well. You can also set custom triggers for tracking history
+on a schema level. The triggers can be any combination of `OpTypeInsert`, `OpTypeUpdate`, `OpTypeDelete`. If you want to
+set a global trigger set for all schemas you can set the triggers in the `enthistory.Generate()` function.
 ```go
 type Annotations struct {
 	// If you would like to add custom annotations to the history table,
@@ -87,6 +91,10 @@ type Annotations struct {
 	// if you would like to add custom mixins to the history table,
 	// otherwise it will default to the same mixins as the original table
 	Mixins []ent.Mixin
+    // Global triggers for tracking history, can be any combination of OpTypeInsert, OpTypeUpdate, OpTypeDelete,
+    // nil value will default to all triggers, to exclude all triggers set to an empty slice,
+    // schema specific triggers will override these global triggers
+    Triggers []OpType `json:"triggers,omitempty"`
 }
 ```
 

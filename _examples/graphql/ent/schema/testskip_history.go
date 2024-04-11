@@ -48,5 +48,5 @@ func (TestSkipHistory) Edges() []ent.Edge {
 	return nil
 }
 func (TestSkipHistory) Annotations() []schema.Annotation {
-	return []schema.Annotation{entgql.Annotation{Skip: entgql.SkipAll}, entsql.Annotation{Table: "testskip_history"}, enthistory.Annotations{IsHistory: true}}
+	return []schema.Annotation{entgql.Annotation{Skip: entgql.SkipAll}, entsql.Annotation{Table: "testskip_history"}, enthistory.Annotations{IsHistory: true, Triggers: []enthistory.OpType{enthistory.OpTypeInsert, enthistory.OpTypeUpdate, enthistory.OpTypeDelete}}}
 }

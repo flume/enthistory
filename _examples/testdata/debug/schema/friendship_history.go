@@ -49,7 +49,7 @@ func (FriendshipHistory) Edges() []ent.Edge {
 	return nil
 }
 func (FriendshipHistory) Annotations() []schema.Annotation {
-	return []schema.Annotation{entsql.Annotation{Table: "friendship_history"}, enthistory.Annotations{IsHistory: true}}
+	return []schema.Annotation{entsql.Annotation{Table: "friendship_history"}, enthistory.Annotations{IsHistory: true, Triggers: []enthistory.OpType{enthistory.OpTypeInsert}}}
 }
 func (FriendshipHistory) Indexes() []ent.Index {
 	return []ent.Index{index.Fields("history_time")}
