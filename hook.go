@@ -42,6 +42,14 @@ func HistoryTriggerDelete[T Mutation]() ent.Hook {
 	return On(historyHookDelete[T](), ent.OpDelete|ent.OpDeleteOne)
 }
 
+func HistoryHooks[T Mutation]() []ent.Hook {
+	return []ent.Hook{
+		HistoryTriggerInsert[T](),
+		HistoryTriggerUpdate[T](),
+		HistoryTriggerDelete[T](),
+	}
+}
+
 func getTypedMutation[T Mutation](m ent.Mutation) (T, error) {
 	f, ok := any(m).(T)
 	if !ok {
