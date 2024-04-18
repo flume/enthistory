@@ -1,6 +1,7 @@
 package enthistory
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"os"
@@ -11,6 +12,8 @@ import (
 	"slices"
 	"strings"
 	"time"
+
+	"golang.org/x/sync/errgroup"
 
 	"golang.org/x/tools/go/packages"
 
@@ -155,62 +158,72 @@ func Generate(schemaPath string, schemas []ent.Interface, options ...Option) (er
 	if ferr != nil {
 		return ferr
 	}
-	var mutations []schemast.Mutator
-	for _, s := range schemas {
-		hfields, herr := historyFields(s, deref(opts))
-		if herr != nil {
-			return herr
-		}
 
-		typeof := reflect.TypeOf(s)
-		var schemaName string
-		if typeof.Kind() == reflect.Ptr {
-			schemaName = typeof.Elem().Name()
-		} else {
-			schemaName = typeof.Name()
-		}
-
-		upsert := schemast.UpsertSchema{
-			Name:   fmt.Sprintf("%sHistory", schemaName),
-			Fields: hfields,
-		}
-
-		if filename, ok := filenames[schemaName]; ok {
-			upsert.FileName = filename
-		}
-
-		if opts.HistoryTimeIndex {
-			upsert.Indexes = append(upsert.Indexes, index.Fields("history_time"))
-		}
-
-		if len(s.Mixin()) > 0 {
-			upsert.Mixins = s.Mixin()
-		}
-
-		annotations, gerr := handleAnnotation(schemaName, s.Annotations(), opts.Triggers)
-		if gerr != nil {
-			return gerr
-		}
-		historyAnt := reduce(annotations, func(agg Annotations, item schema.Annotation) Annotations {
-			if item.Name() == "History" {
-				ant := agg.Merge(item)
-				agg = ant.(Annotations)
+	g, _ := errgroup.WithContext(context.Background())
+	mutations := make([]schemast.Mutator, len(schemas))
+	for i, s := range schemas {
+		g.Go(func() error {
+			hfields, herr := historyFields(s, deref(opts))
+			if herr != nil {
+				return herr
 			}
-			return agg
-		}, Annotations{})
-		if historyAnt.Mixins != nil {
-			upsert.Mixins = historyAnt.Mixins
-		}
-		upsert.Annotations = annotations
-		if historyAnt.Annotations != nil {
-			triggers := []OpType{OpTypeInsert, OpTypeUpdate, OpTypeDelete}
-			if historyAnt.Triggers != nil {
-				triggers = historyAnt.Triggers
+
+			typeof := reflect.TypeOf(s)
+			var schemaName string
+			if typeof.Kind() == reflect.Ptr {
+				schemaName = typeof.Elem().Name()
+			} else {
+				schemaName = typeof.Name()
 			}
-			withIsHist := historyAnt.Merge(Annotations{Annotations: []schema.Annotation{Annotations{IsHistory: true, Triggers: triggers}}})
-			upsert.Annotations = withIsHist.(Annotations).Annotations
+
+			upsert := schemast.UpsertSchema{
+				Name:   fmt.Sprintf("%sHistory", schemaName),
+				Fields: hfields,
+			}
+
+			if filename, ok := filenames[schemaName]; ok {
+				upsert.FileName = filename
+			}
+
+			if opts.HistoryTimeIndex {
+				upsert.Indexes = append(upsert.Indexes, index.Fields("history_time"))
+			}
+
+			if len(s.Mixin()) > 0 {
+				upsert.Mixins = s.Mixin()
+			}
+
+			annotations, gerr := handleAnnotation(schemaName, s.Annotations(), opts.Triggers)
+			if gerr != nil {
+				return gerr
+			}
+			historyAnt := reduce(annotations, func(agg Annotations, item schema.Annotation) Annotations {
+				if item.Name() == "History" {
+					ant := agg.Merge(item)
+					agg = ant.(Annotations)
+				}
+				return agg
+			}, Annotations{})
+			if historyAnt.Mixins != nil {
+				upsert.Mixins = historyAnt.Mixins
+			}
+			upsert.Annotations = annotations
+			if historyAnt.Annotations != nil {
+				triggers := []OpType{OpTypeInsert, OpTypeUpdate, OpTypeDelete}
+				if historyAnt.Triggers != nil {
+					triggers = historyAnt.Triggers
+				}
+				withIsHist := historyAnt.Merge(Annotations{Annotations: []schema.Annotation{Annotations{IsHistory: true, Triggers: triggers}}})
+				upsert.Annotations = withIsHist.(Annotations).Annotations
+			}
+			mutations[i] = &upsert
+			return nil
+		})
+
+		err = g.Wait()
+		if err != nil {
+			return err
 		}
-		mutations = append(mutations, &upsert)
 	}
 
 	if err = schemast.Mutate(ctx, mutations...); err != nil {
