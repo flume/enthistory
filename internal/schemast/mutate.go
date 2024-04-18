@@ -134,10 +134,20 @@ func (c *Context) appendReturnItem(k kind, typeName string, item ast.Expr) error
 func (c *Context) appendImport(typeName, pkgPath string) {
 	importSpec := &ast.ImportSpec{Path: &ast.BasicLit{Value: pkgPath, Kind: token.STRING}}
 	if f, ok := c.newTypes[typeName]; ok {
-		f.Imports = append(f.Imports, importSpec)
+		hasImport := slices.ContainsFunc(f.Imports, func(i *ast.ImportSpec) bool {
+			return !(i == nil || i.Path == nil && i.Path.Value != pkgPath)
+		})
+		if !hasImport {
+			f.Imports = append(f.Imports, importSpec)
+		}
 		for _, decl := range f.Decls {
 			if gen, ok := decl.(*ast.GenDecl); ok && gen.Tok == token.IMPORT {
-				gen.Specs = append(gen.Specs, importSpec)
+				hasImport = slices.ContainsFunc(gen.Specs, func(i ast.Spec) bool {
+					return i.(*ast.ImportSpec).Path.Value == pkgPath
+				})
+				if !hasImport {
+					gen.Specs = append(gen.Specs, importSpec)
+				}
 				return
 			}
 		}
