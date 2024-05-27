@@ -75,6 +75,20 @@ func (cc *CharacterCreate) SetInfo(m map[string]interface{}) *CharacterCreate {
 	return cc
 }
 
+// SetLevel sets the "level" field.
+func (cc *CharacterCreate) SetLevel(i int) *CharacterCreate {
+	cc.mutation.SetLevel(i)
+	return cc
+}
+
+// SetNillableLevel sets the "level" field if the given value is not nil.
+func (cc *CharacterCreate) SetNillableLevel(i *int) *CharacterCreate {
+	if i != nil {
+		cc.SetLevel(*i)
+	}
+	return cc
+}
+
 // AddFriendIDs adds the "friends" edge to the Character entity by IDs.
 func (cc *CharacterCreate) AddFriendIDs(ids ...int) *CharacterCreate {
 	cc.mutation.AddFriendIDs(ids...)
@@ -237,6 +251,10 @@ func (cc *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Info(); ok {
 		_spec.SetField(character.FieldInfo, field.TypeJSON, value)
 		_node.Info = value
+	}
+	if value, ok := cc.mutation.Level(); ok {
+		_spec.SetField(character.FieldLevel, field.TypeInt, value)
+		_node.Level = &value
 	}
 	if nodes := cc.mutation.FriendsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

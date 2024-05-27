@@ -462,6 +462,23 @@ func TestEntHistoryBasic(t *testing.T) {
 				assert.Equal(t, residence.ID.String(), auditTable[10][1])
 			},
 		},
+		{
+			name: "Can clear nillable values",
+			runner: func(t *testing.T, client *ent.Client) {
+				ctx := context.Background()
+
+				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").SetLevel(42).Save(ctx)
+				assert.NoError(t, err)
+
+				iceking, err := simon.Update().SetName("Ice King").ClearLevel().Save(ctx)
+				assert.NoError(t, err)
+
+				icekingHistory, err := iceking.History().Latest(ctx)
+				assert.NoError(t, err)
+
+				assert.Nil(t, icekingHistory.Level)
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

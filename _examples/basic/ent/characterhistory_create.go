@@ -122,6 +122,20 @@ func (chc *CharacterHistoryCreate) SetInfo(m map[string]interface{}) *CharacterH
 	return chc
 }
 
+// SetLevel sets the "level" field.
+func (chc *CharacterHistoryCreate) SetLevel(i int) *CharacterHistoryCreate {
+	chc.mutation.SetLevel(i)
+	return chc
+}
+
+// SetNillableLevel sets the "level" field if the given value is not nil.
+func (chc *CharacterHistoryCreate) SetNillableLevel(i *int) *CharacterHistoryCreate {
+	if i != nil {
+		chc.SetLevel(*i)
+	}
+	return chc
+}
+
 // Mutation returns the CharacterHistoryMutation object of the builder.
 func (chc *CharacterHistoryCreate) Mutation() *CharacterHistoryMutation {
 	return chc.mutation
@@ -261,6 +275,10 @@ func (chc *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cr
 	if value, ok := chc.mutation.Info(); ok {
 		_spec.SetField(characterhistory.FieldInfo, field.TypeJSON, value)
 		_node.Info = value
+	}
+	if value, ok := chc.mutation.Level(); ok {
+		_spec.SetField(characterhistory.FieldLevel, field.TypeInt, value)
+		_node.Level = &value
 	}
 	return _node, _spec
 }

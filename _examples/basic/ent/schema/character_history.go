@@ -43,6 +43,10 @@ func (CharacterHistory) Fields() []ent.Field {
 			Immutable(),
 		field.JSON("info", map[string]any{}).
 			Optional().
+			Immutable(),
+		field.Int("level").
+			Nillable().
+			Optional().
 			Immutable()}
 }
 func (CharacterHistory) Edges() []ent.Edge {

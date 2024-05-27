@@ -32,6 +32,8 @@ type Character struct {
 	Nicknames []string `json:"nicknames,omitempty"`
 	// Info holds the value of the "info" field.
 	Info map[string]interface{} `json:"info,omitempty"`
+	// Level holds the value of the "level" field.
+	Level *int `json:"level,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CharacterQuery when eager-loading is set.
 	Edges               CharacterEdges `json:"edges"`
@@ -88,7 +90,7 @@ func (*Character) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case character.FieldNicknames, character.FieldInfo:
 			values[i] = new([]byte)
-		case character.FieldID, character.FieldAge:
+		case character.FieldID, character.FieldAge, character.FieldLevel:
 			values[i] = new(sql.NullInt64)
 		case character.FieldName:
 			values[i] = new(sql.NullString)
@@ -156,6 +158,13 @@ func (c *Character) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &c.Info); err != nil {
 					return fmt.Errorf("unmarshal field info: %w", err)
 				}
+			}
+		case character.FieldLevel:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field level", values[i])
+			} else if value.Valid {
+				c.Level = new(int)
+				*c.Level = int(value.Int64)
 			}
 		case character.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
@@ -232,6 +241,11 @@ func (c *Character) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("info=")
 	builder.WriteString(fmt.Sprintf("%v", c.Info))
+	builder.WriteString(", ")
+	if v := c.Level; v != nil {
+		builder.WriteString("level=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

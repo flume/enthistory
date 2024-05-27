@@ -34,6 +34,9 @@ func (Character) Fields() []ent.Field {
 			Optional(),
 		field.JSON("info", map[string]any{}).
 			Optional(),
+		field.Int("level").
+			Optional().
+			Nillable(),
 	}
 }
 

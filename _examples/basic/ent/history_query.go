@@ -69,6 +69,7 @@ func (ch *CharacterHistory) Restore(ctx context.Context) (*Character, error) {
 		SetName(ch.Name).
 		SetNicknames(ch.Nicknames).
 		SetInfo(ch.Info).
+		SetNillableLevel(ch.Level).
 		Save(ctx)
 }
 

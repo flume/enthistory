@@ -103,6 +103,33 @@ func (cu *CharacterUpdate) ClearInfo() *CharacterUpdate {
 	return cu
 }
 
+// SetLevel sets the "level" field.
+func (cu *CharacterUpdate) SetLevel(i int) *CharacterUpdate {
+	cu.mutation.ResetLevel()
+	cu.mutation.SetLevel(i)
+	return cu
+}
+
+// SetNillableLevel sets the "level" field if the given value is not nil.
+func (cu *CharacterUpdate) SetNillableLevel(i *int) *CharacterUpdate {
+	if i != nil {
+		cu.SetLevel(*i)
+	}
+	return cu
+}
+
+// AddLevel adds i to the "level" field.
+func (cu *CharacterUpdate) AddLevel(i int) *CharacterUpdate {
+	cu.mutation.AddLevel(i)
+	return cu
+}
+
+// ClearLevel clears the value of the "level" field.
+func (cu *CharacterUpdate) ClearLevel() *CharacterUpdate {
+	cu.mutation.ClearLevel()
+	return cu
+}
+
 // AddFriendIDs adds the "friends" edge to the Character entity by IDs.
 func (cu *CharacterUpdate) AddFriendIDs(ids ...int) *CharacterUpdate {
 	cu.mutation.AddFriendIDs(ids...)
@@ -291,6 +318,15 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.InfoCleared() {
 		_spec.ClearField(character.FieldInfo, field.TypeJSON)
+	}
+	if value, ok := cu.mutation.Level(); ok {
+		_spec.SetField(character.FieldLevel, field.TypeInt, value)
+	}
+	if value, ok := cu.mutation.AddedLevel(); ok {
+		_spec.AddField(character.FieldLevel, field.TypeInt, value)
+	}
+	if cu.mutation.LevelCleared() {
+		_spec.ClearField(character.FieldLevel, field.TypeInt)
 	}
 	if cu.mutation.FriendsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -514,6 +550,33 @@ func (cuo *CharacterUpdateOne) ClearInfo() *CharacterUpdateOne {
 	return cuo
 }
 
+// SetLevel sets the "level" field.
+func (cuo *CharacterUpdateOne) SetLevel(i int) *CharacterUpdateOne {
+	cuo.mutation.ResetLevel()
+	cuo.mutation.SetLevel(i)
+	return cuo
+}
+
+// SetNillableLevel sets the "level" field if the given value is not nil.
+func (cuo *CharacterUpdateOne) SetNillableLevel(i *int) *CharacterUpdateOne {
+	if i != nil {
+		cuo.SetLevel(*i)
+	}
+	return cuo
+}
+
+// AddLevel adds i to the "level" field.
+func (cuo *CharacterUpdateOne) AddLevel(i int) *CharacterUpdateOne {
+	cuo.mutation.AddLevel(i)
+	return cuo
+}
+
+// ClearLevel clears the value of the "level" field.
+func (cuo *CharacterUpdateOne) ClearLevel() *CharacterUpdateOne {
+	cuo.mutation.ClearLevel()
+	return cuo
+}
+
 // AddFriendIDs adds the "friends" edge to the Character entity by IDs.
 func (cuo *CharacterUpdateOne) AddFriendIDs(ids ...int) *CharacterUpdateOne {
 	cuo.mutation.AddFriendIDs(ids...)
@@ -732,6 +795,15 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 	}
 	if cuo.mutation.InfoCleared() {
 		_spec.ClearField(character.FieldInfo, field.TypeJSON)
+	}
+	if value, ok := cuo.mutation.Level(); ok {
+		_spec.SetField(character.FieldLevel, field.TypeInt, value)
+	}
+	if value, ok := cuo.mutation.AddedLevel(); ok {
+		_spec.AddField(character.FieldLevel, field.TypeInt, value)
+	}
+	if cuo.mutation.LevelCleared() {
+		_spec.ClearField(character.FieldLevel, field.TypeInt)
 	}
 	if cuo.mutation.FriendsCleared() {
 		edge := &sqlgraph.EdgeSpec{

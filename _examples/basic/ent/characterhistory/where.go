@@ -91,6 +91,11 @@ func Name(v string) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldEQ(FieldName, v))
 }
 
+// Level applies equality check predicate on the "level" field. It's identical to LevelEQ.
+func Level(v int) predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldEQ(FieldLevel, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldEQ(FieldCreatedAt, v))
@@ -454,6 +459,56 @@ func InfoIsNil() predicate.CharacterHistory {
 // InfoNotNil applies the NotNil predicate on the "info" field.
 func InfoNotNil() predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldNotNull(FieldInfo))
+}
+
+// LevelEQ applies the EQ predicate on the "level" field.
+func LevelEQ(v int) predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldEQ(FieldLevel, v))
+}
+
+// LevelNEQ applies the NEQ predicate on the "level" field.
+func LevelNEQ(v int) predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldNEQ(FieldLevel, v))
+}
+
+// LevelIn applies the In predicate on the "level" field.
+func LevelIn(vs ...int) predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldIn(FieldLevel, vs...))
+}
+
+// LevelNotIn applies the NotIn predicate on the "level" field.
+func LevelNotIn(vs ...int) predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldNotIn(FieldLevel, vs...))
+}
+
+// LevelGT applies the GT predicate on the "level" field.
+func LevelGT(v int) predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldGT(FieldLevel, v))
+}
+
+// LevelGTE applies the GTE predicate on the "level" field.
+func LevelGTE(v int) predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldGTE(FieldLevel, v))
+}
+
+// LevelLT applies the LT predicate on the "level" field.
+func LevelLT(v int) predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldLT(FieldLevel, v))
+}
+
+// LevelLTE applies the LTE predicate on the "level" field.
+func LevelLTE(v int) predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldLTE(FieldLevel, v))
+}
+
+// LevelIsNil applies the IsNil predicate on the "level" field.
+func LevelIsNil() predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldIsNull(FieldLevel))
+}
+
+// LevelNotNil applies the NotNil predicate on the "level" field.
+func LevelNotNil() predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldNotNull(FieldLevel))
 }
 
 // And groups predicates with the AND operator between them.

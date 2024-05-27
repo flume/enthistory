@@ -96,6 +96,10 @@ func (m *CharacterMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetInfo(info)
 	}
 
+	if level, exists := m.Level(); exists {
+		create = create.SetNillableLevel(&level)
+	}
+
 	_, err = create.Save(ctx)
 	if err != nil {
 		rollback(tx, err)
@@ -172,6 +176,12 @@ func (m *CharacterMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetInfo(character.Info)
 		}
 
+		if level, exists := m.Level(); exists {
+			create = create.SetNillableLevel(&level)
+		} else if !m.LevelCleared() {
+			create = create.SetNillableLevel(character.Level)
+		}
+
 		_, err = create.Save(ctx)
 		if err != nil {
 			rollback(tx, err)
@@ -219,6 +229,7 @@ func (m *CharacterMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetName(character.Name).
 			SetNicknames(character.Nicknames).
 			SetInfo(character.Info).
+			SetNillableLevel(character.Level).
 			Save(ctx)
 		if err != nil {
 			rollback(tx, err)

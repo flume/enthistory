@@ -36,6 +36,8 @@ const (
 	FieldNicknames = "nicknames"
 	// FieldInfo holds the string denoting the info field in the database.
 	FieldInfo = "info"
+	// FieldLevel holds the string denoting the level field in the database.
+	FieldLevel = "level"
 	// Table holds the table name of the characterhistory in the database.
 	Table = "character_history"
 )
@@ -53,6 +55,7 @@ var Columns = []string{
 	FieldName,
 	FieldNicknames,
 	FieldInfo,
+	FieldLevel,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -132,4 +135,9 @@ func ByAge(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByLevel orders the results by the level field.
+func ByLevel(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLevel, opts...).ToFunc()
 }
