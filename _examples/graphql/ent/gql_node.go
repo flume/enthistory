@@ -20,14 +20,20 @@ type Noder interface {
 	IsNode()
 }
 
-// IsNode implements the Node interface check for GQLGen.
-func (n *TestExclude) IsNode() {}
+var testexcludeImplementors = []string{"TestExclude", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
-func (n *Todo) IsNode() {}
+func (*TestExclude) IsNode() {}
+
+var todoImplementors = []string{"Todo", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
-func (n *TodoHistory) IsNode() {}
+func (*Todo) IsNode() {}
+
+var todohistoryImplementors = []string{"TodoHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*TodoHistory) IsNode() {}
 
 var errNodeInvalidID = &NotFoundError{"node"}
 
@@ -90,39 +96,30 @@ func (c *Client) noder(ctx context.Context, table string, id uuid.UUID) (Noder, 
 	case testexclude.Table:
 		query := c.TestExclude.Query().
 			Where(testexclude.ID(id))
-		query, err := query.CollectFields(ctx, "TestExclude")
-		if err != nil {
-			return nil, err
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, testexcludeImplementors...); err != nil {
+				return nil, err
+			}
 		}
-		n, err := query.Only(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return n, nil
+		return query.Only(ctx)
 	case todo.Table:
 		query := c.Todo.Query().
 			Where(todo.ID(id))
-		query, err := query.CollectFields(ctx, "Todo")
-		if err != nil {
-			return nil, err
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, todoImplementors...); err != nil {
+				return nil, err
+			}
 		}
-		n, err := query.Only(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return n, nil
+		return query.Only(ctx)
 	case todohistory.Table:
 		query := c.TodoHistory.Query().
 			Where(todohistory.ID(id))
-		query, err := query.CollectFields(ctx, "TodoHistory")
-		if err != nil {
-			return nil, err
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, todohistoryImplementors...); err != nil {
+				return nil, err
+			}
 		}
-		n, err := query.Only(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return n, nil
+		return query.Only(ctx)
 	default:
 		return nil, fmt.Errorf("cannot resolve noder from table %q: %w", table, errNodeInvalidID)
 	}
@@ -199,7 +196,7 @@ func (c *Client) noders(ctx context.Context, table string, ids []uuid.UUID) ([]N
 	case testexclude.Table:
 		query := c.TestExclude.Query().
 			Where(testexclude.IDIn(ids...))
-		query, err := query.CollectFields(ctx, "TestExclude")
+		query, err := query.CollectFields(ctx, testexcludeImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -215,7 +212,7 @@ func (c *Client) noders(ctx context.Context, table string, ids []uuid.UUID) ([]N
 	case todo.Table:
 		query := c.Todo.Query().
 			Where(todo.IDIn(ids...))
-		query, err := query.CollectFields(ctx, "Todo")
+		query, err := query.CollectFields(ctx, todoImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -231,7 +228,7 @@ func (c *Client) noders(ctx context.Context, table string, ids []uuid.UUID) ([]N
 	case todohistory.Table:
 		query := c.TodoHistory.Query().
 			Where(todohistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, "TodoHistory")
+		query, err := query.CollectFields(ctx, todohistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}
