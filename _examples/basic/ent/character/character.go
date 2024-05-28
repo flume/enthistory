@@ -26,6 +26,8 @@ const (
 	FieldNicknames = "nicknames"
 	// FieldInfo holds the string denoting the info field in the database.
 	FieldInfo = "info"
+	// FieldLevel holds the string denoting the level field in the database.
+	FieldLevel = "level"
 	// EdgeFriends holds the string denoting the friends edge name in mutations.
 	EdgeFriends = "friends"
 	// EdgeResidence holds the string denoting the residence edge name in mutations.
@@ -61,6 +63,7 @@ var Columns = []string{
 	FieldName,
 	FieldNicknames,
 	FieldInfo,
+	FieldLevel,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "character"
@@ -127,6 +130,11 @@ func ByAge(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByLevel orders the results by the level field.
+func ByLevel(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLevel, opts...).ToFunc()
 }
 
 // ByFriendsCount orders the results by friends count.

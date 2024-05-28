@@ -99,6 +99,9 @@ func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if chu.mutation.InfoCleared() {
 		_spec.ClearField(characterhistory.FieldInfo, field.TypeJSON)
 	}
+	if chu.mutation.LevelCleared() {
+		_spec.ClearField(characterhistory.FieldLevel, field.TypeInt)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, chu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{characterhistory.Label}
@@ -219,6 +222,9 @@ func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Char
 	}
 	if chuo.mutation.InfoCleared() {
 		_spec.ClearField(characterhistory.FieldInfo, field.TypeJSON)
+	}
+	if chuo.mutation.LevelCleared() {
+		_spec.ClearField(characterhistory.FieldLevel, field.TypeInt)
 	}
 	_node = &CharacterHistory{config: chuo.config}
 	_spec.Assign = _node.assignValues

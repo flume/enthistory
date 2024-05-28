@@ -54,6 +54,8 @@ type CharacterMutation struct {
 	nicknames          *[]string
 	appendnicknames    []string
 	info               *map[string]interface{}
+	level              *int
+	addlevel           *int
 	clearedFields      map[string]struct{}
 	friends            map[int]struct{}
 	removedfriends     map[int]struct{}
@@ -444,6 +446,76 @@ func (m *CharacterMutation) ResetInfo() {
 	delete(m.clearedFields, character.FieldInfo)
 }
 
+// SetLevel sets the "level" field.
+func (m *CharacterMutation) SetLevel(i int) {
+	m.level = &i
+	m.addlevel = nil
+}
+
+// Level returns the value of the "level" field in the mutation.
+func (m *CharacterMutation) Level() (r int, exists bool) {
+	v := m.level
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLevel returns the old "level" field's value of the Character entity.
+// If the Character object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CharacterMutation) OldLevel(ctx context.Context) (v *int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLevel is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLevel requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLevel: %w", err)
+	}
+	return oldValue.Level, nil
+}
+
+// AddLevel adds i to the "level" field.
+func (m *CharacterMutation) AddLevel(i int) {
+	if m.addlevel != nil {
+		*m.addlevel += i
+	} else {
+		m.addlevel = &i
+	}
+}
+
+// AddedLevel returns the value that was added to the "level" field in this mutation.
+func (m *CharacterMutation) AddedLevel() (r int, exists bool) {
+	v := m.addlevel
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearLevel clears the value of the "level" field.
+func (m *CharacterMutation) ClearLevel() {
+	m.level = nil
+	m.addlevel = nil
+	m.clearedFields[character.FieldLevel] = struct{}{}
+}
+
+// LevelCleared returns if the "level" field was cleared in this mutation.
+func (m *CharacterMutation) LevelCleared() bool {
+	_, ok := m.clearedFields[character.FieldLevel]
+	return ok
+}
+
+// ResetLevel resets all changes to the "level" field.
+func (m *CharacterMutation) ResetLevel() {
+	m.level = nil
+	m.addlevel = nil
+	delete(m.clearedFields, character.FieldLevel)
+}
+
 // AddFriendIDs adds the "friends" edge to the Character entity by ids.
 func (m *CharacterMutation) AddFriendIDs(ids ...int) {
 	if m.friends == nil {
@@ -625,7 +697,7 @@ func (m *CharacterMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CharacterMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 7)
 	if m.created_at != nil {
 		fields = append(fields, character.FieldCreatedAt)
 	}
@@ -643,6 +715,9 @@ func (m *CharacterMutation) Fields() []string {
 	}
 	if m.info != nil {
 		fields = append(fields, character.FieldInfo)
+	}
+	if m.level != nil {
+		fields = append(fields, character.FieldLevel)
 	}
 	return fields
 }
@@ -664,6 +739,8 @@ func (m *CharacterMutation) Field(name string) (ent.Value, bool) {
 		return m.Nicknames()
 	case character.FieldInfo:
 		return m.Info()
+	case character.FieldLevel:
+		return m.Level()
 	}
 	return nil, false
 }
@@ -685,6 +762,8 @@ func (m *CharacterMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldNicknames(ctx)
 	case character.FieldInfo:
 		return m.OldInfo(ctx)
+	case character.FieldLevel:
+		return m.OldLevel(ctx)
 	}
 	return nil, fmt.Errorf("unknown Character field %s", name)
 }
@@ -736,6 +815,13 @@ func (m *CharacterMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetInfo(v)
 		return nil
+	case character.FieldLevel:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLevel(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Character field %s", name)
 }
@@ -747,6 +833,9 @@ func (m *CharacterMutation) AddedFields() []string {
 	if m.addage != nil {
 		fields = append(fields, character.FieldAge)
 	}
+	if m.addlevel != nil {
+		fields = append(fields, character.FieldLevel)
+	}
 	return fields
 }
 
@@ -757,6 +846,8 @@ func (m *CharacterMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case character.FieldAge:
 		return m.AddedAge()
+	case character.FieldLevel:
+		return m.AddedLevel()
 	}
 	return nil, false
 }
@@ -773,6 +864,13 @@ func (m *CharacterMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddAge(v)
 		return nil
+	case character.FieldLevel:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddLevel(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Character numeric field %s", name)
 }
@@ -786,6 +884,9 @@ func (m *CharacterMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(character.FieldInfo) {
 		fields = append(fields, character.FieldInfo)
+	}
+	if m.FieldCleared(character.FieldLevel) {
+		fields = append(fields, character.FieldLevel)
 	}
 	return fields
 }
@@ -806,6 +907,9 @@ func (m *CharacterMutation) ClearField(name string) error {
 		return nil
 	case character.FieldInfo:
 		m.ClearInfo()
+		return nil
+	case character.FieldLevel:
+		m.ClearLevel()
 		return nil
 	}
 	return fmt.Errorf("unknown Character nullable field %s", name)
@@ -832,6 +936,9 @@ func (m *CharacterMutation) ResetField(name string) error {
 		return nil
 	case character.FieldInfo:
 		m.ResetInfo()
+		return nil
+	case character.FieldLevel:
+		m.ResetLevel()
 		return nil
 	}
 	return fmt.Errorf("unknown Character field %s", name)
@@ -985,6 +1092,8 @@ type CharacterHistoryMutation struct {
 	nicknames       *[]string
 	appendnicknames []string
 	info            *map[string]interface{}
+	level           *int
+	addlevel        *int
 	clearedFields   map[string]struct{}
 	done            bool
 	oldValue        func(context.Context) (*CharacterHistory, error)
@@ -1579,6 +1688,76 @@ func (m *CharacterHistoryMutation) ResetInfo() {
 	delete(m.clearedFields, characterhistory.FieldInfo)
 }
 
+// SetLevel sets the "level" field.
+func (m *CharacterHistoryMutation) SetLevel(i int) {
+	m.level = &i
+	m.addlevel = nil
+}
+
+// Level returns the value of the "level" field in the mutation.
+func (m *CharacterHistoryMutation) Level() (r int, exists bool) {
+	v := m.level
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLevel returns the old "level" field's value of the CharacterHistory entity.
+// If the CharacterHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CharacterHistoryMutation) OldLevel(ctx context.Context) (v *int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLevel is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLevel requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLevel: %w", err)
+	}
+	return oldValue.Level, nil
+}
+
+// AddLevel adds i to the "level" field.
+func (m *CharacterHistoryMutation) AddLevel(i int) {
+	if m.addlevel != nil {
+		*m.addlevel += i
+	} else {
+		m.addlevel = &i
+	}
+}
+
+// AddedLevel returns the value that was added to the "level" field in this mutation.
+func (m *CharacterHistoryMutation) AddedLevel() (r int, exists bool) {
+	v := m.addlevel
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearLevel clears the value of the "level" field.
+func (m *CharacterHistoryMutation) ClearLevel() {
+	m.level = nil
+	m.addlevel = nil
+	m.clearedFields[characterhistory.FieldLevel] = struct{}{}
+}
+
+// LevelCleared returns if the "level" field was cleared in this mutation.
+func (m *CharacterHistoryMutation) LevelCleared() bool {
+	_, ok := m.clearedFields[characterhistory.FieldLevel]
+	return ok
+}
+
+// ResetLevel resets all changes to the "level" field.
+func (m *CharacterHistoryMutation) ResetLevel() {
+	m.level = nil
+	m.addlevel = nil
+	delete(m.clearedFields, characterhistory.FieldLevel)
+}
+
 // Where appends a list predicates to the CharacterHistoryMutation builder.
 func (m *CharacterHistoryMutation) Where(ps ...predicate.CharacterHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -1613,7 +1792,7 @@ func (m *CharacterHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CharacterHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.created_at != nil {
 		fields = append(fields, characterhistory.FieldCreatedAt)
 	}
@@ -1644,6 +1823,9 @@ func (m *CharacterHistoryMutation) Fields() []string {
 	if m.info != nil {
 		fields = append(fields, characterhistory.FieldInfo)
 	}
+	if m.level != nil {
+		fields = append(fields, characterhistory.FieldLevel)
+	}
 	return fields
 }
 
@@ -1672,6 +1854,8 @@ func (m *CharacterHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Nicknames()
 	case characterhistory.FieldInfo:
 		return m.Info()
+	case characterhistory.FieldLevel:
+		return m.Level()
 	}
 	return nil, false
 }
@@ -1701,6 +1885,8 @@ func (m *CharacterHistoryMutation) OldField(ctx context.Context, name string) (e
 		return m.OldNicknames(ctx)
 	case characterhistory.FieldInfo:
 		return m.OldInfo(ctx)
+	case characterhistory.FieldLevel:
+		return m.OldLevel(ctx)
 	}
 	return nil, fmt.Errorf("unknown CharacterHistory field %s", name)
 }
@@ -1780,6 +1966,13 @@ func (m *CharacterHistoryMutation) SetField(name string, value ent.Value) error 
 		}
 		m.SetInfo(v)
 		return nil
+	case characterhistory.FieldLevel:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLevel(v)
+		return nil
 	}
 	return fmt.Errorf("unknown CharacterHistory field %s", name)
 }
@@ -1797,6 +1990,9 @@ func (m *CharacterHistoryMutation) AddedFields() []string {
 	if m.addage != nil {
 		fields = append(fields, characterhistory.FieldAge)
 	}
+	if m.addlevel != nil {
+		fields = append(fields, characterhistory.FieldLevel)
+	}
 	return fields
 }
 
@@ -1811,6 +2007,8 @@ func (m *CharacterHistoryMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedUpdatedBy()
 	case characterhistory.FieldAge:
 		return m.AddedAge()
+	case characterhistory.FieldLevel:
+		return m.AddedLevel()
 	}
 	return nil, false
 }
@@ -1841,6 +2039,13 @@ func (m *CharacterHistoryMutation) AddField(name string, value ent.Value) error 
 		}
 		m.AddAge(v)
 		return nil
+	case characterhistory.FieldLevel:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddLevel(v)
+		return nil
 	}
 	return fmt.Errorf("unknown CharacterHistory numeric field %s", name)
 }
@@ -1860,6 +2065,9 @@ func (m *CharacterHistoryMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(characterhistory.FieldInfo) {
 		fields = append(fields, characterhistory.FieldInfo)
+	}
+	if m.FieldCleared(characterhistory.FieldLevel) {
+		fields = append(fields, characterhistory.FieldLevel)
 	}
 	return fields
 }
@@ -1886,6 +2094,9 @@ func (m *CharacterHistoryMutation) ClearField(name string) error {
 		return nil
 	case characterhistory.FieldInfo:
 		m.ClearInfo()
+		return nil
+	case characterhistory.FieldLevel:
+		m.ClearLevel()
 		return nil
 	}
 	return fmt.Errorf("unknown CharacterHistory nullable field %s", name)
@@ -1924,6 +2135,9 @@ func (m *CharacterHistoryMutation) ResetField(name string) error {
 		return nil
 	case characterhistory.FieldInfo:
 		m.ResetInfo()
+		return nil
+	case characterhistory.FieldLevel:
+		m.ResetLevel()
 		return nil
 	}
 	return fmt.Errorf("unknown CharacterHistory field %s", name)

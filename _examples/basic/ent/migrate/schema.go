@@ -18,6 +18,7 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "nicknames", Type: field.TypeJSON, Nullable: true},
 		{Name: "info", Type: field.TypeJSON, Nullable: true},
+		{Name: "level", Type: field.TypeInt, Nullable: true},
 		{Name: "residence_occupants", Type: field.TypeUUID, Nullable: true},
 	}
 	// CharacterTable holds the schema information for the "character" table.
@@ -28,7 +29,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "character_residence_occupants",
-				Columns:    []*schema.Column{CharacterColumns[7]},
+				Columns:    []*schema.Column{CharacterColumns[8]},
 				RefColumns: []*schema.Column{ResidenceColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -47,6 +48,7 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "nicknames", Type: field.TypeJSON, Nullable: true},
 		{Name: "info", Type: field.TypeJSON, Nullable: true},
+		{Name: "level", Type: field.TypeInt, Nullable: true},
 	}
 	// CharacterHistoryTable holds the schema information for the "character_history" table.
 	CharacterHistoryTable = &schema.Table{

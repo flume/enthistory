@@ -39,7 +39,9 @@ type CharacterHistory struct {
 	// Nicknames holds the value of the "nicknames" field.
 	Nicknames []string `json:"nicknames,omitempty"`
 	// Info holds the value of the "info" field.
-	Info         map[string]interface{} `json:"info,omitempty"`
+	Info map[string]interface{} `json:"info,omitempty"`
+	// Level holds the value of the "level" field.
+	Level        *int `json:"level,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -50,7 +52,7 @@ func (*CharacterHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case characterhistory.FieldNicknames, characterhistory.FieldInfo:
 			values[i] = new([]byte)
-		case characterhistory.FieldID, characterhistory.FieldRef, characterhistory.FieldUpdatedBy, characterhistory.FieldAge:
+		case characterhistory.FieldID, characterhistory.FieldRef, characterhistory.FieldUpdatedBy, characterhistory.FieldAge, characterhistory.FieldLevel:
 			values[i] = new(sql.NullInt64)
 		case characterhistory.FieldOperation, characterhistory.FieldName:
 			values[i] = new(sql.NullString)
@@ -142,6 +144,13 @@ func (ch *CharacterHistory) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field info: %w", err)
 				}
 			}
+		case characterhistory.FieldLevel:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field level", values[i])
+			} else if value.Valid {
+				ch.Level = new(int)
+				*ch.Level = int(value.Int64)
+			}
 		default:
 			ch.selectValues.Set(columns[i], values[i])
 		}
@@ -209,6 +218,11 @@ func (ch *CharacterHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("info=")
 	builder.WriteString(fmt.Sprintf("%v", ch.Info))
+	builder.WriteString(", ")
+	if v := ch.Level; v != nil {
+		builder.WriteString("level=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

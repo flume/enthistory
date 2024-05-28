@@ -183,7 +183,7 @@ import (
                         {{ range $f := $n.Fields }}
                             if {{ camel $f.Name }}, exists := m.{{ $f.StructField }}(); exists {
                                 create = create.Set{{ if $f.Nillable }}Nillable{{ end }}{{ $f.StructField }}({{ if $f.Nillable }}&{{ end }}{{ camel $f.Name }})
-                            } else {
+                            } else{{ if $f.Nillable }} if !m.{{ $f.StructField }}Cleared() {{ end }} {
                                 create = create.Set{{ if $f.Nillable }}Nillable{{ end }}{{ $f.StructField }}({{ camel $name }}.{{ pascal $f.Name }})
                             }
                         {{ end }}

@@ -75,6 +75,11 @@ func Name(v string) predicate.Character {
 	return predicate.Character(sql.FieldEQ(FieldName, v))
 }
 
+// Level applies equality check predicate on the "level" field. It's identical to LevelEQ.
+func Level(v int) predicate.Character {
+	return predicate.Character(sql.FieldEQ(FieldLevel, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Character {
 	return predicate.Character(sql.FieldEQ(FieldCreatedAt, v))
@@ -278,6 +283,56 @@ func InfoIsNil() predicate.Character {
 // InfoNotNil applies the NotNil predicate on the "info" field.
 func InfoNotNil() predicate.Character {
 	return predicate.Character(sql.FieldNotNull(FieldInfo))
+}
+
+// LevelEQ applies the EQ predicate on the "level" field.
+func LevelEQ(v int) predicate.Character {
+	return predicate.Character(sql.FieldEQ(FieldLevel, v))
+}
+
+// LevelNEQ applies the NEQ predicate on the "level" field.
+func LevelNEQ(v int) predicate.Character {
+	return predicate.Character(sql.FieldNEQ(FieldLevel, v))
+}
+
+// LevelIn applies the In predicate on the "level" field.
+func LevelIn(vs ...int) predicate.Character {
+	return predicate.Character(sql.FieldIn(FieldLevel, vs...))
+}
+
+// LevelNotIn applies the NotIn predicate on the "level" field.
+func LevelNotIn(vs ...int) predicate.Character {
+	return predicate.Character(sql.FieldNotIn(FieldLevel, vs...))
+}
+
+// LevelGT applies the GT predicate on the "level" field.
+func LevelGT(v int) predicate.Character {
+	return predicate.Character(sql.FieldGT(FieldLevel, v))
+}
+
+// LevelGTE applies the GTE predicate on the "level" field.
+func LevelGTE(v int) predicate.Character {
+	return predicate.Character(sql.FieldGTE(FieldLevel, v))
+}
+
+// LevelLT applies the LT predicate on the "level" field.
+func LevelLT(v int) predicate.Character {
+	return predicate.Character(sql.FieldLT(FieldLevel, v))
+}
+
+// LevelLTE applies the LTE predicate on the "level" field.
+func LevelLTE(v int) predicate.Character {
+	return predicate.Character(sql.FieldLTE(FieldLevel, v))
+}
+
+// LevelIsNil applies the IsNil predicate on the "level" field.
+func LevelIsNil() predicate.Character {
+	return predicate.Character(sql.FieldIsNull(FieldLevel))
+}
+
+// LevelNotNil applies the NotNil predicate on the "level" field.
+func LevelNotNil() predicate.Character {
+	return predicate.Character(sql.FieldNotNull(FieldLevel))
 }
 
 // HasFriends applies the HasEdge predicate on the "friends" edge.
