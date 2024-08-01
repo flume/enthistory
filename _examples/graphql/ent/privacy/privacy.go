@@ -3,8 +3,9 @@
 package privacy
 
 import (
-	"_examples/graphql/ent"
 	"context"
+
+	"_examples/graphql/ent"
 
 	"entgo.io/ent/entql"
 	"entgo.io/ent/privacy"

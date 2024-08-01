@@ -3,9 +3,9 @@
 package enttest
 
 import (
-	"_examples/custompaths/internal/ent"
 	"context"
 
+	"_examples/custompaths/internal/ent"
 	// required by schema hooks.
 	_ "_examples/custompaths/internal/ent/runtime"
 

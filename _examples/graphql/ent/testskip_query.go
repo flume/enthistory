@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -63,7 +64,7 @@ func (tsq *TestSkipQuery) Order(o ...testskip.OrderOption) *TestSkipQuery {
 // First returns the first TestSkip entity from the query.
 // Returns a *NotFoundError when no TestSkip was found.
 func (tsq *TestSkipQuery) First(ctx context.Context) (*TestSkip, error) {
-	nodes, err := tsq.Limit(1).All(setContextOp(ctx, tsq.ctx, "First"))
+	nodes, err := tsq.Limit(1).All(setContextOp(ctx, tsq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +87,7 @@ func (tsq *TestSkipQuery) FirstX(ctx context.Context) *TestSkip {
 // Returns a *NotFoundError when no TestSkip ID was found.
 func (tsq *TestSkipQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = tsq.Limit(1).IDs(setContextOp(ctx, tsq.ctx, "FirstID")); err != nil {
+	if ids, err = tsq.Limit(1).IDs(setContextOp(ctx, tsq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -109,7 +110,7 @@ func (tsq *TestSkipQuery) FirstIDX(ctx context.Context) uuid.UUID {
 // Returns a *NotSingularError when more than one TestSkip entity is found.
 // Returns a *NotFoundError when no TestSkip entities are found.
 func (tsq *TestSkipQuery) Only(ctx context.Context) (*TestSkip, error) {
-	nodes, err := tsq.Limit(2).All(setContextOp(ctx, tsq.ctx, "Only"))
+	nodes, err := tsq.Limit(2).All(setContextOp(ctx, tsq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +138,7 @@ func (tsq *TestSkipQuery) OnlyX(ctx context.Context) *TestSkip {
 // Returns a *NotFoundError when no entities are found.
 func (tsq *TestSkipQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = tsq.Limit(2).IDs(setContextOp(ctx, tsq.ctx, "OnlyID")); err != nil {
+	if ids, err = tsq.Limit(2).IDs(setContextOp(ctx, tsq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -162,7 +163,7 @@ func (tsq *TestSkipQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 
 // All executes the query and returns a list of TestSkips.
 func (tsq *TestSkipQuery) All(ctx context.Context) ([]*TestSkip, error) {
-	ctx = setContextOp(ctx, tsq.ctx, "All")
+	ctx = setContextOp(ctx, tsq.ctx, ent.OpQueryAll)
 	if err := tsq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -184,7 +185,7 @@ func (tsq *TestSkipQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) 
 	if tsq.ctx.Unique == nil && tsq.path != nil {
 		tsq.Unique(true)
 	}
-	ctx = setContextOp(ctx, tsq.ctx, "IDs")
+	ctx = setContextOp(ctx, tsq.ctx, ent.OpQueryIDs)
 	if err = tsq.Select(testskip.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -202,7 +203,7 @@ func (tsq *TestSkipQuery) IDsX(ctx context.Context) []uuid.UUID {
 
 // Count returns the count of the given query.
 func (tsq *TestSkipQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, tsq.ctx, "Count")
+	ctx = setContextOp(ctx, tsq.ctx, ent.OpQueryCount)
 	if err := tsq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -220,7 +221,7 @@ func (tsq *TestSkipQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (tsq *TestSkipQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, tsq.ctx, "Exist")
+	ctx = setContextOp(ctx, tsq.ctx, ent.OpQueryExist)
 	switch _, err := tsq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -463,7 +464,7 @@ func (tsgb *TestSkipGroupBy) Aggregate(fns ...AggregateFunc) *TestSkipGroupBy {
 
 // Scan applies the selector query and scans the result into the given value.
 func (tsgb *TestSkipGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tsgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, tsgb.build.ctx, ent.OpQueryGroupBy)
 	if err := tsgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -511,7 +512,7 @@ func (tss *TestSkipSelect) Aggregate(fns ...AggregateFunc) *TestSkipSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (tss *TestSkipSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tss.ctx, "Select")
+	ctx = setContextOp(ctx, tss.ctx, ent.OpQuerySelect)
 	if err := tss.prepareQuery(ctx); err != nil {
 		return err
 	}

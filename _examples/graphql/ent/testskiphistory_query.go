@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -63,7 +64,7 @@ func (tshq *TestSkipHistoryQuery) Order(o ...testskiphistory.OrderOption) *TestS
 // First returns the first TestSkipHistory entity from the query.
 // Returns a *NotFoundError when no TestSkipHistory was found.
 func (tshq *TestSkipHistoryQuery) First(ctx context.Context) (*TestSkipHistory, error) {
-	nodes, err := tshq.Limit(1).All(setContextOp(ctx, tshq.ctx, "First"))
+	nodes, err := tshq.Limit(1).All(setContextOp(ctx, tshq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +87,7 @@ func (tshq *TestSkipHistoryQuery) FirstX(ctx context.Context) *TestSkipHistory {
 // Returns a *NotFoundError when no TestSkipHistory ID was found.
 func (tshq *TestSkipHistoryQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = tshq.Limit(1).IDs(setContextOp(ctx, tshq.ctx, "FirstID")); err != nil {
+	if ids, err = tshq.Limit(1).IDs(setContextOp(ctx, tshq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -109,7 +110,7 @@ func (tshq *TestSkipHistoryQuery) FirstIDX(ctx context.Context) uuid.UUID {
 // Returns a *NotSingularError when more than one TestSkipHistory entity is found.
 // Returns a *NotFoundError when no TestSkipHistory entities are found.
 func (tshq *TestSkipHistoryQuery) Only(ctx context.Context) (*TestSkipHistory, error) {
-	nodes, err := tshq.Limit(2).All(setContextOp(ctx, tshq.ctx, "Only"))
+	nodes, err := tshq.Limit(2).All(setContextOp(ctx, tshq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +138,7 @@ func (tshq *TestSkipHistoryQuery) OnlyX(ctx context.Context) *TestSkipHistory {
 // Returns a *NotFoundError when no entities are found.
 func (tshq *TestSkipHistoryQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = tshq.Limit(2).IDs(setContextOp(ctx, tshq.ctx, "OnlyID")); err != nil {
+	if ids, err = tshq.Limit(2).IDs(setContextOp(ctx, tshq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -162,7 +163,7 @@ func (tshq *TestSkipHistoryQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 
 // All executes the query and returns a list of TestSkipHistories.
 func (tshq *TestSkipHistoryQuery) All(ctx context.Context) ([]*TestSkipHistory, error) {
-	ctx = setContextOp(ctx, tshq.ctx, "All")
+	ctx = setContextOp(ctx, tshq.ctx, ent.OpQueryAll)
 	if err := tshq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -184,7 +185,7 @@ func (tshq *TestSkipHistoryQuery) IDs(ctx context.Context) (ids []uuid.UUID, err
 	if tshq.ctx.Unique == nil && tshq.path != nil {
 		tshq.Unique(true)
 	}
-	ctx = setContextOp(ctx, tshq.ctx, "IDs")
+	ctx = setContextOp(ctx, tshq.ctx, ent.OpQueryIDs)
 	if err = tshq.Select(testskiphistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -202,7 +203,7 @@ func (tshq *TestSkipHistoryQuery) IDsX(ctx context.Context) []uuid.UUID {
 
 // Count returns the count of the given query.
 func (tshq *TestSkipHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, tshq.ctx, "Count")
+	ctx = setContextOp(ctx, tshq.ctx, ent.OpQueryCount)
 	if err := tshq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -220,7 +221,7 @@ func (tshq *TestSkipHistoryQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (tshq *TestSkipHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, tshq.ctx, "Exist")
+	ctx = setContextOp(ctx, tshq.ctx, ent.OpQueryExist)
 	switch _, err := tshq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -463,7 +464,7 @@ func (tshgb *TestSkipHistoryGroupBy) Aggregate(fns ...AggregateFunc) *TestSkipHi
 
 // Scan applies the selector query and scans the result into the given value.
 func (tshgb *TestSkipHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tshgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, tshgb.build.ctx, ent.OpQueryGroupBy)
 	if err := tshgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -511,7 +512,7 @@ func (tshs *TestSkipHistorySelect) Aggregate(fns ...AggregateFunc) *TestSkipHist
 
 // Scan applies the selector query and scans the result into the given value.
 func (tshs *TestSkipHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tshs.ctx, "Select")
+	ctx = setContextOp(ctx, tshs.ctx, ent.OpQuerySelect)
 	if err := tshs.prepareQuery(ctx); err != nil {
 		return err
 	}

@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -60,7 +61,7 @@ func (rhq *ResidenceHistoryQuery) Order(o ...residencehistory.OrderOption) *Resi
 // First returns the first ResidenceHistory entity from the query.
 // Returns a *NotFoundError when no ResidenceHistory was found.
 func (rhq *ResidenceHistoryQuery) First(ctx context.Context) (*ResidenceHistory, error) {
-	nodes, err := rhq.Limit(1).All(setContextOp(ctx, rhq.ctx, "First"))
+	nodes, err := rhq.Limit(1).All(setContextOp(ctx, rhq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +84,7 @@ func (rhq *ResidenceHistoryQuery) FirstX(ctx context.Context) *ResidenceHistory 
 // Returns a *NotFoundError when no ResidenceHistory ID was found.
 func (rhq *ResidenceHistoryQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = rhq.Limit(1).IDs(setContextOp(ctx, rhq.ctx, "FirstID")); err != nil {
+	if ids, err = rhq.Limit(1).IDs(setContextOp(ctx, rhq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -106,7 +107,7 @@ func (rhq *ResidenceHistoryQuery) FirstIDX(ctx context.Context) int {
 // Returns a *NotSingularError when more than one ResidenceHistory entity is found.
 // Returns a *NotFoundError when no ResidenceHistory entities are found.
 func (rhq *ResidenceHistoryQuery) Only(ctx context.Context) (*ResidenceHistory, error) {
-	nodes, err := rhq.Limit(2).All(setContextOp(ctx, rhq.ctx, "Only"))
+	nodes, err := rhq.Limit(2).All(setContextOp(ctx, rhq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +135,7 @@ func (rhq *ResidenceHistoryQuery) OnlyX(ctx context.Context) *ResidenceHistory {
 // Returns a *NotFoundError when no entities are found.
 func (rhq *ResidenceHistoryQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = rhq.Limit(2).IDs(setContextOp(ctx, rhq.ctx, "OnlyID")); err != nil {
+	if ids, err = rhq.Limit(2).IDs(setContextOp(ctx, rhq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -159,7 +160,7 @@ func (rhq *ResidenceHistoryQuery) OnlyIDX(ctx context.Context) int {
 
 // All executes the query and returns a list of ResidenceHistories.
 func (rhq *ResidenceHistoryQuery) All(ctx context.Context) ([]*ResidenceHistory, error) {
-	ctx = setContextOp(ctx, rhq.ctx, "All")
+	ctx = setContextOp(ctx, rhq.ctx, ent.OpQueryAll)
 	if err := rhq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -181,7 +182,7 @@ func (rhq *ResidenceHistoryQuery) IDs(ctx context.Context) (ids []int, err error
 	if rhq.ctx.Unique == nil && rhq.path != nil {
 		rhq.Unique(true)
 	}
-	ctx = setContextOp(ctx, rhq.ctx, "IDs")
+	ctx = setContextOp(ctx, rhq.ctx, ent.OpQueryIDs)
 	if err = rhq.Select(residencehistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -199,7 +200,7 @@ func (rhq *ResidenceHistoryQuery) IDsX(ctx context.Context) []int {
 
 // Count returns the count of the given query.
 func (rhq *ResidenceHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, rhq.ctx, "Count")
+	ctx = setContextOp(ctx, rhq.ctx, ent.OpQueryCount)
 	if err := rhq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -217,7 +218,7 @@ func (rhq *ResidenceHistoryQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (rhq *ResidenceHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, rhq.ctx, "Exist")
+	ctx = setContextOp(ctx, rhq.ctx, ent.OpQueryExist)
 	switch _, err := rhq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -449,7 +450,7 @@ func (rhgb *ResidenceHistoryGroupBy) Aggregate(fns ...AggregateFunc) *ResidenceH
 
 // Scan applies the selector query and scans the result into the given value.
 func (rhgb *ResidenceHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, rhgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, rhgb.build.ctx, ent.OpQueryGroupBy)
 	if err := rhgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -497,7 +498,7 @@ func (rhs *ResidenceHistorySelect) Aggregate(fns ...AggregateFunc) *ResidenceHis
 
 // Scan applies the selector query and scans the result into the given value.
 func (rhs *ResidenceHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, rhs.ctx, "Select")
+	ctx = setContextOp(ctx, rhs.ctx, ent.OpQuerySelect)
 	if err := rhs.prepareQuery(ctx); err != nil {
 		return err
 	}

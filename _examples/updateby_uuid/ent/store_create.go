@@ -153,7 +153,7 @@ func (sc *StoreCreate) check() error {
 	if _, ok := sc.mutation.OrganizationID(); !ok {
 		return &ValidationError{Name: "organization_id", err: errors.New(`ent: missing required field "Store.organization_id"`)}
 	}
-	if _, ok := sc.mutation.OrganizationID(); !ok {
+	if len(sc.mutation.OrganizationIDs()) == 0 {
 		return &ValidationError{Name: "organization", err: errors.New(`ent: missing required edge "Store.organization"`)}
 	}
 	return nil

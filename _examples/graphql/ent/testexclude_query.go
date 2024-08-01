@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -63,7 +64,7 @@ func (teq *TestExcludeQuery) Order(o ...testexclude.OrderOption) *TestExcludeQue
 // First returns the first TestExclude entity from the query.
 // Returns a *NotFoundError when no TestExclude was found.
 func (teq *TestExcludeQuery) First(ctx context.Context) (*TestExclude, error) {
-	nodes, err := teq.Limit(1).All(setContextOp(ctx, teq.ctx, "First"))
+	nodes, err := teq.Limit(1).All(setContextOp(ctx, teq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +87,7 @@ func (teq *TestExcludeQuery) FirstX(ctx context.Context) *TestExclude {
 // Returns a *NotFoundError when no TestExclude ID was found.
 func (teq *TestExcludeQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = teq.Limit(1).IDs(setContextOp(ctx, teq.ctx, "FirstID")); err != nil {
+	if ids, err = teq.Limit(1).IDs(setContextOp(ctx, teq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -109,7 +110,7 @@ func (teq *TestExcludeQuery) FirstIDX(ctx context.Context) uuid.UUID {
 // Returns a *NotSingularError when more than one TestExclude entity is found.
 // Returns a *NotFoundError when no TestExclude entities are found.
 func (teq *TestExcludeQuery) Only(ctx context.Context) (*TestExclude, error) {
-	nodes, err := teq.Limit(2).All(setContextOp(ctx, teq.ctx, "Only"))
+	nodes, err := teq.Limit(2).All(setContextOp(ctx, teq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +138,7 @@ func (teq *TestExcludeQuery) OnlyX(ctx context.Context) *TestExclude {
 // Returns a *NotFoundError when no entities are found.
 func (teq *TestExcludeQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = teq.Limit(2).IDs(setContextOp(ctx, teq.ctx, "OnlyID")); err != nil {
+	if ids, err = teq.Limit(2).IDs(setContextOp(ctx, teq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -162,7 +163,7 @@ func (teq *TestExcludeQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 
 // All executes the query and returns a list of TestExcludes.
 func (teq *TestExcludeQuery) All(ctx context.Context) ([]*TestExclude, error) {
-	ctx = setContextOp(ctx, teq.ctx, "All")
+	ctx = setContextOp(ctx, teq.ctx, ent.OpQueryAll)
 	if err := teq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -184,7 +185,7 @@ func (teq *TestExcludeQuery) IDs(ctx context.Context) (ids []uuid.UUID, err erro
 	if teq.ctx.Unique == nil && teq.path != nil {
 		teq.Unique(true)
 	}
-	ctx = setContextOp(ctx, teq.ctx, "IDs")
+	ctx = setContextOp(ctx, teq.ctx, ent.OpQueryIDs)
 	if err = teq.Select(testexclude.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -202,7 +203,7 @@ func (teq *TestExcludeQuery) IDsX(ctx context.Context) []uuid.UUID {
 
 // Count returns the count of the given query.
 func (teq *TestExcludeQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, teq.ctx, "Count")
+	ctx = setContextOp(ctx, teq.ctx, ent.OpQueryCount)
 	if err := teq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -220,7 +221,7 @@ func (teq *TestExcludeQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (teq *TestExcludeQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, teq.ctx, "Exist")
+	ctx = setContextOp(ctx, teq.ctx, ent.OpQueryExist)
 	switch _, err := teq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -463,7 +464,7 @@ func (tegb *TestExcludeGroupBy) Aggregate(fns ...AggregateFunc) *TestExcludeGrou
 
 // Scan applies the selector query and scans the result into the given value.
 func (tegb *TestExcludeGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tegb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, tegb.build.ctx, ent.OpQueryGroupBy)
 	if err := tegb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -511,7 +512,7 @@ func (tes *TestExcludeSelect) Aggregate(fns ...AggregateFunc) *TestExcludeSelect
 
 // Scan applies the selector query and scans the result into the given value.
 func (tes *TestExcludeSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tes.ctx, "Select")
+	ctx = setContextOp(ctx, tes.ctx, ent.OpQuerySelect)
 	if err := tes.prepareQuery(ctx); err != nil {
 		return err
 	}
