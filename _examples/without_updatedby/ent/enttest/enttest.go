@@ -3,9 +3,9 @@
 package enttest
 
 import (
-	"_examples/without_updatedby/ent"
 	"context"
 
+	"_examples/without_updatedby/ent"
 	// required by schema hooks.
 	_ "_examples/without_updatedby/ent/runtime"
 

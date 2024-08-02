@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -60,7 +61,7 @@ func (fhq *FriendshipHistoryQuery) Order(o ...friendshiphistory.OrderOption) *Fr
 // First returns the first FriendshipHistory entity from the query.
 // Returns a *NotFoundError when no FriendshipHistory was found.
 func (fhq *FriendshipHistoryQuery) First(ctx context.Context) (*FriendshipHistory, error) {
-	nodes, err := fhq.Limit(1).All(setContextOp(ctx, fhq.ctx, "First"))
+	nodes, err := fhq.Limit(1).All(setContextOp(ctx, fhq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +84,7 @@ func (fhq *FriendshipHistoryQuery) FirstX(ctx context.Context) *FriendshipHistor
 // Returns a *NotFoundError when no FriendshipHistory ID was found.
 func (fhq *FriendshipHistoryQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = fhq.Limit(1).IDs(setContextOp(ctx, fhq.ctx, "FirstID")); err != nil {
+	if ids, err = fhq.Limit(1).IDs(setContextOp(ctx, fhq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -106,7 +107,7 @@ func (fhq *FriendshipHistoryQuery) FirstIDX(ctx context.Context) int {
 // Returns a *NotSingularError when more than one FriendshipHistory entity is found.
 // Returns a *NotFoundError when no FriendshipHistory entities are found.
 func (fhq *FriendshipHistoryQuery) Only(ctx context.Context) (*FriendshipHistory, error) {
-	nodes, err := fhq.Limit(2).All(setContextOp(ctx, fhq.ctx, "Only"))
+	nodes, err := fhq.Limit(2).All(setContextOp(ctx, fhq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +135,7 @@ func (fhq *FriendshipHistoryQuery) OnlyX(ctx context.Context) *FriendshipHistory
 // Returns a *NotFoundError when no entities are found.
 func (fhq *FriendshipHistoryQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = fhq.Limit(2).IDs(setContextOp(ctx, fhq.ctx, "OnlyID")); err != nil {
+	if ids, err = fhq.Limit(2).IDs(setContextOp(ctx, fhq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -159,7 +160,7 @@ func (fhq *FriendshipHistoryQuery) OnlyIDX(ctx context.Context) int {
 
 // All executes the query and returns a list of FriendshipHistories.
 func (fhq *FriendshipHistoryQuery) All(ctx context.Context) ([]*FriendshipHistory, error) {
-	ctx = setContextOp(ctx, fhq.ctx, "All")
+	ctx = setContextOp(ctx, fhq.ctx, ent.OpQueryAll)
 	if err := fhq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -181,7 +182,7 @@ func (fhq *FriendshipHistoryQuery) IDs(ctx context.Context) (ids []int, err erro
 	if fhq.ctx.Unique == nil && fhq.path != nil {
 		fhq.Unique(true)
 	}
-	ctx = setContextOp(ctx, fhq.ctx, "IDs")
+	ctx = setContextOp(ctx, fhq.ctx, ent.OpQueryIDs)
 	if err = fhq.Select(friendshiphistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -199,7 +200,7 @@ func (fhq *FriendshipHistoryQuery) IDsX(ctx context.Context) []int {
 
 // Count returns the count of the given query.
 func (fhq *FriendshipHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, fhq.ctx, "Count")
+	ctx = setContextOp(ctx, fhq.ctx, ent.OpQueryCount)
 	if err := fhq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -217,7 +218,7 @@ func (fhq *FriendshipHistoryQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (fhq *FriendshipHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, fhq.ctx, "Exist")
+	ctx = setContextOp(ctx, fhq.ctx, ent.OpQueryExist)
 	switch _, err := fhq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -449,7 +450,7 @@ func (fhgb *FriendshipHistoryGroupBy) Aggregate(fns ...AggregateFunc) *Friendshi
 
 // Scan applies the selector query and scans the result into the given value.
 func (fhgb *FriendshipHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, fhgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, fhgb.build.ctx, ent.OpQueryGroupBy)
 	if err := fhgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -497,7 +498,7 @@ func (fhs *FriendshipHistorySelect) Aggregate(fns ...AggregateFunc) *FriendshipH
 
 // Scan applies the selector query and scans the result into the given value.
 func (fhs *FriendshipHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, fhs.ctx, "Select")
+	ctx = setContextOp(ctx, fhs.ctx, ent.OpQuerySelect)
 	if err := fhs.prepareQuery(ctx); err != nil {
 		return err
 	}

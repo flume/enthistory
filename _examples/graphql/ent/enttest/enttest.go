@@ -3,9 +3,9 @@
 package enttest
 
 import (
-	"_examples/graphql/ent"
 	"context"
 
+	"_examples/graphql/ent"
 	// required by schema hooks.
 	_ "_examples/graphql/ent/runtime"
 

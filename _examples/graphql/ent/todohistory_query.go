@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -63,7 +64,7 @@ func (thq *TodoHistoryQuery) Order(o ...todohistory.OrderOption) *TodoHistoryQue
 // First returns the first TodoHistory entity from the query.
 // Returns a *NotFoundError when no TodoHistory was found.
 func (thq *TodoHistoryQuery) First(ctx context.Context) (*TodoHistory, error) {
-	nodes, err := thq.Limit(1).All(setContextOp(ctx, thq.ctx, "First"))
+	nodes, err := thq.Limit(1).All(setContextOp(ctx, thq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +87,7 @@ func (thq *TodoHistoryQuery) FirstX(ctx context.Context) *TodoHistory {
 // Returns a *NotFoundError when no TodoHistory ID was found.
 func (thq *TodoHistoryQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = thq.Limit(1).IDs(setContextOp(ctx, thq.ctx, "FirstID")); err != nil {
+	if ids, err = thq.Limit(1).IDs(setContextOp(ctx, thq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -109,7 +110,7 @@ func (thq *TodoHistoryQuery) FirstIDX(ctx context.Context) uuid.UUID {
 // Returns a *NotSingularError when more than one TodoHistory entity is found.
 // Returns a *NotFoundError when no TodoHistory entities are found.
 func (thq *TodoHistoryQuery) Only(ctx context.Context) (*TodoHistory, error) {
-	nodes, err := thq.Limit(2).All(setContextOp(ctx, thq.ctx, "Only"))
+	nodes, err := thq.Limit(2).All(setContextOp(ctx, thq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +138,7 @@ func (thq *TodoHistoryQuery) OnlyX(ctx context.Context) *TodoHistory {
 // Returns a *NotFoundError when no entities are found.
 func (thq *TodoHistoryQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = thq.Limit(2).IDs(setContextOp(ctx, thq.ctx, "OnlyID")); err != nil {
+	if ids, err = thq.Limit(2).IDs(setContextOp(ctx, thq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -162,7 +163,7 @@ func (thq *TodoHistoryQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 
 // All executes the query and returns a list of TodoHistories.
 func (thq *TodoHistoryQuery) All(ctx context.Context) ([]*TodoHistory, error) {
-	ctx = setContextOp(ctx, thq.ctx, "All")
+	ctx = setContextOp(ctx, thq.ctx, ent.OpQueryAll)
 	if err := thq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -184,7 +185,7 @@ func (thq *TodoHistoryQuery) IDs(ctx context.Context) (ids []uuid.UUID, err erro
 	if thq.ctx.Unique == nil && thq.path != nil {
 		thq.Unique(true)
 	}
-	ctx = setContextOp(ctx, thq.ctx, "IDs")
+	ctx = setContextOp(ctx, thq.ctx, ent.OpQueryIDs)
 	if err = thq.Select(todohistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -202,7 +203,7 @@ func (thq *TodoHistoryQuery) IDsX(ctx context.Context) []uuid.UUID {
 
 // Count returns the count of the given query.
 func (thq *TodoHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, thq.ctx, "Count")
+	ctx = setContextOp(ctx, thq.ctx, ent.OpQueryCount)
 	if err := thq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -220,7 +221,7 @@ func (thq *TodoHistoryQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (thq *TodoHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, thq.ctx, "Exist")
+	ctx = setContextOp(ctx, thq.ctx, ent.OpQueryExist)
 	switch _, err := thq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -463,7 +464,7 @@ func (thgb *TodoHistoryGroupBy) Aggregate(fns ...AggregateFunc) *TodoHistoryGrou
 
 // Scan applies the selector query and scans the result into the given value.
 func (thgb *TodoHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, thgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, thgb.build.ctx, ent.OpQueryGroupBy)
 	if err := thgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -511,7 +512,7 @@ func (ths *TodoHistorySelect) Aggregate(fns ...AggregateFunc) *TodoHistorySelect
 
 // Scan applies the selector query and scans the result into the given value.
 func (ths *TodoHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ths.ctx, "Select")
+	ctx = setContextOp(ctx, ths.ctx, ent.OpQuerySelect)
 	if err := ths.prepareQuery(ctx); err != nil {
 		return err
 	}

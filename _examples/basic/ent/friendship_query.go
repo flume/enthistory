@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -107,7 +108,7 @@ func (fq *FriendshipQuery) QueryFriend() *CharacterQuery {
 // First returns the first Friendship entity from the query.
 // Returns a *NotFoundError when no Friendship was found.
 func (fq *FriendshipQuery) First(ctx context.Context) (*Friendship, error) {
-	nodes, err := fq.Limit(1).All(setContextOp(ctx, fq.ctx, "First"))
+	nodes, err := fq.Limit(1).All(setContextOp(ctx, fq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -130,7 +131,7 @@ func (fq *FriendshipQuery) FirstX(ctx context.Context) *Friendship {
 // Returns a *NotFoundError when no Friendship ID was found.
 func (fq *FriendshipQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = fq.Limit(1).IDs(setContextOp(ctx, fq.ctx, "FirstID")); err != nil {
+	if ids, err = fq.Limit(1).IDs(setContextOp(ctx, fq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -153,7 +154,7 @@ func (fq *FriendshipQuery) FirstIDX(ctx context.Context) string {
 // Returns a *NotSingularError when more than one Friendship entity is found.
 // Returns a *NotFoundError when no Friendship entities are found.
 func (fq *FriendshipQuery) Only(ctx context.Context) (*Friendship, error) {
-	nodes, err := fq.Limit(2).All(setContextOp(ctx, fq.ctx, "Only"))
+	nodes, err := fq.Limit(2).All(setContextOp(ctx, fq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -181,7 +182,7 @@ func (fq *FriendshipQuery) OnlyX(ctx context.Context) *Friendship {
 // Returns a *NotFoundError when no entities are found.
 func (fq *FriendshipQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
-	if ids, err = fq.Limit(2).IDs(setContextOp(ctx, fq.ctx, "OnlyID")); err != nil {
+	if ids, err = fq.Limit(2).IDs(setContextOp(ctx, fq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -206,7 +207,7 @@ func (fq *FriendshipQuery) OnlyIDX(ctx context.Context) string {
 
 // All executes the query and returns a list of Friendships.
 func (fq *FriendshipQuery) All(ctx context.Context) ([]*Friendship, error) {
-	ctx = setContextOp(ctx, fq.ctx, "All")
+	ctx = setContextOp(ctx, fq.ctx, ent.OpQueryAll)
 	if err := fq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -228,7 +229,7 @@ func (fq *FriendshipQuery) IDs(ctx context.Context) (ids []string, err error) {
 	if fq.ctx.Unique == nil && fq.path != nil {
 		fq.Unique(true)
 	}
-	ctx = setContextOp(ctx, fq.ctx, "IDs")
+	ctx = setContextOp(ctx, fq.ctx, ent.OpQueryIDs)
 	if err = fq.Select(friendship.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -246,7 +247,7 @@ func (fq *FriendshipQuery) IDsX(ctx context.Context) []string {
 
 // Count returns the count of the given query.
 func (fq *FriendshipQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, fq.ctx, "Count")
+	ctx = setContextOp(ctx, fq.ctx, ent.OpQueryCount)
 	if err := fq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -264,7 +265,7 @@ func (fq *FriendshipQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (fq *FriendshipQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, fq.ctx, "Exist")
+	ctx = setContextOp(ctx, fq.ctx, ent.OpQueryExist)
 	switch _, err := fq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -602,7 +603,7 @@ func (fgb *FriendshipGroupBy) Aggregate(fns ...AggregateFunc) *FriendshipGroupBy
 
 // Scan applies the selector query and scans the result into the given value.
 func (fgb *FriendshipGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, fgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, fgb.build.ctx, ent.OpQueryGroupBy)
 	if err := fgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -650,7 +651,7 @@ func (fs *FriendshipSelect) Aggregate(fns ...AggregateFunc) *FriendshipSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (fs *FriendshipSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, fs.ctx, "Select")
+	ctx = setContextOp(ctx, fs.ctx, ent.OpQuerySelect)
 	if err := fs.prepareQuery(ctx); err != nil {
 		return err
 	}

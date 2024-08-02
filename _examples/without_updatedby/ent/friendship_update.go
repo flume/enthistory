@@ -128,10 +128,10 @@ func (fu *FriendshipUpdate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (fu *FriendshipUpdate) check() error {
-	if _, ok := fu.mutation.CharacterID(); fu.mutation.CharacterCleared() && !ok {
+	if fu.mutation.CharacterCleared() && len(fu.mutation.CharacterIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Friendship.character"`)
 	}
-	if _, ok := fu.mutation.FriendID(); fu.mutation.FriendCleared() && !ok {
+	if fu.mutation.FriendCleared() && len(fu.mutation.FriendIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Friendship.friend"`)
 	}
 	return nil
@@ -342,10 +342,10 @@ func (fuo *FriendshipUpdateOne) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (fuo *FriendshipUpdateOne) check() error {
-	if _, ok := fuo.mutation.CharacterID(); fuo.mutation.CharacterCleared() && !ok {
+	if fuo.mutation.CharacterCleared() && len(fuo.mutation.CharacterIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Friendship.character"`)
 	}
-	if _, ok := fuo.mutation.FriendID(); fuo.mutation.FriendCleared() && !ok {
+	if fuo.mutation.FriendCleared() && len(fuo.mutation.FriendIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Friendship.friend"`)
 	}
 	return nil

@@ -132,7 +132,7 @@ func (su *StoreUpdate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (su *StoreUpdate) check() error {
-	if _, ok := su.mutation.OrganizationID(); su.mutation.OrganizationCleared() && !ok {
+	if su.mutation.OrganizationCleared() && len(su.mutation.OrganizationIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Store.organization"`)
 	}
 	return nil
@@ -323,7 +323,7 @@ func (suo *StoreUpdateOne) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (suo *StoreUpdateOne) check() error {
-	if _, ok := suo.mutation.OrganizationID(); suo.mutation.OrganizationCleared() && !ok {
+	if suo.mutation.OrganizationCleared() && len(suo.mutation.OrganizationIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Store.organization"`)
 	}
 	return nil

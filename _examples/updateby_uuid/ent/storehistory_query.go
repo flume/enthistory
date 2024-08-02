@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -60,7 +61,7 @@ func (shq *StoreHistoryQuery) Order(o ...storehistory.OrderOption) *StoreHistory
 // First returns the first StoreHistory entity from the query.
 // Returns a *NotFoundError when no StoreHistory was found.
 func (shq *StoreHistoryQuery) First(ctx context.Context) (*StoreHistory, error) {
-	nodes, err := shq.Limit(1).All(setContextOp(ctx, shq.ctx, "First"))
+	nodes, err := shq.Limit(1).All(setContextOp(ctx, shq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +84,7 @@ func (shq *StoreHistoryQuery) FirstX(ctx context.Context) *StoreHistory {
 // Returns a *NotFoundError when no StoreHistory ID was found.
 func (shq *StoreHistoryQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = shq.Limit(1).IDs(setContextOp(ctx, shq.ctx, "FirstID")); err != nil {
+	if ids, err = shq.Limit(1).IDs(setContextOp(ctx, shq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -106,7 +107,7 @@ func (shq *StoreHistoryQuery) FirstIDX(ctx context.Context) int {
 // Returns a *NotSingularError when more than one StoreHistory entity is found.
 // Returns a *NotFoundError when no StoreHistory entities are found.
 func (shq *StoreHistoryQuery) Only(ctx context.Context) (*StoreHistory, error) {
-	nodes, err := shq.Limit(2).All(setContextOp(ctx, shq.ctx, "Only"))
+	nodes, err := shq.Limit(2).All(setContextOp(ctx, shq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +135,7 @@ func (shq *StoreHistoryQuery) OnlyX(ctx context.Context) *StoreHistory {
 // Returns a *NotFoundError when no entities are found.
 func (shq *StoreHistoryQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = shq.Limit(2).IDs(setContextOp(ctx, shq.ctx, "OnlyID")); err != nil {
+	if ids, err = shq.Limit(2).IDs(setContextOp(ctx, shq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -159,7 +160,7 @@ func (shq *StoreHistoryQuery) OnlyIDX(ctx context.Context) int {
 
 // All executes the query and returns a list of StoreHistories.
 func (shq *StoreHistoryQuery) All(ctx context.Context) ([]*StoreHistory, error) {
-	ctx = setContextOp(ctx, shq.ctx, "All")
+	ctx = setContextOp(ctx, shq.ctx, ent.OpQueryAll)
 	if err := shq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -181,7 +182,7 @@ func (shq *StoreHistoryQuery) IDs(ctx context.Context) (ids []int, err error) {
 	if shq.ctx.Unique == nil && shq.path != nil {
 		shq.Unique(true)
 	}
-	ctx = setContextOp(ctx, shq.ctx, "IDs")
+	ctx = setContextOp(ctx, shq.ctx, ent.OpQueryIDs)
 	if err = shq.Select(storehistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -199,7 +200,7 @@ func (shq *StoreHistoryQuery) IDsX(ctx context.Context) []int {
 
 // Count returns the count of the given query.
 func (shq *StoreHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, shq.ctx, "Count")
+	ctx = setContextOp(ctx, shq.ctx, ent.OpQueryCount)
 	if err := shq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -217,7 +218,7 @@ func (shq *StoreHistoryQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (shq *StoreHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, shq.ctx, "Exist")
+	ctx = setContextOp(ctx, shq.ctx, ent.OpQueryExist)
 	switch _, err := shq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -449,7 +450,7 @@ func (shgb *StoreHistoryGroupBy) Aggregate(fns ...AggregateFunc) *StoreHistoryGr
 
 // Scan applies the selector query and scans the result into the given value.
 func (shgb *StoreHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, shgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, shgb.build.ctx, ent.OpQueryGroupBy)
 	if err := shgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -497,7 +498,7 @@ func (shs *StoreHistorySelect) Aggregate(fns ...AggregateFunc) *StoreHistorySele
 
 // Scan applies the selector query and scans the result into the given value.
 func (shs *StoreHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, shs.ctx, "Select")
+	ctx = setContextOp(ctx, shs.ctx, ent.OpQuerySelect)
 	if err := shs.prepareQuery(ctx); err != nil {
 		return err
 	}
