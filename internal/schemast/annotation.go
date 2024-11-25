@@ -312,7 +312,7 @@ func fieldAnnotation(annot schema.Annotation) (ast.Expr, bool, error) {
 	if len(fieldAnt.ID) > 0 {
 		c.Elts = append(c.Elts, structAttr("ID", strSliceLit(fieldAnt.ID)))
 	}
-	if fieldAnt.StructTag != nil && len(fieldAnt.StructTag) > 0 {
+	if len(fieldAnt.StructTag) > 0 {
 		st := &ast.CompositeLit{
 			Type: &ast.MapType{
 				Key:   ast.NewIdent("string"),
