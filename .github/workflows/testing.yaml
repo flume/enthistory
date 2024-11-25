@@ -40,7 +40,7 @@ jobs:
       - name: GoLang CI Lint
         uses: golangci/golangci-lint-action@v6
         with:
-          version: v1.56
+          version: v1.62
           args: --timeout 10m0s
           skip-cache: true
 
