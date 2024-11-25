@@ -18,7 +18,7 @@ jobs:
         with:
           cache: true
           cache-dependency-path: go.mod
-          go-version: "1.22"
+          go-version: "1.23"
 
       - name: Test
         run: go test ./_examples/.
@@ -35,12 +35,12 @@ jobs:
         with:
           cache: true
           cache-dependency-path: go.mod
-          go-version: "1.22"
+          go-version: "1.23"
 
       - name: GoLang CI Lint
         uses: golangci/golangci-lint-action@v6
         with:
-          version: v1.56
+          version: v1.62
           args: --timeout 10m0s
           skip-cache: true
 
@@ -56,7 +56,7 @@ jobs:
         with:
           cache: true
           cache-dependency-path: go.mod
-          go-version: "1.22"
+          go-version: "1.23"
 
       - name: Format
         run: |
