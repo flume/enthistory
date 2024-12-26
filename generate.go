@@ -389,6 +389,7 @@ func historyFields(schema ent.Interface, opts HistoryOptions) ([]ent.Field, erro
 	var managedId bool
 	entgqlEnabled := false
 
+	// Collect fields and parse out id type
 	for _, f := range schema.Fields() {
 		descriptor := f.Descriptor()
 		if descriptor.Name == "id" {
@@ -405,6 +406,21 @@ func historyFields(schema ent.Interface, opts HistoryOptions) ([]ent.Field, erro
 			}
 		}
 	}
+
+	// Look for id field in mixins
+	for _, m := range schema.Mixin() {
+		for _, f := range m.Fields() {
+			descriptor := f.Descriptor()
+			if descriptor.Name == "id" {
+				managedId = true
+				ref = f
+				if opts.InheritIdType {
+					idField = f
+				}
+			}
+		}
+	}
+
 	if managedId {
 		fields = append(fields, idField)
 	}
