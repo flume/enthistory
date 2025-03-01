@@ -197,30 +197,30 @@ func fromSimpleType(desc *field.Descriptor, rtype bool) (*ast.CallExpr, error) {
 		t := desc.Info.Type
 		var defaultValue ast.Expr
 		if t.Numeric() {
+			defaultValue = intLit(0)
 			if desc.Default != nil {
 				defaultValue = intLit(desc.Default.(int))
 			}
-			defaultValue = intLit(0)
 		} else if t == field.TypeString {
+			defaultValue = strLit("")
 			if desc.Default != nil {
 				defaultValue = strLit(desc.Default.(string))
 			}
-			defaultValue = strLit("")
 		} else if t == field.TypeBool {
+			defaultValue = boolLit(false)
 			if desc.Default != nil {
 				defaultValue = boolLit(desc.Default.(bool))
 			}
-			defaultValue = boolLit(false)
 		} else if t == field.TypeTime {
 			defaultValue = structLit(&ast.SelectorExpr{
 				X:   ast.NewIdent("time"),
 				Sel: ast.NewIdent("Time"),
 			})
 		} else if t == field.TypeBytes {
+			defaultValue = boolSliceLit([]byte{})
 			if desc.Default != nil {
 				defaultValue = boolSliceLit(desc.Default.([]byte))
 			}
-			defaultValue = boolSliceLit([]byte{})
 		} else {
 			return nil, fmt.Errorf("schemast: unsupported type %s", t.ConstName())
 		}
