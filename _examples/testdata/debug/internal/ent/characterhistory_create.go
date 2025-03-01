@@ -4,6 +4,7 @@ package ent
 
 import (
 	"_examples/testdata/debug/internal/ent/characterhistory"
+	"_examples/testdata/debug/models"
 	"context"
 	"errors"
 	"fmt"
@@ -105,6 +106,20 @@ func (chc *CharacterHistoryCreate) SetNillableAge(i *int) *CharacterHistoryCreat
 	return chc
 }
 
+// SetTypedAge sets the "typed_age" field.
+func (chc *CharacterHistoryCreate) SetTypedAge(m models.Uint64) *CharacterHistoryCreate {
+	chc.mutation.SetTypedAge(m)
+	return chc
+}
+
+// SetNillableTypedAge sets the "typed_age" field if the given value is not nil.
+func (chc *CharacterHistoryCreate) SetNillableTypedAge(m *models.Uint64) *CharacterHistoryCreate {
+	if m != nil {
+		chc.SetTypedAge(*m)
+	}
+	return chc
+}
+
 // SetName sets the "name" field.
 func (chc *CharacterHistoryCreate) SetName(s string) *CharacterHistoryCreate {
 	chc.mutation.SetName(s)
@@ -128,6 +143,20 @@ func (chc *CharacterHistoryCreate) SetNicknames(s []string) *CharacterHistoryCre
 // SetInfo sets the "info" field.
 func (chc *CharacterHistoryCreate) SetInfo(m map[string]interface{}) *CharacterHistoryCreate {
 	chc.mutation.SetInfo(m)
+	return chc
+}
+
+// SetInfoStruct sets the "info_struct" field.
+func (chc *CharacterHistoryCreate) SetInfoStruct(ms models.InfoStruct) *CharacterHistoryCreate {
+	chc.mutation.SetInfoStruct(ms)
+	return chc
+}
+
+// SetNillableInfoStruct sets the "info_struct" field if the given value is not nil.
+func (chc *CharacterHistoryCreate) SetNillableInfoStruct(ms *models.InfoStruct) *CharacterHistoryCreate {
+	if ms != nil {
+		chc.SetInfoStruct(*ms)
+	}
 	return chc
 }
 
@@ -276,6 +305,10 @@ func (chc *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cr
 		_spec.SetField(characterhistory.FieldAge, field.TypeInt, value)
 		_node.Age = &value
 	}
+	if value, ok := chc.mutation.TypedAge(); ok {
+		_spec.SetField(characterhistory.FieldTypedAge, field.TypeUint64, value)
+		_node.TypedAge = &value
+	}
 	if value, ok := chc.mutation.Name(); ok {
 		_spec.SetField(characterhistory.FieldName, field.TypeString, value)
 		_node.Name = &value
@@ -287,6 +320,10 @@ func (chc *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cr
 	if value, ok := chc.mutation.Info(); ok {
 		_spec.SetField(characterhistory.FieldInfo, field.TypeJSON, value)
 		_node.Info = value
+	}
+	if value, ok := chc.mutation.InfoStruct(); ok {
+		_spec.SetField(characterhistory.FieldInfoStruct, field.TypeJSON, value)
+		_node.InfoStruct = value
 	}
 	return _node, _spec
 }

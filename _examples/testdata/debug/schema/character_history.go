@@ -3,6 +3,7 @@
 package schema
 
 import (
+	"_examples/testdata/debug/models"
 	"_examples/testdata/debug/schema/mixins"
 	"time"
 
@@ -45,6 +46,11 @@ func (CharacterHistory) Fields() []ent.Field {
 			Nillable().
 			Optional().
 			Immutable(),
+		field.Uint64("typed_age").
+			GoType(models.Uint64(0)).
+			Nillable().
+			Optional().
+			Immutable(),
 		field.String("name").
 			Nillable().
 			Optional().
@@ -53,6 +59,10 @@ func (CharacterHistory) Fields() []ent.Field {
 			Optional().
 			Immutable(),
 		field.JSON("info", map[string]any{}).
+			Optional().
+			Immutable(),
+		field.JSON("info_struct", models.
+			InfoStruct{}).
 			Optional().
 			Immutable()}
 }

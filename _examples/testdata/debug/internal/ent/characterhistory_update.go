@@ -96,6 +96,9 @@ func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if chu.mutation.AgeCleared() {
 		_spec.ClearField(characterhistory.FieldAge, field.TypeInt)
 	}
+	if chu.mutation.TypedAgeCleared() {
+		_spec.ClearField(characterhistory.FieldTypedAge, field.TypeUint64)
+	}
 	if chu.mutation.NameCleared() {
 		_spec.ClearField(characterhistory.FieldName, field.TypeString)
 	}
@@ -104,6 +107,9 @@ func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if chu.mutation.InfoCleared() {
 		_spec.ClearField(characterhistory.FieldInfo, field.TypeJSON)
+	}
+	if chu.mutation.InfoStructCleared() {
+		_spec.ClearField(characterhistory.FieldInfoStruct, field.TypeJSON)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, chu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -223,6 +229,9 @@ func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Char
 	if chuo.mutation.AgeCleared() {
 		_spec.ClearField(characterhistory.FieldAge, field.TypeInt)
 	}
+	if chuo.mutation.TypedAgeCleared() {
+		_spec.ClearField(characterhistory.FieldTypedAge, field.TypeUint64)
+	}
 	if chuo.mutation.NameCleared() {
 		_spec.ClearField(characterhistory.FieldName, field.TypeString)
 	}
@@ -231,6 +240,9 @@ func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Char
 	}
 	if chuo.mutation.InfoCleared() {
 		_spec.ClearField(characterhistory.FieldInfo, field.TypeJSON)
+	}
+	if chuo.mutation.InfoStructCleared() {
+		_spec.ClearField(characterhistory.FieldInfoStruct, field.TypeJSON)
 	}
 	_node = &CharacterHistory{config: chuo.config}
 	_spec.Assign = _node.assignValues

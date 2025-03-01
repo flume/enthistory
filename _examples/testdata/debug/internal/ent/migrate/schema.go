@@ -16,9 +16,11 @@ var (
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "other", Type: field.TypeString},
 		{Name: "age", Type: field.TypeInt},
+		{Name: "typed_age", Type: field.TypeUint64},
 		{Name: "name", Type: field.TypeString},
 		{Name: "nicknames", Type: field.TypeJSON, Nullable: true},
 		{Name: "info", Type: field.TypeJSON, Nullable: true},
+		{Name: "info_struct", Type: field.TypeJSON, Nullable: true},
 	}
 	// CharacterTable holds the schema information for the "character" table.
 	CharacterTable = &schema.Table{
@@ -36,9 +38,11 @@ var (
 		{Name: "ref", Type: field.TypeUUID, Nullable: true},
 		{Name: "updated_by", Type: field.TypeUUID, Nullable: true},
 		{Name: "age", Type: field.TypeInt, Nullable: true},
+		{Name: "typed_age", Type: field.TypeUint64, Nullable: true},
 		{Name: "name", Type: field.TypeString, Nullable: true},
 		{Name: "nicknames", Type: field.TypeJSON, Nullable: true},
 		{Name: "info", Type: field.TypeJSON, Nullable: true},
+		{Name: "info_struct", Type: field.TypeJSON, Nullable: true},
 	}
 	// CharacterHistoryTable holds the schema information for the "character_history" table.
 	CharacterHistoryTable = &schema.Table{
