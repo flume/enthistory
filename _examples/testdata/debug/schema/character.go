@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"_examples/testdata/debug/models"
 	"_examples/testdata/debug/schema/mixins"
 
 	"github.com/flume/enthistory"
@@ -42,10 +43,15 @@ func (Character) Fields() []ent.Field {
 		field.UUID("id", uuid.New()).Default(uuid.New).Annotations(entgql.Annotation{Type: "ID"}),
 		field.Int("age").
 			Positive(),
+		field.Uint64("typed_age").
+			Positive().
+			GoType(models.Uint64(0)),
 		field.String("name"),
 		field.Strings("nicknames").
 			Optional(),
 		field.JSON("info", map[string]any{}).
+			Optional(),
+		field.JSON("info_struct", models.InfoStruct{}).
 			Optional(),
 	}
 }
