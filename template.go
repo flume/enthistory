@@ -87,6 +87,15 @@ func calculateHooks(original, history gen.Type) string {
 	return res
 }
 
+func fieldInNode(node *gen.Type, fieldName string) bool {
+	for _, f := range node.Fields {
+		if f.Name == fieldName {
+			return true
+		}
+	}
+	return false
+}
+
 func parseTemplate(name, path string) *gen.Template {
 	t := gen.NewTemplate(name)
 	t.Funcs(template.FuncMap{
@@ -96,6 +105,7 @@ func parseTemplate(name, path string) *gen.Template {
 		"in":                        in,
 		"isIdTypeUUID":              isIdTypeUUID,
 		"calculateHooks":            calculateHooks,
+		"fieldInNode":               fieldInNode,
 	})
 	return gen.MustParse(t.ParseFS(_templates, path))
 }

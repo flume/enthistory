@@ -123,9 +123,11 @@ import (
                         {{- end }}
 
                         {{ range $f := $n.Fields }}
+                            {{ if (fieldInNode $h $f.Name) }}
                             if {{ camel $f.Name }}, exists := m.{{ $f.StructField }}(); exists {
                                 create = create.Set{{ if $f.Nillable }}Nillable{{ end }}{{ $f.StructField }}({{ if $f.Nillable }}&{{ end }}{{ camel $f.Name }})
                             }
+                            {{ end }}
                         {{ end }}
                         _, err = create.Save(ctx)
                         if err != nil {
@@ -181,11 +183,13 @@ import (
                             {{- end }}
 
                         {{ range $f := $n.Fields }}
+                            {{ if (fieldInNode $h $f.Name) }}
                             if {{ camel $f.Name }}, exists := m.{{ $f.StructField }}(); exists {
                                 create = create.Set{{ if $f.Nillable }}Nillable{{ end }}{{ $f.StructField }}({{ if $f.Nillable }}&{{ end }}{{ camel $f.Name }})
                             } else{{ if $f.Nillable }} if !m.{{ $f.StructField }}Cleared() {{ end }} {
                                 create = create.Set{{ if $f.Nillable }}Nillable{{ end }}{{ $f.StructField }}({{ camel $name }}.{{ pascal $f.Name }})
                             }
+                            {{ end }}
                         {{ end }}
                             _, err = create.Save(ctx)
                             if err != nil {
@@ -242,7 +246,9 @@ import (
                                 SetHistoryTime(time.Now()).
                                 SetRef(id).
                             {{- range $f := $n.Fields }}
+                                {{ if (fieldInNode $h $f.Name) }}
                                 Set{{ if $f.Nillable }}Nillable{{ end }}{{ $f.StructField }}({{ camel $name }}.{{ pascal $f.Name }}).
+                                {{- end }}
                             {{- end }}
                                 Save(ctx)
                             if err != nil {

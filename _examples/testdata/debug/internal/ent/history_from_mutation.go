@@ -77,10 +77,6 @@ func (m *CharacterMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if other, exists := m.Other(); exists {
-		create = create.SetOther(other)
-	}
-
 	if age, exists := m.Age(); exists {
 		create = create.SetAge(age)
 	}
@@ -147,12 +143,6 @@ func (m *CharacterMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedAt(updatedAt)
 		} else {
 			create = create.SetUpdatedAt(character.UpdatedAt)
-		}
-
-		if other, exists := m.Other(); exists {
-			create = create.SetOther(other)
-		} else {
-			create = create.SetOther(character.Other)
 		}
 
 		if age, exists := m.Age(); exists {
@@ -222,7 +212,6 @@ func (m *CharacterMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRef(id).
 			SetCreatedAt(character.CreatedAt).
 			SetUpdatedAt(character.UpdatedAt).
-			SetOther(character.Other).
 			SetAge(character.Age).
 			SetName(character.Name).
 			SetNicknames(character.Nicknames).
