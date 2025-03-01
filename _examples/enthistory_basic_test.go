@@ -1,6 +1,7 @@
 package _examples
 
 import (
+	"_examples/basic/ent/schema/models"
 	"context"
 	"os"
 	"strings"
@@ -32,7 +33,7 @@ func TestEntHistoryBasic(t *testing.T) {
 			runner: func(t *testing.T, client *ent.Client) {
 				ctx := context.Background()
 				// create
-				character, err := client.Character.Create().SetAge(10).SetName("Princess Bubblegum").Save(ctx)
+				character, err := client.Character.Create().SetAge(10).SetTypedAge(models.Uint64(10)).SetName("Princess Bubblegum").Save(ctx)
 				assert.NoError(t, err)
 				characterHistory, err := character.History().All(ctx)
 				assert.NoError(t, err)
@@ -47,10 +48,10 @@ func TestEntHistoryBasic(t *testing.T) {
 			runner: func(t *testing.T, client *ent.Client) {
 				ctx := context.Background()
 				// create
-				character, err := client.Character.Create().SetAge(10).SetName("Beemo").Save(ctx)
+				character, err := client.Character.Create().SetAge(10).SetTypedAge(models.Uint64(10)).SetName("Beemo").Save(ctx)
 				assert.NoError(t, err)
 				// update
-				character, err = character.Update().SetAge(1003).SetName("BMO").Save(ctx)
+				character, err = character.Update().SetAge(1003).SetTypedAge(models.Uint64(1003)).SetName("BMO").Save(ctx)
 				assert.NoError(t, err)
 				characterHistory, err := character.History().All(ctx)
 				assert.NoError(t, err)
@@ -65,7 +66,7 @@ func TestEntHistoryBasic(t *testing.T) {
 			runner: func(t *testing.T, client *ent.Client) {
 				ctx := context.Background()
 				// create
-				character, err := client.Character.Create().SetAge(1003).SetName("Marceline").Save(ctx)
+				character, err := client.Character.Create().SetAge(1003).SetTypedAge(models.Uint64(1003)).SetName("Marceline").Save(ctx)
 				assert.NoError(t, err)
 				// update
 				character, err = character.Update().SetName("Marceline the Vampire Queen").Save(ctx)
@@ -86,7 +87,7 @@ func TestEntHistoryBasic(t *testing.T) {
 			runner: func(t *testing.T, client *ent.Client) {
 				ctx := context.Background()
 				// create
-				character, err := client.Character.Create().SetAge(1003).SetName("Marceline").Save(ctx)
+				character, err := client.Character.Create().SetAge(1003).SetTypedAge(models.Uint64(1003)).SetName("Marceline").Save(ctx)
 				assert.NoError(t, err)
 				// update
 				character, err = character.Update().SetName("Marceline the Vampire Queen").Save(ctx)
@@ -107,7 +108,7 @@ func TestEntHistoryBasic(t *testing.T) {
 			runner: func(t *testing.T, client *ent.Client) {
 				ctx := context.Background()
 				// create character 1
-				character1, err := client.Character.Create().SetAge(100).SetName("Ice King").Save(ctx)
+				character1, err := client.Character.Create().SetAge(100).SetTypedAge(models.Uint64(100)).SetName("Ice King").Save(ctx)
 				assert.NoError(t, err)
 				characterHistory, err := character1.History().All(ctx)
 				assert.NoError(t, err)
@@ -117,7 +118,7 @@ func TestEntHistoryBasic(t *testing.T) {
 				assert.Equal(t, 1, len(allHistory))
 
 				// create character 2
-				character2, err := client.Character.Create().SetAge(10000).SetName("Gunter").Save(ctx)
+				character2, err := client.Character.Create().SetAge(10000).SetTypedAge(models.Uint64(10000)).SetName("Gunter").Save(ctx)
 				assert.NoError(t, err)
 				characterHistory, err = character2.History().All(ctx)
 				assert.NoError(t, err)
@@ -132,10 +133,10 @@ func TestEntHistoryBasic(t *testing.T) {
 			runner: func(t *testing.T, client *ent.Client) {
 				ctx := context.Background()
 				// create character 1
-				finn, err := client.Character.Create().SetAge(14).SetName("Finn the Human").Save(ctx)
+				finn, err := client.Character.Create().SetAge(14).SetTypedAge(models.Uint64(14)).SetName("Finn the Human").Save(ctx)
 				assert.NoError(t, err)
 				// create character 2
-				jake, err := client.Character.Create().SetAge(10).SetName("Jake the Dog").Save(ctx)
+				jake, err := client.Character.Create().SetAge(10).SetTypedAge(models.Uint64(10)).SetName("Jake the Dog").Save(ctx)
 				assert.NoError(t, err)
 
 				// create friendship
@@ -154,10 +155,10 @@ func TestEntHistoryBasic(t *testing.T) {
 			runner: func(t *testing.T, client *ent.Client) {
 				ctx := context.Background()
 				// create character 1
-				finn, err := client.Character.Create().SetAge(14).SetName("Finn the Human").Save(ctx)
+				finn, err := client.Character.Create().SetAge(14).SetTypedAge(models.Uint64(14)).SetName("Finn the Human").Save(ctx)
 				assert.NoError(t, err)
 				// create character 2
-				jake, err := client.Character.Create().SetAge(10).SetName("Jake the Dog").Save(ctx)
+				jake, err := client.Character.Create().SetAge(10).SetTypedAge(models.Uint64(10)).SetName("Jake the Dog").Save(ctx)
 				assert.NoError(t, err)
 
 				// create friendship
@@ -179,7 +180,7 @@ func TestEntHistoryBasic(t *testing.T) {
 				userId := 75
 				ctx := context.WithValue(context.Background(), "userId", userId)
 
-				finn, err := client.Character.Create().SetAge(14).SetName("Finn the Human").Save(ctx)
+				finn, err := client.Character.Create().SetAge(14).SetTypedAge(models.Uint64(14)).SetName("Finn the Human").Save(ctx)
 				assert.NoError(t, err)
 
 				history := finn.History().FirstX(ctx)
@@ -192,7 +193,7 @@ func TestEntHistoryBasic(t *testing.T) {
 			runner: func(t *testing.T, client *ent.Client) {
 				ctx := context.Background()
 
-				finn, err := client.Character.Create().SetAge(14).SetName("Finn the Human").Save(ctx)
+				finn, err := client.Character.Create().SetAge(14).SetTypedAge(models.Uint64(14)).SetName("Finn the Human").Save(ctx)
 				assert.NoError(t, err)
 
 				history := finn.History().FirstX(ctx)
@@ -204,7 +205,7 @@ func TestEntHistoryBasic(t *testing.T) {
 			runner: func(t *testing.T, client *ent.Client) {
 				ctx := context.Background()
 
-				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").Save(ctx)
+				simon, err := client.Character.Create().SetAge(47).SetTypedAge(models.Uint64(47)).SetName("Simon Petrikov").Save(ctx)
 				assert.NoError(t, err)
 
 				iceking, err := simon.Update().SetName("Ice King").Save(ctx)
@@ -232,7 +233,7 @@ func TestEntHistoryBasic(t *testing.T) {
 			runner: func(t *testing.T, client *ent.Client) {
 				ctx := context.Background()
 
-				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").Save(ctx)
+				simon, err := client.Character.Create().SetAge(47).SetTypedAge(models.Uint64(47)).SetName("Simon Petrikov").Save(ctx)
 				assert.NoError(t, err)
 
 				iceking, err := simon.Update().SetName("Ice King").Save(ctx)
@@ -254,7 +255,7 @@ func TestEntHistoryBasic(t *testing.T) {
 			runner: func(t *testing.T, client *ent.Client) {
 				ctx := context.Background()
 
-				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").Save(ctx)
+				simon, err := client.Character.Create().SetAge(47).SetTypedAge(models.Uint64(47)).SetName("Simon Petrikov").Save(ctx)
 				assert.NoError(t, err)
 
 				iceking, err := simon.Update().SetName("Ice King").Save(ctx)
@@ -276,7 +277,7 @@ func TestEntHistoryBasic(t *testing.T) {
 			runner: func(t *testing.T, client *ent.Client) {
 				ctx := context.Background()
 
-				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").Save(ctx)
+				simon, err := client.Character.Create().SetAge(47).SetTypedAge(models.Uint64(47)).SetName("Simon Petrikov").Save(ctx)
 				assert.NoError(t, err)
 
 				firstHistory, err := simon.History().Earliest(ctx)
@@ -302,7 +303,7 @@ func TestEntHistoryBasic(t *testing.T) {
 			runner: func(t *testing.T, client *ent.Client) {
 				ctx := context.Background()
 
-				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").Save(ctx)
+				simon, err := client.Character.Create().SetAge(47).SetTypedAge(models.Uint64(47)).SetName("Simon Petrikov").Save(ctx)
 				assert.NoError(t, err)
 
 				firstHistory, err := simon.History().Earliest(ctx)
@@ -328,7 +329,7 @@ func TestEntHistoryBasic(t *testing.T) {
 			runner: func(t *testing.T, client *ent.Client) {
 				ctx := context.Background()
 
-				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").Save(ctx)
+				simon, err := client.Character.Create().SetAge(47).SetTypedAge(models.Uint64(47)).SetName("Simon Petrikov").Save(ctx)
 				assert.NoError(t, err)
 
 				firstHistory, err := simon.History().Earliest(ctx)
@@ -354,12 +355,12 @@ func TestEntHistoryBasic(t *testing.T) {
 			runner: func(t *testing.T, client *ent.Client) {
 				ctx := context.Background()
 
-				gunter, err := client.Character.Create().SetAge(10000).SetName("Gunter").Save(ctx)
+				gunter, err := client.Character.Create().SetAge(10000).SetTypedAge(models.Uint64(10000)).SetName("Gunter").Save(ctx)
 				assert.NoError(t, err)
 				gunterHistory, err := gunter.History().Earliest(ctx)
 				assert.NoError(t, err)
 
-				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").Save(ctx)
+				simon, err := client.Character.Create().SetAge(47).SetTypedAge(models.Uint64(47)).SetName("Simon Petrikov").Save(ctx)
 				assert.NoError(t, err)
 				simon, err = simon.Update().SetName("Ice King").Save(ctx)
 				assert.NoError(t, err)
@@ -402,15 +403,20 @@ func TestEntHistoryBasic(t *testing.T) {
 
 				gunter, err := client.Character.Create().
 					SetAge(10000).
+					SetTypedAge(models.Uint64(10000)).
 					SetName("Gunter").
 					SetNicknames([]string{"Orgalorg"}).
 					Save(ctx)
 				assert.NoError(t, err)
 				simon, err := client.Character.Create().
 					SetAge(47).
+					SetTypedAge(models.Uint64(47)).
 					SetName("Simon Petrikov").
 					SetInfo(map[string]any{
 						"firstAppearance": "Come Along With Me",
+					}).
+					SetInfoStruct(models.InfoStruct{
+						FirstAppearance: "Come Along With Me",
 					}).
 					Save(ctx)
 				assert.NoError(t, err)
@@ -424,6 +430,7 @@ func TestEntHistoryBasic(t *testing.T) {
 				gunter, err = gunter.Update().
 					SetNicknames([]string{"Orgalorg", "Destroyer of Worlds"}).
 					SetAge(20).
+					SetTypedAge(models.Uint64(20)).
 					Save(ctx)
 				assert.NoError(t, err)
 				simon, err = simon.Update().
@@ -431,6 +438,10 @@ func TestEntHistoryBasic(t *testing.T) {
 					SetInfo(map[string]any{
 						"firstAppearance": "Come Along With Me",
 						"lastAppearance":  "Together Again",
+					}).
+					SetInfoStruct(models.InfoStruct{
+						FirstAppearance: "Come Along With Me",
+						LastAppearance:  "Together Again",
 					}).
 					Save(ctx)
 				assert.NoError(t, err)
@@ -457,8 +468,8 @@ func TestEntHistoryBasic(t *testing.T) {
 
 				assert.Equal(t, 11, len(auditTable))
 				assert.Equal(t, 6, len(auditTable[0]))
-				assert.Equal(t, "age: 10000 -> 20\nnicknames: [\"Orgalorg\"] -> [\"Orgalorg\",\"Destroyer of Worlds\"]", removeUpdatedAt(auditTable[2][4]))
-				assert.Equal(t, "name: \"Simon Petrikov\" -> \"Ice King\"\ninfo: {\"firstAppearance\":\"Come Along With Me\"} -> {\"firstAppearance\":\"Come Along With Me\",\"lastAppearance\":\"Together Again\"}", removeUpdatedAt(auditTable[5][4]))
+				assert.Equal(t, "age: 10000 -> 20\ntyped_age: 10000 -> 20\nnicknames: [\"Orgalorg\"] -> [\"Orgalorg\",\"Destroyer of Worlds\"]", removeUpdatedAt(auditTable[2][4]))
+				assert.Equal(t, "name: \"Simon Petrikov\" -> \"Ice King\"\ninfo: {\"firstAppearance\":\"Come Along With Me\"} -> {\"firstAppearance\":\"Come Along With Me\",\"lastAppearance\":\"Together Again\"}\ninfo_struct: {\"firstAppearance\":\"Come Along With Me\",\"lastAppearance\":\"\"} -> {\"firstAppearance\":\"Come Along With Me\",\"lastAppearance\":\"Together Again\"}", removeUpdatedAt(auditTable[5][4]))
 				assert.Equal(t, residence.ID.String(), auditTable[10][1])
 			},
 		},
@@ -467,7 +478,7 @@ func TestEntHistoryBasic(t *testing.T) {
 			runner: func(t *testing.T, client *ent.Client) {
 				ctx := context.Background()
 
-				simon, err := client.Character.Create().SetAge(47).SetName("Simon Petrikov").SetLevel(42).Save(ctx)
+				simon, err := client.Character.Create().SetAge(47).SetTypedAge(models.Uint64(47)).SetName("Simon Petrikov").SetLevel(42).Save(ctx)
 				assert.NoError(t, err)
 
 				iceking, err := simon.Update().SetName("Ice King").ClearLevel().Save(ctx)
