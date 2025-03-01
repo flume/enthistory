@@ -3,9 +3,9 @@
 package enttest
 
 import (
-	"_examples/testdata/debug/internal/ent"
 	"context"
 
+	"_examples/testdata/debug/internal/ent"
 	// required by schema hooks.
 	_ "_examples/testdata/debug/internal/ent/runtime"
 
