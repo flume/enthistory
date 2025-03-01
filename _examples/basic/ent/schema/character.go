@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"_examples/basic/ent/schema/models"
+
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -29,10 +31,15 @@ func (Character) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int("age").
 			Positive(),
+		field.Uint64("typed_age").
+			Positive().
+			GoType(models.Uint64(0)),
 		field.String("name"),
 		field.JSON("nicknames", []string{}).
 			Optional(),
 		field.JSON("info", map[string]any{}).
+			Optional(),
+		field.JSON("info_struct", models.InfoStruct{}).
 			Optional(),
 		field.Int("level").
 			Optional().
