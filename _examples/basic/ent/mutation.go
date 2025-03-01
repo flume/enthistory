@@ -10,6 +10,7 @@ import (
 	"_examples/basic/ent/predicate"
 	"_examples/basic/ent/residence"
 	"_examples/basic/ent/residencehistory"
+	"_examples/basic/ent/schema/models"
 	"context"
 	"errors"
 	"fmt"
@@ -50,10 +51,13 @@ type CharacterMutation struct {
 	updated_at         *time.Time
 	age                *int
 	addage             *int
+	typed_age          *models.Uint64
+	addtyped_age       *models.Uint64
 	name               *string
 	nicknames          *[]string
 	appendnicknames    []string
 	info               *map[string]interface{}
+	info_struct        *models.InfoStruct
 	level              *int
 	addlevel           *int
 	clearedFields      map[string]struct{}
@@ -296,6 +300,62 @@ func (m *CharacterMutation) ResetAge() {
 	m.addage = nil
 }
 
+// SetTypedAge sets the "typed_age" field.
+func (m *CharacterMutation) SetTypedAge(value models.Uint64) {
+	m.typed_age = &value
+	m.addtyped_age = nil
+}
+
+// TypedAge returns the value of the "typed_age" field in the mutation.
+func (m *CharacterMutation) TypedAge() (r models.Uint64, exists bool) {
+	v := m.typed_age
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTypedAge returns the old "typed_age" field's value of the Character entity.
+// If the Character object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CharacterMutation) OldTypedAge(ctx context.Context) (v models.Uint64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTypedAge is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTypedAge requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTypedAge: %w", err)
+	}
+	return oldValue.TypedAge, nil
+}
+
+// AddTypedAge adds value to the "typed_age" field.
+func (m *CharacterMutation) AddTypedAge(value models.Uint64) {
+	if m.addtyped_age != nil {
+		*m.addtyped_age += value
+	} else {
+		m.addtyped_age = &value
+	}
+}
+
+// AddedTypedAge returns the value that was added to the "typed_age" field in this mutation.
+func (m *CharacterMutation) AddedTypedAge() (r models.Uint64, exists bool) {
+	v := m.addtyped_age
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetTypedAge resets all changes to the "typed_age" field.
+func (m *CharacterMutation) ResetTypedAge() {
+	m.typed_age = nil
+	m.addtyped_age = nil
+}
+
 // SetName sets the "name" field.
 func (m *CharacterMutation) SetName(s string) {
 	m.name = &s
@@ -444,6 +504,55 @@ func (m *CharacterMutation) InfoCleared() bool {
 func (m *CharacterMutation) ResetInfo() {
 	m.info = nil
 	delete(m.clearedFields, character.FieldInfo)
+}
+
+// SetInfoStruct sets the "info_struct" field.
+func (m *CharacterMutation) SetInfoStruct(ms models.InfoStruct) {
+	m.info_struct = &ms
+}
+
+// InfoStruct returns the value of the "info_struct" field in the mutation.
+func (m *CharacterMutation) InfoStruct() (r models.InfoStruct, exists bool) {
+	v := m.info_struct
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInfoStruct returns the old "info_struct" field's value of the Character entity.
+// If the Character object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CharacterMutation) OldInfoStruct(ctx context.Context) (v models.InfoStruct, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInfoStruct is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInfoStruct requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInfoStruct: %w", err)
+	}
+	return oldValue.InfoStruct, nil
+}
+
+// ClearInfoStruct clears the value of the "info_struct" field.
+func (m *CharacterMutation) ClearInfoStruct() {
+	m.info_struct = nil
+	m.clearedFields[character.FieldInfoStruct] = struct{}{}
+}
+
+// InfoStructCleared returns if the "info_struct" field was cleared in this mutation.
+func (m *CharacterMutation) InfoStructCleared() bool {
+	_, ok := m.clearedFields[character.FieldInfoStruct]
+	return ok
+}
+
+// ResetInfoStruct resets all changes to the "info_struct" field.
+func (m *CharacterMutation) ResetInfoStruct() {
+	m.info_struct = nil
+	delete(m.clearedFields, character.FieldInfoStruct)
 }
 
 // SetLevel sets the "level" field.
@@ -697,7 +806,7 @@ func (m *CharacterMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CharacterMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 9)
 	if m.created_at != nil {
 		fields = append(fields, character.FieldCreatedAt)
 	}
@@ -707,6 +816,9 @@ func (m *CharacterMutation) Fields() []string {
 	if m.age != nil {
 		fields = append(fields, character.FieldAge)
 	}
+	if m.typed_age != nil {
+		fields = append(fields, character.FieldTypedAge)
+	}
 	if m.name != nil {
 		fields = append(fields, character.FieldName)
 	}
@@ -715,6 +827,9 @@ func (m *CharacterMutation) Fields() []string {
 	}
 	if m.info != nil {
 		fields = append(fields, character.FieldInfo)
+	}
+	if m.info_struct != nil {
+		fields = append(fields, character.FieldInfoStruct)
 	}
 	if m.level != nil {
 		fields = append(fields, character.FieldLevel)
@@ -733,12 +848,16 @@ func (m *CharacterMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case character.FieldAge:
 		return m.Age()
+	case character.FieldTypedAge:
+		return m.TypedAge()
 	case character.FieldName:
 		return m.Name()
 	case character.FieldNicknames:
 		return m.Nicknames()
 	case character.FieldInfo:
 		return m.Info()
+	case character.FieldInfoStruct:
+		return m.InfoStruct()
 	case character.FieldLevel:
 		return m.Level()
 	}
@@ -756,12 +875,16 @@ func (m *CharacterMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldUpdatedAt(ctx)
 	case character.FieldAge:
 		return m.OldAge(ctx)
+	case character.FieldTypedAge:
+		return m.OldTypedAge(ctx)
 	case character.FieldName:
 		return m.OldName(ctx)
 	case character.FieldNicknames:
 		return m.OldNicknames(ctx)
 	case character.FieldInfo:
 		return m.OldInfo(ctx)
+	case character.FieldInfoStruct:
+		return m.OldInfoStruct(ctx)
 	case character.FieldLevel:
 		return m.OldLevel(ctx)
 	}
@@ -794,6 +917,13 @@ func (m *CharacterMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAge(v)
 		return nil
+	case character.FieldTypedAge:
+		v, ok := value.(models.Uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTypedAge(v)
+		return nil
 	case character.FieldName:
 		v, ok := value.(string)
 		if !ok {
@@ -815,6 +945,13 @@ func (m *CharacterMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetInfo(v)
 		return nil
+	case character.FieldInfoStruct:
+		v, ok := value.(models.InfoStruct)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInfoStruct(v)
+		return nil
 	case character.FieldLevel:
 		v, ok := value.(int)
 		if !ok {
@@ -833,6 +970,9 @@ func (m *CharacterMutation) AddedFields() []string {
 	if m.addage != nil {
 		fields = append(fields, character.FieldAge)
 	}
+	if m.addtyped_age != nil {
+		fields = append(fields, character.FieldTypedAge)
+	}
 	if m.addlevel != nil {
 		fields = append(fields, character.FieldLevel)
 	}
@@ -846,6 +986,8 @@ func (m *CharacterMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case character.FieldAge:
 		return m.AddedAge()
+	case character.FieldTypedAge:
+		return m.AddedTypedAge()
 	case character.FieldLevel:
 		return m.AddedLevel()
 	}
@@ -863,6 +1005,13 @@ func (m *CharacterMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddAge(v)
+		return nil
+	case character.FieldTypedAge:
+		v, ok := value.(models.Uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddTypedAge(v)
 		return nil
 	case character.FieldLevel:
 		v, ok := value.(int)
@@ -884,6 +1033,9 @@ func (m *CharacterMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(character.FieldInfo) {
 		fields = append(fields, character.FieldInfo)
+	}
+	if m.FieldCleared(character.FieldInfoStruct) {
+		fields = append(fields, character.FieldInfoStruct)
 	}
 	if m.FieldCleared(character.FieldLevel) {
 		fields = append(fields, character.FieldLevel)
@@ -908,6 +1060,9 @@ func (m *CharacterMutation) ClearField(name string) error {
 	case character.FieldInfo:
 		m.ClearInfo()
 		return nil
+	case character.FieldInfoStruct:
+		m.ClearInfoStruct()
+		return nil
 	case character.FieldLevel:
 		m.ClearLevel()
 		return nil
@@ -928,6 +1083,9 @@ func (m *CharacterMutation) ResetField(name string) error {
 	case character.FieldAge:
 		m.ResetAge()
 		return nil
+	case character.FieldTypedAge:
+		m.ResetTypedAge()
+		return nil
 	case character.FieldName:
 		m.ResetName()
 		return nil
@@ -936,6 +1094,9 @@ func (m *CharacterMutation) ResetField(name string) error {
 		return nil
 	case character.FieldInfo:
 		m.ResetInfo()
+		return nil
+	case character.FieldInfoStruct:
+		m.ResetInfoStruct()
 		return nil
 	case character.FieldLevel:
 		m.ResetLevel()
@@ -1088,10 +1249,13 @@ type CharacterHistoryMutation struct {
 	addupdated_by   *int
 	age             *int
 	addage          *int
+	typed_age       *models.Uint64
+	addtyped_age    *models.Uint64
 	name            *string
 	nicknames       *[]string
 	appendnicknames []string
 	info            *map[string]interface{}
+	info_struct     *models.InfoStruct
 	level           *int
 	addlevel        *int
 	clearedFields   map[string]struct{}
@@ -1538,6 +1702,62 @@ func (m *CharacterHistoryMutation) ResetAge() {
 	m.addage = nil
 }
 
+// SetTypedAge sets the "typed_age" field.
+func (m *CharacterHistoryMutation) SetTypedAge(value models.Uint64) {
+	m.typed_age = &value
+	m.addtyped_age = nil
+}
+
+// TypedAge returns the value of the "typed_age" field in the mutation.
+func (m *CharacterHistoryMutation) TypedAge() (r models.Uint64, exists bool) {
+	v := m.typed_age
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTypedAge returns the old "typed_age" field's value of the CharacterHistory entity.
+// If the CharacterHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CharacterHistoryMutation) OldTypedAge(ctx context.Context) (v models.Uint64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTypedAge is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTypedAge requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTypedAge: %w", err)
+	}
+	return oldValue.TypedAge, nil
+}
+
+// AddTypedAge adds value to the "typed_age" field.
+func (m *CharacterHistoryMutation) AddTypedAge(value models.Uint64) {
+	if m.addtyped_age != nil {
+		*m.addtyped_age += value
+	} else {
+		m.addtyped_age = &value
+	}
+}
+
+// AddedTypedAge returns the value that was added to the "typed_age" field in this mutation.
+func (m *CharacterHistoryMutation) AddedTypedAge() (r models.Uint64, exists bool) {
+	v := m.addtyped_age
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetTypedAge resets all changes to the "typed_age" field.
+func (m *CharacterHistoryMutation) ResetTypedAge() {
+	m.typed_age = nil
+	m.addtyped_age = nil
+}
+
 // SetName sets the "name" field.
 func (m *CharacterHistoryMutation) SetName(s string) {
 	m.name = &s
@@ -1688,6 +1908,55 @@ func (m *CharacterHistoryMutation) ResetInfo() {
 	delete(m.clearedFields, characterhistory.FieldInfo)
 }
 
+// SetInfoStruct sets the "info_struct" field.
+func (m *CharacterHistoryMutation) SetInfoStruct(ms models.InfoStruct) {
+	m.info_struct = &ms
+}
+
+// InfoStruct returns the value of the "info_struct" field in the mutation.
+func (m *CharacterHistoryMutation) InfoStruct() (r models.InfoStruct, exists bool) {
+	v := m.info_struct
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInfoStruct returns the old "info_struct" field's value of the CharacterHistory entity.
+// If the CharacterHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CharacterHistoryMutation) OldInfoStruct(ctx context.Context) (v models.InfoStruct, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInfoStruct is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInfoStruct requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInfoStruct: %w", err)
+	}
+	return oldValue.InfoStruct, nil
+}
+
+// ClearInfoStruct clears the value of the "info_struct" field.
+func (m *CharacterHistoryMutation) ClearInfoStruct() {
+	m.info_struct = nil
+	m.clearedFields[characterhistory.FieldInfoStruct] = struct{}{}
+}
+
+// InfoStructCleared returns if the "info_struct" field was cleared in this mutation.
+func (m *CharacterHistoryMutation) InfoStructCleared() bool {
+	_, ok := m.clearedFields[characterhistory.FieldInfoStruct]
+	return ok
+}
+
+// ResetInfoStruct resets all changes to the "info_struct" field.
+func (m *CharacterHistoryMutation) ResetInfoStruct() {
+	m.info_struct = nil
+	delete(m.clearedFields, characterhistory.FieldInfoStruct)
+}
+
 // SetLevel sets the "level" field.
 func (m *CharacterHistoryMutation) SetLevel(i int) {
 	m.level = &i
@@ -1792,7 +2061,7 @@ func (m *CharacterHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CharacterHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 13)
 	if m.created_at != nil {
 		fields = append(fields, characterhistory.FieldCreatedAt)
 	}
@@ -1814,6 +2083,9 @@ func (m *CharacterHistoryMutation) Fields() []string {
 	if m.age != nil {
 		fields = append(fields, characterhistory.FieldAge)
 	}
+	if m.typed_age != nil {
+		fields = append(fields, characterhistory.FieldTypedAge)
+	}
 	if m.name != nil {
 		fields = append(fields, characterhistory.FieldName)
 	}
@@ -1822,6 +2094,9 @@ func (m *CharacterHistoryMutation) Fields() []string {
 	}
 	if m.info != nil {
 		fields = append(fields, characterhistory.FieldInfo)
+	}
+	if m.info_struct != nil {
+		fields = append(fields, characterhistory.FieldInfoStruct)
 	}
 	if m.level != nil {
 		fields = append(fields, characterhistory.FieldLevel)
@@ -1848,12 +2123,16 @@ func (m *CharacterHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedBy()
 	case characterhistory.FieldAge:
 		return m.Age()
+	case characterhistory.FieldTypedAge:
+		return m.TypedAge()
 	case characterhistory.FieldName:
 		return m.Name()
 	case characterhistory.FieldNicknames:
 		return m.Nicknames()
 	case characterhistory.FieldInfo:
 		return m.Info()
+	case characterhistory.FieldInfoStruct:
+		return m.InfoStruct()
 	case characterhistory.FieldLevel:
 		return m.Level()
 	}
@@ -1879,12 +2158,16 @@ func (m *CharacterHistoryMutation) OldField(ctx context.Context, name string) (e
 		return m.OldUpdatedBy(ctx)
 	case characterhistory.FieldAge:
 		return m.OldAge(ctx)
+	case characterhistory.FieldTypedAge:
+		return m.OldTypedAge(ctx)
 	case characterhistory.FieldName:
 		return m.OldName(ctx)
 	case characterhistory.FieldNicknames:
 		return m.OldNicknames(ctx)
 	case characterhistory.FieldInfo:
 		return m.OldInfo(ctx)
+	case characterhistory.FieldInfoStruct:
+		return m.OldInfoStruct(ctx)
 	case characterhistory.FieldLevel:
 		return m.OldLevel(ctx)
 	}
@@ -1945,6 +2228,13 @@ func (m *CharacterHistoryMutation) SetField(name string, value ent.Value) error 
 		}
 		m.SetAge(v)
 		return nil
+	case characterhistory.FieldTypedAge:
+		v, ok := value.(models.Uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTypedAge(v)
+		return nil
 	case characterhistory.FieldName:
 		v, ok := value.(string)
 		if !ok {
@@ -1965,6 +2255,13 @@ func (m *CharacterHistoryMutation) SetField(name string, value ent.Value) error 
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetInfo(v)
+		return nil
+	case characterhistory.FieldInfoStruct:
+		v, ok := value.(models.InfoStruct)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInfoStruct(v)
 		return nil
 	case characterhistory.FieldLevel:
 		v, ok := value.(int)
@@ -1990,6 +2287,9 @@ func (m *CharacterHistoryMutation) AddedFields() []string {
 	if m.addage != nil {
 		fields = append(fields, characterhistory.FieldAge)
 	}
+	if m.addtyped_age != nil {
+		fields = append(fields, characterhistory.FieldTypedAge)
+	}
 	if m.addlevel != nil {
 		fields = append(fields, characterhistory.FieldLevel)
 	}
@@ -2007,6 +2307,8 @@ func (m *CharacterHistoryMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedUpdatedBy()
 	case characterhistory.FieldAge:
 		return m.AddedAge()
+	case characterhistory.FieldTypedAge:
+		return m.AddedTypedAge()
 	case characterhistory.FieldLevel:
 		return m.AddedLevel()
 	}
@@ -2039,6 +2341,13 @@ func (m *CharacterHistoryMutation) AddField(name string, value ent.Value) error 
 		}
 		m.AddAge(v)
 		return nil
+	case characterhistory.FieldTypedAge:
+		v, ok := value.(models.Uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddTypedAge(v)
+		return nil
 	case characterhistory.FieldLevel:
 		v, ok := value.(int)
 		if !ok {
@@ -2065,6 +2374,9 @@ func (m *CharacterHistoryMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(characterhistory.FieldInfo) {
 		fields = append(fields, characterhistory.FieldInfo)
+	}
+	if m.FieldCleared(characterhistory.FieldInfoStruct) {
+		fields = append(fields, characterhistory.FieldInfoStruct)
 	}
 	if m.FieldCleared(characterhistory.FieldLevel) {
 		fields = append(fields, characterhistory.FieldLevel)
@@ -2094,6 +2406,9 @@ func (m *CharacterHistoryMutation) ClearField(name string) error {
 		return nil
 	case characterhistory.FieldInfo:
 		m.ClearInfo()
+		return nil
+	case characterhistory.FieldInfoStruct:
+		m.ClearInfoStruct()
 		return nil
 	case characterhistory.FieldLevel:
 		m.ClearLevel()
@@ -2127,6 +2442,9 @@ func (m *CharacterHistoryMutation) ResetField(name string) error {
 	case characterhistory.FieldAge:
 		m.ResetAge()
 		return nil
+	case characterhistory.FieldTypedAge:
+		m.ResetTypedAge()
+		return nil
 	case characterhistory.FieldName:
 		m.ResetName()
 		return nil
@@ -2135,6 +2453,9 @@ func (m *CharacterHistoryMutation) ResetField(name string) error {
 		return nil
 	case characterhistory.FieldInfo:
 		m.ResetInfo()
+		return nil
+	case characterhistory.FieldInfoStruct:
+		m.ResetInfoStruct()
 		return nil
 	case characterhistory.FieldLevel:
 		m.ResetLevel()

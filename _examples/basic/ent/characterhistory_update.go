@@ -99,6 +99,9 @@ func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if chu.mutation.InfoCleared() {
 		_spec.ClearField(characterhistory.FieldInfo, field.TypeJSON)
 	}
+	if chu.mutation.InfoStructCleared() {
+		_spec.ClearField(characterhistory.FieldInfoStruct, field.TypeJSON)
+	}
 	if chu.mutation.LevelCleared() {
 		_spec.ClearField(characterhistory.FieldLevel, field.TypeInt)
 	}
@@ -222,6 +225,9 @@ func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Char
 	}
 	if chuo.mutation.InfoCleared() {
 		_spec.ClearField(characterhistory.FieldInfo, field.TypeJSON)
+	}
+	if chuo.mutation.InfoStructCleared() {
+		_spec.ClearField(characterhistory.FieldInfoStruct, field.TypeJSON)
 	}
 	if chuo.mutation.LevelCleared() {
 		_spec.ClearField(characterhistory.FieldLevel, field.TypeInt)

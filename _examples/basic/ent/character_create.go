@@ -6,6 +6,7 @@ import (
 	"_examples/basic/ent/character"
 	"_examples/basic/ent/friendship"
 	"_examples/basic/ent/residence"
+	"_examples/basic/ent/schema/models"
 	"context"
 	"errors"
 	"fmt"
@@ -57,6 +58,12 @@ func (cc *CharacterCreate) SetAge(i int) *CharacterCreate {
 	return cc
 }
 
+// SetTypedAge sets the "typed_age" field.
+func (cc *CharacterCreate) SetTypedAge(m models.Uint64) *CharacterCreate {
+	cc.mutation.SetTypedAge(m)
+	return cc
+}
+
 // SetName sets the "name" field.
 func (cc *CharacterCreate) SetName(s string) *CharacterCreate {
 	cc.mutation.SetName(s)
@@ -72,6 +79,20 @@ func (cc *CharacterCreate) SetNicknames(s []string) *CharacterCreate {
 // SetInfo sets the "info" field.
 func (cc *CharacterCreate) SetInfo(m map[string]interface{}) *CharacterCreate {
 	cc.mutation.SetInfo(m)
+	return cc
+}
+
+// SetInfoStruct sets the "info_struct" field.
+func (cc *CharacterCreate) SetInfoStruct(ms models.InfoStruct) *CharacterCreate {
+	cc.mutation.SetInfoStruct(ms)
+	return cc
+}
+
+// SetNillableInfoStruct sets the "info_struct" field if the given value is not nil.
+func (cc *CharacterCreate) SetNillableInfoStruct(ms *models.InfoStruct) *CharacterCreate {
+	if ms != nil {
+		cc.SetInfoStruct(*ms)
+	}
 	return cc
 }
 
@@ -199,6 +220,14 @@ func (cc *CharacterCreate) check() error {
 			return &ValidationError{Name: "age", err: fmt.Errorf(`ent: validator failed for field "Character.age": %w`, err)}
 		}
 	}
+	if _, ok := cc.mutation.TypedAge(); !ok {
+		return &ValidationError{Name: "typed_age", err: errors.New(`ent: missing required field "Character.typed_age"`)}
+	}
+	if v, ok := cc.mutation.TypedAge(); ok {
+		if err := character.TypedAgeValidator(uint64(v)); err != nil {
+			return &ValidationError{Name: "typed_age", err: fmt.Errorf(`ent: validator failed for field "Character.typed_age": %w`, err)}
+		}
+	}
 	if _, ok := cc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Character.name"`)}
 	}
@@ -240,6 +269,10 @@ func (cc *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
 		_spec.SetField(character.FieldAge, field.TypeInt, value)
 		_node.Age = value
 	}
+	if value, ok := cc.mutation.TypedAge(); ok {
+		_spec.SetField(character.FieldTypedAge, field.TypeUint64, value)
+		_node.TypedAge = value
+	}
 	if value, ok := cc.mutation.Name(); ok {
 		_spec.SetField(character.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -251,6 +284,10 @@ func (cc *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Info(); ok {
 		_spec.SetField(character.FieldInfo, field.TypeJSON, value)
 		_node.Info = value
+	}
+	if value, ok := cc.mutation.InfoStruct(); ok {
+		_spec.SetField(character.FieldInfoStruct, field.TypeJSON, value)
+		_node.InfoStruct = value
 	}
 	if value, ok := cc.mutation.Level(); ok {
 		_spec.SetField(character.FieldLevel, field.TypeInt, value)

@@ -4,6 +4,7 @@ package schema
 
 import (
 	"_examples/basic/ent/schema/mixins"
+	"_examples/basic/ent/schema/models"
 	"time"
 
 	"entgo.io/ent"
@@ -36,12 +37,19 @@ func (CharacterHistory) Fields() []ent.Field {
 			Immutable(),
 		field.Int("age").
 			Immutable(),
+		field.Uint64("typed_age").
+			GoType(models.Uint64(0)).
+			Immutable(),
 		field.String("name").
 			Immutable(),
 		field.JSON("nicknames", []string{}).
 			Optional().
 			Immutable(),
 		field.JSON("info", map[string]any{}).
+			Optional().
+			Immutable(),
+		field.JSON("info_struct", models.
+			InfoStruct{}).
 			Optional().
 			Immutable(),
 		field.Int("level").

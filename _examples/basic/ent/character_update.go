@@ -7,6 +7,7 @@ import (
 	"_examples/basic/ent/friendship"
 	"_examples/basic/ent/predicate"
 	"_examples/basic/ent/residence"
+	"_examples/basic/ent/schema/models"
 	"context"
 	"errors"
 	"fmt"
@@ -59,6 +60,27 @@ func (cu *CharacterUpdate) AddAge(i int) *CharacterUpdate {
 	return cu
 }
 
+// SetTypedAge sets the "typed_age" field.
+func (cu *CharacterUpdate) SetTypedAge(m models.Uint64) *CharacterUpdate {
+	cu.mutation.ResetTypedAge()
+	cu.mutation.SetTypedAge(m)
+	return cu
+}
+
+// SetNillableTypedAge sets the "typed_age" field if the given value is not nil.
+func (cu *CharacterUpdate) SetNillableTypedAge(m *models.Uint64) *CharacterUpdate {
+	if m != nil {
+		cu.SetTypedAge(*m)
+	}
+	return cu
+}
+
+// AddTypedAge adds m to the "typed_age" field.
+func (cu *CharacterUpdate) AddTypedAge(m models.Uint64) *CharacterUpdate {
+	cu.mutation.AddTypedAge(m)
+	return cu
+}
+
 // SetName sets the "name" field.
 func (cu *CharacterUpdate) SetName(s string) *CharacterUpdate {
 	cu.mutation.SetName(s)
@@ -100,6 +122,26 @@ func (cu *CharacterUpdate) SetInfo(m map[string]interface{}) *CharacterUpdate {
 // ClearInfo clears the value of the "info" field.
 func (cu *CharacterUpdate) ClearInfo() *CharacterUpdate {
 	cu.mutation.ClearInfo()
+	return cu
+}
+
+// SetInfoStruct sets the "info_struct" field.
+func (cu *CharacterUpdate) SetInfoStruct(ms models.InfoStruct) *CharacterUpdate {
+	cu.mutation.SetInfoStruct(ms)
+	return cu
+}
+
+// SetNillableInfoStruct sets the "info_struct" field if the given value is not nil.
+func (cu *CharacterUpdate) SetNillableInfoStruct(ms *models.InfoStruct) *CharacterUpdate {
+	if ms != nil {
+		cu.SetInfoStruct(*ms)
+	}
+	return cu
+}
+
+// ClearInfoStruct clears the value of the "info_struct" field.
+func (cu *CharacterUpdate) ClearInfoStruct() *CharacterUpdate {
+	cu.mutation.ClearInfoStruct()
 	return cu
 }
 
@@ -275,6 +317,11 @@ func (cu *CharacterUpdate) check() error {
 			return &ValidationError{Name: "age", err: fmt.Errorf(`ent: validator failed for field "Character.age": %w`, err)}
 		}
 	}
+	if v, ok := cu.mutation.TypedAge(); ok {
+		if err := character.TypedAgeValidator(uint64(v)); err != nil {
+			return &ValidationError{Name: "typed_age", err: fmt.Errorf(`ent: validator failed for field "Character.typed_age": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -299,6 +346,12 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := cu.mutation.AddedAge(); ok {
 		_spec.AddField(character.FieldAge, field.TypeInt, value)
 	}
+	if value, ok := cu.mutation.TypedAge(); ok {
+		_spec.SetField(character.FieldTypedAge, field.TypeUint64, value)
+	}
+	if value, ok := cu.mutation.AddedTypedAge(); ok {
+		_spec.AddField(character.FieldTypedAge, field.TypeUint64, value)
+	}
 	if value, ok := cu.mutation.Name(); ok {
 		_spec.SetField(character.FieldName, field.TypeString, value)
 	}
@@ -318,6 +371,12 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.InfoCleared() {
 		_spec.ClearField(character.FieldInfo, field.TypeJSON)
+	}
+	if value, ok := cu.mutation.InfoStruct(); ok {
+		_spec.SetField(character.FieldInfoStruct, field.TypeJSON, value)
+	}
+	if cu.mutation.InfoStructCleared() {
+		_spec.ClearField(character.FieldInfoStruct, field.TypeJSON)
 	}
 	if value, ok := cu.mutation.Level(); ok {
 		_spec.SetField(character.FieldLevel, field.TypeInt, value)
@@ -506,6 +565,27 @@ func (cuo *CharacterUpdateOne) AddAge(i int) *CharacterUpdateOne {
 	return cuo
 }
 
+// SetTypedAge sets the "typed_age" field.
+func (cuo *CharacterUpdateOne) SetTypedAge(m models.Uint64) *CharacterUpdateOne {
+	cuo.mutation.ResetTypedAge()
+	cuo.mutation.SetTypedAge(m)
+	return cuo
+}
+
+// SetNillableTypedAge sets the "typed_age" field if the given value is not nil.
+func (cuo *CharacterUpdateOne) SetNillableTypedAge(m *models.Uint64) *CharacterUpdateOne {
+	if m != nil {
+		cuo.SetTypedAge(*m)
+	}
+	return cuo
+}
+
+// AddTypedAge adds m to the "typed_age" field.
+func (cuo *CharacterUpdateOne) AddTypedAge(m models.Uint64) *CharacterUpdateOne {
+	cuo.mutation.AddTypedAge(m)
+	return cuo
+}
+
 // SetName sets the "name" field.
 func (cuo *CharacterUpdateOne) SetName(s string) *CharacterUpdateOne {
 	cuo.mutation.SetName(s)
@@ -547,6 +627,26 @@ func (cuo *CharacterUpdateOne) SetInfo(m map[string]interface{}) *CharacterUpdat
 // ClearInfo clears the value of the "info" field.
 func (cuo *CharacterUpdateOne) ClearInfo() *CharacterUpdateOne {
 	cuo.mutation.ClearInfo()
+	return cuo
+}
+
+// SetInfoStruct sets the "info_struct" field.
+func (cuo *CharacterUpdateOne) SetInfoStruct(ms models.InfoStruct) *CharacterUpdateOne {
+	cuo.mutation.SetInfoStruct(ms)
+	return cuo
+}
+
+// SetNillableInfoStruct sets the "info_struct" field if the given value is not nil.
+func (cuo *CharacterUpdateOne) SetNillableInfoStruct(ms *models.InfoStruct) *CharacterUpdateOne {
+	if ms != nil {
+		cuo.SetInfoStruct(*ms)
+	}
+	return cuo
+}
+
+// ClearInfoStruct clears the value of the "info_struct" field.
+func (cuo *CharacterUpdateOne) ClearInfoStruct() *CharacterUpdateOne {
+	cuo.mutation.ClearInfoStruct()
 	return cuo
 }
 
@@ -735,6 +835,11 @@ func (cuo *CharacterUpdateOne) check() error {
 			return &ValidationError{Name: "age", err: fmt.Errorf(`ent: validator failed for field "Character.age": %w`, err)}
 		}
 	}
+	if v, ok := cuo.mutation.TypedAge(); ok {
+		if err := character.TypedAgeValidator(uint64(v)); err != nil {
+			return &ValidationError{Name: "typed_age", err: fmt.Errorf(`ent: validator failed for field "Character.typed_age": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -776,6 +881,12 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 	if value, ok := cuo.mutation.AddedAge(); ok {
 		_spec.AddField(character.FieldAge, field.TypeInt, value)
 	}
+	if value, ok := cuo.mutation.TypedAge(); ok {
+		_spec.SetField(character.FieldTypedAge, field.TypeUint64, value)
+	}
+	if value, ok := cuo.mutation.AddedTypedAge(); ok {
+		_spec.AddField(character.FieldTypedAge, field.TypeUint64, value)
+	}
 	if value, ok := cuo.mutation.Name(); ok {
 		_spec.SetField(character.FieldName, field.TypeString, value)
 	}
@@ -795,6 +906,12 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 	}
 	if cuo.mutation.InfoCleared() {
 		_spec.ClearField(character.FieldInfo, field.TypeJSON)
+	}
+	if value, ok := cuo.mutation.InfoStruct(); ok {
+		_spec.SetField(character.FieldInfoStruct, field.TypeJSON, value)
+	}
+	if cuo.mutation.InfoStructCleared() {
+		_spec.ClearField(character.FieldInfoStruct, field.TypeJSON)
 	}
 	if value, ok := cuo.mutation.Level(); ok {
 		_spec.SetField(character.FieldLevel, field.TypeInt, value)
