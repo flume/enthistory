@@ -35,10 +35,14 @@ var replacer = strings.NewReplacer("interface {}", "any", "interface{}", "any")
 func Field(desc *field.Descriptor) (*ast.CallExpr, error) {
 	switch t := desc.Info.Type; {
 	case t.Numeric(), t == field.TypeString, t == field.TypeBool, t == field.TypeTime, t == field.TypeBytes:
-		return fromSimpleType(desc)
+		return fromSimpleType(desc, true)
 	case t == field.TypeUUID:
+		call, err := fromSimpleType(desc, false)
+		if err != nil {
+			return nil, err
+		}
 		return fromComplexType(
-			desc,
+			call,
 			structLit(
 				&ast.SelectorExpr{
 					X:   ast.NewIdent("uuid"),
@@ -66,8 +70,12 @@ func Field(desc *field.Descriptor) (*ast.CallExpr, error) {
 				}
 			}
 		}
+		call, err := fromSimpleType(desc, false)
+		if err != nil {
+			return nil, err
+		}
 		return fromComplexType(
-			desc,
+			call,
 			exp,
 		)
 	case t == field.TypeEnum:
@@ -132,7 +140,7 @@ func newFieldCall(desc *field.Descriptor) *builderCall {
 func fromEnumType(desc *field.Descriptor) (*ast.CallExpr, error) {
 	info := desc.Info
 	_ = info
-	call, err := fromSimpleType(desc)
+	call, err := fromSimpleType(desc, false)
 	if err != nil {
 		return nil, err
 	}
@@ -164,12 +172,7 @@ func fromEnumType(desc *field.Descriptor) (*ast.CallExpr, error) {
 	return builder.curr, nil
 }
 
-func fromComplexType(desc *field.Descriptor, filedType ast.Expr) (*ast.CallExpr, error) {
-	call, err := fromSimpleType(desc)
-	if err != nil {
-		return nil, err
-	}
-
+func fromComplexType(call *ast.CallExpr, filedType ast.Expr) (*ast.CallExpr, error) {
 	callExpr := call
 	// Loop through calls to find the base and append the filedType there
 	for {
@@ -188,8 +191,41 @@ func fromComplexType(desc *field.Descriptor, filedType ast.Expr) (*ast.CallExpr,
 	return call, nil
 }
 
-func fromSimpleType(desc *field.Descriptor) (*ast.CallExpr, error) {
+func fromSimpleType(desc *field.Descriptor, rtype bool) (*ast.CallExpr, error) {
 	builder := newFieldCall(desc)
+	if rtype && desc.Info.RType != nil {
+		t := desc.Info.Type
+		var defaultValue ast.Expr
+		if t.Numeric() {
+			defaultValue = intLit(0)
+			if desc.Default != nil {
+				defaultValue = intLit(desc.Default.(int))
+			}
+		} else if t == field.TypeString {
+			defaultValue = strLit("")
+			if desc.Default != nil {
+				defaultValue = strLit(desc.Default.(string))
+			}
+		} else if t == field.TypeBool {
+			defaultValue = boolLit(false)
+			if desc.Default != nil {
+				defaultValue = boolLit(desc.Default.(bool))
+			}
+		} else if t == field.TypeTime {
+			defaultValue = structLit(&ast.SelectorExpr{
+				X:   ast.NewIdent("time"),
+				Sel: ast.NewIdent("Time"),
+			})
+		} else if t == field.TypeBytes {
+			defaultValue = boolSliceLit([]byte{})
+			if desc.Default != nil {
+				defaultValue = boolSliceLit(desc.Default.([]byte))
+			}
+		} else {
+			return nil, fmt.Errorf("schemast: unsupported type %s", t.ConstName())
+		}
+		builder.method("GoType", initLit(desc.Info.RType.Ident, []ast.Expr{defaultValue}))
+	}
 	if desc.Nillable {
 		builder.method("Nillable")
 	}
@@ -238,6 +274,7 @@ func fromSimpleType(desc *field.Descriptor) (*ast.CallExpr, error) {
 		}
 		builder.method("UpdateDefault", expr)
 	}
+
 	// Unsupported features
 	var unsupported error
 	if len(desc.Validators) != 0 {

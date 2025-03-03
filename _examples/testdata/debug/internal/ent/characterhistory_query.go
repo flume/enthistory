@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -61,7 +62,7 @@ func (chq *CharacterHistoryQuery) Order(o ...characterhistory.OrderOption) *Char
 // First returns the first CharacterHistory entity from the query.
 // Returns a *NotFoundError when no CharacterHistory was found.
 func (chq *CharacterHistoryQuery) First(ctx context.Context) (*CharacterHistory, error) {
-	nodes, err := chq.Limit(1).All(setContextOp(ctx, chq.ctx, "First"))
+	nodes, err := chq.Limit(1).All(setContextOp(ctx, chq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +85,7 @@ func (chq *CharacterHistoryQuery) FirstX(ctx context.Context) *CharacterHistory 
 // Returns a *NotFoundError when no CharacterHistory ID was found.
 func (chq *CharacterHistoryQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = chq.Limit(1).IDs(setContextOp(ctx, chq.ctx, "FirstID")); err != nil {
+	if ids, err = chq.Limit(1).IDs(setContextOp(ctx, chq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -107,7 +108,7 @@ func (chq *CharacterHistoryQuery) FirstIDX(ctx context.Context) uuid.UUID {
 // Returns a *NotSingularError when more than one CharacterHistory entity is found.
 // Returns a *NotFoundError when no CharacterHistory entities are found.
 func (chq *CharacterHistoryQuery) Only(ctx context.Context) (*CharacterHistory, error) {
-	nodes, err := chq.Limit(2).All(setContextOp(ctx, chq.ctx, "Only"))
+	nodes, err := chq.Limit(2).All(setContextOp(ctx, chq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -135,7 +136,7 @@ func (chq *CharacterHistoryQuery) OnlyX(ctx context.Context) *CharacterHistory {
 // Returns a *NotFoundError when no entities are found.
 func (chq *CharacterHistoryQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = chq.Limit(2).IDs(setContextOp(ctx, chq.ctx, "OnlyID")); err != nil {
+	if ids, err = chq.Limit(2).IDs(setContextOp(ctx, chq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -160,7 +161,7 @@ func (chq *CharacterHistoryQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 
 // All executes the query and returns a list of CharacterHistories.
 func (chq *CharacterHistoryQuery) All(ctx context.Context) ([]*CharacterHistory, error) {
-	ctx = setContextOp(ctx, chq.ctx, "All")
+	ctx = setContextOp(ctx, chq.ctx, ent.OpQueryAll)
 	if err := chq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -182,7 +183,7 @@ func (chq *CharacterHistoryQuery) IDs(ctx context.Context) (ids []uuid.UUID, err
 	if chq.ctx.Unique == nil && chq.path != nil {
 		chq.Unique(true)
 	}
-	ctx = setContextOp(ctx, chq.ctx, "IDs")
+	ctx = setContextOp(ctx, chq.ctx, ent.OpQueryIDs)
 	if err = chq.Select(characterhistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -200,7 +201,7 @@ func (chq *CharacterHistoryQuery) IDsX(ctx context.Context) []uuid.UUID {
 
 // Count returns the count of the given query.
 func (chq *CharacterHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, chq.ctx, "Count")
+	ctx = setContextOp(ctx, chq.ctx, ent.OpQueryCount)
 	if err := chq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -218,7 +219,7 @@ func (chq *CharacterHistoryQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (chq *CharacterHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, chq.ctx, "Exist")
+	ctx = setContextOp(ctx, chq.ctx, ent.OpQueryExist)
 	switch _, err := chq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -450,7 +451,7 @@ func (chgb *CharacterHistoryGroupBy) Aggregate(fns ...AggregateFunc) *CharacterH
 
 // Scan applies the selector query and scans the result into the given value.
 func (chgb *CharacterHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, chgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, chgb.build.ctx, ent.OpQueryGroupBy)
 	if err := chgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -498,7 +499,7 @@ func (chs *CharacterHistorySelect) Aggregate(fns ...AggregateFunc) *CharacterHis
 
 // Scan applies the selector query and scans the result into the given value.
 func (chs *CharacterHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, chs.ctx, "Select")
+	ctx = setContextOp(ctx, chs.ctx, ent.OpQuerySelect)
 	if err := chs.prepareQuery(ctx); err != nil {
 		return err
 	}

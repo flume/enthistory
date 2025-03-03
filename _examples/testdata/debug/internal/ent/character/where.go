@@ -4,6 +4,7 @@ package character
 
 import (
 	"_examples/testdata/debug/internal/ent/predicate"
+	"_examples/testdata/debug/models"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -74,6 +75,12 @@ func Other(v string) predicate.Character {
 // Age applies equality check predicate on the "age" field. It's identical to AgeEQ.
 func Age(v int) predicate.Character {
 	return predicate.Character(sql.FieldEQ(FieldAge, v))
+}
+
+// TypedAge applies equality check predicate on the "typed_age" field. It's identical to TypedAgeEQ.
+func TypedAge(v models.Uint64) predicate.Character {
+	vc := uint64(v)
+	return predicate.Character(sql.FieldEQ(FieldTypedAge, vc))
 }
 
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
@@ -266,6 +273,60 @@ func AgeLTE(v int) predicate.Character {
 	return predicate.Character(sql.FieldLTE(FieldAge, v))
 }
 
+// TypedAgeEQ applies the EQ predicate on the "typed_age" field.
+func TypedAgeEQ(v models.Uint64) predicate.Character {
+	vc := uint64(v)
+	return predicate.Character(sql.FieldEQ(FieldTypedAge, vc))
+}
+
+// TypedAgeNEQ applies the NEQ predicate on the "typed_age" field.
+func TypedAgeNEQ(v models.Uint64) predicate.Character {
+	vc := uint64(v)
+	return predicate.Character(sql.FieldNEQ(FieldTypedAge, vc))
+}
+
+// TypedAgeIn applies the In predicate on the "typed_age" field.
+func TypedAgeIn(vs ...models.Uint64) predicate.Character {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = uint64(vs[i])
+	}
+	return predicate.Character(sql.FieldIn(FieldTypedAge, v...))
+}
+
+// TypedAgeNotIn applies the NotIn predicate on the "typed_age" field.
+func TypedAgeNotIn(vs ...models.Uint64) predicate.Character {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = uint64(vs[i])
+	}
+	return predicate.Character(sql.FieldNotIn(FieldTypedAge, v...))
+}
+
+// TypedAgeGT applies the GT predicate on the "typed_age" field.
+func TypedAgeGT(v models.Uint64) predicate.Character {
+	vc := uint64(v)
+	return predicate.Character(sql.FieldGT(FieldTypedAge, vc))
+}
+
+// TypedAgeGTE applies the GTE predicate on the "typed_age" field.
+func TypedAgeGTE(v models.Uint64) predicate.Character {
+	vc := uint64(v)
+	return predicate.Character(sql.FieldGTE(FieldTypedAge, vc))
+}
+
+// TypedAgeLT applies the LT predicate on the "typed_age" field.
+func TypedAgeLT(v models.Uint64) predicate.Character {
+	vc := uint64(v)
+	return predicate.Character(sql.FieldLT(FieldTypedAge, vc))
+}
+
+// TypedAgeLTE applies the LTE predicate on the "typed_age" field.
+func TypedAgeLTE(v models.Uint64) predicate.Character {
+	vc := uint64(v)
+	return predicate.Character(sql.FieldLTE(FieldTypedAge, vc))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.Character {
 	return predicate.Character(sql.FieldEQ(FieldName, v))
@@ -349,6 +410,16 @@ func InfoIsNil() predicate.Character {
 // InfoNotNil applies the NotNil predicate on the "info" field.
 func InfoNotNil() predicate.Character {
 	return predicate.Character(sql.FieldNotNull(FieldInfo))
+}
+
+// InfoStructIsNil applies the IsNil predicate on the "info_struct" field.
+func InfoStructIsNil() predicate.Character {
+	return predicate.Character(sql.FieldIsNull(FieldInfoStruct))
+}
+
+// InfoStructNotNil applies the NotNil predicate on the "info_struct" field.
+func InfoStructNotNil() predicate.Character {
+	return predicate.Character(sql.FieldNotNull(FieldInfoStruct))
 }
 
 // HasFriends applies the HasEdge predicate on the "friends" edge.

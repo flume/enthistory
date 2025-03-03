@@ -23,12 +23,16 @@ const (
 	FieldOther = "other"
 	// FieldAge holds the string denoting the age field in the database.
 	FieldAge = "age"
+	// FieldTypedAge holds the string denoting the typed_age field in the database.
+	FieldTypedAge = "typed_age"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldNicknames holds the string denoting the nicknames field in the database.
 	FieldNicknames = "nicknames"
 	// FieldInfo holds the string denoting the info field in the database.
 	FieldInfo = "info"
+	// FieldInfoStruct holds the string denoting the info_struct field in the database.
+	FieldInfoStruct = "info_struct"
 	// EdgeFriends holds the string denoting the friends edge name in mutations.
 	EdgeFriends = "friends"
 	// EdgeFriendships holds the string denoting the friendships edge name in mutations.
@@ -53,9 +57,11 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldOther,
 	FieldAge,
+	FieldTypedAge,
 	FieldName,
 	FieldNicknames,
 	FieldInfo,
+	FieldInfoStruct,
 }
 
 var (
@@ -81,6 +87,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// AgeValidator is a validator for the "age" field. It is called by the builders before save.
 	AgeValidator func(int) error
+	// TypedAgeValidator is a validator for the "typed_age" field. It is called by the builders before save.
+	TypedAgeValidator func(uint64) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -111,6 +119,11 @@ func ByOther(opts ...sql.OrderTermOption) OrderOption {
 // ByAge orders the results by the age field.
 func ByAge(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAge, opts...).ToFunc()
+}
+
+// ByTypedAge orders the results by the typed_age field.
+func ByTypedAge(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTypedAge, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

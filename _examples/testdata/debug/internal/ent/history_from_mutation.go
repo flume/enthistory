@@ -77,12 +77,12 @@ func (m *CharacterMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetUpdatedAt(updatedAt)
 	}
 
-	if other, exists := m.Other(); exists {
-		create = create.SetOther(other)
-	}
-
 	if age, exists := m.Age(); exists {
 		create = create.SetAge(age)
+	}
+
+	if typedAge, exists := m.TypedAge(); exists {
+		create = create.SetTypedAge(typedAge)
 	}
 
 	if name, exists := m.Name(); exists {
@@ -95,6 +95,10 @@ func (m *CharacterMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if info, exists := m.Info(); exists {
 		create = create.SetInfo(info)
+	}
+
+	if infoStruct, exists := m.InfoStruct(); exists {
+		create = create.SetInfoStruct(infoStruct)
 	}
 
 	_, err = create.Save(ctx)
@@ -149,16 +153,16 @@ func (m *CharacterMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetUpdatedAt(character.UpdatedAt)
 		}
 
-		if other, exists := m.Other(); exists {
-			create = create.SetOther(other)
-		} else {
-			create = create.SetOther(character.Other)
-		}
-
 		if age, exists := m.Age(); exists {
 			create = create.SetAge(age)
 		} else {
 			create = create.SetAge(character.Age)
+		}
+
+		if typedAge, exists := m.TypedAge(); exists {
+			create = create.SetTypedAge(typedAge)
+		} else {
+			create = create.SetTypedAge(character.TypedAge)
 		}
 
 		if name, exists := m.Name(); exists {
@@ -177,6 +181,12 @@ func (m *CharacterMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetInfo(info)
 		} else {
 			create = create.SetInfo(character.Info)
+		}
+
+		if infoStruct, exists := m.InfoStruct(); exists {
+			create = create.SetInfoStruct(infoStruct)
+		} else {
+			create = create.SetInfoStruct(character.InfoStruct)
 		}
 
 		_, err = create.Save(ctx)
@@ -222,11 +232,12 @@ func (m *CharacterMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRef(id).
 			SetCreatedAt(character.CreatedAt).
 			SetUpdatedAt(character.UpdatedAt).
-			SetOther(character.Other).
 			SetAge(character.Age).
+			SetTypedAge(character.TypedAge).
 			SetName(character.Name).
 			SetNicknames(character.Nicknames).
 			SetInfo(character.Info).
+			SetInfoStruct(character.InfoStruct).
 			Save(ctx)
 		if err != nil {
 			rollback(tx, err)

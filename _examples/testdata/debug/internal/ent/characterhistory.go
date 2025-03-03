@@ -4,6 +4,7 @@ package ent
 
 import (
 	"_examples/testdata/debug/internal/ent/characterhistory"
+	"_examples/testdata/debug/models"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -35,12 +36,16 @@ type CharacterHistory struct {
 	UpdatedBy *uuid.UUID `json:"updated_by,omitempty"`
 	// Age holds the value of the "age" field.
 	Age *int `json:"age,omitempty"`
+	// TypedAge holds the value of the "typed_age" field.
+	TypedAge *models.Uint64 `json:"typed_age,omitempty"`
 	// Name holds the value of the "name" field.
 	Name *string `json:"name,omitempty"`
 	// Nicknames holds the value of the "nicknames" field.
 	Nicknames []string `json:"nicknames,omitempty"`
 	// Info holds the value of the "info" field.
-	Info         map[string]interface{} `json:"info,omitempty"`
+	Info map[string]interface{} `json:"info,omitempty"`
+	// InfoStruct holds the value of the "info_struct" field.
+	InfoStruct   models.InfoStruct `json:"info_struct,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -51,9 +56,9 @@ func (*CharacterHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case characterhistory.FieldUpdatedBy:
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
-		case characterhistory.FieldNicknames, characterhistory.FieldInfo:
+		case characterhistory.FieldNicknames, characterhistory.FieldInfo, characterhistory.FieldInfoStruct:
 			values[i] = new([]byte)
-		case characterhistory.FieldAge:
+		case characterhistory.FieldAge, characterhistory.FieldTypedAge:
 			values[i] = new(sql.NullInt64)
 		case characterhistory.FieldOperation, characterhistory.FieldName:
 			values[i] = new(sql.NullString)
@@ -126,6 +131,13 @@ func (ch *CharacterHistory) assignValues(columns []string, values []any) error {
 				ch.Age = new(int)
 				*ch.Age = int(value.Int64)
 			}
+		case characterhistory.FieldTypedAge:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field typed_age", values[i])
+			} else if value.Valid {
+				ch.TypedAge = new(models.Uint64)
+				*ch.TypedAge = models.Uint64(value.Int64)
+			}
 		case characterhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -147,6 +159,14 @@ func (ch *CharacterHistory) assignValues(columns []string, values []any) error {
 			} else if value != nil && len(*value) > 0 {
 				if err := json.Unmarshal(*value, &ch.Info); err != nil {
 					return fmt.Errorf("unmarshal field info: %w", err)
+				}
+			}
+		case characterhistory.FieldInfoStruct:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field info_struct", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ch.InfoStruct); err != nil {
+					return fmt.Errorf("unmarshal field info_struct: %w", err)
 				}
 			}
 		default:
@@ -210,6 +230,11 @@ func (ch *CharacterHistory) String() string {
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
+	if v := ch.TypedAge; v != nil {
+		builder.WriteString("typed_age=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
 	if v := ch.Name; v != nil {
 		builder.WriteString("name=")
 		builder.WriteString(*v)
@@ -220,6 +245,9 @@ func (ch *CharacterHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("info=")
 	builder.WriteString(fmt.Sprintf("%v", ch.Info))
+	builder.WriteString(", ")
+	builder.WriteString("info_struct=")
+	builder.WriteString(fmt.Sprintf("%v", ch.InfoStruct))
 	builder.WriteByte(')')
 	return builder.String()
 }

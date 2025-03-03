@@ -4,6 +4,7 @@ package characterhistory
 
 import (
 	"_examples/testdata/debug/internal/ent/predicate"
+	"_examples/testdata/debug/models"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -85,6 +86,12 @@ func UpdatedBy(v uuid.UUID) predicate.CharacterHistory {
 // Age applies equality check predicate on the "age" field. It's identical to AgeEQ.
 func Age(v int) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldEQ(FieldAge, v))
+}
+
+// TypedAge applies equality check predicate on the "typed_age" field. It's identical to TypedAgeEQ.
+func TypedAge(v models.Uint64) predicate.CharacterHistory {
+	vc := uint64(v)
+	return predicate.CharacterHistory(sql.FieldEQ(FieldTypedAge, vc))
 }
 
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
@@ -382,6 +389,70 @@ func AgeNotNil() predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldNotNull(FieldAge))
 }
 
+// TypedAgeEQ applies the EQ predicate on the "typed_age" field.
+func TypedAgeEQ(v models.Uint64) predicate.CharacterHistory {
+	vc := uint64(v)
+	return predicate.CharacterHistory(sql.FieldEQ(FieldTypedAge, vc))
+}
+
+// TypedAgeNEQ applies the NEQ predicate on the "typed_age" field.
+func TypedAgeNEQ(v models.Uint64) predicate.CharacterHistory {
+	vc := uint64(v)
+	return predicate.CharacterHistory(sql.FieldNEQ(FieldTypedAge, vc))
+}
+
+// TypedAgeIn applies the In predicate on the "typed_age" field.
+func TypedAgeIn(vs ...models.Uint64) predicate.CharacterHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = uint64(vs[i])
+	}
+	return predicate.CharacterHistory(sql.FieldIn(FieldTypedAge, v...))
+}
+
+// TypedAgeNotIn applies the NotIn predicate on the "typed_age" field.
+func TypedAgeNotIn(vs ...models.Uint64) predicate.CharacterHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = uint64(vs[i])
+	}
+	return predicate.CharacterHistory(sql.FieldNotIn(FieldTypedAge, v...))
+}
+
+// TypedAgeGT applies the GT predicate on the "typed_age" field.
+func TypedAgeGT(v models.Uint64) predicate.CharacterHistory {
+	vc := uint64(v)
+	return predicate.CharacterHistory(sql.FieldGT(FieldTypedAge, vc))
+}
+
+// TypedAgeGTE applies the GTE predicate on the "typed_age" field.
+func TypedAgeGTE(v models.Uint64) predicate.CharacterHistory {
+	vc := uint64(v)
+	return predicate.CharacterHistory(sql.FieldGTE(FieldTypedAge, vc))
+}
+
+// TypedAgeLT applies the LT predicate on the "typed_age" field.
+func TypedAgeLT(v models.Uint64) predicate.CharacterHistory {
+	vc := uint64(v)
+	return predicate.CharacterHistory(sql.FieldLT(FieldTypedAge, vc))
+}
+
+// TypedAgeLTE applies the LTE predicate on the "typed_age" field.
+func TypedAgeLTE(v models.Uint64) predicate.CharacterHistory {
+	vc := uint64(v)
+	return predicate.CharacterHistory(sql.FieldLTE(FieldTypedAge, vc))
+}
+
+// TypedAgeIsNil applies the IsNil predicate on the "typed_age" field.
+func TypedAgeIsNil() predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldIsNull(FieldTypedAge))
+}
+
+// TypedAgeNotNil applies the NotNil predicate on the "typed_age" field.
+func TypedAgeNotNil() predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldNotNull(FieldTypedAge))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldEQ(FieldName, v))
@@ -475,6 +546,16 @@ func InfoIsNil() predicate.CharacterHistory {
 // InfoNotNil applies the NotNil predicate on the "info" field.
 func InfoNotNil() predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldNotNull(FieldInfo))
+}
+
+// InfoStructIsNil applies the IsNil predicate on the "info_struct" field.
+func InfoStructIsNil() predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldIsNull(FieldInfoStruct))
+}
+
+// InfoStructNotNil applies the NotNil predicate on the "info_struct" field.
+func InfoStructNotNil() predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldNotNull(FieldInfoStruct))
 }
 
 // And groups predicates with the AND operator between them.

@@ -80,10 +80,29 @@ func strSliceLit(s []string) ast.Expr {
 	return c
 }
 
+func boolSliceLit(s []byte) ast.Expr {
+	c := &ast.CompositeLit{
+		Type: &ast.ArrayType{
+			Elt: ast.NewIdent("byte"),
+		},
+	}
+	for _, v := range s {
+		c.Elts = append(c.Elts, byteLit(v))
+	}
+	return c
+}
+
 func strLit(lit string) ast.Expr {
 	return &ast.BasicLit{
 		Kind:  token.STRING,
 		Value: strconv.Quote(lit),
+	}
+}
+
+func byteLit(lit byte) ast.Expr {
+	return &ast.BasicLit{
+		Kind:  token.CHAR,
+		Value: strconv.QuoteRune(rune(lit)),
 	}
 }
 
@@ -108,6 +127,16 @@ func selectorLit(x, sel string) *ast.SelectorExpr {
 	return &ast.SelectorExpr{
 		X:   ast.NewIdent(x),
 		Sel: ast.NewIdent(sel),
+	}
+}
+
+func initLit(x string, args []ast.Expr) *ast.CallExpr {
+	return &ast.CallExpr{
+		Fun:      ast.NewIdent(x),
+		Lparen:   1,
+		Args:     args,
+		Ellipsis: token.NoPos,
+		Rparen:   2,
 	}
 }
 

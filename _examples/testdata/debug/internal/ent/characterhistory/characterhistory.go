@@ -31,12 +31,16 @@ const (
 	FieldUpdatedBy = "updated_by"
 	// FieldAge holds the string denoting the age field in the database.
 	FieldAge = "age"
+	// FieldTypedAge holds the string denoting the typed_age field in the database.
+	FieldTypedAge = "typed_age"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldNicknames holds the string denoting the nicknames field in the database.
 	FieldNicknames = "nicknames"
 	// FieldInfo holds the string denoting the info field in the database.
 	FieldInfo = "info"
+	// FieldInfoStruct holds the string denoting the info_struct field in the database.
+	FieldInfoStruct = "info_struct"
 	// Table holds the table name of the characterhistory in the database.
 	Table = "character_history"
 )
@@ -51,9 +55,11 @@ var Columns = []string{
 	FieldRef,
 	FieldUpdatedBy,
 	FieldAge,
+	FieldTypedAge,
 	FieldName,
 	FieldNicknames,
 	FieldInfo,
+	FieldInfoStruct,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -128,6 +134,11 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByAge orders the results by the age field.
 func ByAge(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAge, opts...).ToFunc()
+}
+
+// ByTypedAge orders the results by the typed_age field.
+func ByTypedAge(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTypedAge, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

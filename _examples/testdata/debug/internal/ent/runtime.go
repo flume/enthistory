@@ -34,6 +34,10 @@ func init() {
 	characterDescAge := characterFields[1].Descriptor()
 	// character.AgeValidator is a validator for the "age" field. It is called by the builders before save.
 	character.AgeValidator = characterDescAge.Validators[0].(func(int) error)
+	// characterDescTypedAge is the schema descriptor for typed_age field.
+	characterDescTypedAge := characterFields[2].Descriptor()
+	// character.TypedAgeValidator is a validator for the "typed_age" field. It is called by the builders before save.
+	character.TypedAgeValidator = characterDescTypedAge.Validators[0].(func(uint64) error)
 	// characterDescID is the schema descriptor for id field.
 	characterDescID := characterFields[0].Descriptor()
 	// character.DefaultID holds the default value on creation for the id field.
