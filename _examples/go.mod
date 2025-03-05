@@ -1,12 +1,12 @@
 module _examples
 
-go 1.24.0
+go 1.24.1
 
 require (
 	entgo.io/contrib v0.6.0
 	entgo.io/ent v0.14.3
 	github.com/99designs/gqlgen v0.17.66
-	github.com/flume/enthistory v0.15.6
+	github.com/flume/enthistory v0.16.0
 	github.com/google/uuid v1.6.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/mattn/go-sqlite3 v1.14.24
@@ -38,8 +38,8 @@ require (
 	github.com/zclconf/go-cty-yaml v1.1.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/exp v0.0.0-20250228200357-dead58393ab7 // indirect
-	golang.org/x/mod v0.23.0 // indirect
-	golang.org/x/sync v0.11.0 // indirect
+	golang.org/x/mod v0.24.0 // indirect
+	golang.org/x/sync v0.12.0 // indirect
 	golang.org/x/text v0.22.0 // indirect
 	golang.org/x/tools v0.30.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240401170217-c3f982113cda // indirect
