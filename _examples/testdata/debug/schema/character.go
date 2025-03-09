@@ -55,7 +55,8 @@ func (Character) Fields() []ent.Field {
 			Optional(),
 		field.String("species").
 			Optional().
-			GoType(models.SpeciesType("")),
+			GoType(models.SpeciesType("")).
+			DefaultFunc(models.DefaultSpeciesType),
 	}
 }
 
