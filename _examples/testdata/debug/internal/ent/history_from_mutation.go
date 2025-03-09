@@ -101,6 +101,10 @@ func (m *CharacterMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetInfoStruct(infoStruct)
 	}
 
+	if species, exists := m.Species(); exists {
+		create = create.SetSpecies(species)
+	}
+
 	_, err = create.Save(ctx)
 	if err != nil {
 		rollback(tx, err)
@@ -189,6 +193,12 @@ func (m *CharacterMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetInfoStruct(character.InfoStruct)
 		}
 
+		if species, exists := m.Species(); exists {
+			create = create.SetSpecies(species)
+		} else {
+			create = create.SetSpecies(character.Species)
+		}
+
 		_, err = create.Save(ctx)
 		if err != nil {
 			rollback(tx, err)
@@ -238,6 +248,7 @@ func (m *CharacterMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetNicknames(character.Nicknames).
 			SetInfo(character.Info).
 			SetInfoStruct(character.InfoStruct).
+			SetSpecies(character.Species).
 			Save(ctx)
 		if err != nil {
 			rollback(tx, err)

@@ -53,6 +53,9 @@ func (Character) Fields() []ent.Field {
 			Optional(),
 		field.JSON("info_struct", models.InfoStruct{}).
 			Optional(),
+		field.String("species").
+			Optional().
+			GoType(models.SpeciesType("")),
 	}
 }
 

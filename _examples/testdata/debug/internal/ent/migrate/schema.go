@@ -21,6 +21,7 @@ var (
 		{Name: "nicknames", Type: field.TypeJSON, Nullable: true},
 		{Name: "info", Type: field.TypeJSON, Nullable: true},
 		{Name: "info_struct", Type: field.TypeJSON, Nullable: true},
+		{Name: "species", Type: field.TypeString, Nullable: true},
 	}
 	// CharacterTable holds the schema information for the "character" table.
 	CharacterTable = &schema.Table{
@@ -43,6 +44,7 @@ var (
 		{Name: "nicknames", Type: field.TypeJSON, Nullable: true},
 		{Name: "info", Type: field.TypeJSON, Nullable: true},
 		{Name: "info_struct", Type: field.TypeJSON, Nullable: true},
+		{Name: "species", Type: field.TypeString, Nullable: true},
 	}
 	// CharacterHistoryTable holds the schema information for the "character_history" table.
 	CharacterHistoryTable = &schema.Table{

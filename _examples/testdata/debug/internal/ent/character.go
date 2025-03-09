@@ -38,6 +38,8 @@ type Character struct {
 	Info map[string]interface{} `json:"info,omitempty"`
 	// InfoStruct holds the value of the "info_struct" field.
 	InfoStruct models.InfoStruct `json:"info_struct,omitempty"`
+	// Species holds the value of the "species" field.
+	Species models.SpeciesType `json:"species,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CharacterQuery when eager-loading is set.
 	Edges        CharacterEdges `json:"edges"`
@@ -82,7 +84,7 @@ func (*Character) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case character.FieldAge, character.FieldTypedAge:
 			values[i] = new(sql.NullInt64)
-		case character.FieldOther, character.FieldName:
+		case character.FieldOther, character.FieldName, character.FieldSpecies:
 			values[i] = new(sql.NullString)
 		case character.FieldCreatedAt, character.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -169,6 +171,12 @@ func (c *Character) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field info_struct: %w", err)
 				}
 			}
+		case character.FieldSpecies:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field species", values[i])
+			} else if value.Valid {
+				c.Species = models.SpeciesType(value.String)
+			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
 		}
@@ -241,6 +249,9 @@ func (c *Character) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("info_struct=")
 	builder.WriteString(fmt.Sprintf("%v", c.InfoStruct))
+	builder.WriteString(", ")
+	builder.WriteString("species=")
+	builder.WriteString(fmt.Sprintf("%v", c.Species))
 	builder.WriteByte(')')
 	return builder.String()
 }

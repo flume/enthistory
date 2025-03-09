@@ -33,6 +33,8 @@ const (
 	FieldInfo = "info"
 	// FieldInfoStruct holds the string denoting the info_struct field in the database.
 	FieldInfoStruct = "info_struct"
+	// FieldSpecies holds the string denoting the species field in the database.
+	FieldSpecies = "species"
 	// EdgeFriends holds the string denoting the friends edge name in mutations.
 	EdgeFriends = "friends"
 	// EdgeFriendships holds the string denoting the friendships edge name in mutations.
@@ -62,6 +64,7 @@ var Columns = []string{
 	FieldNicknames,
 	FieldInfo,
 	FieldInfoStruct,
+	FieldSpecies,
 }
 
 var (
@@ -129,6 +132,11 @@ func ByTypedAge(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// BySpecies orders the results by the species field.
+func BySpecies(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSpecies, opts...).ToFunc()
 }
 
 // ByFriendsCount orders the results by friends count.

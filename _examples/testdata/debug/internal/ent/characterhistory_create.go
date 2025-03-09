@@ -160,6 +160,20 @@ func (chc *CharacterHistoryCreate) SetNillableInfoStruct(ms *models.InfoStruct) 
 	return chc
 }
 
+// SetSpecies sets the "species" field.
+func (chc *CharacterHistoryCreate) SetSpecies(mt models.SpeciesType) *CharacterHistoryCreate {
+	chc.mutation.SetSpecies(mt)
+	return chc
+}
+
+// SetNillableSpecies sets the "species" field if the given value is not nil.
+func (chc *CharacterHistoryCreate) SetNillableSpecies(mt *models.SpeciesType) *CharacterHistoryCreate {
+	if mt != nil {
+		chc.SetSpecies(*mt)
+	}
+	return chc
+}
+
 // SetID sets the "id" field.
 func (chc *CharacterHistoryCreate) SetID(u uuid.UUID) *CharacterHistoryCreate {
 	chc.mutation.SetID(u)
@@ -324,6 +338,10 @@ func (chc *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cr
 	if value, ok := chc.mutation.InfoStruct(); ok {
 		_spec.SetField(characterhistory.FieldInfoStruct, field.TypeJSON, value)
 		_node.InfoStruct = value
+	}
+	if value, ok := chc.mutation.Species(); ok {
+		_spec.SetField(characterhistory.FieldSpecies, field.TypeString, value)
+		_node.Species = &value
 	}
 	return _node, _spec
 }

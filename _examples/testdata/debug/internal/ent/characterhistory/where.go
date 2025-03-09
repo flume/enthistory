@@ -99,6 +99,12 @@ func Name(v string) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldEQ(FieldName, v))
 }
 
+// Species applies equality check predicate on the "species" field. It's identical to SpeciesEQ.
+func Species(v models.SpeciesType) predicate.CharacterHistory {
+	vc := string(v)
+	return predicate.CharacterHistory(sql.FieldEQ(FieldSpecies, vc))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldEQ(FieldCreatedAt, v))
@@ -556,6 +562,100 @@ func InfoStructIsNil() predicate.CharacterHistory {
 // InfoStructNotNil applies the NotNil predicate on the "info_struct" field.
 func InfoStructNotNil() predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldNotNull(FieldInfoStruct))
+}
+
+// SpeciesEQ applies the EQ predicate on the "species" field.
+func SpeciesEQ(v models.SpeciesType) predicate.CharacterHistory {
+	vc := string(v)
+	return predicate.CharacterHistory(sql.FieldEQ(FieldSpecies, vc))
+}
+
+// SpeciesNEQ applies the NEQ predicate on the "species" field.
+func SpeciesNEQ(v models.SpeciesType) predicate.CharacterHistory {
+	vc := string(v)
+	return predicate.CharacterHistory(sql.FieldNEQ(FieldSpecies, vc))
+}
+
+// SpeciesIn applies the In predicate on the "species" field.
+func SpeciesIn(vs ...models.SpeciesType) predicate.CharacterHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = string(vs[i])
+	}
+	return predicate.CharacterHistory(sql.FieldIn(FieldSpecies, v...))
+}
+
+// SpeciesNotIn applies the NotIn predicate on the "species" field.
+func SpeciesNotIn(vs ...models.SpeciesType) predicate.CharacterHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = string(vs[i])
+	}
+	return predicate.CharacterHistory(sql.FieldNotIn(FieldSpecies, v...))
+}
+
+// SpeciesGT applies the GT predicate on the "species" field.
+func SpeciesGT(v models.SpeciesType) predicate.CharacterHistory {
+	vc := string(v)
+	return predicate.CharacterHistory(sql.FieldGT(FieldSpecies, vc))
+}
+
+// SpeciesGTE applies the GTE predicate on the "species" field.
+func SpeciesGTE(v models.SpeciesType) predicate.CharacterHistory {
+	vc := string(v)
+	return predicate.CharacterHistory(sql.FieldGTE(FieldSpecies, vc))
+}
+
+// SpeciesLT applies the LT predicate on the "species" field.
+func SpeciesLT(v models.SpeciesType) predicate.CharacterHistory {
+	vc := string(v)
+	return predicate.CharacterHistory(sql.FieldLT(FieldSpecies, vc))
+}
+
+// SpeciesLTE applies the LTE predicate on the "species" field.
+func SpeciesLTE(v models.SpeciesType) predicate.CharacterHistory {
+	vc := string(v)
+	return predicate.CharacterHistory(sql.FieldLTE(FieldSpecies, vc))
+}
+
+// SpeciesContains applies the Contains predicate on the "species" field.
+func SpeciesContains(v models.SpeciesType) predicate.CharacterHistory {
+	vc := string(v)
+	return predicate.CharacterHistory(sql.FieldContains(FieldSpecies, vc))
+}
+
+// SpeciesHasPrefix applies the HasPrefix predicate on the "species" field.
+func SpeciesHasPrefix(v models.SpeciesType) predicate.CharacterHistory {
+	vc := string(v)
+	return predicate.CharacterHistory(sql.FieldHasPrefix(FieldSpecies, vc))
+}
+
+// SpeciesHasSuffix applies the HasSuffix predicate on the "species" field.
+func SpeciesHasSuffix(v models.SpeciesType) predicate.CharacterHistory {
+	vc := string(v)
+	return predicate.CharacterHistory(sql.FieldHasSuffix(FieldSpecies, vc))
+}
+
+// SpeciesIsNil applies the IsNil predicate on the "species" field.
+func SpeciesIsNil() predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldIsNull(FieldSpecies))
+}
+
+// SpeciesNotNil applies the NotNil predicate on the "species" field.
+func SpeciesNotNil() predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldNotNull(FieldSpecies))
+}
+
+// SpeciesEqualFold applies the EqualFold predicate on the "species" field.
+func SpeciesEqualFold(v models.SpeciesType) predicate.CharacterHistory {
+	vc := string(v)
+	return predicate.CharacterHistory(sql.FieldEqualFold(FieldSpecies, vc))
+}
+
+// SpeciesContainsFold applies the ContainsFold predicate on the "species" field.
+func SpeciesContainsFold(v models.SpeciesType) predicate.CharacterHistory {
+	vc := string(v)
+	return predicate.CharacterHistory(sql.FieldContainsFold(FieldSpecies, vc))
 }
 
 // And groups predicates with the AND operator between them.

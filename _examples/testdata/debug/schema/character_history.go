@@ -64,7 +64,13 @@ func (CharacterHistory) Fields() []ent.Field {
 		field.JSON("info_struct", models.
 			InfoStruct{}).
 			Optional().
+			Immutable(),
+		field.String("species").
+			GoType(models.SpeciesType("")).
+			Nillable().
+			Optional().
 			Immutable()}
+
 }
 func (CharacterHistory) Edges() []ent.Edge {
 	return nil

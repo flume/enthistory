@@ -93,6 +93,20 @@ func (cc *CharacterCreate) SetNillableInfoStruct(ms *models.InfoStruct) *Charact
 	return cc
 }
 
+// SetSpecies sets the "species" field.
+func (cc *CharacterCreate) SetSpecies(mt models.SpeciesType) *CharacterCreate {
+	cc.mutation.SetSpecies(mt)
+	return cc
+}
+
+// SetNillableSpecies sets the "species" field if the given value is not nil.
+func (cc *CharacterCreate) SetNillableSpecies(mt *models.SpeciesType) *CharacterCreate {
+	if mt != nil {
+		cc.SetSpecies(*mt)
+	}
+	return cc
+}
+
 // SetID sets the "id" field.
 func (cc *CharacterCreate) SetID(u uuid.UUID) *CharacterCreate {
 	cc.mutation.SetID(u)
@@ -282,6 +296,10 @@ func (cc *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.InfoStruct(); ok {
 		_spec.SetField(character.FieldInfoStruct, field.TypeJSON, value)
 		_node.InfoStruct = value
+	}
+	if value, ok := cc.mutation.Species(); ok {
+		_spec.SetField(character.FieldSpecies, field.TypeString, value)
+		_node.Species = value
 	}
 	if nodes := cc.mutation.FriendsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
