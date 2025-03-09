@@ -172,6 +172,26 @@ func (cu *CharacterUpdate) ClearLevel() *CharacterUpdate {
 	return cu
 }
 
+// SetSpecies sets the "species" field.
+func (cu *CharacterUpdate) SetSpecies(mt models.SpeciesType) *CharacterUpdate {
+	cu.mutation.SetSpecies(mt)
+	return cu
+}
+
+// SetNillableSpecies sets the "species" field if the given value is not nil.
+func (cu *CharacterUpdate) SetNillableSpecies(mt *models.SpeciesType) *CharacterUpdate {
+	if mt != nil {
+		cu.SetSpecies(*mt)
+	}
+	return cu
+}
+
+// ClearSpecies clears the value of the "species" field.
+func (cu *CharacterUpdate) ClearSpecies() *CharacterUpdate {
+	cu.mutation.ClearSpecies()
+	return cu
+}
+
 // AddFriendIDs adds the "friends" edge to the Character entity by IDs.
 func (cu *CharacterUpdate) AddFriendIDs(ids ...int) *CharacterUpdate {
 	cu.mutation.AddFriendIDs(ids...)
@@ -386,6 +406,12 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.LevelCleared() {
 		_spec.ClearField(character.FieldLevel, field.TypeInt)
+	}
+	if value, ok := cu.mutation.Species(); ok {
+		_spec.SetField(character.FieldSpecies, field.TypeString, value)
+	}
+	if cu.mutation.SpeciesCleared() {
+		_spec.ClearField(character.FieldSpecies, field.TypeString)
 	}
 	if cu.mutation.FriendsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -677,6 +703,26 @@ func (cuo *CharacterUpdateOne) ClearLevel() *CharacterUpdateOne {
 	return cuo
 }
 
+// SetSpecies sets the "species" field.
+func (cuo *CharacterUpdateOne) SetSpecies(mt models.SpeciesType) *CharacterUpdateOne {
+	cuo.mutation.SetSpecies(mt)
+	return cuo
+}
+
+// SetNillableSpecies sets the "species" field if the given value is not nil.
+func (cuo *CharacterUpdateOne) SetNillableSpecies(mt *models.SpeciesType) *CharacterUpdateOne {
+	if mt != nil {
+		cuo.SetSpecies(*mt)
+	}
+	return cuo
+}
+
+// ClearSpecies clears the value of the "species" field.
+func (cuo *CharacterUpdateOne) ClearSpecies() *CharacterUpdateOne {
+	cuo.mutation.ClearSpecies()
+	return cuo
+}
+
 // AddFriendIDs adds the "friends" edge to the Character entity by IDs.
 func (cuo *CharacterUpdateOne) AddFriendIDs(ids ...int) *CharacterUpdateOne {
 	cuo.mutation.AddFriendIDs(ids...)
@@ -921,6 +967,12 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 	}
 	if cuo.mutation.LevelCleared() {
 		_spec.ClearField(character.FieldLevel, field.TypeInt)
+	}
+	if value, ok := cuo.mutation.Species(); ok {
+		_spec.SetField(character.FieldSpecies, field.TypeString, value)
+	}
+	if cuo.mutation.SpeciesCleared() {
+		_spec.ClearField(character.FieldSpecies, field.TypeString)
 	}
 	if cuo.mutation.FriendsCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -64,6 +64,14 @@ func (cc *CharacterCreate) SetTypedAge(m models.Uint64) *CharacterCreate {
 	return cc
 }
 
+// SetNillableTypedAge sets the "typed_age" field if the given value is not nil.
+func (cc *CharacterCreate) SetNillableTypedAge(m *models.Uint64) *CharacterCreate {
+	if m != nil {
+		cc.SetTypedAge(*m)
+	}
+	return cc
+}
+
 // SetName sets the "name" field.
 func (cc *CharacterCreate) SetName(s string) *CharacterCreate {
 	cc.mutation.SetName(s)
@@ -106,6 +114,20 @@ func (cc *CharacterCreate) SetLevel(i int) *CharacterCreate {
 func (cc *CharacterCreate) SetNillableLevel(i *int) *CharacterCreate {
 	if i != nil {
 		cc.SetLevel(*i)
+	}
+	return cc
+}
+
+// SetSpecies sets the "species" field.
+func (cc *CharacterCreate) SetSpecies(mt models.SpeciesType) *CharacterCreate {
+	cc.mutation.SetSpecies(mt)
+	return cc
+}
+
+// SetNillableSpecies sets the "species" field if the given value is not nil.
+func (cc *CharacterCreate) SetNillableSpecies(mt *models.SpeciesType) *CharacterCreate {
+	if mt != nil {
+		cc.SetSpecies(*mt)
 	}
 	return cc
 }
@@ -202,6 +224,18 @@ func (cc *CharacterCreate) defaults() {
 		v := character.DefaultUpdatedAt()
 		cc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := cc.mutation.TypedAge(); !ok {
+		v := character.DefaultTypedAge()
+		cc.mutation.SetTypedAge(v)
+	}
+	if _, ok := cc.mutation.InfoStruct(); !ok {
+		v := character.DefaultInfoStruct()
+		cc.mutation.SetInfoStruct(v)
+	}
+	if _, ok := cc.mutation.Species(); !ok {
+		v := character.DefaultSpecies()
+		cc.mutation.SetSpecies(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -292,6 +326,10 @@ func (cc *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Level(); ok {
 		_spec.SetField(character.FieldLevel, field.TypeInt, value)
 		_node.Level = &value
+	}
+	if value, ok := cc.mutation.Species(); ok {
+		_spec.SetField(character.FieldSpecies, field.TypeString, value)
+		_node.Species = value
 	}
 	if nodes := cc.mutation.FriendsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
