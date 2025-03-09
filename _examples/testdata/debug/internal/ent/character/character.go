@@ -3,6 +3,7 @@
 package character
 
 import (
+	"_examples/testdata/debug/models"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -90,8 +91,14 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// AgeValidator is a validator for the "age" field. It is called by the builders before save.
 	AgeValidator func(int) error
+	// DefaultTypedAge holds the default value on creation for the "typed_age" field.
+	DefaultTypedAge func() models.Uint64
 	// TypedAgeValidator is a validator for the "typed_age" field. It is called by the builders before save.
 	TypedAgeValidator func(uint64) error
+	// DefaultInfoStruct holds the default value on creation for the "info_struct" field.
+	DefaultInfoStruct func() models.InfoStruct
+	// DefaultSpecies holds the default value on creation for the "species" field.
+	DefaultSpecies func() models.SpeciesType
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )

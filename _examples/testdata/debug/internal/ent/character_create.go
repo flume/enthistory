@@ -61,6 +61,14 @@ func (cc *CharacterCreate) SetTypedAge(m models.Uint64) *CharacterCreate {
 	return cc
 }
 
+// SetNillableTypedAge sets the "typed_age" field if the given value is not nil.
+func (cc *CharacterCreate) SetNillableTypedAge(m *models.Uint64) *CharacterCreate {
+	if m != nil {
+		cc.SetTypedAge(*m)
+	}
+	return cc
+}
+
 // SetName sets the "name" field.
 func (cc *CharacterCreate) SetName(s string) *CharacterCreate {
 	cc.mutation.SetName(s)
@@ -189,6 +197,18 @@ func (cc *CharacterCreate) defaults() {
 	if _, ok := cc.mutation.CreatedAt(); !ok {
 		v := character.DefaultCreatedAt()
 		cc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := cc.mutation.TypedAge(); !ok {
+		v := character.DefaultTypedAge()
+		cc.mutation.SetTypedAge(v)
+	}
+	if _, ok := cc.mutation.InfoStruct(); !ok {
+		v := character.DefaultInfoStruct()
+		cc.mutation.SetInfoStruct(v)
+	}
+	if _, ok := cc.mutation.Species(); !ok {
+		v := character.DefaultSpecies()
+		cc.mutation.SetSpecies(v)
 	}
 	if _, ok := cc.mutation.ID(); !ok {
 		v := character.DefaultID()

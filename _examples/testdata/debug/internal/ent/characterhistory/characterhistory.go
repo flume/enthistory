@@ -3,6 +3,7 @@
 package characterhistory
 
 import (
+	"_examples/testdata/debug/models"
 	"fmt"
 	"time"
 
@@ -82,6 +83,12 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultHistoryTime holds the default value on creation for the "history_time" field.
 	DefaultHistoryTime func() time.Time
+	// DefaultTypedAge holds the default value on creation for the "typed_age" field.
+	DefaultTypedAge func() models.Uint64
+	// DefaultInfoStruct holds the default value on creation for the "info_struct" field.
+	DefaultInfoStruct func() models.InfoStruct
+	// DefaultSpecies holds the default value on creation for the "species" field.
+	DefaultSpecies func() models.SpeciesType
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )

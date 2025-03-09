@@ -231,6 +231,18 @@ func (chc *CharacterHistoryCreate) defaults() {
 		v := characterhistory.DefaultHistoryTime()
 		chc.mutation.SetHistoryTime(v)
 	}
+	if _, ok := chc.mutation.TypedAge(); !ok {
+		v := characterhistory.DefaultTypedAge()
+		chc.mutation.SetTypedAge(v)
+	}
+	if _, ok := chc.mutation.InfoStruct(); !ok {
+		v := characterhistory.DefaultInfoStruct()
+		chc.mutation.SetInfoStruct(v)
+	}
+	if _, ok := chc.mutation.Species(); !ok {
+		v := characterhistory.DefaultSpecies()
+		chc.mutation.SetSpecies(v)
+	}
 	if _, ok := chc.mutation.ID(); !ok {
 		v := characterhistory.DefaultID()
 		chc.mutation.SetID(v)
