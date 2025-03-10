@@ -10,6 +10,7 @@ import (
 	"_examples/basic/ent/residence"
 	"_examples/basic/ent/residencehistory"
 	"_examples/basic/ent/schema"
+	"_examples/basic/ent/schema/models"
 	"time"
 
 	"github.com/google/uuid"
@@ -40,8 +41,18 @@ func init() {
 	character.AgeValidator = characterDescAge.Validators[0].(func(int) error)
 	// characterDescTypedAge is the schema descriptor for typed_age field.
 	characterDescTypedAge := characterFields[1].Descriptor()
+	// character.DefaultTypedAge holds the default value on creation for the typed_age field.
+	character.DefaultTypedAge = characterDescTypedAge.Default.(func() models.Uint64)
 	// character.TypedAgeValidator is a validator for the "typed_age" field. It is called by the builders before save.
 	character.TypedAgeValidator = characterDescTypedAge.Validators[0].(func(uint64) error)
+	// characterDescInfoStruct is the schema descriptor for info_struct field.
+	characterDescInfoStruct := characterFields[5].Descriptor()
+	// character.DefaultInfoStruct holds the default value on creation for the info_struct field.
+	character.DefaultInfoStruct = characterDescInfoStruct.Default.(func() models.InfoStruct)
+	// characterDescSpecies is the schema descriptor for species field.
+	characterDescSpecies := characterFields[7].Descriptor()
+	// character.DefaultSpecies holds the default value on creation for the species field.
+	character.DefaultSpecies = characterDescSpecies.Default.(func() models.SpeciesType)
 	characterhistoryMixin := schema.CharacterHistory{}.Mixin()
 	characterhistoryMixinFields0 := characterhistoryMixin[0].Fields()
 	_ = characterhistoryMixinFields0
@@ -61,6 +72,18 @@ func init() {
 	characterhistoryDescHistoryTime := characterhistoryFields[0].Descriptor()
 	// characterhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
 	characterhistory.DefaultHistoryTime = characterhistoryDescHistoryTime.Default.(func() time.Time)
+	// characterhistoryDescTypedAge is the schema descriptor for typed_age field.
+	characterhistoryDescTypedAge := characterhistoryFields[5].Descriptor()
+	// characterhistory.DefaultTypedAge holds the default value on creation for the typed_age field.
+	characterhistory.DefaultTypedAge = characterhistoryDescTypedAge.Default.(func() models.Uint64)
+	// characterhistoryDescInfoStruct is the schema descriptor for info_struct field.
+	characterhistoryDescInfoStruct := characterhistoryFields[9].Descriptor()
+	// characterhistory.DefaultInfoStruct holds the default value on creation for the info_struct field.
+	characterhistory.DefaultInfoStruct = characterhistoryDescInfoStruct.Default.(func() models.InfoStruct)
+	// characterhistoryDescSpecies is the schema descriptor for species field.
+	characterhistoryDescSpecies := characterhistoryFields[11].Descriptor()
+	// characterhistory.DefaultSpecies holds the default value on creation for the species field.
+	characterhistory.DefaultSpecies = characterhistoryDescSpecies.Default.(func() models.SpeciesType)
 	friendshipMixin := schema.Friendship{}.Mixin()
 	friendshipMixinFields0 := friendshipMixin[0].Fields()
 	_ = friendshipMixinFields0

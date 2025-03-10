@@ -3,6 +3,7 @@
 package character
 
 import (
+	"_examples/testdata/debug/models"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -33,6 +34,8 @@ const (
 	FieldInfo = "info"
 	// FieldInfoStruct holds the string denoting the info_struct field in the database.
 	FieldInfoStruct = "info_struct"
+	// FieldSpecies holds the string denoting the species field in the database.
+	FieldSpecies = "species"
 	// EdgeFriends holds the string denoting the friends edge name in mutations.
 	EdgeFriends = "friends"
 	// EdgeFriendships holds the string denoting the friendships edge name in mutations.
@@ -62,6 +65,7 @@ var Columns = []string{
 	FieldNicknames,
 	FieldInfo,
 	FieldInfoStruct,
+	FieldSpecies,
 }
 
 var (
@@ -87,8 +91,14 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// AgeValidator is a validator for the "age" field. It is called by the builders before save.
 	AgeValidator func(int) error
+	// DefaultTypedAge holds the default value on creation for the "typed_age" field.
+	DefaultTypedAge func() models.Uint64
 	// TypedAgeValidator is a validator for the "typed_age" field. It is called by the builders before save.
 	TypedAgeValidator func(uint64) error
+	// DefaultInfoStruct holds the default value on creation for the "info_struct" field.
+	DefaultInfoStruct func() models.InfoStruct
+	// DefaultSpecies holds the default value on creation for the "species" field.
+	DefaultSpecies func() models.SpeciesType
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -129,6 +139,11 @@ func ByTypedAge(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// BySpecies orders the results by the species field.
+func BySpecies(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSpecies, opts...).ToFunc()
 }
 
 // ByFriendsCount orders the results by friends count.

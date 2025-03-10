@@ -3,6 +3,7 @@
 package characterhistory
 
 import (
+	"_examples/basic/ent/schema/models"
 	"fmt"
 	"time"
 
@@ -42,6 +43,8 @@ const (
 	FieldInfoStruct = "info_struct"
 	// FieldLevel holds the string denoting the level field in the database.
 	FieldLevel = "level"
+	// FieldSpecies holds the string denoting the species field in the database.
+	FieldSpecies = "species"
 	// Table holds the table name of the characterhistory in the database.
 	Table = "character_history"
 )
@@ -62,6 +65,7 @@ var Columns = []string{
 	FieldInfo,
 	FieldInfoStruct,
 	FieldLevel,
+	FieldSpecies,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -83,6 +87,12 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultHistoryTime holds the default value on creation for the "history_time" field.
 	DefaultHistoryTime func() time.Time
+	// DefaultTypedAge holds the default value on creation for the "typed_age" field.
+	DefaultTypedAge func() models.Uint64
+	// DefaultInfoStruct holds the default value on creation for the "info_struct" field.
+	DefaultInfoStruct func() models.InfoStruct
+	// DefaultSpecies holds the default value on creation for the "species" field.
+	DefaultSpecies func() models.SpeciesType
 )
 
 // OperationValidator is a validator for the "operation" field enum values. It is called by the builders before save.
@@ -151,4 +161,9 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByLevel orders the results by the level field.
 func ByLevel(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLevel, opts...).ToFunc()
+}
+
+// BySpecies orders the results by the species field.
+func BySpecies(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSpecies, opts...).ToFunc()
 }

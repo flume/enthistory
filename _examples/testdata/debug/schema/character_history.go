@@ -50,7 +50,8 @@ func (CharacterHistory) Fields() []ent.Field {
 			GoType(models.Uint64(0)).
 			Nillable().
 			Optional().
-			Immutable(),
+			Immutable().
+			DefaultFunc(models.DefaultUint64),
 		field.String("name").
 			Nillable().
 			Optional().
@@ -64,7 +65,15 @@ func (CharacterHistory) Fields() []ent.Field {
 		field.JSON("info_struct", models.
 			InfoStruct{}).
 			Optional().
-			Immutable()}
+			Immutable().
+			Default(models.DefaultInfoStruct),
+		field.String("species").
+			GoType(models.SpeciesType("")).
+			Nillable().
+			Optional().
+			Immutable().
+			DefaultFunc(models.DefaultSpeciesType)}
+
 }
 func (CharacterHistory) Edges() []ent.Edge {
 	return nil

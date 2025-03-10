@@ -61,6 +61,14 @@ func (cc *CharacterCreate) SetTypedAge(m models.Uint64) *CharacterCreate {
 	return cc
 }
 
+// SetNillableTypedAge sets the "typed_age" field if the given value is not nil.
+func (cc *CharacterCreate) SetNillableTypedAge(m *models.Uint64) *CharacterCreate {
+	if m != nil {
+		cc.SetTypedAge(*m)
+	}
+	return cc
+}
+
 // SetName sets the "name" field.
 func (cc *CharacterCreate) SetName(s string) *CharacterCreate {
 	cc.mutation.SetName(s)
@@ -89,6 +97,20 @@ func (cc *CharacterCreate) SetInfoStruct(ms models.InfoStruct) *CharacterCreate 
 func (cc *CharacterCreate) SetNillableInfoStruct(ms *models.InfoStruct) *CharacterCreate {
 	if ms != nil {
 		cc.SetInfoStruct(*ms)
+	}
+	return cc
+}
+
+// SetSpecies sets the "species" field.
+func (cc *CharacterCreate) SetSpecies(mt models.SpeciesType) *CharacterCreate {
+	cc.mutation.SetSpecies(mt)
+	return cc
+}
+
+// SetNillableSpecies sets the "species" field if the given value is not nil.
+func (cc *CharacterCreate) SetNillableSpecies(mt *models.SpeciesType) *CharacterCreate {
+	if mt != nil {
+		cc.SetSpecies(*mt)
 	}
 	return cc
 }
@@ -175,6 +197,18 @@ func (cc *CharacterCreate) defaults() {
 	if _, ok := cc.mutation.CreatedAt(); !ok {
 		v := character.DefaultCreatedAt()
 		cc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := cc.mutation.TypedAge(); !ok {
+		v := character.DefaultTypedAge()
+		cc.mutation.SetTypedAge(v)
+	}
+	if _, ok := cc.mutation.InfoStruct(); !ok {
+		v := character.DefaultInfoStruct()
+		cc.mutation.SetInfoStruct(v)
+	}
+	if _, ok := cc.mutation.Species(); !ok {
+		v := character.DefaultSpecies()
+		cc.mutation.SetSpecies(v)
 	}
 	if _, ok := cc.mutation.ID(); !ok {
 		v := character.DefaultID()
@@ -282,6 +316,10 @@ func (cc *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.InfoStruct(); ok {
 		_spec.SetField(character.FieldInfoStruct, field.TypeJSON, value)
 		_node.InfoStruct = value
+	}
+	if value, ok := cc.mutation.Species(); ok {
+		_spec.SetField(character.FieldSpecies, field.TypeString, value)
+		_node.Species = value
 	}
 	if nodes := cc.mutation.FriendsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

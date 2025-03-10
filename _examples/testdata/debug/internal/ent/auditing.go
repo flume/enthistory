@@ -69,6 +69,9 @@ func (ch *CharacterHistory) changes(new *CharacterHistory) []Change {
 	if !reflect.DeepEqual(ch.InfoStruct, new.InfoStruct) {
 		changes = append(changes, NewChange(characterhistory.FieldInfoStruct, ch.InfoStruct, new.InfoStruct))
 	}
+	if !reflect.DeepEqual(ch.Species, new.Species) {
+		changes = append(changes, NewChange(characterhistory.FieldSpecies, ch.Species, new.Species))
+	}
 	return changes
 }
 

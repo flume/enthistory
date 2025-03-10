@@ -3,6 +3,7 @@
 package characterhistory
 
 import (
+	"_examples/testdata/debug/models"
 	"fmt"
 	"time"
 
@@ -41,6 +42,8 @@ const (
 	FieldInfo = "info"
 	// FieldInfoStruct holds the string denoting the info_struct field in the database.
 	FieldInfoStruct = "info_struct"
+	// FieldSpecies holds the string denoting the species field in the database.
+	FieldSpecies = "species"
 	// Table holds the table name of the characterhistory in the database.
 	Table = "character_history"
 )
@@ -60,6 +63,7 @@ var Columns = []string{
 	FieldNicknames,
 	FieldInfo,
 	FieldInfoStruct,
+	FieldSpecies,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -79,6 +83,12 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultHistoryTime holds the default value on creation for the "history_time" field.
 	DefaultHistoryTime func() time.Time
+	// DefaultTypedAge holds the default value on creation for the "typed_age" field.
+	DefaultTypedAge func() models.Uint64
+	// DefaultInfoStruct holds the default value on creation for the "info_struct" field.
+	DefaultInfoStruct func() models.InfoStruct
+	// DefaultSpecies holds the default value on creation for the "species" field.
+	DefaultSpecies func() models.SpeciesType
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
@@ -144,4 +154,9 @@ func ByTypedAge(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// BySpecies orders the results by the species field.
+func BySpecies(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSpecies, opts...).ToFunc()
 }

@@ -160,6 +160,20 @@ func (chc *CharacterHistoryCreate) SetNillableInfoStruct(ms *models.InfoStruct) 
 	return chc
 }
 
+// SetSpecies sets the "species" field.
+func (chc *CharacterHistoryCreate) SetSpecies(mt models.SpeciesType) *CharacterHistoryCreate {
+	chc.mutation.SetSpecies(mt)
+	return chc
+}
+
+// SetNillableSpecies sets the "species" field if the given value is not nil.
+func (chc *CharacterHistoryCreate) SetNillableSpecies(mt *models.SpeciesType) *CharacterHistoryCreate {
+	if mt != nil {
+		chc.SetSpecies(*mt)
+	}
+	return chc
+}
+
 // SetID sets the "id" field.
 func (chc *CharacterHistoryCreate) SetID(u uuid.UUID) *CharacterHistoryCreate {
 	chc.mutation.SetID(u)
@@ -216,6 +230,18 @@ func (chc *CharacterHistoryCreate) defaults() {
 	if _, ok := chc.mutation.HistoryTime(); !ok {
 		v := characterhistory.DefaultHistoryTime()
 		chc.mutation.SetHistoryTime(v)
+	}
+	if _, ok := chc.mutation.TypedAge(); !ok {
+		v := characterhistory.DefaultTypedAge()
+		chc.mutation.SetTypedAge(v)
+	}
+	if _, ok := chc.mutation.InfoStruct(); !ok {
+		v := characterhistory.DefaultInfoStruct()
+		chc.mutation.SetInfoStruct(v)
+	}
+	if _, ok := chc.mutation.Species(); !ok {
+		v := characterhistory.DefaultSpecies()
+		chc.mutation.SetSpecies(v)
 	}
 	if _, ok := chc.mutation.ID(); !ok {
 		v := characterhistory.DefaultID()
@@ -324,6 +350,10 @@ func (chc *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cr
 	if value, ok := chc.mutation.InfoStruct(); ok {
 		_spec.SetField(characterhistory.FieldInfoStruct, field.TypeJSON, value)
 		_node.InfoStruct = value
+	}
+	if value, ok := chc.mutation.Species(); ok {
+		_spec.SetField(characterhistory.FieldSpecies, field.TypeString, value)
+		_node.Species = &value
 	}
 	return _node, _spec
 }

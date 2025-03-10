@@ -193,23 +193,29 @@ func fromComplexType(call *ast.CallExpr, filedType ast.Expr) (*ast.CallExpr, err
 
 func fromSimpleType(desc *field.Descriptor, rtype bool) (*ast.CallExpr, error) {
 	builder := newFieldCall(desc)
+	t := desc.Info.Type
 	if rtype && desc.Info.RType != nil {
-		t := desc.Info.Type
 		var defaultValue ast.Expr
 		if t.Numeric() {
 			defaultValue = intLit(0)
 			if desc.Default != nil {
-				defaultValue = intLit(desc.Default.(int))
+				if def, ok := desc.Default.(int); ok {
+					defaultValue = intLit(def)
+				}
 			}
 		} else if t == field.TypeString {
 			defaultValue = strLit("")
 			if desc.Default != nil {
-				defaultValue = strLit(desc.Default.(string))
+				if def, ok := desc.Default.(string); ok {
+					defaultValue = strLit(def)
+				}
 			}
 		} else if t == field.TypeBool {
 			defaultValue = boolLit(false)
 			if desc.Default != nil {
-				defaultValue = boolLit(desc.Default.(bool))
+				if def, ok := desc.Default.(bool); ok {
+					defaultValue = boolLit(def)
+				}
 			}
 		} else if t == field.TypeTime {
 			defaultValue = structLit(&ast.SelectorExpr{
@@ -219,7 +225,9 @@ func fromSimpleType(desc *field.Descriptor, rtype bool) (*ast.CallExpr, error) {
 		} else if t == field.TypeBytes {
 			defaultValue = boolSliceLit([]byte{})
 			if desc.Default != nil {
-				defaultValue = boolSliceLit(desc.Default.([]byte))
+				if def, ok := desc.Default.([]byte); ok {
+					defaultValue = boolSliceLit(def)
+				}
 			}
 		} else {
 			return nil, fmt.Errorf("schemast: unsupported type %s", t.ConstName())
@@ -261,14 +269,15 @@ func fromSimpleType(desc *field.Descriptor, rtype bool) (*ast.CallExpr, error) {
 		builder.annotate(annots...)
 	}
 	if desc.Default != nil {
-		expr, err := defaultExpr(desc.Default)
+		hasDefaultFunc := t.Numeric() || t == field.TypeString || t == field.TypeBytes
+		method, expr, err := defaultExpr(desc.Default, hasDefaultFunc)
 		if err != nil {
 			return nil, err
 		}
-		builder.method("Default", expr)
+		builder.method(method, expr)
 	}
 	if desc.UpdateDefault != nil {
-		expr, err := defaultExpr(desc.UpdateDefault)
+		_, expr, err := defaultExpr(desc.UpdateDefault, false)
 		if err != nil {
 			return nil, err
 		}
@@ -294,30 +303,35 @@ func fieldConstructor(dsc *field.Descriptor) string {
 	return strings.TrimPrefix(cn, "Type")
 }
 
-func defaultExpr(d interface{}) (ast.Expr, error) {
+const (
+	builderMethodDefault     = "Default"
+	builderMethodDefaultFunc = "DefaultFunc"
+)
+
+func defaultExpr(d any, hasDefaultFunc bool) (string, ast.Expr, error) {
 	v := reflect.ValueOf(d)
 	switch v.Kind() {
 	case reflect.String:
-		return strLit(d.(string)), nil
+		return builderMethodDefault, strLit(d.(string)), nil
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
 		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 		lit := &ast.BasicLit{
 			Kind:  token.INT,
 			Value: fmt.Sprintf("%d", d),
 		}
-		return lit, nil
+		return builderMethodDefault, lit, nil
 	case reflect.Float32, reflect.Float64:
 		lit := &ast.BasicLit{
 			Kind:  token.FLOAT,
 			Value: fmt.Sprintf("%#v", d),
 		}
-		return lit, nil
+		return builderMethodDefault, lit, nil
 	case reflect.Bool:
 		lit := &ast.BasicLit{
 			Kind:  token.STRING,
 			Value: strconv.FormatBool(d.(bool)),
 		}
-		return lit, nil
+		return builderMethodDefault, lit, nil
 	case reflect.Func:
 		f := runtime.FuncForPC(v.Pointer()).Name()
 		pkg := strings.Split(f, "/")
@@ -326,11 +340,15 @@ func defaultExpr(d interface{}) (ast.Expr, error) {
 		}
 		parts := strings.Split(f, ".")
 		if len(parts) != 2 {
-			return nil, errors.New("schemast: only selector exprs are supported for default func")
+			return "", nil, errors.New("schemast: only selector exprs are supported for default func")
 		}
-		return selectorLit(parts[0], parts[1]), nil
+		selector := selectorLit(parts[0], parts[1])
+		if !hasDefaultFunc {
+			return builderMethodDefault, selector, nil
+		}
+		return builderMethodDefaultFunc, selector, nil
 	default:
-		return nil, fmt.Errorf("schemast: unsupported default field kind: %q", v.Kind())
+		return "", nil, fmt.Errorf("schemast: unsupported default field kind: %q", v.Kind())
 	}
 }
 

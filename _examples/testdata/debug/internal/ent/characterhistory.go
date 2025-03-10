@@ -45,7 +45,9 @@ type CharacterHistory struct {
 	// Info holds the value of the "info" field.
 	Info map[string]interface{} `json:"info,omitempty"`
 	// InfoStruct holds the value of the "info_struct" field.
-	InfoStruct   models.InfoStruct `json:"info_struct,omitempty"`
+	InfoStruct models.InfoStruct `json:"info_struct,omitempty"`
+	// Species holds the value of the "species" field.
+	Species      *models.SpeciesType `json:"species,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -60,7 +62,7 @@ func (*CharacterHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case characterhistory.FieldAge, characterhistory.FieldTypedAge:
 			values[i] = new(sql.NullInt64)
-		case characterhistory.FieldOperation, characterhistory.FieldName:
+		case characterhistory.FieldOperation, characterhistory.FieldName, characterhistory.FieldSpecies:
 			values[i] = new(sql.NullString)
 		case characterhistory.FieldCreatedAt, characterhistory.FieldUpdatedAt, characterhistory.FieldHistoryTime:
 			values[i] = new(sql.NullTime)
@@ -169,6 +171,13 @@ func (ch *CharacterHistory) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field info_struct: %w", err)
 				}
 			}
+		case characterhistory.FieldSpecies:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field species", values[i])
+			} else if value.Valid {
+				ch.Species = new(models.SpeciesType)
+				*ch.Species = models.SpeciesType(value.String)
+			}
 		default:
 			ch.selectValues.Set(columns[i], values[i])
 		}
@@ -248,6 +257,11 @@ func (ch *CharacterHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("info_struct=")
 	builder.WriteString(fmt.Sprintf("%v", ch.InfoStruct))
+	builder.WriteString(", ")
+	if v := ch.Species; v != nil {
+		builder.WriteString("species=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

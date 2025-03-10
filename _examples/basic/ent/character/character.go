@@ -3,6 +3,7 @@
 package character
 
 import (
+	"_examples/basic/ent/schema/models"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -32,6 +33,8 @@ const (
 	FieldInfoStruct = "info_struct"
 	// FieldLevel holds the string denoting the level field in the database.
 	FieldLevel = "level"
+	// FieldSpecies holds the string denoting the species field in the database.
+	FieldSpecies = "species"
 	// EdgeFriends holds the string denoting the friends edge name in mutations.
 	EdgeFriends = "friends"
 	// EdgeResidence holds the string denoting the residence edge name in mutations.
@@ -70,6 +73,7 @@ var Columns = []string{
 	FieldInfo,
 	FieldInfoStruct,
 	FieldLevel,
+	FieldSpecies,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "character"
@@ -108,8 +112,14 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// AgeValidator is a validator for the "age" field. It is called by the builders before save.
 	AgeValidator func(int) error
+	// DefaultTypedAge holds the default value on creation for the "typed_age" field.
+	DefaultTypedAge func() models.Uint64
 	// TypedAgeValidator is a validator for the "typed_age" field. It is called by the builders before save.
 	TypedAgeValidator func(uint64) error
+	// DefaultInfoStruct holds the default value on creation for the "info_struct" field.
+	DefaultInfoStruct func() models.InfoStruct
+	// DefaultSpecies holds the default value on creation for the "species" field.
+	DefaultSpecies func() models.SpeciesType
 )
 
 // OrderOption defines the ordering options for the Character queries.
@@ -148,6 +158,11 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByLevel orders the results by the level field.
 func ByLevel(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLevel, opts...).ToFunc()
+}
+
+// BySpecies orders the results by the species field.
+func BySpecies(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSpecies, opts...).ToFunc()
 }
 
 // ByFriendsCount orders the results by friends count.

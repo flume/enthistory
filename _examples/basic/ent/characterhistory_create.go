@@ -111,6 +111,14 @@ func (chc *CharacterHistoryCreate) SetTypedAge(m models.Uint64) *CharacterHistor
 	return chc
 }
 
+// SetNillableTypedAge sets the "typed_age" field if the given value is not nil.
+func (chc *CharacterHistoryCreate) SetNillableTypedAge(m *models.Uint64) *CharacterHistoryCreate {
+	if m != nil {
+		chc.SetTypedAge(*m)
+	}
+	return chc
+}
+
 // SetName sets the "name" field.
 func (chc *CharacterHistoryCreate) SetName(s string) *CharacterHistoryCreate {
 	chc.mutation.SetName(s)
@@ -153,6 +161,20 @@ func (chc *CharacterHistoryCreate) SetLevel(i int) *CharacterHistoryCreate {
 func (chc *CharacterHistoryCreate) SetNillableLevel(i *int) *CharacterHistoryCreate {
 	if i != nil {
 		chc.SetLevel(*i)
+	}
+	return chc
+}
+
+// SetSpecies sets the "species" field.
+func (chc *CharacterHistoryCreate) SetSpecies(mt models.SpeciesType) *CharacterHistoryCreate {
+	chc.mutation.SetSpecies(mt)
+	return chc
+}
+
+// SetNillableSpecies sets the "species" field if the given value is not nil.
+func (chc *CharacterHistoryCreate) SetNillableSpecies(mt *models.SpeciesType) *CharacterHistoryCreate {
+	if mt != nil {
+		chc.SetSpecies(*mt)
 	}
 	return chc
 }
@@ -203,6 +225,18 @@ func (chc *CharacterHistoryCreate) defaults() {
 	if _, ok := chc.mutation.HistoryTime(); !ok {
 		v := characterhistory.DefaultHistoryTime()
 		chc.mutation.SetHistoryTime(v)
+	}
+	if _, ok := chc.mutation.TypedAge(); !ok {
+		v := characterhistory.DefaultTypedAge()
+		chc.mutation.SetTypedAge(v)
+	}
+	if _, ok := chc.mutation.InfoStruct(); !ok {
+		v := characterhistory.DefaultInfoStruct()
+		chc.mutation.SetInfoStruct(v)
+	}
+	if _, ok := chc.mutation.Species(); !ok {
+		v := characterhistory.DefaultSpecies()
+		chc.mutation.SetSpecies(v)
 	}
 }
 
@@ -311,6 +345,10 @@ func (chc *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cr
 	if value, ok := chc.mutation.Level(); ok {
 		_spec.SetField(characterhistory.FieldLevel, field.TypeInt, value)
 		_node.Level = &value
+	}
+	if value, ok := chc.mutation.Species(); ok {
+		_spec.SetField(characterhistory.FieldSpecies, field.TypeString, value)
+		_node.Species = value
 	}
 	return _node, _spec
 }

@@ -55,6 +55,7 @@ type CharacterMutation struct {
 	appendnicknames    []string
 	info               *map[string]interface{}
 	info_struct        *models.InfoStruct
+	species            *models.SpeciesType
 	clearedFields      map[string]struct{}
 	friends            map[uuid.UUID]struct{}
 	removedfriends     map[uuid.UUID]struct{}
@@ -590,6 +591,55 @@ func (m *CharacterMutation) ResetInfoStruct() {
 	delete(m.clearedFields, character.FieldInfoStruct)
 }
 
+// SetSpecies sets the "species" field.
+func (m *CharacterMutation) SetSpecies(mt models.SpeciesType) {
+	m.species = &mt
+}
+
+// Species returns the value of the "species" field in the mutation.
+func (m *CharacterMutation) Species() (r models.SpeciesType, exists bool) {
+	v := m.species
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSpecies returns the old "species" field's value of the Character entity.
+// If the Character object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CharacterMutation) OldSpecies(ctx context.Context) (v models.SpeciesType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSpecies is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSpecies requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSpecies: %w", err)
+	}
+	return oldValue.Species, nil
+}
+
+// ClearSpecies clears the value of the "species" field.
+func (m *CharacterMutation) ClearSpecies() {
+	m.species = nil
+	m.clearedFields[character.FieldSpecies] = struct{}{}
+}
+
+// SpeciesCleared returns if the "species" field was cleared in this mutation.
+func (m *CharacterMutation) SpeciesCleared() bool {
+	_, ok := m.clearedFields[character.FieldSpecies]
+	return ok
+}
+
+// ResetSpecies resets all changes to the "species" field.
+func (m *CharacterMutation) ResetSpecies() {
+	m.species = nil
+	delete(m.clearedFields, character.FieldSpecies)
+}
+
 // AddFriendIDs adds the "friends" edge to the Character entity by ids.
 func (m *CharacterMutation) AddFriendIDs(ids ...uuid.UUID) {
 	if m.friends == nil {
@@ -732,7 +782,7 @@ func (m *CharacterMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CharacterMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 10)
 	if m.created_at != nil {
 		fields = append(fields, character.FieldCreatedAt)
 	}
@@ -760,6 +810,9 @@ func (m *CharacterMutation) Fields() []string {
 	if m.info_struct != nil {
 		fields = append(fields, character.FieldInfoStruct)
 	}
+	if m.species != nil {
+		fields = append(fields, character.FieldSpecies)
+	}
 	return fields
 }
 
@@ -786,6 +839,8 @@ func (m *CharacterMutation) Field(name string) (ent.Value, bool) {
 		return m.Info()
 	case character.FieldInfoStruct:
 		return m.InfoStruct()
+	case character.FieldSpecies:
+		return m.Species()
 	}
 	return nil, false
 }
@@ -813,6 +868,8 @@ func (m *CharacterMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldInfo(ctx)
 	case character.FieldInfoStruct:
 		return m.OldInfoStruct(ctx)
+	case character.FieldSpecies:
+		return m.OldSpecies(ctx)
 	}
 	return nil, fmt.Errorf("unknown Character field %s", name)
 }
@@ -885,6 +942,13 @@ func (m *CharacterMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetInfoStruct(v)
 		return nil
+	case character.FieldSpecies:
+		v, ok := value.(models.SpeciesType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSpecies(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Character field %s", name)
 }
@@ -951,6 +1015,9 @@ func (m *CharacterMutation) ClearedFields() []string {
 	if m.FieldCleared(character.FieldInfoStruct) {
 		fields = append(fields, character.FieldInfoStruct)
 	}
+	if m.FieldCleared(character.FieldSpecies) {
+		fields = append(fields, character.FieldSpecies)
+	}
 	return fields
 }
 
@@ -973,6 +1040,9 @@ func (m *CharacterMutation) ClearField(name string) error {
 		return nil
 	case character.FieldInfoStruct:
 		m.ClearInfoStruct()
+		return nil
+	case character.FieldSpecies:
+		m.ClearSpecies()
 		return nil
 	}
 	return fmt.Errorf("unknown Character nullable field %s", name)
@@ -1008,6 +1078,9 @@ func (m *CharacterMutation) ResetField(name string) error {
 		return nil
 	case character.FieldInfoStruct:
 		m.ResetInfoStruct()
+		return nil
+	case character.FieldSpecies:
+		m.ResetSpecies()
 		return nil
 	}
 	return fmt.Errorf("unknown Character field %s", name)
@@ -1144,6 +1217,7 @@ type CharacterHistoryMutation struct {
 	appendnicknames []string
 	info            *map[string]interface{}
 	info_struct     *models.InfoStruct
+	species         *models.SpeciesType
 	clearedFields   map[string]struct{}
 	done            bool
 	oldValue        func(context.Context) (*CharacterHistory, error)
@@ -1848,6 +1922,55 @@ func (m *CharacterHistoryMutation) ResetInfoStruct() {
 	delete(m.clearedFields, characterhistory.FieldInfoStruct)
 }
 
+// SetSpecies sets the "species" field.
+func (m *CharacterHistoryMutation) SetSpecies(mt models.SpeciesType) {
+	m.species = &mt
+}
+
+// Species returns the value of the "species" field in the mutation.
+func (m *CharacterHistoryMutation) Species() (r models.SpeciesType, exists bool) {
+	v := m.species
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSpecies returns the old "species" field's value of the CharacterHistory entity.
+// If the CharacterHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CharacterHistoryMutation) OldSpecies(ctx context.Context) (v *models.SpeciesType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSpecies is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSpecies requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSpecies: %w", err)
+	}
+	return oldValue.Species, nil
+}
+
+// ClearSpecies clears the value of the "species" field.
+func (m *CharacterHistoryMutation) ClearSpecies() {
+	m.species = nil
+	m.clearedFields[characterhistory.FieldSpecies] = struct{}{}
+}
+
+// SpeciesCleared returns if the "species" field was cleared in this mutation.
+func (m *CharacterHistoryMutation) SpeciesCleared() bool {
+	_, ok := m.clearedFields[characterhistory.FieldSpecies]
+	return ok
+}
+
+// ResetSpecies resets all changes to the "species" field.
+func (m *CharacterHistoryMutation) ResetSpecies() {
+	m.species = nil
+	delete(m.clearedFields, characterhistory.FieldSpecies)
+}
+
 // Where appends a list predicates to the CharacterHistoryMutation builder.
 func (m *CharacterHistoryMutation) Where(ps ...predicate.CharacterHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -1882,7 +2005,7 @@ func (m *CharacterHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CharacterHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 13)
 	if m.created_at != nil {
 		fields = append(fields, characterhistory.FieldCreatedAt)
 	}
@@ -1919,6 +2042,9 @@ func (m *CharacterHistoryMutation) Fields() []string {
 	if m.info_struct != nil {
 		fields = append(fields, characterhistory.FieldInfoStruct)
 	}
+	if m.species != nil {
+		fields = append(fields, characterhistory.FieldSpecies)
+	}
 	return fields
 }
 
@@ -1951,6 +2077,8 @@ func (m *CharacterHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Info()
 	case characterhistory.FieldInfoStruct:
 		return m.InfoStruct()
+	case characterhistory.FieldSpecies:
+		return m.Species()
 	}
 	return nil, false
 }
@@ -1984,6 +2112,8 @@ func (m *CharacterHistoryMutation) OldField(ctx context.Context, name string) (e
 		return m.OldInfo(ctx)
 	case characterhistory.FieldInfoStruct:
 		return m.OldInfoStruct(ctx)
+	case characterhistory.FieldSpecies:
+		return m.OldSpecies(ctx)
 	}
 	return nil, fmt.Errorf("unknown CharacterHistory field %s", name)
 }
@@ -2077,6 +2207,13 @@ func (m *CharacterHistoryMutation) SetField(name string, value ent.Value) error 
 		}
 		m.SetInfoStruct(v)
 		return nil
+	case characterhistory.FieldSpecies:
+		v, ok := value.(models.SpeciesType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSpecies(v)
+		return nil
 	}
 	return fmt.Errorf("unknown CharacterHistory field %s", name)
 }
@@ -2158,6 +2295,9 @@ func (m *CharacterHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(characterhistory.FieldInfoStruct) {
 		fields = append(fields, characterhistory.FieldInfoStruct)
 	}
+	if m.FieldCleared(characterhistory.FieldSpecies) {
+		fields = append(fields, characterhistory.FieldSpecies)
+	}
 	return fields
 }
 
@@ -2195,6 +2335,9 @@ func (m *CharacterHistoryMutation) ClearField(name string) error {
 		return nil
 	case characterhistory.FieldInfoStruct:
 		m.ClearInfoStruct()
+		return nil
+	case characterhistory.FieldSpecies:
+		m.ClearSpecies()
 		return nil
 	}
 	return fmt.Errorf("unknown CharacterHistory nullable field %s", name)
@@ -2239,6 +2382,9 @@ func (m *CharacterHistoryMutation) ResetField(name string) error {
 		return nil
 	case characterhistory.FieldInfoStruct:
 		m.ResetInfoStruct()
+		return nil
+	case characterhistory.FieldSpecies:
+		m.ResetSpecies()
 		return nil
 	}
 	return fmt.Errorf("unknown CharacterHistory field %s", name)

@@ -88,6 +88,12 @@ func Name(v string) predicate.Character {
 	return predicate.Character(sql.FieldEQ(FieldName, v))
 }
 
+// Species applies equality check predicate on the "species" field. It's identical to SpeciesEQ.
+func Species(v models.SpeciesType) predicate.Character {
+	vc := string(v)
+	return predicate.Character(sql.FieldEQ(FieldSpecies, vc))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Character {
 	return predicate.Character(sql.FieldEQ(FieldCreatedAt, v))
@@ -420,6 +426,100 @@ func InfoStructIsNil() predicate.Character {
 // InfoStructNotNil applies the NotNil predicate on the "info_struct" field.
 func InfoStructNotNil() predicate.Character {
 	return predicate.Character(sql.FieldNotNull(FieldInfoStruct))
+}
+
+// SpeciesEQ applies the EQ predicate on the "species" field.
+func SpeciesEQ(v models.SpeciesType) predicate.Character {
+	vc := string(v)
+	return predicate.Character(sql.FieldEQ(FieldSpecies, vc))
+}
+
+// SpeciesNEQ applies the NEQ predicate on the "species" field.
+func SpeciesNEQ(v models.SpeciesType) predicate.Character {
+	vc := string(v)
+	return predicate.Character(sql.FieldNEQ(FieldSpecies, vc))
+}
+
+// SpeciesIn applies the In predicate on the "species" field.
+func SpeciesIn(vs ...models.SpeciesType) predicate.Character {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = string(vs[i])
+	}
+	return predicate.Character(sql.FieldIn(FieldSpecies, v...))
+}
+
+// SpeciesNotIn applies the NotIn predicate on the "species" field.
+func SpeciesNotIn(vs ...models.SpeciesType) predicate.Character {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = string(vs[i])
+	}
+	return predicate.Character(sql.FieldNotIn(FieldSpecies, v...))
+}
+
+// SpeciesGT applies the GT predicate on the "species" field.
+func SpeciesGT(v models.SpeciesType) predicate.Character {
+	vc := string(v)
+	return predicate.Character(sql.FieldGT(FieldSpecies, vc))
+}
+
+// SpeciesGTE applies the GTE predicate on the "species" field.
+func SpeciesGTE(v models.SpeciesType) predicate.Character {
+	vc := string(v)
+	return predicate.Character(sql.FieldGTE(FieldSpecies, vc))
+}
+
+// SpeciesLT applies the LT predicate on the "species" field.
+func SpeciesLT(v models.SpeciesType) predicate.Character {
+	vc := string(v)
+	return predicate.Character(sql.FieldLT(FieldSpecies, vc))
+}
+
+// SpeciesLTE applies the LTE predicate on the "species" field.
+func SpeciesLTE(v models.SpeciesType) predicate.Character {
+	vc := string(v)
+	return predicate.Character(sql.FieldLTE(FieldSpecies, vc))
+}
+
+// SpeciesContains applies the Contains predicate on the "species" field.
+func SpeciesContains(v models.SpeciesType) predicate.Character {
+	vc := string(v)
+	return predicate.Character(sql.FieldContains(FieldSpecies, vc))
+}
+
+// SpeciesHasPrefix applies the HasPrefix predicate on the "species" field.
+func SpeciesHasPrefix(v models.SpeciesType) predicate.Character {
+	vc := string(v)
+	return predicate.Character(sql.FieldHasPrefix(FieldSpecies, vc))
+}
+
+// SpeciesHasSuffix applies the HasSuffix predicate on the "species" field.
+func SpeciesHasSuffix(v models.SpeciesType) predicate.Character {
+	vc := string(v)
+	return predicate.Character(sql.FieldHasSuffix(FieldSpecies, vc))
+}
+
+// SpeciesIsNil applies the IsNil predicate on the "species" field.
+func SpeciesIsNil() predicate.Character {
+	return predicate.Character(sql.FieldIsNull(FieldSpecies))
+}
+
+// SpeciesNotNil applies the NotNil predicate on the "species" field.
+func SpeciesNotNil() predicate.Character {
+	return predicate.Character(sql.FieldNotNull(FieldSpecies))
+}
+
+// SpeciesEqualFold applies the EqualFold predicate on the "species" field.
+func SpeciesEqualFold(v models.SpeciesType) predicate.Character {
+	vc := string(v)
+	return predicate.Character(sql.FieldEqualFold(FieldSpecies, vc))
+}
+
+// SpeciesContainsFold applies the ContainsFold predicate on the "species" field.
+func SpeciesContainsFold(v models.SpeciesType) predicate.Character {
+	vc := string(v)
+	return predicate.Character(sql.FieldContainsFold(FieldSpecies, vc))
 }
 
 // HasFriends applies the HasEdge predicate on the "friends" edge.

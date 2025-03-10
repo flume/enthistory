@@ -72,6 +72,7 @@ func (ch *CharacterHistory) Restore(ctx context.Context) (*Character, error) {
 		SetInfo(ch.Info).
 		SetInfoStruct(ch.InfoStruct).
 		SetNillableLevel(ch.Level).
+		SetSpecies(ch.Species).
 		Save(ctx)
 }
 

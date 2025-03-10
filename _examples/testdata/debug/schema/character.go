@@ -45,14 +45,20 @@ func (Character) Fields() []ent.Field {
 			Positive(),
 		field.Uint64("typed_age").
 			Positive().
-			GoType(models.Uint64(0)),
+			GoType(models.Uint64(0)).
+			DefaultFunc(models.DefaultUint64),
 		field.String("name"),
 		field.Strings("nicknames").
 			Optional(),
 		field.JSON("info", map[string]any{}).
 			Optional(),
 		field.JSON("info_struct", models.InfoStruct{}).
-			Optional(),
+			Optional().
+			Default(models.DefaultInfoStruct),
+		field.String("species").
+			Optional().
+			GoType(models.SpeciesType("")).
+			DefaultFunc(models.DefaultSpeciesType),
 	}
 }
 
