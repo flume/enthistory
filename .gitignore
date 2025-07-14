@@ -16,3 +16,4 @@
 .DS_STORE
 .idea
 entdb
+go.work.sum
