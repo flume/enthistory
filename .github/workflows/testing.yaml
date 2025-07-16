@@ -5,6 +5,9 @@ on:
     paths:
       - "**" # Run on all branches
 
+permissions:
+  contents: read
+
 jobs:
   testing:
     name: Testing
