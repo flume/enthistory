@@ -8,7 +8,7 @@ import (
 	"entgo.io/ent"
 
 	"entgo.io/ent/schema"
-	"github.com/mitchellh/mapstructure"
+	"github.com/go-viper/mapstructure/v2"
 )
 
 type Annotations struct {
