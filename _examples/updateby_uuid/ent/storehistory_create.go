@@ -24,119 +24,119 @@ type StoreHistoryCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (shc *StoreHistoryCreate) SetCreatedAt(t time.Time) *StoreHistoryCreate {
-	shc.mutation.SetCreatedAt(t)
-	return shc
+func (_c *StoreHistoryCreate) SetCreatedAt(v time.Time) *StoreHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (shc *StoreHistoryCreate) SetNillableCreatedAt(t *time.Time) *StoreHistoryCreate {
-	if t != nil {
-		shc.SetCreatedAt(*t)
+func (_c *StoreHistoryCreate) SetNillableCreatedAt(v *time.Time) *StoreHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (shc *StoreHistoryCreate) SetUpdatedAt(t time.Time) *StoreHistoryCreate {
-	shc.mutation.SetUpdatedAt(t)
-	return shc
+func (_c *StoreHistoryCreate) SetUpdatedAt(v time.Time) *StoreHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (shc *StoreHistoryCreate) SetNillableUpdatedAt(t *time.Time) *StoreHistoryCreate {
-	if t != nil {
-		shc.SetUpdatedAt(*t)
+func (_c *StoreHistoryCreate) SetNillableUpdatedAt(v *time.Time) *StoreHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (shc *StoreHistoryCreate) SetHistoryTime(t time.Time) *StoreHistoryCreate {
-	shc.mutation.SetHistoryTime(t)
-	return shc
+func (_c *StoreHistoryCreate) SetHistoryTime(v time.Time) *StoreHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (shc *StoreHistoryCreate) SetNillableHistoryTime(t *time.Time) *StoreHistoryCreate {
-	if t != nil {
-		shc.SetHistoryTime(*t)
+func (_c *StoreHistoryCreate) SetNillableHistoryTime(v *time.Time) *StoreHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (shc *StoreHistoryCreate) SetOperation(et enthistory.OpType) *StoreHistoryCreate {
-	shc.mutation.SetOperation(et)
-	return shc
+func (_c *StoreHistoryCreate) SetOperation(v enthistory.OpType) *StoreHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (shc *StoreHistoryCreate) SetRef(u uuid.UUID) *StoreHistoryCreate {
-	shc.mutation.SetRef(u)
-	return shc
+func (_c *StoreHistoryCreate) SetRef(v uuid.UUID) *StoreHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (shc *StoreHistoryCreate) SetNillableRef(u *uuid.UUID) *StoreHistoryCreate {
-	if u != nil {
-		shc.SetRef(*u)
+func (_c *StoreHistoryCreate) SetNillableRef(v *uuid.UUID) *StoreHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (shc *StoreHistoryCreate) SetUpdatedBy(u uuid.UUID) *StoreHistoryCreate {
-	shc.mutation.SetUpdatedBy(u)
-	return shc
+func (_c *StoreHistoryCreate) SetUpdatedBy(v uuid.UUID) *StoreHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (shc *StoreHistoryCreate) SetNillableUpdatedBy(u *uuid.UUID) *StoreHistoryCreate {
-	if u != nil {
-		shc.SetUpdatedBy(*u)
+func (_c *StoreHistoryCreate) SetNillableUpdatedBy(v *uuid.UUID) *StoreHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return shc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (shc *StoreHistoryCreate) SetName(s string) *StoreHistoryCreate {
-	shc.mutation.SetName(s)
-	return shc
+func (_c *StoreHistoryCreate) SetName(v string) *StoreHistoryCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetRegion sets the "region" field.
-func (shc *StoreHistoryCreate) SetRegion(s string) *StoreHistoryCreate {
-	shc.mutation.SetRegion(s)
-	return shc
+func (_c *StoreHistoryCreate) SetRegion(v string) *StoreHistoryCreate {
+	_c.mutation.SetRegion(v)
+	return _c
 }
 
 // SetOrganizationID sets the "organization_id" field.
-func (shc *StoreHistoryCreate) SetOrganizationID(u uuid.UUID) *StoreHistoryCreate {
-	shc.mutation.SetOrganizationID(u)
-	return shc
+func (_c *StoreHistoryCreate) SetOrganizationID(v uuid.UUID) *StoreHistoryCreate {
+	_c.mutation.SetOrganizationID(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (shc *StoreHistoryCreate) SetID(i int) *StoreHistoryCreate {
-	shc.mutation.SetID(i)
-	return shc
+func (_c *StoreHistoryCreate) SetID(v int) *StoreHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // Mutation returns the StoreHistoryMutation object of the builder.
-func (shc *StoreHistoryCreate) Mutation() *StoreHistoryMutation {
-	return shc.mutation
+func (_c *StoreHistoryCreate) Mutation() *StoreHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the StoreHistory in the database.
-func (shc *StoreHistoryCreate) Save(ctx context.Context) (*StoreHistory, error) {
-	shc.defaults()
-	return withHooks(ctx, shc.sqlSave, shc.mutation, shc.hooks)
+func (_c *StoreHistoryCreate) Save(ctx context.Context) (*StoreHistory, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (shc *StoreHistoryCreate) SaveX(ctx context.Context) *StoreHistory {
-	v, err := shc.Save(ctx)
+func (_c *StoreHistoryCreate) SaveX(ctx context.Context) *StoreHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -144,71 +144,71 @@ func (shc *StoreHistoryCreate) SaveX(ctx context.Context) *StoreHistory {
 }
 
 // Exec executes the query.
-func (shc *StoreHistoryCreate) Exec(ctx context.Context) error {
-	_, err := shc.Save(ctx)
+func (_c *StoreHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shc *StoreHistoryCreate) ExecX(ctx context.Context) {
-	if err := shc.Exec(ctx); err != nil {
+func (_c *StoreHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (shc *StoreHistoryCreate) defaults() {
-	if _, ok := shc.mutation.CreatedAt(); !ok {
+func (_c *StoreHistoryCreate) defaults() {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := storehistory.DefaultCreatedAt()
-		shc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := shc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		v := storehistory.DefaultUpdatedAt()
-		shc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := shc.mutation.HistoryTime(); !ok {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		v := storehistory.DefaultHistoryTime()
-		shc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (shc *StoreHistoryCreate) check() error {
-	if _, ok := shc.mutation.CreatedAt(); !ok {
+func (_c *StoreHistoryCreate) check() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "StoreHistory.created_at"`)}
 	}
-	if _, ok := shc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "StoreHistory.updated_at"`)}
 	}
-	if _, ok := shc.mutation.HistoryTime(); !ok {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`ent: missing required field "StoreHistory.history_time"`)}
 	}
-	if _, ok := shc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`ent: missing required field "StoreHistory.operation"`)}
 	}
-	if v, ok := shc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := storehistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`ent: validator failed for field "StoreHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := shc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "StoreHistory.name"`)}
 	}
-	if _, ok := shc.mutation.Region(); !ok {
+	if _, ok := _c.mutation.Region(); !ok {
 		return &ValidationError{Name: "region", err: errors.New(`ent: missing required field "StoreHistory.region"`)}
 	}
-	if _, ok := shc.mutation.OrganizationID(); !ok {
+	if _, ok := _c.mutation.OrganizationID(); !ok {
 		return &ValidationError{Name: "organization_id", err: errors.New(`ent: missing required field "StoreHistory.organization_id"`)}
 	}
 	return nil
 }
 
-func (shc *StoreHistoryCreate) sqlSave(ctx context.Context) (*StoreHistory, error) {
-	if err := shc.check(); err != nil {
+func (_c *StoreHistoryCreate) sqlSave(ctx context.Context) (*StoreHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := shc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, shc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -218,53 +218,53 @@ func (shc *StoreHistoryCreate) sqlSave(ctx context.Context) (*StoreHistory, erro
 		id := _spec.ID.Value.(int64)
 		_node.ID = int(id)
 	}
-	shc.mutation.id = &_node.ID
-	shc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (shc *StoreHistoryCreate) createSpec() (*StoreHistory, *sqlgraph.CreateSpec) {
+func (_c *StoreHistoryCreate) createSpec() (*StoreHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &StoreHistory{config: shc.config}
+		_node = &StoreHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(storehistory.Table, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeInt))
 	)
-	if id, ok := shc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := shc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(storehistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := shc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(storehistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := shc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(storehistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := shc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(storehistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := shc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(storehistory.FieldRef, field.TypeUUID, value)
 		_node.Ref = value
 	}
-	if value, ok := shc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(storehistory.FieldUpdatedBy, field.TypeUUID, value)
 		_node.UpdatedBy = &value
 	}
-	if value, ok := shc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(storehistory.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := shc.mutation.Region(); ok {
+	if value, ok := _c.mutation.Region(); ok {
 		_spec.SetField(storehistory.FieldRegion, field.TypeString, value)
 		_node.Region = value
 	}
-	if value, ok := shc.mutation.OrganizationID(); ok {
+	if value, ok := _c.mutation.OrganizationID(); ok {
 		_spec.SetField(storehistory.FieldOrganizationID, field.TypeUUID, value)
 		_node.OrganizationID = value
 	}
@@ -279,16 +279,16 @@ type StoreHistoryCreateBulk struct {
 }
 
 // Save creates the StoreHistory entities in the database.
-func (shcb *StoreHistoryCreateBulk) Save(ctx context.Context) ([]*StoreHistory, error) {
-	if shcb.err != nil {
-		return nil, shcb.err
+func (_c *StoreHistoryCreateBulk) Save(ctx context.Context) ([]*StoreHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(shcb.builders))
-	nodes := make([]*StoreHistory, len(shcb.builders))
-	mutators := make([]Mutator, len(shcb.builders))
-	for i := range shcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*StoreHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := shcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*StoreHistoryMutation)
@@ -302,11 +302,11 @@ func (shcb *StoreHistoryCreateBulk) Save(ctx context.Context) ([]*StoreHistory, 
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, shcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, shcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -330,7 +330,7 @@ func (shcb *StoreHistoryCreateBulk) Save(ctx context.Context) ([]*StoreHistory, 
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, shcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -338,8 +338,8 @@ func (shcb *StoreHistoryCreateBulk) Save(ctx context.Context) ([]*StoreHistory, 
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (shcb *StoreHistoryCreateBulk) SaveX(ctx context.Context) []*StoreHistory {
-	v, err := shcb.Save(ctx)
+func (_c *StoreHistoryCreateBulk) SaveX(ctx context.Context) []*StoreHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -347,14 +347,14 @@ func (shcb *StoreHistoryCreateBulk) SaveX(ctx context.Context) []*StoreHistory {
 }
 
 // Exec executes the query.
-func (shcb *StoreHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := shcb.Save(ctx)
+func (_c *StoreHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shcb *StoreHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := shcb.Exec(ctx); err != nil {
+func (_c *StoreHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

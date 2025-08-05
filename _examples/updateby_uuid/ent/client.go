@@ -308,8 +308,8 @@ func (c *OrganizationClient) Update() *OrganizationUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *OrganizationClient) UpdateOne(o *Organization) *OrganizationUpdateOne {
-	mutation := newOrganizationMutation(c.config, OpUpdateOne, withOrganization(o))
+func (c *OrganizationClient) UpdateOne(_m *Organization) *OrganizationUpdateOne {
+	mutation := newOrganizationMutation(c.config, OpUpdateOne, withOrganization(_m))
 	return &OrganizationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -326,8 +326,8 @@ func (c *OrganizationClient) Delete() *OrganizationDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *OrganizationClient) DeleteOne(o *Organization) *OrganizationDeleteOne {
-	return c.DeleteOneID(o.ID)
+func (c *OrganizationClient) DeleteOne(_m *Organization) *OrganizationDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -362,16 +362,16 @@ func (c *OrganizationClient) GetX(ctx context.Context, id uuid.UUID) *Organizati
 }
 
 // QueryOrganizationStores queries the organization_stores edge of a Organization.
-func (c *OrganizationClient) QueryOrganizationStores(o *Organization) *StoreQuery {
+func (c *OrganizationClient) QueryOrganizationStores(_m *Organization) *StoreQuery {
 	query := (&StoreClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := o.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(store.Table, store.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.OrganizationStoresTable, organization.OrganizationStoresColumn),
 		)
-		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -457,8 +457,8 @@ func (c *OrganizationHistoryClient) Update() *OrganizationHistoryUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *OrganizationHistoryClient) UpdateOne(oh *OrganizationHistory) *OrganizationHistoryUpdateOne {
-	mutation := newOrganizationHistoryMutation(c.config, OpUpdateOne, withOrganizationHistory(oh))
+func (c *OrganizationHistoryClient) UpdateOne(_m *OrganizationHistory) *OrganizationHistoryUpdateOne {
+	mutation := newOrganizationHistoryMutation(c.config, OpUpdateOne, withOrganizationHistory(_m))
 	return &OrganizationHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -475,8 +475,8 @@ func (c *OrganizationHistoryClient) Delete() *OrganizationHistoryDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *OrganizationHistoryClient) DeleteOne(oh *OrganizationHistory) *OrganizationHistoryDeleteOne {
-	return c.DeleteOneID(oh.ID)
+func (c *OrganizationHistoryClient) DeleteOne(_m *OrganizationHistory) *OrganizationHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -590,8 +590,8 @@ func (c *StoreClient) Update() *StoreUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *StoreClient) UpdateOne(s *Store) *StoreUpdateOne {
-	mutation := newStoreMutation(c.config, OpUpdateOne, withStore(s))
+func (c *StoreClient) UpdateOne(_m *Store) *StoreUpdateOne {
+	mutation := newStoreMutation(c.config, OpUpdateOne, withStore(_m))
 	return &StoreUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -608,8 +608,8 @@ func (c *StoreClient) Delete() *StoreDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *StoreClient) DeleteOne(s *Store) *StoreDeleteOne {
-	return c.DeleteOneID(s.ID)
+func (c *StoreClient) DeleteOne(_m *Store) *StoreDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -644,16 +644,16 @@ func (c *StoreClient) GetX(ctx context.Context, id uuid.UUID) *Store {
 }
 
 // QueryOrganization queries the organization edge of a Store.
-func (c *StoreClient) QueryOrganization(s *Store) *OrganizationQuery {
+func (c *StoreClient) QueryOrganization(_m *Store) *OrganizationQuery {
 	query := (&OrganizationClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := s.ID
+		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(store.Table, store.FieldID, id),
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, store.OrganizationTable, store.OrganizationColumn),
 		)
-		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
@@ -739,8 +739,8 @@ func (c *StoreHistoryClient) Update() *StoreHistoryUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *StoreHistoryClient) UpdateOne(sh *StoreHistory) *StoreHistoryUpdateOne {
-	mutation := newStoreHistoryMutation(c.config, OpUpdateOne, withStoreHistory(sh))
+func (c *StoreHistoryClient) UpdateOne(_m *StoreHistory) *StoreHistoryUpdateOne {
+	mutation := newStoreHistoryMutation(c.config, OpUpdateOne, withStoreHistory(_m))
 	return &StoreHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -757,8 +757,8 @@ func (c *StoreHistoryClient) Delete() *StoreHistoryDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *StoreHistoryClient) DeleteOne(sh *StoreHistory) *StoreHistoryDeleteOne {
-	return c.DeleteOneID(sh.ID)
+func (c *StoreHistoryClient) DeleteOne(_m *StoreHistory) *StoreHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.

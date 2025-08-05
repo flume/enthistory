@@ -23,58 +23,58 @@ type TodoUpdate struct {
 }
 
 // Where appends a list predicates to the TodoUpdate builder.
-func (tu *TodoUpdate) Where(ps ...predicate.Todo) *TodoUpdate {
-	tu.mutation.Where(ps...)
-	return tu
+func (_u *TodoUpdate) Where(ps ...predicate.Todo) *TodoUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetOtherID sets the "other_id" field.
-func (tu *TodoUpdate) SetOtherID(u uuid.UUID) *TodoUpdate {
-	tu.mutation.SetOtherID(u)
-	return tu
+func (_u *TodoUpdate) SetOtherID(v uuid.UUID) *TodoUpdate {
+	_u.mutation.SetOtherID(v)
+	return _u
 }
 
 // SetNillableOtherID sets the "other_id" field if the given value is not nil.
-func (tu *TodoUpdate) SetNillableOtherID(u *uuid.UUID) *TodoUpdate {
-	if u != nil {
-		tu.SetOtherID(*u)
+func (_u *TodoUpdate) SetNillableOtherID(v *uuid.UUID) *TodoUpdate {
+	if v != nil {
+		_u.SetOtherID(*v)
 	}
-	return tu
+	return _u
 }
 
 // ClearOtherID clears the value of the "other_id" field.
-func (tu *TodoUpdate) ClearOtherID() *TodoUpdate {
-	tu.mutation.ClearOtherID()
-	return tu
+func (_u *TodoUpdate) ClearOtherID() *TodoUpdate {
+	_u.mutation.ClearOtherID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (tu *TodoUpdate) SetName(s string) *TodoUpdate {
-	tu.mutation.SetName(s)
-	return tu
+func (_u *TodoUpdate) SetName(v string) *TodoUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (tu *TodoUpdate) SetNillableName(s *string) *TodoUpdate {
-	if s != nil {
-		tu.SetName(*s)
+func (_u *TodoUpdate) SetNillableName(v *string) *TodoUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return tu
+	return _u
 }
 
 // Mutation returns the TodoMutation object of the builder.
-func (tu *TodoUpdate) Mutation() *TodoMutation {
-	return tu.mutation
+func (_u *TodoUpdate) Mutation() *TodoMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (tu *TodoUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, tu.sqlSave, tu.mutation, tu.hooks)
+func (_u *TodoUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tu *TodoUpdate) SaveX(ctx context.Context) int {
-	affected, err := tu.Save(ctx)
+func (_u *TodoUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -82,21 +82,21 @@ func (tu *TodoUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (tu *TodoUpdate) Exec(ctx context.Context) error {
-	_, err := tu.Save(ctx)
+func (_u *TodoUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tu *TodoUpdate) ExecX(ctx context.Context) {
-	if err := tu.Exec(ctx); err != nil {
+func (_u *TodoUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tu *TodoUpdate) check() error {
-	if v, ok := tu.mutation.Name(); ok {
+func (_u *TodoUpdate) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := todo.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Todo.name": %w`, err)}
 		}
@@ -104,28 +104,28 @@ func (tu *TodoUpdate) check() error {
 	return nil
 }
 
-func (tu *TodoUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := tu.check(); err != nil {
-		return n, err
+func (_u *TodoUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(todo.Table, todo.Columns, sqlgraph.NewFieldSpec(todo.FieldID, field.TypeUUID))
-	if ps := tu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := tu.mutation.OtherID(); ok {
+	if value, ok := _u.mutation.OtherID(); ok {
 		_spec.SetField(todo.FieldOtherID, field.TypeUUID, value)
 	}
-	if tu.mutation.OtherIDCleared() {
+	if _u.mutation.OtherIDCleared() {
 		_spec.ClearField(todo.FieldOtherID, field.TypeUUID)
 	}
-	if value, ok := tu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(todo.FieldName, field.TypeString, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, tu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{todo.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -133,8 +133,8 @@ func (tu *TodoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	tu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // TodoUpdateOne is the builder for updating a single Todo entity.
@@ -146,65 +146,65 @@ type TodoUpdateOne struct {
 }
 
 // SetOtherID sets the "other_id" field.
-func (tuo *TodoUpdateOne) SetOtherID(u uuid.UUID) *TodoUpdateOne {
-	tuo.mutation.SetOtherID(u)
-	return tuo
+func (_u *TodoUpdateOne) SetOtherID(v uuid.UUID) *TodoUpdateOne {
+	_u.mutation.SetOtherID(v)
+	return _u
 }
 
 // SetNillableOtherID sets the "other_id" field if the given value is not nil.
-func (tuo *TodoUpdateOne) SetNillableOtherID(u *uuid.UUID) *TodoUpdateOne {
-	if u != nil {
-		tuo.SetOtherID(*u)
+func (_u *TodoUpdateOne) SetNillableOtherID(v *uuid.UUID) *TodoUpdateOne {
+	if v != nil {
+		_u.SetOtherID(*v)
 	}
-	return tuo
+	return _u
 }
 
 // ClearOtherID clears the value of the "other_id" field.
-func (tuo *TodoUpdateOne) ClearOtherID() *TodoUpdateOne {
-	tuo.mutation.ClearOtherID()
-	return tuo
+func (_u *TodoUpdateOne) ClearOtherID() *TodoUpdateOne {
+	_u.mutation.ClearOtherID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (tuo *TodoUpdateOne) SetName(s string) *TodoUpdateOne {
-	tuo.mutation.SetName(s)
-	return tuo
+func (_u *TodoUpdateOne) SetName(v string) *TodoUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (tuo *TodoUpdateOne) SetNillableName(s *string) *TodoUpdateOne {
-	if s != nil {
-		tuo.SetName(*s)
+func (_u *TodoUpdateOne) SetNillableName(v *string) *TodoUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return tuo
+	return _u
 }
 
 // Mutation returns the TodoMutation object of the builder.
-func (tuo *TodoUpdateOne) Mutation() *TodoMutation {
-	return tuo.mutation
+func (_u *TodoUpdateOne) Mutation() *TodoMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the TodoUpdate builder.
-func (tuo *TodoUpdateOne) Where(ps ...predicate.Todo) *TodoUpdateOne {
-	tuo.mutation.Where(ps...)
-	return tuo
+func (_u *TodoUpdateOne) Where(ps ...predicate.Todo) *TodoUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (tuo *TodoUpdateOne) Select(field string, fields ...string) *TodoUpdateOne {
-	tuo.fields = append([]string{field}, fields...)
-	return tuo
+func (_u *TodoUpdateOne) Select(field string, fields ...string) *TodoUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Todo entity.
-func (tuo *TodoUpdateOne) Save(ctx context.Context) (*Todo, error) {
-	return withHooks(ctx, tuo.sqlSave, tuo.mutation, tuo.hooks)
+func (_u *TodoUpdateOne) Save(ctx context.Context) (*Todo, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tuo *TodoUpdateOne) SaveX(ctx context.Context) *Todo {
-	node, err := tuo.Save(ctx)
+func (_u *TodoUpdateOne) SaveX(ctx context.Context) *Todo {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -212,21 +212,21 @@ func (tuo *TodoUpdateOne) SaveX(ctx context.Context) *Todo {
 }
 
 // Exec executes the query on the entity.
-func (tuo *TodoUpdateOne) Exec(ctx context.Context) error {
-	_, err := tuo.Save(ctx)
+func (_u *TodoUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tuo *TodoUpdateOne) ExecX(ctx context.Context) {
-	if err := tuo.Exec(ctx); err != nil {
+func (_u *TodoUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tuo *TodoUpdateOne) check() error {
-	if v, ok := tuo.mutation.Name(); ok {
+func (_u *TodoUpdateOne) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := todo.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Todo.name": %w`, err)}
 		}
@@ -234,17 +234,17 @@ func (tuo *TodoUpdateOne) check() error {
 	return nil
 }
 
-func (tuo *TodoUpdateOne) sqlSave(ctx context.Context) (_node *Todo, err error) {
-	if err := tuo.check(); err != nil {
+func (_u *TodoUpdateOne) sqlSave(ctx context.Context) (_node *Todo, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(todo.Table, todo.Columns, sqlgraph.NewFieldSpec(todo.FieldID, field.TypeUUID))
-	id, ok := tuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Todo.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := tuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, todo.FieldID)
 		for _, f := range fields {
@@ -256,26 +256,26 @@ func (tuo *TodoUpdateOne) sqlSave(ctx context.Context) (_node *Todo, err error) 
 			}
 		}
 	}
-	if ps := tuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := tuo.mutation.OtherID(); ok {
+	if value, ok := _u.mutation.OtherID(); ok {
 		_spec.SetField(todo.FieldOtherID, field.TypeUUID, value)
 	}
-	if tuo.mutation.OtherIDCleared() {
+	if _u.mutation.OtherIDCleared() {
 		_spec.ClearField(todo.FieldOtherID, field.TypeUUID)
 	}
-	if value, ok := tuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(todo.FieldName, field.TypeString, value)
 	}
-	_node = &Todo{config: tuo.config}
+	_node = &Todo{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, tuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{todo.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -283,6 +283,6 @@ func (tuo *TodoUpdateOne) sqlSave(ctx context.Context) (_node *Todo, err error) 
 		}
 		return nil, err
 	}
-	tuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

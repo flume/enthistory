@@ -23,58 +23,58 @@ type TestExcludeUpdate struct {
 }
 
 // Where appends a list predicates to the TestExcludeUpdate builder.
-func (teu *TestExcludeUpdate) Where(ps ...predicate.TestExclude) *TestExcludeUpdate {
-	teu.mutation.Where(ps...)
-	return teu
+func (_u *TestExcludeUpdate) Where(ps ...predicate.TestExclude) *TestExcludeUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetOtherID sets the "other_id" field.
-func (teu *TestExcludeUpdate) SetOtherID(u uuid.UUID) *TestExcludeUpdate {
-	teu.mutation.SetOtherID(u)
-	return teu
+func (_u *TestExcludeUpdate) SetOtherID(v uuid.UUID) *TestExcludeUpdate {
+	_u.mutation.SetOtherID(v)
+	return _u
 }
 
 // SetNillableOtherID sets the "other_id" field if the given value is not nil.
-func (teu *TestExcludeUpdate) SetNillableOtherID(u *uuid.UUID) *TestExcludeUpdate {
-	if u != nil {
-		teu.SetOtherID(*u)
+func (_u *TestExcludeUpdate) SetNillableOtherID(v *uuid.UUID) *TestExcludeUpdate {
+	if v != nil {
+		_u.SetOtherID(*v)
 	}
-	return teu
+	return _u
 }
 
 // ClearOtherID clears the value of the "other_id" field.
-func (teu *TestExcludeUpdate) ClearOtherID() *TestExcludeUpdate {
-	teu.mutation.ClearOtherID()
-	return teu
+func (_u *TestExcludeUpdate) ClearOtherID() *TestExcludeUpdate {
+	_u.mutation.ClearOtherID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (teu *TestExcludeUpdate) SetName(s string) *TestExcludeUpdate {
-	teu.mutation.SetName(s)
-	return teu
+func (_u *TestExcludeUpdate) SetName(v string) *TestExcludeUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (teu *TestExcludeUpdate) SetNillableName(s *string) *TestExcludeUpdate {
-	if s != nil {
-		teu.SetName(*s)
+func (_u *TestExcludeUpdate) SetNillableName(v *string) *TestExcludeUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return teu
+	return _u
 }
 
 // Mutation returns the TestExcludeMutation object of the builder.
-func (teu *TestExcludeUpdate) Mutation() *TestExcludeMutation {
-	return teu.mutation
+func (_u *TestExcludeUpdate) Mutation() *TestExcludeMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (teu *TestExcludeUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, teu.sqlSave, teu.mutation, teu.hooks)
+func (_u *TestExcludeUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (teu *TestExcludeUpdate) SaveX(ctx context.Context) int {
-	affected, err := teu.Save(ctx)
+func (_u *TestExcludeUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -82,21 +82,21 @@ func (teu *TestExcludeUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (teu *TestExcludeUpdate) Exec(ctx context.Context) error {
-	_, err := teu.Save(ctx)
+func (_u *TestExcludeUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (teu *TestExcludeUpdate) ExecX(ctx context.Context) {
-	if err := teu.Exec(ctx); err != nil {
+func (_u *TestExcludeUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (teu *TestExcludeUpdate) check() error {
-	if v, ok := teu.mutation.Name(); ok {
+func (_u *TestExcludeUpdate) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := testexclude.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "TestExclude.name": %w`, err)}
 		}
@@ -104,28 +104,28 @@ func (teu *TestExcludeUpdate) check() error {
 	return nil
 }
 
-func (teu *TestExcludeUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := teu.check(); err != nil {
-		return n, err
+func (_u *TestExcludeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(testexclude.Table, testexclude.Columns, sqlgraph.NewFieldSpec(testexclude.FieldID, field.TypeUUID))
-	if ps := teu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := teu.mutation.OtherID(); ok {
+	if value, ok := _u.mutation.OtherID(); ok {
 		_spec.SetField(testexclude.FieldOtherID, field.TypeUUID, value)
 	}
-	if teu.mutation.OtherIDCleared() {
+	if _u.mutation.OtherIDCleared() {
 		_spec.ClearField(testexclude.FieldOtherID, field.TypeUUID)
 	}
-	if value, ok := teu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(testexclude.FieldName, field.TypeString, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, teu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{testexclude.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -133,8 +133,8 @@ func (teu *TestExcludeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	teu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // TestExcludeUpdateOne is the builder for updating a single TestExclude entity.
@@ -146,65 +146,65 @@ type TestExcludeUpdateOne struct {
 }
 
 // SetOtherID sets the "other_id" field.
-func (teuo *TestExcludeUpdateOne) SetOtherID(u uuid.UUID) *TestExcludeUpdateOne {
-	teuo.mutation.SetOtherID(u)
-	return teuo
+func (_u *TestExcludeUpdateOne) SetOtherID(v uuid.UUID) *TestExcludeUpdateOne {
+	_u.mutation.SetOtherID(v)
+	return _u
 }
 
 // SetNillableOtherID sets the "other_id" field if the given value is not nil.
-func (teuo *TestExcludeUpdateOne) SetNillableOtherID(u *uuid.UUID) *TestExcludeUpdateOne {
-	if u != nil {
-		teuo.SetOtherID(*u)
+func (_u *TestExcludeUpdateOne) SetNillableOtherID(v *uuid.UUID) *TestExcludeUpdateOne {
+	if v != nil {
+		_u.SetOtherID(*v)
 	}
-	return teuo
+	return _u
 }
 
 // ClearOtherID clears the value of the "other_id" field.
-func (teuo *TestExcludeUpdateOne) ClearOtherID() *TestExcludeUpdateOne {
-	teuo.mutation.ClearOtherID()
-	return teuo
+func (_u *TestExcludeUpdateOne) ClearOtherID() *TestExcludeUpdateOne {
+	_u.mutation.ClearOtherID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (teuo *TestExcludeUpdateOne) SetName(s string) *TestExcludeUpdateOne {
-	teuo.mutation.SetName(s)
-	return teuo
+func (_u *TestExcludeUpdateOne) SetName(v string) *TestExcludeUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (teuo *TestExcludeUpdateOne) SetNillableName(s *string) *TestExcludeUpdateOne {
-	if s != nil {
-		teuo.SetName(*s)
+func (_u *TestExcludeUpdateOne) SetNillableName(v *string) *TestExcludeUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return teuo
+	return _u
 }
 
 // Mutation returns the TestExcludeMutation object of the builder.
-func (teuo *TestExcludeUpdateOne) Mutation() *TestExcludeMutation {
-	return teuo.mutation
+func (_u *TestExcludeUpdateOne) Mutation() *TestExcludeMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the TestExcludeUpdate builder.
-func (teuo *TestExcludeUpdateOne) Where(ps ...predicate.TestExclude) *TestExcludeUpdateOne {
-	teuo.mutation.Where(ps...)
-	return teuo
+func (_u *TestExcludeUpdateOne) Where(ps ...predicate.TestExclude) *TestExcludeUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (teuo *TestExcludeUpdateOne) Select(field string, fields ...string) *TestExcludeUpdateOne {
-	teuo.fields = append([]string{field}, fields...)
-	return teuo
+func (_u *TestExcludeUpdateOne) Select(field string, fields ...string) *TestExcludeUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated TestExclude entity.
-func (teuo *TestExcludeUpdateOne) Save(ctx context.Context) (*TestExclude, error) {
-	return withHooks(ctx, teuo.sqlSave, teuo.mutation, teuo.hooks)
+func (_u *TestExcludeUpdateOne) Save(ctx context.Context) (*TestExclude, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (teuo *TestExcludeUpdateOne) SaveX(ctx context.Context) *TestExclude {
-	node, err := teuo.Save(ctx)
+func (_u *TestExcludeUpdateOne) SaveX(ctx context.Context) *TestExclude {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -212,21 +212,21 @@ func (teuo *TestExcludeUpdateOne) SaveX(ctx context.Context) *TestExclude {
 }
 
 // Exec executes the query on the entity.
-func (teuo *TestExcludeUpdateOne) Exec(ctx context.Context) error {
-	_, err := teuo.Save(ctx)
+func (_u *TestExcludeUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (teuo *TestExcludeUpdateOne) ExecX(ctx context.Context) {
-	if err := teuo.Exec(ctx); err != nil {
+func (_u *TestExcludeUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (teuo *TestExcludeUpdateOne) check() error {
-	if v, ok := teuo.mutation.Name(); ok {
+func (_u *TestExcludeUpdateOne) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := testexclude.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "TestExclude.name": %w`, err)}
 		}
@@ -234,17 +234,17 @@ func (teuo *TestExcludeUpdateOne) check() error {
 	return nil
 }
 
-func (teuo *TestExcludeUpdateOne) sqlSave(ctx context.Context) (_node *TestExclude, err error) {
-	if err := teuo.check(); err != nil {
+func (_u *TestExcludeUpdateOne) sqlSave(ctx context.Context) (_node *TestExclude, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(testexclude.Table, testexclude.Columns, sqlgraph.NewFieldSpec(testexclude.FieldID, field.TypeUUID))
-	id, ok := teuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "TestExclude.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := teuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, testexclude.FieldID)
 		for _, f := range fields {
@@ -256,26 +256,26 @@ func (teuo *TestExcludeUpdateOne) sqlSave(ctx context.Context) (_node *TestExclu
 			}
 		}
 	}
-	if ps := teuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := teuo.mutation.OtherID(); ok {
+	if value, ok := _u.mutation.OtherID(); ok {
 		_spec.SetField(testexclude.FieldOtherID, field.TypeUUID, value)
 	}
-	if teuo.mutation.OtherIDCleared() {
+	if _u.mutation.OtherIDCleared() {
 		_spec.ClearField(testexclude.FieldOtherID, field.TypeUUID)
 	}
-	if value, ok := teuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(testexclude.FieldName, field.TypeString, value)
 	}
-	_node = &TestExclude{config: teuo.config}
+	_node = &TestExclude{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, teuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{testexclude.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -283,6 +283,6 @@ func (teuo *TestExcludeUpdateOne) sqlSave(ctx context.Context) (_node *TestExclu
 		}
 		return nil, err
 	}
-	teuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

@@ -28,40 +28,40 @@ type StoreHistoryQuery struct {
 }
 
 // Where adds a new predicate for the StoreHistoryQuery builder.
-func (shq *StoreHistoryQuery) Where(ps ...predicate.StoreHistory) *StoreHistoryQuery {
-	shq.predicates = append(shq.predicates, ps...)
-	return shq
+func (_q *StoreHistoryQuery) Where(ps ...predicate.StoreHistory) *StoreHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (shq *StoreHistoryQuery) Limit(limit int) *StoreHistoryQuery {
-	shq.ctx.Limit = &limit
-	return shq
+func (_q *StoreHistoryQuery) Limit(limit int) *StoreHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (shq *StoreHistoryQuery) Offset(offset int) *StoreHistoryQuery {
-	shq.ctx.Offset = &offset
-	return shq
+func (_q *StoreHistoryQuery) Offset(offset int) *StoreHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (shq *StoreHistoryQuery) Unique(unique bool) *StoreHistoryQuery {
-	shq.ctx.Unique = &unique
-	return shq
+func (_q *StoreHistoryQuery) Unique(unique bool) *StoreHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (shq *StoreHistoryQuery) Order(o ...storehistory.OrderOption) *StoreHistoryQuery {
-	shq.order = append(shq.order, o...)
-	return shq
+func (_q *StoreHistoryQuery) Order(o ...storehistory.OrderOption) *StoreHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first StoreHistory entity from the query.
 // Returns a *NotFoundError when no StoreHistory was found.
-func (shq *StoreHistoryQuery) First(ctx context.Context) (*StoreHistory, error) {
-	nodes, err := shq.Limit(1).All(setContextOp(ctx, shq.ctx, ent.OpQueryFirst))
+func (_q *StoreHistoryQuery) First(ctx context.Context) (*StoreHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -72,8 +72,8 @@ func (shq *StoreHistoryQuery) First(ctx context.Context) (*StoreHistory, error) 
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (shq *StoreHistoryQuery) FirstX(ctx context.Context) *StoreHistory {
-	node, err := shq.First(ctx)
+func (_q *StoreHistoryQuery) FirstX(ctx context.Context) *StoreHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -82,9 +82,9 @@ func (shq *StoreHistoryQuery) FirstX(ctx context.Context) *StoreHistory {
 
 // FirstID returns the first StoreHistory ID from the query.
 // Returns a *NotFoundError when no StoreHistory ID was found.
-func (shq *StoreHistoryQuery) FirstID(ctx context.Context) (id int, err error) {
+func (_q *StoreHistoryQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = shq.Limit(1).IDs(setContextOp(ctx, shq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -95,8 +95,8 @@ func (shq *StoreHistoryQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (shq *StoreHistoryQuery) FirstIDX(ctx context.Context) int {
-	id, err := shq.FirstID(ctx)
+func (_q *StoreHistoryQuery) FirstIDX(ctx context.Context) int {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -106,8 +106,8 @@ func (shq *StoreHistoryQuery) FirstIDX(ctx context.Context) int {
 // Only returns a single StoreHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one StoreHistory entity is found.
 // Returns a *NotFoundError when no StoreHistory entities are found.
-func (shq *StoreHistoryQuery) Only(ctx context.Context) (*StoreHistory, error) {
-	nodes, err := shq.Limit(2).All(setContextOp(ctx, shq.ctx, ent.OpQueryOnly))
+func (_q *StoreHistoryQuery) Only(ctx context.Context) (*StoreHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -122,8 +122,8 @@ func (shq *StoreHistoryQuery) Only(ctx context.Context) (*StoreHistory, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (shq *StoreHistoryQuery) OnlyX(ctx context.Context) *StoreHistory {
-	node, err := shq.Only(ctx)
+func (_q *StoreHistoryQuery) OnlyX(ctx context.Context) *StoreHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -133,9 +133,9 @@ func (shq *StoreHistoryQuery) OnlyX(ctx context.Context) *StoreHistory {
 // OnlyID is like Only, but returns the only StoreHistory ID in the query.
 // Returns a *NotSingularError when more than one StoreHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (shq *StoreHistoryQuery) OnlyID(ctx context.Context) (id int, err error) {
+func (_q *StoreHistoryQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = shq.Limit(2).IDs(setContextOp(ctx, shq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -150,8 +150,8 @@ func (shq *StoreHistoryQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (shq *StoreHistoryQuery) OnlyIDX(ctx context.Context) int {
-	id, err := shq.OnlyID(ctx)
+func (_q *StoreHistoryQuery) OnlyIDX(ctx context.Context) int {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -159,18 +159,18 @@ func (shq *StoreHistoryQuery) OnlyIDX(ctx context.Context) int {
 }
 
 // All executes the query and returns a list of StoreHistories.
-func (shq *StoreHistoryQuery) All(ctx context.Context) ([]*StoreHistory, error) {
-	ctx = setContextOp(ctx, shq.ctx, ent.OpQueryAll)
-	if err := shq.prepareQuery(ctx); err != nil {
+func (_q *StoreHistoryQuery) All(ctx context.Context) ([]*StoreHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*StoreHistory, *StoreHistoryQuery]()
-	return withInterceptors[[]*StoreHistory](ctx, shq, qr, shq.inters)
+	return withInterceptors[[]*StoreHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (shq *StoreHistoryQuery) AllX(ctx context.Context) []*StoreHistory {
-	nodes, err := shq.All(ctx)
+func (_q *StoreHistoryQuery) AllX(ctx context.Context) []*StoreHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -178,20 +178,20 @@ func (shq *StoreHistoryQuery) AllX(ctx context.Context) []*StoreHistory {
 }
 
 // IDs executes the query and returns a list of StoreHistory IDs.
-func (shq *StoreHistoryQuery) IDs(ctx context.Context) (ids []int, err error) {
-	if shq.ctx.Unique == nil && shq.path != nil {
-		shq.Unique(true)
+func (_q *StoreHistoryQuery) IDs(ctx context.Context) (ids []int, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, shq.ctx, ent.OpQueryIDs)
-	if err = shq.Select(storehistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(storehistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (shq *StoreHistoryQuery) IDsX(ctx context.Context) []int {
-	ids, err := shq.IDs(ctx)
+func (_q *StoreHistoryQuery) IDsX(ctx context.Context) []int {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -199,17 +199,17 @@ func (shq *StoreHistoryQuery) IDsX(ctx context.Context) []int {
 }
 
 // Count returns the count of the given query.
-func (shq *StoreHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, shq.ctx, ent.OpQueryCount)
-	if err := shq.prepareQuery(ctx); err != nil {
+func (_q *StoreHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, shq, querierCount[*StoreHistoryQuery](), shq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*StoreHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (shq *StoreHistoryQuery) CountX(ctx context.Context) int {
-	count, err := shq.Count(ctx)
+func (_q *StoreHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -217,9 +217,9 @@ func (shq *StoreHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (shq *StoreHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, shq.ctx, ent.OpQueryExist)
-	switch _, err := shq.FirstID(ctx); {
+func (_q *StoreHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -230,8 +230,8 @@ func (shq *StoreHistoryQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (shq *StoreHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := shq.Exist(ctx)
+func (_q *StoreHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -240,19 +240,19 @@ func (shq *StoreHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the StoreHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (shq *StoreHistoryQuery) Clone() *StoreHistoryQuery {
-	if shq == nil {
+func (_q *StoreHistoryQuery) Clone() *StoreHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &StoreHistoryQuery{
-		config:     shq.config,
-		ctx:        shq.ctx.Clone(),
-		order:      append([]storehistory.OrderOption{}, shq.order...),
-		inters:     append([]Interceptor{}, shq.inters...),
-		predicates: append([]predicate.StoreHistory{}, shq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]storehistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.StoreHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  shq.sql.Clone(),
-		path: shq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -270,10 +270,10 @@ func (shq *StoreHistoryQuery) Clone() *StoreHistoryQuery {
 //		GroupBy(storehistory.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (shq *StoreHistoryQuery) GroupBy(field string, fields ...string) *StoreHistoryGroupBy {
-	shq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &StoreHistoryGroupBy{build: shq}
-	grbuild.flds = &shq.ctx.Fields
+func (_q *StoreHistoryQuery) GroupBy(field string, fields ...string) *StoreHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &StoreHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = storehistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -291,62 +291,62 @@ func (shq *StoreHistoryQuery) GroupBy(field string, fields ...string) *StoreHist
 //	client.StoreHistory.Query().
 //		Select(storehistory.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (shq *StoreHistoryQuery) Select(fields ...string) *StoreHistorySelect {
-	shq.ctx.Fields = append(shq.ctx.Fields, fields...)
-	sbuild := &StoreHistorySelect{StoreHistoryQuery: shq}
+func (_q *StoreHistoryQuery) Select(fields ...string) *StoreHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &StoreHistorySelect{StoreHistoryQuery: _q}
 	sbuild.label = storehistory.Label
-	sbuild.flds, sbuild.scan = &shq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a StoreHistorySelect configured with the given aggregations.
-func (shq *StoreHistoryQuery) Aggregate(fns ...AggregateFunc) *StoreHistorySelect {
-	return shq.Select().Aggregate(fns...)
+func (_q *StoreHistoryQuery) Aggregate(fns ...AggregateFunc) *StoreHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (shq *StoreHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range shq.inters {
+func (_q *StoreHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, shq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range shq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !storehistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if shq.path != nil {
-		prev, err := shq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		shq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (shq *StoreHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*StoreHistory, error) {
+func (_q *StoreHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*StoreHistory, error) {
 	var (
 		nodes = []*StoreHistory{}
-		_spec = shq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*StoreHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &StoreHistory{config: shq.config}
+		node := &StoreHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, shq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -355,24 +355,24 @@ func (shq *StoreHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	return nodes, nil
 }
 
-func (shq *StoreHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := shq.querySpec()
-	_spec.Node.Columns = shq.ctx.Fields
-	if len(shq.ctx.Fields) > 0 {
-		_spec.Unique = shq.ctx.Unique != nil && *shq.ctx.Unique
+func (_q *StoreHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, shq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (shq *StoreHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *StoreHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(storehistory.Table, storehistory.Columns, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeInt))
-	_spec.From = shq.sql
-	if unique := shq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if shq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := shq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, storehistory.FieldID)
 		for i := range fields {
@@ -381,20 +381,20 @@ func (shq *StoreHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := shq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := shq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := shq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := shq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -404,33 +404,33 @@ func (shq *StoreHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (shq *StoreHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(shq.driver.Dialect())
+func (_q *StoreHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(storehistory.Table)
-	columns := shq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = storehistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if shq.sql != nil {
-		selector = shq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if shq.ctx.Unique != nil && *shq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, p := range shq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range shq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := shq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := shq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -443,41 +443,41 @@ type StoreHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (shgb *StoreHistoryGroupBy) Aggregate(fns ...AggregateFunc) *StoreHistoryGroupBy {
-	shgb.fns = append(shgb.fns, fns...)
-	return shgb
+func (_g *StoreHistoryGroupBy) Aggregate(fns ...AggregateFunc) *StoreHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (shgb *StoreHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, shgb.build.ctx, ent.OpQueryGroupBy)
-	if err := shgb.build.prepareQuery(ctx); err != nil {
+func (_g *StoreHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*StoreHistoryQuery, *StoreHistoryGroupBy](ctx, shgb.build, shgb, shgb.build.inters, v)
+	return scanWithInterceptors[*StoreHistoryQuery, *StoreHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (shgb *StoreHistoryGroupBy) sqlScan(ctx context.Context, root *StoreHistoryQuery, v any) error {
+func (_g *StoreHistoryGroupBy) sqlScan(ctx context.Context, root *StoreHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(shgb.fns))
-	for _, fn := range shgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*shgb.flds)+len(shgb.fns))
-		for _, f := range *shgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*shgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := shgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -491,27 +491,27 @@ type StoreHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (shs *StoreHistorySelect) Aggregate(fns ...AggregateFunc) *StoreHistorySelect {
-	shs.fns = append(shs.fns, fns...)
-	return shs
+func (_s *StoreHistorySelect) Aggregate(fns ...AggregateFunc) *StoreHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (shs *StoreHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, shs.ctx, ent.OpQuerySelect)
-	if err := shs.prepareQuery(ctx); err != nil {
+func (_s *StoreHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*StoreHistoryQuery, *StoreHistorySelect](ctx, shs.StoreHistoryQuery, shs, shs.inters, v)
+	return scanWithInterceptors[*StoreHistoryQuery, *StoreHistorySelect](ctx, _s.StoreHistoryQuery, _s, _s.inters, v)
 }
 
-func (shs *StoreHistorySelect) sqlScan(ctx context.Context, root *StoreHistoryQuery, v any) error {
+func (_s *StoreHistorySelect) sqlScan(ctx context.Context, root *StoreHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(shs.fns))
-	for _, fn := range shs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*shs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -519,7 +519,7 @@ func (shs *StoreHistorySelect) sqlScan(ctx context.Context, root *StoreHistoryQu
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := shs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

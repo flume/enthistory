@@ -28,40 +28,40 @@ type OrganizationHistoryQuery struct {
 }
 
 // Where adds a new predicate for the OrganizationHistoryQuery builder.
-func (ohq *OrganizationHistoryQuery) Where(ps ...predicate.OrganizationHistory) *OrganizationHistoryQuery {
-	ohq.predicates = append(ohq.predicates, ps...)
-	return ohq
+func (_q *OrganizationHistoryQuery) Where(ps ...predicate.OrganizationHistory) *OrganizationHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (ohq *OrganizationHistoryQuery) Limit(limit int) *OrganizationHistoryQuery {
-	ohq.ctx.Limit = &limit
-	return ohq
+func (_q *OrganizationHistoryQuery) Limit(limit int) *OrganizationHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (ohq *OrganizationHistoryQuery) Offset(offset int) *OrganizationHistoryQuery {
-	ohq.ctx.Offset = &offset
-	return ohq
+func (_q *OrganizationHistoryQuery) Offset(offset int) *OrganizationHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (ohq *OrganizationHistoryQuery) Unique(unique bool) *OrganizationHistoryQuery {
-	ohq.ctx.Unique = &unique
-	return ohq
+func (_q *OrganizationHistoryQuery) Unique(unique bool) *OrganizationHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (ohq *OrganizationHistoryQuery) Order(o ...organizationhistory.OrderOption) *OrganizationHistoryQuery {
-	ohq.order = append(ohq.order, o...)
-	return ohq
+func (_q *OrganizationHistoryQuery) Order(o ...organizationhistory.OrderOption) *OrganizationHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first OrganizationHistory entity from the query.
 // Returns a *NotFoundError when no OrganizationHistory was found.
-func (ohq *OrganizationHistoryQuery) First(ctx context.Context) (*OrganizationHistory, error) {
-	nodes, err := ohq.Limit(1).All(setContextOp(ctx, ohq.ctx, ent.OpQueryFirst))
+func (_q *OrganizationHistoryQuery) First(ctx context.Context) (*OrganizationHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -72,8 +72,8 @@ func (ohq *OrganizationHistoryQuery) First(ctx context.Context) (*OrganizationHi
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (ohq *OrganizationHistoryQuery) FirstX(ctx context.Context) *OrganizationHistory {
-	node, err := ohq.First(ctx)
+func (_q *OrganizationHistoryQuery) FirstX(ctx context.Context) *OrganizationHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -82,9 +82,9 @@ func (ohq *OrganizationHistoryQuery) FirstX(ctx context.Context) *OrganizationHi
 
 // FirstID returns the first OrganizationHistory ID from the query.
 // Returns a *NotFoundError when no OrganizationHistory ID was found.
-func (ohq *OrganizationHistoryQuery) FirstID(ctx context.Context) (id int, err error) {
+func (_q *OrganizationHistoryQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = ohq.Limit(1).IDs(setContextOp(ctx, ohq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -95,8 +95,8 @@ func (ohq *OrganizationHistoryQuery) FirstID(ctx context.Context) (id int, err e
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (ohq *OrganizationHistoryQuery) FirstIDX(ctx context.Context) int {
-	id, err := ohq.FirstID(ctx)
+func (_q *OrganizationHistoryQuery) FirstIDX(ctx context.Context) int {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -106,8 +106,8 @@ func (ohq *OrganizationHistoryQuery) FirstIDX(ctx context.Context) int {
 // Only returns a single OrganizationHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one OrganizationHistory entity is found.
 // Returns a *NotFoundError when no OrganizationHistory entities are found.
-func (ohq *OrganizationHistoryQuery) Only(ctx context.Context) (*OrganizationHistory, error) {
-	nodes, err := ohq.Limit(2).All(setContextOp(ctx, ohq.ctx, ent.OpQueryOnly))
+func (_q *OrganizationHistoryQuery) Only(ctx context.Context) (*OrganizationHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -122,8 +122,8 @@ func (ohq *OrganizationHistoryQuery) Only(ctx context.Context) (*OrganizationHis
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (ohq *OrganizationHistoryQuery) OnlyX(ctx context.Context) *OrganizationHistory {
-	node, err := ohq.Only(ctx)
+func (_q *OrganizationHistoryQuery) OnlyX(ctx context.Context) *OrganizationHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -133,9 +133,9 @@ func (ohq *OrganizationHistoryQuery) OnlyX(ctx context.Context) *OrganizationHis
 // OnlyID is like Only, but returns the only OrganizationHistory ID in the query.
 // Returns a *NotSingularError when more than one OrganizationHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (ohq *OrganizationHistoryQuery) OnlyID(ctx context.Context) (id int, err error) {
+func (_q *OrganizationHistoryQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = ohq.Limit(2).IDs(setContextOp(ctx, ohq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -150,8 +150,8 @@ func (ohq *OrganizationHistoryQuery) OnlyID(ctx context.Context) (id int, err er
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (ohq *OrganizationHistoryQuery) OnlyIDX(ctx context.Context) int {
-	id, err := ohq.OnlyID(ctx)
+func (_q *OrganizationHistoryQuery) OnlyIDX(ctx context.Context) int {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -159,18 +159,18 @@ func (ohq *OrganizationHistoryQuery) OnlyIDX(ctx context.Context) int {
 }
 
 // All executes the query and returns a list of OrganizationHistories.
-func (ohq *OrganizationHistoryQuery) All(ctx context.Context) ([]*OrganizationHistory, error) {
-	ctx = setContextOp(ctx, ohq.ctx, ent.OpQueryAll)
-	if err := ohq.prepareQuery(ctx); err != nil {
+func (_q *OrganizationHistoryQuery) All(ctx context.Context) ([]*OrganizationHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*OrganizationHistory, *OrganizationHistoryQuery]()
-	return withInterceptors[[]*OrganizationHistory](ctx, ohq, qr, ohq.inters)
+	return withInterceptors[[]*OrganizationHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (ohq *OrganizationHistoryQuery) AllX(ctx context.Context) []*OrganizationHistory {
-	nodes, err := ohq.All(ctx)
+func (_q *OrganizationHistoryQuery) AllX(ctx context.Context) []*OrganizationHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -178,20 +178,20 @@ func (ohq *OrganizationHistoryQuery) AllX(ctx context.Context) []*OrganizationHi
 }
 
 // IDs executes the query and returns a list of OrganizationHistory IDs.
-func (ohq *OrganizationHistoryQuery) IDs(ctx context.Context) (ids []int, err error) {
-	if ohq.ctx.Unique == nil && ohq.path != nil {
-		ohq.Unique(true)
+func (_q *OrganizationHistoryQuery) IDs(ctx context.Context) (ids []int, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, ohq.ctx, ent.OpQueryIDs)
-	if err = ohq.Select(organizationhistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(organizationhistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (ohq *OrganizationHistoryQuery) IDsX(ctx context.Context) []int {
-	ids, err := ohq.IDs(ctx)
+func (_q *OrganizationHistoryQuery) IDsX(ctx context.Context) []int {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -199,17 +199,17 @@ func (ohq *OrganizationHistoryQuery) IDsX(ctx context.Context) []int {
 }
 
 // Count returns the count of the given query.
-func (ohq *OrganizationHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, ohq.ctx, ent.OpQueryCount)
-	if err := ohq.prepareQuery(ctx); err != nil {
+func (_q *OrganizationHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, ohq, querierCount[*OrganizationHistoryQuery](), ohq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*OrganizationHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (ohq *OrganizationHistoryQuery) CountX(ctx context.Context) int {
-	count, err := ohq.Count(ctx)
+func (_q *OrganizationHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -217,9 +217,9 @@ func (ohq *OrganizationHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (ohq *OrganizationHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, ohq.ctx, ent.OpQueryExist)
-	switch _, err := ohq.FirstID(ctx); {
+func (_q *OrganizationHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -230,8 +230,8 @@ func (ohq *OrganizationHistoryQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (ohq *OrganizationHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := ohq.Exist(ctx)
+func (_q *OrganizationHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -240,19 +240,19 @@ func (ohq *OrganizationHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the OrganizationHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (ohq *OrganizationHistoryQuery) Clone() *OrganizationHistoryQuery {
-	if ohq == nil {
+func (_q *OrganizationHistoryQuery) Clone() *OrganizationHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &OrganizationHistoryQuery{
-		config:     ohq.config,
-		ctx:        ohq.ctx.Clone(),
-		order:      append([]organizationhistory.OrderOption{}, ohq.order...),
-		inters:     append([]Interceptor{}, ohq.inters...),
-		predicates: append([]predicate.OrganizationHistory{}, ohq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]organizationhistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.OrganizationHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  ohq.sql.Clone(),
-		path: ohq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -270,10 +270,10 @@ func (ohq *OrganizationHistoryQuery) Clone() *OrganizationHistoryQuery {
 //		GroupBy(organizationhistory.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (ohq *OrganizationHistoryQuery) GroupBy(field string, fields ...string) *OrganizationHistoryGroupBy {
-	ohq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &OrganizationHistoryGroupBy{build: ohq}
-	grbuild.flds = &ohq.ctx.Fields
+func (_q *OrganizationHistoryQuery) GroupBy(field string, fields ...string) *OrganizationHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &OrganizationHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = organizationhistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -291,62 +291,62 @@ func (ohq *OrganizationHistoryQuery) GroupBy(field string, fields ...string) *Or
 //	client.OrganizationHistory.Query().
 //		Select(organizationhistory.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (ohq *OrganizationHistoryQuery) Select(fields ...string) *OrganizationHistorySelect {
-	ohq.ctx.Fields = append(ohq.ctx.Fields, fields...)
-	sbuild := &OrganizationHistorySelect{OrganizationHistoryQuery: ohq}
+func (_q *OrganizationHistoryQuery) Select(fields ...string) *OrganizationHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &OrganizationHistorySelect{OrganizationHistoryQuery: _q}
 	sbuild.label = organizationhistory.Label
-	sbuild.flds, sbuild.scan = &ohq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a OrganizationHistorySelect configured with the given aggregations.
-func (ohq *OrganizationHistoryQuery) Aggregate(fns ...AggregateFunc) *OrganizationHistorySelect {
-	return ohq.Select().Aggregate(fns...)
+func (_q *OrganizationHistoryQuery) Aggregate(fns ...AggregateFunc) *OrganizationHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (ohq *OrganizationHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range ohq.inters {
+func (_q *OrganizationHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, ohq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range ohq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !organizationhistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if ohq.path != nil {
-		prev, err := ohq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		ohq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (ohq *OrganizationHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*OrganizationHistory, error) {
+func (_q *OrganizationHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*OrganizationHistory, error) {
 	var (
 		nodes = []*OrganizationHistory{}
-		_spec = ohq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*OrganizationHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &OrganizationHistory{config: ohq.config}
+		node := &OrganizationHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, ohq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -355,24 +355,24 @@ func (ohq *OrganizationHistoryQuery) sqlAll(ctx context.Context, hooks ...queryH
 	return nodes, nil
 }
 
-func (ohq *OrganizationHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := ohq.querySpec()
-	_spec.Node.Columns = ohq.ctx.Fields
-	if len(ohq.ctx.Fields) > 0 {
-		_spec.Unique = ohq.ctx.Unique != nil && *ohq.ctx.Unique
+func (_q *OrganizationHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, ohq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (ohq *OrganizationHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *OrganizationHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(organizationhistory.Table, organizationhistory.Columns, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeInt))
-	_spec.From = ohq.sql
-	if unique := ohq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if ohq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := ohq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, organizationhistory.FieldID)
 		for i := range fields {
@@ -381,20 +381,20 @@ func (ohq *OrganizationHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := ohq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := ohq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := ohq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := ohq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -404,33 +404,33 @@ func (ohq *OrganizationHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (ohq *OrganizationHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(ohq.driver.Dialect())
+func (_q *OrganizationHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(organizationhistory.Table)
-	columns := ohq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = organizationhistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if ohq.sql != nil {
-		selector = ohq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if ohq.ctx.Unique != nil && *ohq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, p := range ohq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range ohq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := ohq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := ohq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -443,41 +443,41 @@ type OrganizationHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (ohgb *OrganizationHistoryGroupBy) Aggregate(fns ...AggregateFunc) *OrganizationHistoryGroupBy {
-	ohgb.fns = append(ohgb.fns, fns...)
-	return ohgb
+func (_g *OrganizationHistoryGroupBy) Aggregate(fns ...AggregateFunc) *OrganizationHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ohgb *OrganizationHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ohgb.build.ctx, ent.OpQueryGroupBy)
-	if err := ohgb.build.prepareQuery(ctx); err != nil {
+func (_g *OrganizationHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*OrganizationHistoryQuery, *OrganizationHistoryGroupBy](ctx, ohgb.build, ohgb, ohgb.build.inters, v)
+	return scanWithInterceptors[*OrganizationHistoryQuery, *OrganizationHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (ohgb *OrganizationHistoryGroupBy) sqlScan(ctx context.Context, root *OrganizationHistoryQuery, v any) error {
+func (_g *OrganizationHistoryGroupBy) sqlScan(ctx context.Context, root *OrganizationHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(ohgb.fns))
-	for _, fn := range ohgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*ohgb.flds)+len(ohgb.fns))
-		for _, f := range *ohgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*ohgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ohgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -491,27 +491,27 @@ type OrganizationHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (ohs *OrganizationHistorySelect) Aggregate(fns ...AggregateFunc) *OrganizationHistorySelect {
-	ohs.fns = append(ohs.fns, fns...)
-	return ohs
+func (_s *OrganizationHistorySelect) Aggregate(fns ...AggregateFunc) *OrganizationHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (ohs *OrganizationHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ohs.ctx, ent.OpQuerySelect)
-	if err := ohs.prepareQuery(ctx); err != nil {
+func (_s *OrganizationHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*OrganizationHistoryQuery, *OrganizationHistorySelect](ctx, ohs.OrganizationHistoryQuery, ohs, ohs.inters, v)
+	return scanWithInterceptors[*OrganizationHistoryQuery, *OrganizationHistorySelect](ctx, _s.OrganizationHistoryQuery, _s, _s.inters, v)
 }
 
-func (ohs *OrganizationHistorySelect) sqlScan(ctx context.Context, root *OrganizationHistoryQuery, v any) error {
+func (_s *OrganizationHistorySelect) sqlScan(ctx context.Context, root *OrganizationHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(ohs.fns))
-	for _, fn := range ohs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*ohs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -519,7 +519,7 @@ func (ohs *OrganizationHistorySelect) sqlScan(ctx context.Context, root *Organiz
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ohs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

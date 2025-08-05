@@ -20,56 +20,56 @@ type FriendshipHistoryDelete struct {
 }
 
 // Where appends a list predicates to the FriendshipHistoryDelete builder.
-func (fhd *FriendshipHistoryDelete) Where(ps ...predicate.FriendshipHistory) *FriendshipHistoryDelete {
-	fhd.mutation.Where(ps...)
-	return fhd
+func (_d *FriendshipHistoryDelete) Where(ps ...predicate.FriendshipHistory) *FriendshipHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (fhd *FriendshipHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, fhd.sqlExec, fhd.mutation, fhd.hooks)
+func (_d *FriendshipHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fhd *FriendshipHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := fhd.Exec(ctx)
+func (_d *FriendshipHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (fhd *FriendshipHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *FriendshipHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(friendshiphistory.Table, sqlgraph.NewFieldSpec(friendshiphistory.FieldID, field.TypeInt))
-	if ps := fhd.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, fhd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	fhd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // FriendshipHistoryDeleteOne is the builder for deleting a single FriendshipHistory entity.
 type FriendshipHistoryDeleteOne struct {
-	fhd *FriendshipHistoryDelete
+	_d *FriendshipHistoryDelete
 }
 
 // Where appends a list predicates to the FriendshipHistoryDelete builder.
-func (fhdo *FriendshipHistoryDeleteOne) Where(ps ...predicate.FriendshipHistory) *FriendshipHistoryDeleteOne {
-	fhdo.fhd.mutation.Where(ps...)
-	return fhdo
+func (_d *FriendshipHistoryDeleteOne) Where(ps ...predicate.FriendshipHistory) *FriendshipHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (fhdo *FriendshipHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := fhdo.fhd.Exec(ctx)
+func (_d *FriendshipHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (fhdo *FriendshipHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fhdo *FriendshipHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := fhdo.Exec(ctx); err != nil {
+func (_d *FriendshipHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

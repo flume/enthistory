@@ -23,58 +23,58 @@ type TestSkipHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the TestSkipHistoryUpdate builder.
-func (tshu *TestSkipHistoryUpdate) Where(ps ...predicate.TestSkipHistory) *TestSkipHistoryUpdate {
-	tshu.mutation.Where(ps...)
-	return tshu
+func (_u *TestSkipHistoryUpdate) Where(ps ...predicate.TestSkipHistory) *TestSkipHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetOtherID sets the "other_id" field.
-func (tshu *TestSkipHistoryUpdate) SetOtherID(u uuid.UUID) *TestSkipHistoryUpdate {
-	tshu.mutation.SetOtherID(u)
-	return tshu
+func (_u *TestSkipHistoryUpdate) SetOtherID(v uuid.UUID) *TestSkipHistoryUpdate {
+	_u.mutation.SetOtherID(v)
+	return _u
 }
 
 // SetNillableOtherID sets the "other_id" field if the given value is not nil.
-func (tshu *TestSkipHistoryUpdate) SetNillableOtherID(u *uuid.UUID) *TestSkipHistoryUpdate {
-	if u != nil {
-		tshu.SetOtherID(*u)
+func (_u *TestSkipHistoryUpdate) SetNillableOtherID(v *uuid.UUID) *TestSkipHistoryUpdate {
+	if v != nil {
+		_u.SetOtherID(*v)
 	}
-	return tshu
+	return _u
 }
 
 // ClearOtherID clears the value of the "other_id" field.
-func (tshu *TestSkipHistoryUpdate) ClearOtherID() *TestSkipHistoryUpdate {
-	tshu.mutation.ClearOtherID()
-	return tshu
+func (_u *TestSkipHistoryUpdate) ClearOtherID() *TestSkipHistoryUpdate {
+	_u.mutation.ClearOtherID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (tshu *TestSkipHistoryUpdate) SetName(s string) *TestSkipHistoryUpdate {
-	tshu.mutation.SetName(s)
-	return tshu
+func (_u *TestSkipHistoryUpdate) SetName(v string) *TestSkipHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (tshu *TestSkipHistoryUpdate) SetNillableName(s *string) *TestSkipHistoryUpdate {
-	if s != nil {
-		tshu.SetName(*s)
+func (_u *TestSkipHistoryUpdate) SetNillableName(v *string) *TestSkipHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return tshu
+	return _u
 }
 
 // Mutation returns the TestSkipHistoryMutation object of the builder.
-func (tshu *TestSkipHistoryUpdate) Mutation() *TestSkipHistoryMutation {
-	return tshu.mutation
+func (_u *TestSkipHistoryUpdate) Mutation() *TestSkipHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (tshu *TestSkipHistoryUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, tshu.sqlSave, tshu.mutation, tshu.hooks)
+func (_u *TestSkipHistoryUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tshu *TestSkipHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := tshu.Save(ctx)
+func (_u *TestSkipHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -82,43 +82,43 @@ func (tshu *TestSkipHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (tshu *TestSkipHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := tshu.Save(ctx)
+func (_u *TestSkipHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tshu *TestSkipHistoryUpdate) ExecX(ctx context.Context) {
-	if err := tshu.Exec(ctx); err != nil {
+func (_u *TestSkipHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (tshu *TestSkipHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *TestSkipHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(testskiphistory.Table, testskiphistory.Columns, sqlgraph.NewFieldSpec(testskiphistory.FieldID, field.TypeUUID))
-	if ps := tshu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if tshu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(testskiphistory.FieldRef, field.TypeUUID)
 	}
-	if tshu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(testskiphistory.FieldUpdatedBy, field.TypeUUID)
 	}
-	if value, ok := tshu.mutation.OtherID(); ok {
+	if value, ok := _u.mutation.OtherID(); ok {
 		_spec.SetField(testskiphistory.FieldOtherID, field.TypeUUID, value)
 	}
-	if tshu.mutation.OtherIDCleared() {
+	if _u.mutation.OtherIDCleared() {
 		_spec.ClearField(testskiphistory.FieldOtherID, field.TypeUUID)
 	}
-	if value, ok := tshu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(testskiphistory.FieldName, field.TypeString, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, tshu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{testskiphistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -126,8 +126,8 @@ func (tshu *TestSkipHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 		}
 		return 0, err
 	}
-	tshu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // TestSkipHistoryUpdateOne is the builder for updating a single TestSkipHistory entity.
@@ -139,65 +139,65 @@ type TestSkipHistoryUpdateOne struct {
 }
 
 // SetOtherID sets the "other_id" field.
-func (tshuo *TestSkipHistoryUpdateOne) SetOtherID(u uuid.UUID) *TestSkipHistoryUpdateOne {
-	tshuo.mutation.SetOtherID(u)
-	return tshuo
+func (_u *TestSkipHistoryUpdateOne) SetOtherID(v uuid.UUID) *TestSkipHistoryUpdateOne {
+	_u.mutation.SetOtherID(v)
+	return _u
 }
 
 // SetNillableOtherID sets the "other_id" field if the given value is not nil.
-func (tshuo *TestSkipHistoryUpdateOne) SetNillableOtherID(u *uuid.UUID) *TestSkipHistoryUpdateOne {
-	if u != nil {
-		tshuo.SetOtherID(*u)
+func (_u *TestSkipHistoryUpdateOne) SetNillableOtherID(v *uuid.UUID) *TestSkipHistoryUpdateOne {
+	if v != nil {
+		_u.SetOtherID(*v)
 	}
-	return tshuo
+	return _u
 }
 
 // ClearOtherID clears the value of the "other_id" field.
-func (tshuo *TestSkipHistoryUpdateOne) ClearOtherID() *TestSkipHistoryUpdateOne {
-	tshuo.mutation.ClearOtherID()
-	return tshuo
+func (_u *TestSkipHistoryUpdateOne) ClearOtherID() *TestSkipHistoryUpdateOne {
+	_u.mutation.ClearOtherID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (tshuo *TestSkipHistoryUpdateOne) SetName(s string) *TestSkipHistoryUpdateOne {
-	tshuo.mutation.SetName(s)
-	return tshuo
+func (_u *TestSkipHistoryUpdateOne) SetName(v string) *TestSkipHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (tshuo *TestSkipHistoryUpdateOne) SetNillableName(s *string) *TestSkipHistoryUpdateOne {
-	if s != nil {
-		tshuo.SetName(*s)
+func (_u *TestSkipHistoryUpdateOne) SetNillableName(v *string) *TestSkipHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return tshuo
+	return _u
 }
 
 // Mutation returns the TestSkipHistoryMutation object of the builder.
-func (tshuo *TestSkipHistoryUpdateOne) Mutation() *TestSkipHistoryMutation {
-	return tshuo.mutation
+func (_u *TestSkipHistoryUpdateOne) Mutation() *TestSkipHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the TestSkipHistoryUpdate builder.
-func (tshuo *TestSkipHistoryUpdateOne) Where(ps ...predicate.TestSkipHistory) *TestSkipHistoryUpdateOne {
-	tshuo.mutation.Where(ps...)
-	return tshuo
+func (_u *TestSkipHistoryUpdateOne) Where(ps ...predicate.TestSkipHistory) *TestSkipHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (tshuo *TestSkipHistoryUpdateOne) Select(field string, fields ...string) *TestSkipHistoryUpdateOne {
-	tshuo.fields = append([]string{field}, fields...)
-	return tshuo
+func (_u *TestSkipHistoryUpdateOne) Select(field string, fields ...string) *TestSkipHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated TestSkipHistory entity.
-func (tshuo *TestSkipHistoryUpdateOne) Save(ctx context.Context) (*TestSkipHistory, error) {
-	return withHooks(ctx, tshuo.sqlSave, tshuo.mutation, tshuo.hooks)
+func (_u *TestSkipHistoryUpdateOne) Save(ctx context.Context) (*TestSkipHistory, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tshuo *TestSkipHistoryUpdateOne) SaveX(ctx context.Context) *TestSkipHistory {
-	node, err := tshuo.Save(ctx)
+func (_u *TestSkipHistoryUpdateOne) SaveX(ctx context.Context) *TestSkipHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -205,26 +205,26 @@ func (tshuo *TestSkipHistoryUpdateOne) SaveX(ctx context.Context) *TestSkipHisto
 }
 
 // Exec executes the query on the entity.
-func (tshuo *TestSkipHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := tshuo.Save(ctx)
+func (_u *TestSkipHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tshuo *TestSkipHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := tshuo.Exec(ctx); err != nil {
+func (_u *TestSkipHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (tshuo *TestSkipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TestSkipHistory, err error) {
+func (_u *TestSkipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TestSkipHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(testskiphistory.Table, testskiphistory.Columns, sqlgraph.NewFieldSpec(testskiphistory.FieldID, field.TypeUUID))
-	id, ok := tshuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "TestSkipHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := tshuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, testskiphistory.FieldID)
 		for _, f := range fields {
@@ -236,32 +236,32 @@ func (tshuo *TestSkipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Test
 			}
 		}
 	}
-	if ps := tshuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if tshuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(testskiphistory.FieldRef, field.TypeUUID)
 	}
-	if tshuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(testskiphistory.FieldUpdatedBy, field.TypeUUID)
 	}
-	if value, ok := tshuo.mutation.OtherID(); ok {
+	if value, ok := _u.mutation.OtherID(); ok {
 		_spec.SetField(testskiphistory.FieldOtherID, field.TypeUUID, value)
 	}
-	if tshuo.mutation.OtherIDCleared() {
+	if _u.mutation.OtherIDCleared() {
 		_spec.ClearField(testskiphistory.FieldOtherID, field.TypeUUID)
 	}
-	if value, ok := tshuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(testskiphistory.FieldName, field.TypeString, value)
 	}
-	_node = &TestSkipHistory{config: tshuo.config}
+	_node = &TestSkipHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, tshuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{testskiphistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -269,6 +269,6 @@ func (tshuo *TestSkipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Test
 		}
 		return nil, err
 	}
-	tshuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

@@ -28,40 +28,40 @@ type FriendshipHistoryQuery struct {
 }
 
 // Where adds a new predicate for the FriendshipHistoryQuery builder.
-func (fhq *FriendshipHistoryQuery) Where(ps ...predicate.FriendshipHistory) *FriendshipHistoryQuery {
-	fhq.predicates = append(fhq.predicates, ps...)
-	return fhq
+func (_q *FriendshipHistoryQuery) Where(ps ...predicate.FriendshipHistory) *FriendshipHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (fhq *FriendshipHistoryQuery) Limit(limit int) *FriendshipHistoryQuery {
-	fhq.ctx.Limit = &limit
-	return fhq
+func (_q *FriendshipHistoryQuery) Limit(limit int) *FriendshipHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (fhq *FriendshipHistoryQuery) Offset(offset int) *FriendshipHistoryQuery {
-	fhq.ctx.Offset = &offset
-	return fhq
+func (_q *FriendshipHistoryQuery) Offset(offset int) *FriendshipHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (fhq *FriendshipHistoryQuery) Unique(unique bool) *FriendshipHistoryQuery {
-	fhq.ctx.Unique = &unique
-	return fhq
+func (_q *FriendshipHistoryQuery) Unique(unique bool) *FriendshipHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (fhq *FriendshipHistoryQuery) Order(o ...friendshiphistory.OrderOption) *FriendshipHistoryQuery {
-	fhq.order = append(fhq.order, o...)
-	return fhq
+func (_q *FriendshipHistoryQuery) Order(o ...friendshiphistory.OrderOption) *FriendshipHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first FriendshipHistory entity from the query.
 // Returns a *NotFoundError when no FriendshipHistory was found.
-func (fhq *FriendshipHistoryQuery) First(ctx context.Context) (*FriendshipHistory, error) {
-	nodes, err := fhq.Limit(1).All(setContextOp(ctx, fhq.ctx, ent.OpQueryFirst))
+func (_q *FriendshipHistoryQuery) First(ctx context.Context) (*FriendshipHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -72,8 +72,8 @@ func (fhq *FriendshipHistoryQuery) First(ctx context.Context) (*FriendshipHistor
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (fhq *FriendshipHistoryQuery) FirstX(ctx context.Context) *FriendshipHistory {
-	node, err := fhq.First(ctx)
+func (_q *FriendshipHistoryQuery) FirstX(ctx context.Context) *FriendshipHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -82,9 +82,9 @@ func (fhq *FriendshipHistoryQuery) FirstX(ctx context.Context) *FriendshipHistor
 
 // FirstID returns the first FriendshipHistory ID from the query.
 // Returns a *NotFoundError when no FriendshipHistory ID was found.
-func (fhq *FriendshipHistoryQuery) FirstID(ctx context.Context) (id int, err error) {
+func (_q *FriendshipHistoryQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = fhq.Limit(1).IDs(setContextOp(ctx, fhq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -95,8 +95,8 @@ func (fhq *FriendshipHistoryQuery) FirstID(ctx context.Context) (id int, err err
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (fhq *FriendshipHistoryQuery) FirstIDX(ctx context.Context) int {
-	id, err := fhq.FirstID(ctx)
+func (_q *FriendshipHistoryQuery) FirstIDX(ctx context.Context) int {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -106,8 +106,8 @@ func (fhq *FriendshipHistoryQuery) FirstIDX(ctx context.Context) int {
 // Only returns a single FriendshipHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one FriendshipHistory entity is found.
 // Returns a *NotFoundError when no FriendshipHistory entities are found.
-func (fhq *FriendshipHistoryQuery) Only(ctx context.Context) (*FriendshipHistory, error) {
-	nodes, err := fhq.Limit(2).All(setContextOp(ctx, fhq.ctx, ent.OpQueryOnly))
+func (_q *FriendshipHistoryQuery) Only(ctx context.Context) (*FriendshipHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -122,8 +122,8 @@ func (fhq *FriendshipHistoryQuery) Only(ctx context.Context) (*FriendshipHistory
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (fhq *FriendshipHistoryQuery) OnlyX(ctx context.Context) *FriendshipHistory {
-	node, err := fhq.Only(ctx)
+func (_q *FriendshipHistoryQuery) OnlyX(ctx context.Context) *FriendshipHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -133,9 +133,9 @@ func (fhq *FriendshipHistoryQuery) OnlyX(ctx context.Context) *FriendshipHistory
 // OnlyID is like Only, but returns the only FriendshipHistory ID in the query.
 // Returns a *NotSingularError when more than one FriendshipHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (fhq *FriendshipHistoryQuery) OnlyID(ctx context.Context) (id int, err error) {
+func (_q *FriendshipHistoryQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = fhq.Limit(2).IDs(setContextOp(ctx, fhq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -150,8 +150,8 @@ func (fhq *FriendshipHistoryQuery) OnlyID(ctx context.Context) (id int, err erro
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (fhq *FriendshipHistoryQuery) OnlyIDX(ctx context.Context) int {
-	id, err := fhq.OnlyID(ctx)
+func (_q *FriendshipHistoryQuery) OnlyIDX(ctx context.Context) int {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -159,18 +159,18 @@ func (fhq *FriendshipHistoryQuery) OnlyIDX(ctx context.Context) int {
 }
 
 // All executes the query and returns a list of FriendshipHistories.
-func (fhq *FriendshipHistoryQuery) All(ctx context.Context) ([]*FriendshipHistory, error) {
-	ctx = setContextOp(ctx, fhq.ctx, ent.OpQueryAll)
-	if err := fhq.prepareQuery(ctx); err != nil {
+func (_q *FriendshipHistoryQuery) All(ctx context.Context) ([]*FriendshipHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*FriendshipHistory, *FriendshipHistoryQuery]()
-	return withInterceptors[[]*FriendshipHistory](ctx, fhq, qr, fhq.inters)
+	return withInterceptors[[]*FriendshipHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (fhq *FriendshipHistoryQuery) AllX(ctx context.Context) []*FriendshipHistory {
-	nodes, err := fhq.All(ctx)
+func (_q *FriendshipHistoryQuery) AllX(ctx context.Context) []*FriendshipHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -178,20 +178,20 @@ func (fhq *FriendshipHistoryQuery) AllX(ctx context.Context) []*FriendshipHistor
 }
 
 // IDs executes the query and returns a list of FriendshipHistory IDs.
-func (fhq *FriendshipHistoryQuery) IDs(ctx context.Context) (ids []int, err error) {
-	if fhq.ctx.Unique == nil && fhq.path != nil {
-		fhq.Unique(true)
+func (_q *FriendshipHistoryQuery) IDs(ctx context.Context) (ids []int, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, fhq.ctx, ent.OpQueryIDs)
-	if err = fhq.Select(friendshiphistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(friendshiphistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (fhq *FriendshipHistoryQuery) IDsX(ctx context.Context) []int {
-	ids, err := fhq.IDs(ctx)
+func (_q *FriendshipHistoryQuery) IDsX(ctx context.Context) []int {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -199,17 +199,17 @@ func (fhq *FriendshipHistoryQuery) IDsX(ctx context.Context) []int {
 }
 
 // Count returns the count of the given query.
-func (fhq *FriendshipHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, fhq.ctx, ent.OpQueryCount)
-	if err := fhq.prepareQuery(ctx); err != nil {
+func (_q *FriendshipHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, fhq, querierCount[*FriendshipHistoryQuery](), fhq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*FriendshipHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (fhq *FriendshipHistoryQuery) CountX(ctx context.Context) int {
-	count, err := fhq.Count(ctx)
+func (_q *FriendshipHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -217,9 +217,9 @@ func (fhq *FriendshipHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (fhq *FriendshipHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, fhq.ctx, ent.OpQueryExist)
-	switch _, err := fhq.FirstID(ctx); {
+func (_q *FriendshipHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -230,8 +230,8 @@ func (fhq *FriendshipHistoryQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (fhq *FriendshipHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := fhq.Exist(ctx)
+func (_q *FriendshipHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -240,19 +240,19 @@ func (fhq *FriendshipHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the FriendshipHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (fhq *FriendshipHistoryQuery) Clone() *FriendshipHistoryQuery {
-	if fhq == nil {
+func (_q *FriendshipHistoryQuery) Clone() *FriendshipHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &FriendshipHistoryQuery{
-		config:     fhq.config,
-		ctx:        fhq.ctx.Clone(),
-		order:      append([]friendshiphistory.OrderOption{}, fhq.order...),
-		inters:     append([]Interceptor{}, fhq.inters...),
-		predicates: append([]predicate.FriendshipHistory{}, fhq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]friendshiphistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.FriendshipHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  fhq.sql.Clone(),
-		path: fhq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -270,10 +270,10 @@ func (fhq *FriendshipHistoryQuery) Clone() *FriendshipHistoryQuery {
 //		GroupBy(friendshiphistory.FieldHistoryTime).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (fhq *FriendshipHistoryQuery) GroupBy(field string, fields ...string) *FriendshipHistoryGroupBy {
-	fhq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &FriendshipHistoryGroupBy{build: fhq}
-	grbuild.flds = &fhq.ctx.Fields
+func (_q *FriendshipHistoryQuery) GroupBy(field string, fields ...string) *FriendshipHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &FriendshipHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = friendshiphistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -291,62 +291,62 @@ func (fhq *FriendshipHistoryQuery) GroupBy(field string, fields ...string) *Frie
 //	client.FriendshipHistory.Query().
 //		Select(friendshiphistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (fhq *FriendshipHistoryQuery) Select(fields ...string) *FriendshipHistorySelect {
-	fhq.ctx.Fields = append(fhq.ctx.Fields, fields...)
-	sbuild := &FriendshipHistorySelect{FriendshipHistoryQuery: fhq}
+func (_q *FriendshipHistoryQuery) Select(fields ...string) *FriendshipHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &FriendshipHistorySelect{FriendshipHistoryQuery: _q}
 	sbuild.label = friendshiphistory.Label
-	sbuild.flds, sbuild.scan = &fhq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a FriendshipHistorySelect configured with the given aggregations.
-func (fhq *FriendshipHistoryQuery) Aggregate(fns ...AggregateFunc) *FriendshipHistorySelect {
-	return fhq.Select().Aggregate(fns...)
+func (_q *FriendshipHistoryQuery) Aggregate(fns ...AggregateFunc) *FriendshipHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (fhq *FriendshipHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range fhq.inters {
+func (_q *FriendshipHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, fhq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range fhq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !friendshiphistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if fhq.path != nil {
-		prev, err := fhq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		fhq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (fhq *FriendshipHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*FriendshipHistory, error) {
+func (_q *FriendshipHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*FriendshipHistory, error) {
 	var (
 		nodes = []*FriendshipHistory{}
-		_spec = fhq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*FriendshipHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &FriendshipHistory{config: fhq.config}
+		node := &FriendshipHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, fhq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -355,24 +355,24 @@ func (fhq *FriendshipHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	return nodes, nil
 }
 
-func (fhq *FriendshipHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := fhq.querySpec()
-	_spec.Node.Columns = fhq.ctx.Fields
-	if len(fhq.ctx.Fields) > 0 {
-		_spec.Unique = fhq.ctx.Unique != nil && *fhq.ctx.Unique
+func (_q *FriendshipHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, fhq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (fhq *FriendshipHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *FriendshipHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(friendshiphistory.Table, friendshiphistory.Columns, sqlgraph.NewFieldSpec(friendshiphistory.FieldID, field.TypeInt))
-	_spec.From = fhq.sql
-	if unique := fhq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if fhq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := fhq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, friendshiphistory.FieldID)
 		for i := range fields {
@@ -381,20 +381,20 @@ func (fhq *FriendshipHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := fhq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := fhq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := fhq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := fhq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -404,33 +404,33 @@ func (fhq *FriendshipHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (fhq *FriendshipHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(fhq.driver.Dialect())
+func (_q *FriendshipHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(friendshiphistory.Table)
-	columns := fhq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = friendshiphistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if fhq.sql != nil {
-		selector = fhq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if fhq.ctx.Unique != nil && *fhq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, p := range fhq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range fhq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := fhq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := fhq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -443,41 +443,41 @@ type FriendshipHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (fhgb *FriendshipHistoryGroupBy) Aggregate(fns ...AggregateFunc) *FriendshipHistoryGroupBy {
-	fhgb.fns = append(fhgb.fns, fns...)
-	return fhgb
+func (_g *FriendshipHistoryGroupBy) Aggregate(fns ...AggregateFunc) *FriendshipHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (fhgb *FriendshipHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, fhgb.build.ctx, ent.OpQueryGroupBy)
-	if err := fhgb.build.prepareQuery(ctx); err != nil {
+func (_g *FriendshipHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*FriendshipHistoryQuery, *FriendshipHistoryGroupBy](ctx, fhgb.build, fhgb, fhgb.build.inters, v)
+	return scanWithInterceptors[*FriendshipHistoryQuery, *FriendshipHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (fhgb *FriendshipHistoryGroupBy) sqlScan(ctx context.Context, root *FriendshipHistoryQuery, v any) error {
+func (_g *FriendshipHistoryGroupBy) sqlScan(ctx context.Context, root *FriendshipHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(fhgb.fns))
-	for _, fn := range fhgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*fhgb.flds)+len(fhgb.fns))
-		for _, f := range *fhgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*fhgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := fhgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -491,27 +491,27 @@ type FriendshipHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (fhs *FriendshipHistorySelect) Aggregate(fns ...AggregateFunc) *FriendshipHistorySelect {
-	fhs.fns = append(fhs.fns, fns...)
-	return fhs
+func (_s *FriendshipHistorySelect) Aggregate(fns ...AggregateFunc) *FriendshipHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (fhs *FriendshipHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, fhs.ctx, ent.OpQuerySelect)
-	if err := fhs.prepareQuery(ctx); err != nil {
+func (_s *FriendshipHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*FriendshipHistoryQuery, *FriendshipHistorySelect](ctx, fhs.FriendshipHistoryQuery, fhs, fhs.inters, v)
+	return scanWithInterceptors[*FriendshipHistoryQuery, *FriendshipHistorySelect](ctx, _s.FriendshipHistoryQuery, _s, _s.inters, v)
 }
 
-func (fhs *FriendshipHistorySelect) sqlScan(ctx context.Context, root *FriendshipHistoryQuery, v any) error {
+func (_s *FriendshipHistorySelect) sqlScan(ctx context.Context, root *FriendshipHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(fhs.fns))
-	for _, fn := range fhs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*fhs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -519,7 +519,7 @@ func (fhs *FriendshipHistorySelect) sqlScan(ctx context.Context, root *Friendshi
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := fhs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

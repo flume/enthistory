@@ -42,7 +42,7 @@ func (*TestSkip) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TestSkip fields.
-func (ts *TestSkip) assignValues(columns []string, values []any) error {
+func (_m *TestSkip) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -52,22 +52,22 @@ func (ts *TestSkip) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				ts.ID = *value
+				_m.ID = *value
 			}
 		case testskip.FieldOtherID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field other_id", values[i])
 			} else if value != nil {
-				ts.OtherID = *value
+				_m.OtherID = *value
 			}
 		case testskip.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				ts.Name = value.String
+				_m.Name = value.String
 			}
 		default:
-			ts.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -75,38 +75,38 @@ func (ts *TestSkip) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TestSkip.
 // This includes values selected through modifiers, order, etc.
-func (ts *TestSkip) Value(name string) (ent.Value, error) {
-	return ts.selectValues.Get(name)
+func (_m *TestSkip) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this TestSkip.
 // Note that you need to call TestSkip.Unwrap() before calling this method if this TestSkip
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ts *TestSkip) Update() *TestSkipUpdateOne {
-	return NewTestSkipClient(ts.config).UpdateOne(ts)
+func (_m *TestSkip) Update() *TestSkipUpdateOne {
+	return NewTestSkipClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TestSkip entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ts *TestSkip) Unwrap() *TestSkip {
-	_tx, ok := ts.config.driver.(*txDriver)
+func (_m *TestSkip) Unwrap() *TestSkip {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: TestSkip is not a transactional entity")
 	}
-	ts.config.driver = _tx.drv
-	return ts
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ts *TestSkip) String() string {
+func (_m *TestSkip) String() string {
 	var builder strings.Builder
 	builder.WriteString("TestSkip(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ts.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("other_id=")
-	builder.WriteString(fmt.Sprintf("%v", ts.OtherID))
+	builder.WriteString(fmt.Sprintf("%v", _m.OtherID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(ts.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteByte(')')
 	return builder.String()
 }

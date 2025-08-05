@@ -75,7 +75,7 @@ func (*Store) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Store fields.
-func (s *Store) assignValues(columns []string, values []any) error {
+func (_m *Store) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -85,40 +85,40 @@ func (s *Store) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				s.ID = *value
+				_m.ID = *value
 			}
 		case store.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				s.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case store.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				s.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case store.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				s.Name = value.String
+				_m.Name = value.String
 			}
 		case store.FieldRegion:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field region", values[i])
 			} else if value.Valid {
-				s.Region = value.String
+				_m.Region = value.String
 			}
 		case store.FieldOrganizationID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_id", values[i])
 			} else if value != nil {
-				s.OrganizationID = *value
+				_m.OrganizationID = *value
 			}
 		default:
-			s.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -126,52 +126,52 @@ func (s *Store) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Store.
 // This includes values selected through modifiers, order, etc.
-func (s *Store) Value(name string) (ent.Value, error) {
-	return s.selectValues.Get(name)
+func (_m *Store) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryOrganization queries the "organization" edge of the Store entity.
-func (s *Store) QueryOrganization() *OrganizationQuery {
-	return NewStoreClient(s.config).QueryOrganization(s)
+func (_m *Store) QueryOrganization() *OrganizationQuery {
+	return NewStoreClient(_m.config).QueryOrganization(_m)
 }
 
 // Update returns a builder for updating this Store.
 // Note that you need to call Store.Unwrap() before calling this method if this Store
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (s *Store) Update() *StoreUpdateOne {
-	return NewStoreClient(s.config).UpdateOne(s)
+func (_m *Store) Update() *StoreUpdateOne {
+	return NewStoreClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Store entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (s *Store) Unwrap() *Store {
-	_tx, ok := s.config.driver.(*txDriver)
+func (_m *Store) Unwrap() *Store {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: Store is not a transactional entity")
 	}
-	s.config.driver = _tx.drv
-	return s
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (s *Store) String() string {
+func (_m *Store) String() string {
 	var builder strings.Builder
 	builder.WriteString("Store(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", s.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(s.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(s.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(s.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("region=")
-	builder.WriteString(s.Region)
+	builder.WriteString(_m.Region)
 	builder.WriteString(", ")
 	builder.WriteString("organization_id=")
-	builder.WriteString(fmt.Sprintf("%v", s.OrganizationID))
+	builder.WriteString(fmt.Sprintf("%v", _m.OrganizationID))
 	builder.WriteByte(')')
 	return builder.String()
 }

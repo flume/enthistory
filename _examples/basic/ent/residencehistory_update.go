@@ -23,31 +23,31 @@ type ResidenceHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the ResidenceHistoryUpdate builder.
-func (rhu *ResidenceHistoryUpdate) Where(ps ...predicate.ResidenceHistory) *ResidenceHistoryUpdate {
-	rhu.mutation.Where(ps...)
-	return rhu
+func (_u *ResidenceHistoryUpdate) Where(ps ...predicate.ResidenceHistory) *ResidenceHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (rhu *ResidenceHistoryUpdate) SetUpdatedAt(t time.Time) *ResidenceHistoryUpdate {
-	rhu.mutation.SetUpdatedAt(t)
-	return rhu
+func (_u *ResidenceHistoryUpdate) SetUpdatedAt(v time.Time) *ResidenceHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the ResidenceHistoryMutation object of the builder.
-func (rhu *ResidenceHistoryUpdate) Mutation() *ResidenceHistoryMutation {
-	return rhu.mutation
+func (_u *ResidenceHistoryUpdate) Mutation() *ResidenceHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (rhu *ResidenceHistoryUpdate) Save(ctx context.Context) (int, error) {
-	rhu.defaults()
-	return withHooks(ctx, rhu.sqlSave, rhu.mutation, rhu.hooks)
+func (_u *ResidenceHistoryUpdate) Save(ctx context.Context) (int, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (rhu *ResidenceHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := rhu.Save(ctx)
+func (_u *ResidenceHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -55,45 +55,45 @@ func (rhu *ResidenceHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (rhu *ResidenceHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := rhu.Save(ctx)
+func (_u *ResidenceHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (rhu *ResidenceHistoryUpdate) ExecX(ctx context.Context) {
-	if err := rhu.Exec(ctx); err != nil {
+func (_u *ResidenceHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (rhu *ResidenceHistoryUpdate) defaults() {
-	if _, ok := rhu.mutation.UpdatedAt(); !ok {
+func (_u *ResidenceHistoryUpdate) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := residencehistory.UpdateDefaultUpdatedAt()
-		rhu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
-func (rhu *ResidenceHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *ResidenceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(residencehistory.Table, residencehistory.Columns, sqlgraph.NewFieldSpec(residencehistory.FieldID, field.TypeInt))
-	if ps := rhu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := rhu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(residencehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if rhu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(residencehistory.FieldRef, field.TypeUUID)
 	}
-	if rhu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(residencehistory.FieldUpdatedBy, field.TypeInt)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, rhu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{residencehistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -101,8 +101,8 @@ func (rhu *ResidenceHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 		}
 		return 0, err
 	}
-	rhu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ResidenceHistoryUpdateOne is the builder for updating a single ResidenceHistory entity.
@@ -114,38 +114,38 @@ type ResidenceHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (rhuo *ResidenceHistoryUpdateOne) SetUpdatedAt(t time.Time) *ResidenceHistoryUpdateOne {
-	rhuo.mutation.SetUpdatedAt(t)
-	return rhuo
+func (_u *ResidenceHistoryUpdateOne) SetUpdatedAt(v time.Time) *ResidenceHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the ResidenceHistoryMutation object of the builder.
-func (rhuo *ResidenceHistoryUpdateOne) Mutation() *ResidenceHistoryMutation {
-	return rhuo.mutation
+func (_u *ResidenceHistoryUpdateOne) Mutation() *ResidenceHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the ResidenceHistoryUpdate builder.
-func (rhuo *ResidenceHistoryUpdateOne) Where(ps ...predicate.ResidenceHistory) *ResidenceHistoryUpdateOne {
-	rhuo.mutation.Where(ps...)
-	return rhuo
+func (_u *ResidenceHistoryUpdateOne) Where(ps ...predicate.ResidenceHistory) *ResidenceHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (rhuo *ResidenceHistoryUpdateOne) Select(field string, fields ...string) *ResidenceHistoryUpdateOne {
-	rhuo.fields = append([]string{field}, fields...)
-	return rhuo
+func (_u *ResidenceHistoryUpdateOne) Select(field string, fields ...string) *ResidenceHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated ResidenceHistory entity.
-func (rhuo *ResidenceHistoryUpdateOne) Save(ctx context.Context) (*ResidenceHistory, error) {
-	rhuo.defaults()
-	return withHooks(ctx, rhuo.sqlSave, rhuo.mutation, rhuo.hooks)
+func (_u *ResidenceHistoryUpdateOne) Save(ctx context.Context) (*ResidenceHistory, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (rhuo *ResidenceHistoryUpdateOne) SaveX(ctx context.Context) *ResidenceHistory {
-	node, err := rhuo.Save(ctx)
+func (_u *ResidenceHistoryUpdateOne) SaveX(ctx context.Context) *ResidenceHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -153,34 +153,34 @@ func (rhuo *ResidenceHistoryUpdateOne) SaveX(ctx context.Context) *ResidenceHist
 }
 
 // Exec executes the query on the entity.
-func (rhuo *ResidenceHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := rhuo.Save(ctx)
+func (_u *ResidenceHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (rhuo *ResidenceHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := rhuo.Exec(ctx); err != nil {
+func (_u *ResidenceHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (rhuo *ResidenceHistoryUpdateOne) defaults() {
-	if _, ok := rhuo.mutation.UpdatedAt(); !ok {
+func (_u *ResidenceHistoryUpdateOne) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := residencehistory.UpdateDefaultUpdatedAt()
-		rhuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
-func (rhuo *ResidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ResidenceHistory, err error) {
+func (_u *ResidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ResidenceHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(residencehistory.Table, residencehistory.Columns, sqlgraph.NewFieldSpec(residencehistory.FieldID, field.TypeInt))
-	id, ok := rhuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "ResidenceHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := rhuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, residencehistory.FieldID)
 		for _, f := range fields {
@@ -192,26 +192,26 @@ func (rhuo *ResidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Resi
 			}
 		}
 	}
-	if ps := rhuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := rhuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(residencehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if rhuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(residencehistory.FieldRef, field.TypeUUID)
 	}
-	if rhuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(residencehistory.FieldUpdatedBy, field.TypeInt)
 	}
-	_node = &ResidenceHistory{config: rhuo.config}
+	_node = &ResidenceHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, rhuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{residencehistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -219,6 +219,6 @@ func (rhuo *ResidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Resi
 		}
 		return nil, err
 	}
-	rhuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

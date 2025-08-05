@@ -20,56 +20,56 @@ type ResidenceHistoryDelete struct {
 }
 
 // Where appends a list predicates to the ResidenceHistoryDelete builder.
-func (rhd *ResidenceHistoryDelete) Where(ps ...predicate.ResidenceHistory) *ResidenceHistoryDelete {
-	rhd.mutation.Where(ps...)
-	return rhd
+func (_d *ResidenceHistoryDelete) Where(ps ...predicate.ResidenceHistory) *ResidenceHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (rhd *ResidenceHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, rhd.sqlExec, rhd.mutation, rhd.hooks)
+func (_d *ResidenceHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (rhd *ResidenceHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := rhd.Exec(ctx)
+func (_d *ResidenceHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (rhd *ResidenceHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *ResidenceHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(residencehistory.Table, sqlgraph.NewFieldSpec(residencehistory.FieldID, field.TypeInt))
-	if ps := rhd.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, rhd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	rhd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // ResidenceHistoryDeleteOne is the builder for deleting a single ResidenceHistory entity.
 type ResidenceHistoryDeleteOne struct {
-	rhd *ResidenceHistoryDelete
+	_d *ResidenceHistoryDelete
 }
 
 // Where appends a list predicates to the ResidenceHistoryDelete builder.
-func (rhdo *ResidenceHistoryDeleteOne) Where(ps ...predicate.ResidenceHistory) *ResidenceHistoryDeleteOne {
-	rhdo.rhd.mutation.Where(ps...)
-	return rhdo
+func (_d *ResidenceHistoryDeleteOne) Where(ps ...predicate.ResidenceHistory) *ResidenceHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (rhdo *ResidenceHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := rhdo.rhd.Exec(ctx)
+func (_d *ResidenceHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (rhdo *ResidenceHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (rhdo *ResidenceHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := rhdo.Exec(ctx); err != nil {
+func (_d *ResidenceHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

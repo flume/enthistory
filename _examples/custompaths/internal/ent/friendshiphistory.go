@@ -55,7 +55,7 @@ func (*FriendshipHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the FriendshipHistory fields.
-func (fh *FriendshipHistory) assignValues(columns []string, values []any) error {
+func (_m *FriendshipHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -66,39 +66,39 @@ func (fh *FriendshipHistory) assignValues(columns []string, values []any) error 
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			fh.ID = int(value.Int64)
+			_m.ID = int(value.Int64)
 		case friendshiphistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				fh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case friendshiphistory.FieldOperation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value.Valid {
-				fh.Operation = enthistory.OpType(value.String)
+				_m.Operation = enthistory.OpType(value.String)
 			}
 		case friendshiphistory.FieldRef:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value != nil {
-				fh.Ref = *value
+				_m.Ref = *value
 			}
 		case friendshiphistory.FieldCharacterID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field character_id", values[i])
 			} else if value != nil {
-				fh.CharacterID = *value
+				_m.CharacterID = *value
 			}
 		case friendshiphistory.FieldFriendID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field friend_id", values[i])
 			} else if value != nil {
-				fh.FriendID = *value
+				_m.FriendID = *value
 			}
 		default:
-			fh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -106,47 +106,47 @@ func (fh *FriendshipHistory) assignValues(columns []string, values []any) error 
 
 // Value returns the ent.Value that was dynamically selected and assigned to the FriendshipHistory.
 // This includes values selected through modifiers, order, etc.
-func (fh *FriendshipHistory) Value(name string) (ent.Value, error) {
-	return fh.selectValues.Get(name)
+func (_m *FriendshipHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this FriendshipHistory.
 // Note that you need to call FriendshipHistory.Unwrap() before calling this method if this FriendshipHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (fh *FriendshipHistory) Update() *FriendshipHistoryUpdateOne {
-	return NewFriendshipHistoryClient(fh.config).UpdateOne(fh)
+func (_m *FriendshipHistory) Update() *FriendshipHistoryUpdateOne {
+	return NewFriendshipHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the FriendshipHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (fh *FriendshipHistory) Unwrap() *FriendshipHistory {
-	_tx, ok := fh.config.driver.(*txDriver)
+func (_m *FriendshipHistory) Unwrap() *FriendshipHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: FriendshipHistory is not a transactional entity")
 	}
-	fh.config.driver = _tx.drv
-	return fh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (fh *FriendshipHistory) String() string {
+func (_m *FriendshipHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("FriendshipHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", fh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(fh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", fh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(fmt.Sprintf("%v", fh.Ref))
+	builder.WriteString(fmt.Sprintf("%v", _m.Ref))
 	builder.WriteString(", ")
 	builder.WriteString("character_id=")
-	builder.WriteString(fmt.Sprintf("%v", fh.CharacterID))
+	builder.WriteString(fmt.Sprintf("%v", _m.CharacterID))
 	builder.WriteString(", ")
 	builder.WriteString("friend_id=")
-	builder.WriteString(fmt.Sprintf("%v", fh.FriendID))
+	builder.WriteString(fmt.Sprintf("%v", _m.FriendID))
 	builder.WriteByte(')')
 	return builder.String()
 }

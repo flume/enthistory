@@ -23,58 +23,58 @@ type TodoHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the TodoHistoryUpdate builder.
-func (thu *TodoHistoryUpdate) Where(ps ...predicate.TodoHistory) *TodoHistoryUpdate {
-	thu.mutation.Where(ps...)
-	return thu
+func (_u *TodoHistoryUpdate) Where(ps ...predicate.TodoHistory) *TodoHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetOtherID sets the "other_id" field.
-func (thu *TodoHistoryUpdate) SetOtherID(u uuid.UUID) *TodoHistoryUpdate {
-	thu.mutation.SetOtherID(u)
-	return thu
+func (_u *TodoHistoryUpdate) SetOtherID(v uuid.UUID) *TodoHistoryUpdate {
+	_u.mutation.SetOtherID(v)
+	return _u
 }
 
 // SetNillableOtherID sets the "other_id" field if the given value is not nil.
-func (thu *TodoHistoryUpdate) SetNillableOtherID(u *uuid.UUID) *TodoHistoryUpdate {
-	if u != nil {
-		thu.SetOtherID(*u)
+func (_u *TodoHistoryUpdate) SetNillableOtherID(v *uuid.UUID) *TodoHistoryUpdate {
+	if v != nil {
+		_u.SetOtherID(*v)
 	}
-	return thu
+	return _u
 }
 
 // ClearOtherID clears the value of the "other_id" field.
-func (thu *TodoHistoryUpdate) ClearOtherID() *TodoHistoryUpdate {
-	thu.mutation.ClearOtherID()
-	return thu
+func (_u *TodoHistoryUpdate) ClearOtherID() *TodoHistoryUpdate {
+	_u.mutation.ClearOtherID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (thu *TodoHistoryUpdate) SetName(s string) *TodoHistoryUpdate {
-	thu.mutation.SetName(s)
-	return thu
+func (_u *TodoHistoryUpdate) SetName(v string) *TodoHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (thu *TodoHistoryUpdate) SetNillableName(s *string) *TodoHistoryUpdate {
-	if s != nil {
-		thu.SetName(*s)
+func (_u *TodoHistoryUpdate) SetNillableName(v *string) *TodoHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return thu
+	return _u
 }
 
 // Mutation returns the TodoHistoryMutation object of the builder.
-func (thu *TodoHistoryUpdate) Mutation() *TodoHistoryMutation {
-	return thu.mutation
+func (_u *TodoHistoryUpdate) Mutation() *TodoHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (thu *TodoHistoryUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, thu.sqlSave, thu.mutation, thu.hooks)
+func (_u *TodoHistoryUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (thu *TodoHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := thu.Save(ctx)
+func (_u *TodoHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -82,43 +82,43 @@ func (thu *TodoHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (thu *TodoHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := thu.Save(ctx)
+func (_u *TodoHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (thu *TodoHistoryUpdate) ExecX(ctx context.Context) {
-	if err := thu.Exec(ctx); err != nil {
+func (_u *TodoHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (thu *TodoHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *TodoHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(todohistory.Table, todohistory.Columns, sqlgraph.NewFieldSpec(todohistory.FieldID, field.TypeUUID))
-	if ps := thu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if thu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(todohistory.FieldRef, field.TypeUUID)
 	}
-	if thu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(todohistory.FieldUpdatedBy, field.TypeUUID)
 	}
-	if value, ok := thu.mutation.OtherID(); ok {
+	if value, ok := _u.mutation.OtherID(); ok {
 		_spec.SetField(todohistory.FieldOtherID, field.TypeUUID, value)
 	}
-	if thu.mutation.OtherIDCleared() {
+	if _u.mutation.OtherIDCleared() {
 		_spec.ClearField(todohistory.FieldOtherID, field.TypeUUID)
 	}
-	if value, ok := thu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(todohistory.FieldName, field.TypeString, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, thu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{todohistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -126,8 +126,8 @@ func (thu *TodoHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	thu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // TodoHistoryUpdateOne is the builder for updating a single TodoHistory entity.
@@ -139,65 +139,65 @@ type TodoHistoryUpdateOne struct {
 }
 
 // SetOtherID sets the "other_id" field.
-func (thuo *TodoHistoryUpdateOne) SetOtherID(u uuid.UUID) *TodoHistoryUpdateOne {
-	thuo.mutation.SetOtherID(u)
-	return thuo
+func (_u *TodoHistoryUpdateOne) SetOtherID(v uuid.UUID) *TodoHistoryUpdateOne {
+	_u.mutation.SetOtherID(v)
+	return _u
 }
 
 // SetNillableOtherID sets the "other_id" field if the given value is not nil.
-func (thuo *TodoHistoryUpdateOne) SetNillableOtherID(u *uuid.UUID) *TodoHistoryUpdateOne {
-	if u != nil {
-		thuo.SetOtherID(*u)
+func (_u *TodoHistoryUpdateOne) SetNillableOtherID(v *uuid.UUID) *TodoHistoryUpdateOne {
+	if v != nil {
+		_u.SetOtherID(*v)
 	}
-	return thuo
+	return _u
 }
 
 // ClearOtherID clears the value of the "other_id" field.
-func (thuo *TodoHistoryUpdateOne) ClearOtherID() *TodoHistoryUpdateOne {
-	thuo.mutation.ClearOtherID()
-	return thuo
+func (_u *TodoHistoryUpdateOne) ClearOtherID() *TodoHistoryUpdateOne {
+	_u.mutation.ClearOtherID()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (thuo *TodoHistoryUpdateOne) SetName(s string) *TodoHistoryUpdateOne {
-	thuo.mutation.SetName(s)
-	return thuo
+func (_u *TodoHistoryUpdateOne) SetName(v string) *TodoHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (thuo *TodoHistoryUpdateOne) SetNillableName(s *string) *TodoHistoryUpdateOne {
-	if s != nil {
-		thuo.SetName(*s)
+func (_u *TodoHistoryUpdateOne) SetNillableName(v *string) *TodoHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return thuo
+	return _u
 }
 
 // Mutation returns the TodoHistoryMutation object of the builder.
-func (thuo *TodoHistoryUpdateOne) Mutation() *TodoHistoryMutation {
-	return thuo.mutation
+func (_u *TodoHistoryUpdateOne) Mutation() *TodoHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the TodoHistoryUpdate builder.
-func (thuo *TodoHistoryUpdateOne) Where(ps ...predicate.TodoHistory) *TodoHistoryUpdateOne {
-	thuo.mutation.Where(ps...)
-	return thuo
+func (_u *TodoHistoryUpdateOne) Where(ps ...predicate.TodoHistory) *TodoHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (thuo *TodoHistoryUpdateOne) Select(field string, fields ...string) *TodoHistoryUpdateOne {
-	thuo.fields = append([]string{field}, fields...)
-	return thuo
+func (_u *TodoHistoryUpdateOne) Select(field string, fields ...string) *TodoHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated TodoHistory entity.
-func (thuo *TodoHistoryUpdateOne) Save(ctx context.Context) (*TodoHistory, error) {
-	return withHooks(ctx, thuo.sqlSave, thuo.mutation, thuo.hooks)
+func (_u *TodoHistoryUpdateOne) Save(ctx context.Context) (*TodoHistory, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (thuo *TodoHistoryUpdateOne) SaveX(ctx context.Context) *TodoHistory {
-	node, err := thuo.Save(ctx)
+func (_u *TodoHistoryUpdateOne) SaveX(ctx context.Context) *TodoHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -205,26 +205,26 @@ func (thuo *TodoHistoryUpdateOne) SaveX(ctx context.Context) *TodoHistory {
 }
 
 // Exec executes the query on the entity.
-func (thuo *TodoHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := thuo.Save(ctx)
+func (_u *TodoHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (thuo *TodoHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := thuo.Exec(ctx); err != nil {
+func (_u *TodoHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (thuo *TodoHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TodoHistory, err error) {
+func (_u *TodoHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TodoHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(todohistory.Table, todohistory.Columns, sqlgraph.NewFieldSpec(todohistory.FieldID, field.TypeUUID))
-	id, ok := thuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "TodoHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := thuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, todohistory.FieldID)
 		for _, f := range fields {
@@ -236,32 +236,32 @@ func (thuo *TodoHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TodoHisto
 			}
 		}
 	}
-	if ps := thuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if thuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(todohistory.FieldRef, field.TypeUUID)
 	}
-	if thuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(todohistory.FieldUpdatedBy, field.TypeUUID)
 	}
-	if value, ok := thuo.mutation.OtherID(); ok {
+	if value, ok := _u.mutation.OtherID(); ok {
 		_spec.SetField(todohistory.FieldOtherID, field.TypeUUID, value)
 	}
-	if thuo.mutation.OtherIDCleared() {
+	if _u.mutation.OtherIDCleared() {
 		_spec.ClearField(todohistory.FieldOtherID, field.TypeUUID)
 	}
-	if value, ok := thuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(todohistory.FieldName, field.TypeString, value)
 	}
-	_node = &TodoHistory{config: thuo.config}
+	_node = &TodoHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, thuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{todohistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -269,6 +269,6 @@ func (thuo *TodoHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TodoHisto
 		}
 		return nil, err
 	}
-	thuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

@@ -53,7 +53,7 @@ func (*MenuItem) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the MenuItem fields.
-func (mi *MenuItem) assignValues(columns []string, values []any) error {
+func (_m *MenuItem) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -63,40 +63,40 @@ func (mi *MenuItem) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				mi.ID = *value
+				_m.ID = *value
 			}
 		case menuitem.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				mi.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case menuitem.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				mi.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case menuitem.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				mi.Name = value.String
+				_m.Name = value.String
 			}
 		case menuitem.FieldPrice:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field price", values[i])
 			} else if value.Valid {
-				mi.Price = value.Float64
+				_m.Price = value.Float64
 			}
 		case menuitem.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				mi.Description = value.String
+				_m.Description = value.String
 			}
 		default:
-			mi.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -104,47 +104,47 @@ func (mi *MenuItem) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the MenuItem.
 // This includes values selected through modifiers, order, etc.
-func (mi *MenuItem) Value(name string) (ent.Value, error) {
-	return mi.selectValues.Get(name)
+func (_m *MenuItem) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this MenuItem.
 // Note that you need to call MenuItem.Unwrap() before calling this method if this MenuItem
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (mi *MenuItem) Update() *MenuItemUpdateOne {
-	return NewMenuItemClient(mi.config).UpdateOne(mi)
+func (_m *MenuItem) Update() *MenuItemUpdateOne {
+	return NewMenuItemClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the MenuItem entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (mi *MenuItem) Unwrap() *MenuItem {
-	_tx, ok := mi.config.driver.(*txDriver)
+func (_m *MenuItem) Unwrap() *MenuItem {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: MenuItem is not a transactional entity")
 	}
-	mi.config.driver = _tx.drv
-	return mi
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (mi *MenuItem) String() string {
+func (_m *MenuItem) String() string {
 	var builder strings.Builder
 	builder.WriteString("MenuItem(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", mi.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(mi.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(mi.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(mi.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("price=")
-	builder.WriteString(fmt.Sprintf("%v", mi.Price))
+	builder.WriteString(fmt.Sprintf("%v", _m.Price))
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(mi.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteByte(')')
 	return builder.String()
 }

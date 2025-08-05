@@ -24,81 +24,81 @@ type ResidenceUpdate struct {
 }
 
 // Where appends a list predicates to the ResidenceUpdate builder.
-func (ru *ResidenceUpdate) Where(ps ...predicate.Residence) *ResidenceUpdate {
-	ru.mutation.Where(ps...)
-	return ru
+func (_u *ResidenceUpdate) Where(ps ...predicate.Residence) *ResidenceUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ru *ResidenceUpdate) SetUpdatedAt(t time.Time) *ResidenceUpdate {
-	ru.mutation.SetUpdatedAt(t)
-	return ru
+func (_u *ResidenceUpdate) SetUpdatedAt(v time.Time) *ResidenceUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ru *ResidenceUpdate) SetName(s string) *ResidenceUpdate {
-	ru.mutation.SetName(s)
-	return ru
+func (_u *ResidenceUpdate) SetName(v string) *ResidenceUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ru *ResidenceUpdate) SetNillableName(s *string) *ResidenceUpdate {
-	if s != nil {
-		ru.SetName(*s)
+func (_u *ResidenceUpdate) SetNillableName(v *string) *ResidenceUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ru
+	return _u
 }
 
 // AddOccupantIDs adds the "occupants" edge to the Character entity by IDs.
-func (ru *ResidenceUpdate) AddOccupantIDs(ids ...int) *ResidenceUpdate {
-	ru.mutation.AddOccupantIDs(ids...)
-	return ru
+func (_u *ResidenceUpdate) AddOccupantIDs(ids ...int) *ResidenceUpdate {
+	_u.mutation.AddOccupantIDs(ids...)
+	return _u
 }
 
 // AddOccupants adds the "occupants" edges to the Character entity.
-func (ru *ResidenceUpdate) AddOccupants(c ...*Character) *ResidenceUpdate {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ResidenceUpdate) AddOccupants(v ...*Character) *ResidenceUpdate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.AddOccupantIDs(ids...)
+	return _u.AddOccupantIDs(ids...)
 }
 
 // Mutation returns the ResidenceMutation object of the builder.
-func (ru *ResidenceUpdate) Mutation() *ResidenceMutation {
-	return ru.mutation
+func (_u *ResidenceUpdate) Mutation() *ResidenceMutation {
+	return _u.mutation
 }
 
 // ClearOccupants clears all "occupants" edges to the Character entity.
-func (ru *ResidenceUpdate) ClearOccupants() *ResidenceUpdate {
-	ru.mutation.ClearOccupants()
-	return ru
+func (_u *ResidenceUpdate) ClearOccupants() *ResidenceUpdate {
+	_u.mutation.ClearOccupants()
+	return _u
 }
 
 // RemoveOccupantIDs removes the "occupants" edge to Character entities by IDs.
-func (ru *ResidenceUpdate) RemoveOccupantIDs(ids ...int) *ResidenceUpdate {
-	ru.mutation.RemoveOccupantIDs(ids...)
-	return ru
+func (_u *ResidenceUpdate) RemoveOccupantIDs(ids ...int) *ResidenceUpdate {
+	_u.mutation.RemoveOccupantIDs(ids...)
+	return _u
 }
 
 // RemoveOccupants removes "occupants" edges to Character entities.
-func (ru *ResidenceUpdate) RemoveOccupants(c ...*Character) *ResidenceUpdate {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ResidenceUpdate) RemoveOccupants(v ...*Character) *ResidenceUpdate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ru.RemoveOccupantIDs(ids...)
+	return _u.RemoveOccupantIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (ru *ResidenceUpdate) Save(ctx context.Context) (int, error) {
-	ru.defaults()
-	return withHooks(ctx, ru.sqlSave, ru.mutation, ru.hooks)
+func (_u *ResidenceUpdate) Save(ctx context.Context) (int, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ru *ResidenceUpdate) SaveX(ctx context.Context) int {
-	affected, err := ru.Save(ctx)
+func (_u *ResidenceUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -106,42 +106,42 @@ func (ru *ResidenceUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (ru *ResidenceUpdate) Exec(ctx context.Context) error {
-	_, err := ru.Save(ctx)
+func (_u *ResidenceUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ru *ResidenceUpdate) ExecX(ctx context.Context) {
-	if err := ru.Exec(ctx); err != nil {
+func (_u *ResidenceUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ru *ResidenceUpdate) defaults() {
-	if _, ok := ru.mutation.UpdatedAt(); !ok {
+func (_u *ResidenceUpdate) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := residence.UpdateDefaultUpdatedAt()
-		ru.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
-func (ru *ResidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *ResidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(residence.Table, residence.Columns, sqlgraph.NewFieldSpec(residence.FieldID, field.TypeUUID))
-	if ps := ru.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := ru.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(residence.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := ru.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(residence.FieldName, field.TypeString, value)
 	}
-	if ru.mutation.OccupantsCleared() {
+	if _u.mutation.OccupantsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -154,7 +154,7 @@ func (ru *ResidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.RemovedOccupantsIDs(); len(nodes) > 0 && !ru.mutation.OccupantsCleared() {
+	if nodes := _u.mutation.RemovedOccupantsIDs(); len(nodes) > 0 && !_u.mutation.OccupantsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -170,7 +170,7 @@ func (ru *ResidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ru.mutation.OccupantsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OccupantsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -186,7 +186,7 @@ func (ru *ResidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, ru.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{residence.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -194,8 +194,8 @@ func (ru *ResidenceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	ru.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // ResidenceUpdateOne is the builder for updating a single Residence entity.
@@ -207,88 +207,88 @@ type ResidenceUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ruo *ResidenceUpdateOne) SetUpdatedAt(t time.Time) *ResidenceUpdateOne {
-	ruo.mutation.SetUpdatedAt(t)
-	return ruo
+func (_u *ResidenceUpdateOne) SetUpdatedAt(v time.Time) *ResidenceUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ruo *ResidenceUpdateOne) SetName(s string) *ResidenceUpdateOne {
-	ruo.mutation.SetName(s)
-	return ruo
+func (_u *ResidenceUpdateOne) SetName(v string) *ResidenceUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ruo *ResidenceUpdateOne) SetNillableName(s *string) *ResidenceUpdateOne {
-	if s != nil {
-		ruo.SetName(*s)
+func (_u *ResidenceUpdateOne) SetNillableName(v *string) *ResidenceUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ruo
+	return _u
 }
 
 // AddOccupantIDs adds the "occupants" edge to the Character entity by IDs.
-func (ruo *ResidenceUpdateOne) AddOccupantIDs(ids ...int) *ResidenceUpdateOne {
-	ruo.mutation.AddOccupantIDs(ids...)
-	return ruo
+func (_u *ResidenceUpdateOne) AddOccupantIDs(ids ...int) *ResidenceUpdateOne {
+	_u.mutation.AddOccupantIDs(ids...)
+	return _u
 }
 
 // AddOccupants adds the "occupants" edges to the Character entity.
-func (ruo *ResidenceUpdateOne) AddOccupants(c ...*Character) *ResidenceUpdateOne {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ResidenceUpdateOne) AddOccupants(v ...*Character) *ResidenceUpdateOne {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.AddOccupantIDs(ids...)
+	return _u.AddOccupantIDs(ids...)
 }
 
 // Mutation returns the ResidenceMutation object of the builder.
-func (ruo *ResidenceUpdateOne) Mutation() *ResidenceMutation {
-	return ruo.mutation
+func (_u *ResidenceUpdateOne) Mutation() *ResidenceMutation {
+	return _u.mutation
 }
 
 // ClearOccupants clears all "occupants" edges to the Character entity.
-func (ruo *ResidenceUpdateOne) ClearOccupants() *ResidenceUpdateOne {
-	ruo.mutation.ClearOccupants()
-	return ruo
+func (_u *ResidenceUpdateOne) ClearOccupants() *ResidenceUpdateOne {
+	_u.mutation.ClearOccupants()
+	return _u
 }
 
 // RemoveOccupantIDs removes the "occupants" edge to Character entities by IDs.
-func (ruo *ResidenceUpdateOne) RemoveOccupantIDs(ids ...int) *ResidenceUpdateOne {
-	ruo.mutation.RemoveOccupantIDs(ids...)
-	return ruo
+func (_u *ResidenceUpdateOne) RemoveOccupantIDs(ids ...int) *ResidenceUpdateOne {
+	_u.mutation.RemoveOccupantIDs(ids...)
+	return _u
 }
 
 // RemoveOccupants removes "occupants" edges to Character entities.
-func (ruo *ResidenceUpdateOne) RemoveOccupants(c ...*Character) *ResidenceUpdateOne {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *ResidenceUpdateOne) RemoveOccupants(v ...*Character) *ResidenceUpdateOne {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return ruo.RemoveOccupantIDs(ids...)
+	return _u.RemoveOccupantIDs(ids...)
 }
 
 // Where appends a list predicates to the ResidenceUpdate builder.
-func (ruo *ResidenceUpdateOne) Where(ps ...predicate.Residence) *ResidenceUpdateOne {
-	ruo.mutation.Where(ps...)
-	return ruo
+func (_u *ResidenceUpdateOne) Where(ps ...predicate.Residence) *ResidenceUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (ruo *ResidenceUpdateOne) Select(field string, fields ...string) *ResidenceUpdateOne {
-	ruo.fields = append([]string{field}, fields...)
-	return ruo
+func (_u *ResidenceUpdateOne) Select(field string, fields ...string) *ResidenceUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Residence entity.
-func (ruo *ResidenceUpdateOne) Save(ctx context.Context) (*Residence, error) {
-	ruo.defaults()
-	return withHooks(ctx, ruo.sqlSave, ruo.mutation, ruo.hooks)
+func (_u *ResidenceUpdateOne) Save(ctx context.Context) (*Residence, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ruo *ResidenceUpdateOne) SaveX(ctx context.Context) *Residence {
-	node, err := ruo.Save(ctx)
+func (_u *ResidenceUpdateOne) SaveX(ctx context.Context) *Residence {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -296,34 +296,34 @@ func (ruo *ResidenceUpdateOne) SaveX(ctx context.Context) *Residence {
 }
 
 // Exec executes the query on the entity.
-func (ruo *ResidenceUpdateOne) Exec(ctx context.Context) error {
-	_, err := ruo.Save(ctx)
+func (_u *ResidenceUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ruo *ResidenceUpdateOne) ExecX(ctx context.Context) {
-	if err := ruo.Exec(ctx); err != nil {
+func (_u *ResidenceUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ruo *ResidenceUpdateOne) defaults() {
-	if _, ok := ruo.mutation.UpdatedAt(); !ok {
+func (_u *ResidenceUpdateOne) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := residence.UpdateDefaultUpdatedAt()
-		ruo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
-func (ruo *ResidenceUpdateOne) sqlSave(ctx context.Context) (_node *Residence, err error) {
+func (_u *ResidenceUpdateOne) sqlSave(ctx context.Context) (_node *Residence, err error) {
 	_spec := sqlgraph.NewUpdateSpec(residence.Table, residence.Columns, sqlgraph.NewFieldSpec(residence.FieldID, field.TypeUUID))
-	id, ok := ruo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Residence.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := ruo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, residence.FieldID)
 		for _, f := range fields {
@@ -335,20 +335,20 @@ func (ruo *ResidenceUpdateOne) sqlSave(ctx context.Context) (_node *Residence, e
 			}
 		}
 	}
-	if ps := ruo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := ruo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(residence.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := ruo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(residence.FieldName, field.TypeString, value)
 	}
-	if ruo.mutation.OccupantsCleared() {
+	if _u.mutation.OccupantsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -361,7 +361,7 @@ func (ruo *ResidenceUpdateOne) sqlSave(ctx context.Context) (_node *Residence, e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.RemovedOccupantsIDs(); len(nodes) > 0 && !ruo.mutation.OccupantsCleared() {
+	if nodes := _u.mutation.RemovedOccupantsIDs(); len(nodes) > 0 && !_u.mutation.OccupantsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -377,7 +377,7 @@ func (ruo *ResidenceUpdateOne) sqlSave(ctx context.Context) (_node *Residence, e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := ruo.mutation.OccupantsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OccupantsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -393,10 +393,10 @@ func (ruo *ResidenceUpdateOne) sqlSave(ctx context.Context) (_node *Residence, e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_node = &Residence{config: ruo.config}
+	_node = &Residence{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, ruo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{residence.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -404,6 +404,6 @@ func (ruo *ResidenceUpdateOne) sqlSave(ctx context.Context) (_node *Residence, e
 		}
 		return nil, err
 	}
-	ruo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

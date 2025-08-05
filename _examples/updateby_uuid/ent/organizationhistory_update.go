@@ -23,57 +23,57 @@ type OrganizationHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the OrganizationHistoryUpdate builder.
-func (ohu *OrganizationHistoryUpdate) Where(ps ...predicate.OrganizationHistory) *OrganizationHistoryUpdate {
-	ohu.mutation.Where(ps...)
-	return ohu
+func (_u *OrganizationHistoryUpdate) Where(ps ...predicate.OrganizationHistory) *OrganizationHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ohu *OrganizationHistoryUpdate) SetUpdatedAt(t time.Time) *OrganizationHistoryUpdate {
-	ohu.mutation.SetUpdatedAt(t)
-	return ohu
+func (_u *OrganizationHistoryUpdate) SetUpdatedAt(v time.Time) *OrganizationHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ohu *OrganizationHistoryUpdate) SetName(s string) *OrganizationHistoryUpdate {
-	ohu.mutation.SetName(s)
-	return ohu
+func (_u *OrganizationHistoryUpdate) SetName(v string) *OrganizationHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ohu *OrganizationHistoryUpdate) SetNillableName(s *string) *OrganizationHistoryUpdate {
-	if s != nil {
-		ohu.SetName(*s)
+func (_u *OrganizationHistoryUpdate) SetNillableName(v *string) *OrganizationHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ohu
+	return _u
 }
 
 // SetInfo sets the "info" field.
-func (ohu *OrganizationHistoryUpdate) SetInfo(m map[string]interface{}) *OrganizationHistoryUpdate {
-	ohu.mutation.SetInfo(m)
-	return ohu
+func (_u *OrganizationHistoryUpdate) SetInfo(v map[string]interface{}) *OrganizationHistoryUpdate {
+	_u.mutation.SetInfo(v)
+	return _u
 }
 
 // ClearInfo clears the value of the "info" field.
-func (ohu *OrganizationHistoryUpdate) ClearInfo() *OrganizationHistoryUpdate {
-	ohu.mutation.ClearInfo()
-	return ohu
+func (_u *OrganizationHistoryUpdate) ClearInfo() *OrganizationHistoryUpdate {
+	_u.mutation.ClearInfo()
+	return _u
 }
 
 // Mutation returns the OrganizationHistoryMutation object of the builder.
-func (ohu *OrganizationHistoryUpdate) Mutation() *OrganizationHistoryMutation {
-	return ohu.mutation
+func (_u *OrganizationHistoryUpdate) Mutation() *OrganizationHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (ohu *OrganizationHistoryUpdate) Save(ctx context.Context) (int, error) {
-	ohu.defaults()
-	return withHooks(ctx, ohu.sqlSave, ohu.mutation, ohu.hooks)
+func (_u *OrganizationHistoryUpdate) Save(ctx context.Context) (int, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ohu *OrganizationHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := ohu.Save(ctx)
+func (_u *OrganizationHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -81,54 +81,54 @@ func (ohu *OrganizationHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (ohu *OrganizationHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := ohu.Save(ctx)
+func (_u *OrganizationHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ohu *OrganizationHistoryUpdate) ExecX(ctx context.Context) {
-	if err := ohu.Exec(ctx); err != nil {
+func (_u *OrganizationHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ohu *OrganizationHistoryUpdate) defaults() {
-	if _, ok := ohu.mutation.UpdatedAt(); !ok {
+func (_u *OrganizationHistoryUpdate) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := organizationhistory.UpdateDefaultUpdatedAt()
-		ohu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
-func (ohu *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(organizationhistory.Table, organizationhistory.Columns, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeInt))
-	if ps := ohu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := ohu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(organizationhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ohu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(organizationhistory.FieldRef, field.TypeUUID)
 	}
-	if ohu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationhistory.FieldUpdatedBy, field.TypeUUID)
 	}
-	if value, ok := ohu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(organizationhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := ohu.mutation.Info(); ok {
+	if value, ok := _u.mutation.Info(); ok {
 		_spec.SetField(organizationhistory.FieldInfo, field.TypeJSON, value)
 	}
-	if ohu.mutation.InfoCleared() {
+	if _u.mutation.InfoCleared() {
 		_spec.ClearField(organizationhistory.FieldInfo, field.TypeJSON)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, ohu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{organizationhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -136,8 +136,8 @@ func (ohu *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 		}
 		return 0, err
 	}
-	ohu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // OrganizationHistoryUpdateOne is the builder for updating a single OrganizationHistory entity.
@@ -149,64 +149,64 @@ type OrganizationHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (ohuo *OrganizationHistoryUpdateOne) SetUpdatedAt(t time.Time) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.SetUpdatedAt(t)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) SetUpdatedAt(v time.Time) *OrganizationHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (ohuo *OrganizationHistoryUpdateOne) SetName(s string) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.SetName(s)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) SetName(v string) *OrganizationHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (ohuo *OrganizationHistoryUpdateOne) SetNillableName(s *string) *OrganizationHistoryUpdateOne {
-	if s != nil {
-		ohuo.SetName(*s)
+func (_u *OrganizationHistoryUpdateOne) SetNillableName(v *string) *OrganizationHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return ohuo
+	return _u
 }
 
 // SetInfo sets the "info" field.
-func (ohuo *OrganizationHistoryUpdateOne) SetInfo(m map[string]interface{}) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.SetInfo(m)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) SetInfo(v map[string]interface{}) *OrganizationHistoryUpdateOne {
+	_u.mutation.SetInfo(v)
+	return _u
 }
 
 // ClearInfo clears the value of the "info" field.
-func (ohuo *OrganizationHistoryUpdateOne) ClearInfo() *OrganizationHistoryUpdateOne {
-	ohuo.mutation.ClearInfo()
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) ClearInfo() *OrganizationHistoryUpdateOne {
+	_u.mutation.ClearInfo()
+	return _u
 }
 
 // Mutation returns the OrganizationHistoryMutation object of the builder.
-func (ohuo *OrganizationHistoryUpdateOne) Mutation() *OrganizationHistoryMutation {
-	return ohuo.mutation
+func (_u *OrganizationHistoryUpdateOne) Mutation() *OrganizationHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the OrganizationHistoryUpdate builder.
-func (ohuo *OrganizationHistoryUpdateOne) Where(ps ...predicate.OrganizationHistory) *OrganizationHistoryUpdateOne {
-	ohuo.mutation.Where(ps...)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) Where(ps ...predicate.OrganizationHistory) *OrganizationHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (ohuo *OrganizationHistoryUpdateOne) Select(field string, fields ...string) *OrganizationHistoryUpdateOne {
-	ohuo.fields = append([]string{field}, fields...)
-	return ohuo
+func (_u *OrganizationHistoryUpdateOne) Select(field string, fields ...string) *OrganizationHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated OrganizationHistory entity.
-func (ohuo *OrganizationHistoryUpdateOne) Save(ctx context.Context) (*OrganizationHistory, error) {
-	ohuo.defaults()
-	return withHooks(ctx, ohuo.sqlSave, ohuo.mutation, ohuo.hooks)
+func (_u *OrganizationHistoryUpdateOne) Save(ctx context.Context) (*OrganizationHistory, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ohuo *OrganizationHistoryUpdateOne) SaveX(ctx context.Context) *OrganizationHistory {
-	node, err := ohuo.Save(ctx)
+func (_u *OrganizationHistoryUpdateOne) SaveX(ctx context.Context) *OrganizationHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -214,34 +214,34 @@ func (ohuo *OrganizationHistoryUpdateOne) SaveX(ctx context.Context) *Organizati
 }
 
 // Exec executes the query on the entity.
-func (ohuo *OrganizationHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := ohuo.Save(ctx)
+func (_u *OrganizationHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ohuo *OrganizationHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := ohuo.Exec(ctx); err != nil {
+func (_u *OrganizationHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (ohuo *OrganizationHistoryUpdateOne) defaults() {
-	if _, ok := ohuo.mutation.UpdatedAt(); !ok {
+func (_u *OrganizationHistoryUpdateOne) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := organizationhistory.UpdateDefaultUpdatedAt()
-		ohuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
-func (ohuo *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *OrganizationHistory, err error) {
+func (_u *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *OrganizationHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(organizationhistory.Table, organizationhistory.Columns, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeInt))
-	id, ok := ohuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "OrganizationHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := ohuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, organizationhistory.FieldID)
 		for _, f := range fields {
@@ -253,35 +253,35 @@ func (ohuo *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *O
 			}
 		}
 	}
-	if ps := ohuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := ohuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(organizationhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if ohuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(organizationhistory.FieldRef, field.TypeUUID)
 	}
-	if ohuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationhistory.FieldUpdatedBy, field.TypeUUID)
 	}
-	if value, ok := ohuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(organizationhistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := ohuo.mutation.Info(); ok {
+	if value, ok := _u.mutation.Info(); ok {
 		_spec.SetField(organizationhistory.FieldInfo, field.TypeJSON, value)
 	}
-	if ohuo.mutation.InfoCleared() {
+	if _u.mutation.InfoCleared() {
 		_spec.ClearField(organizationhistory.FieldInfo, field.TypeJSON)
 	}
-	_node = &OrganizationHistory{config: ohuo.config}
+	_node = &OrganizationHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, ohuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{organizationhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -289,6 +289,6 @@ func (ohuo *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *O
 		}
 		return nil, err
 	}
-	ohuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

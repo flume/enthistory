@@ -20,56 +20,56 @@ type StoreHistoryDelete struct {
 }
 
 // Where appends a list predicates to the StoreHistoryDelete builder.
-func (shd *StoreHistoryDelete) Where(ps ...predicate.StoreHistory) *StoreHistoryDelete {
-	shd.mutation.Where(ps...)
-	return shd
+func (_d *StoreHistoryDelete) Where(ps ...predicate.StoreHistory) *StoreHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (shd *StoreHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, shd.sqlExec, shd.mutation, shd.hooks)
+func (_d *StoreHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shd *StoreHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := shd.Exec(ctx)
+func (_d *StoreHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (shd *StoreHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *StoreHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(storehistory.Table, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeInt))
-	if ps := shd.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, shd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	shd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // StoreHistoryDeleteOne is the builder for deleting a single StoreHistory entity.
 type StoreHistoryDeleteOne struct {
-	shd *StoreHistoryDelete
+	_d *StoreHistoryDelete
 }
 
 // Where appends a list predicates to the StoreHistoryDelete builder.
-func (shdo *StoreHistoryDeleteOne) Where(ps ...predicate.StoreHistory) *StoreHistoryDeleteOne {
-	shdo.shd.mutation.Where(ps...)
-	return shdo
+func (_d *StoreHistoryDeleteOne) Where(ps ...predicate.StoreHistory) *StoreHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (shdo *StoreHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := shdo.shd.Exec(ctx)
+func (_d *StoreHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (shdo *StoreHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shdo *StoreHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := shdo.Exec(ctx); err != nil {
+func (_d *StoreHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

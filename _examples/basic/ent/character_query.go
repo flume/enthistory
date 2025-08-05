@@ -36,44 +36,44 @@ type CharacterQuery struct {
 }
 
 // Where adds a new predicate for the CharacterQuery builder.
-func (cq *CharacterQuery) Where(ps ...predicate.Character) *CharacterQuery {
-	cq.predicates = append(cq.predicates, ps...)
-	return cq
+func (_q *CharacterQuery) Where(ps ...predicate.Character) *CharacterQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (cq *CharacterQuery) Limit(limit int) *CharacterQuery {
-	cq.ctx.Limit = &limit
-	return cq
+func (_q *CharacterQuery) Limit(limit int) *CharacterQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (cq *CharacterQuery) Offset(offset int) *CharacterQuery {
-	cq.ctx.Offset = &offset
-	return cq
+func (_q *CharacterQuery) Offset(offset int) *CharacterQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (cq *CharacterQuery) Unique(unique bool) *CharacterQuery {
-	cq.ctx.Unique = &unique
-	return cq
+func (_q *CharacterQuery) Unique(unique bool) *CharacterQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (cq *CharacterQuery) Order(o ...character.OrderOption) *CharacterQuery {
-	cq.order = append(cq.order, o...)
-	return cq
+func (_q *CharacterQuery) Order(o ...character.OrderOption) *CharacterQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryFriends chains the current query on the "friends" edge.
-func (cq *CharacterQuery) QueryFriends() *CharacterQuery {
-	query := (&CharacterClient{config: cq.config}).Query()
+func (_q *CharacterQuery) QueryFriends() *CharacterQuery {
+	query := (&CharacterClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := cq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := cq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -82,20 +82,20 @@ func (cq *CharacterQuery) QueryFriends() *CharacterQuery {
 			sqlgraph.To(character.Table, character.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, character.FriendsTable, character.FriendsPrimaryKey...),
 		)
-		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryResidence chains the current query on the "residence" edge.
-func (cq *CharacterQuery) QueryResidence() *ResidenceQuery {
-	query := (&ResidenceClient{config: cq.config}).Query()
+func (_q *CharacterQuery) QueryResidence() *ResidenceQuery {
+	query := (&ResidenceClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := cq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := cq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -104,20 +104,20 @@ func (cq *CharacterQuery) QueryResidence() *ResidenceQuery {
 			sqlgraph.To(residence.Table, residence.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, character.ResidenceTable, character.ResidenceColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryFriendships chains the current query on the "friendships" edge.
-func (cq *CharacterQuery) QueryFriendships() *FriendshipQuery {
-	query := (&FriendshipClient{config: cq.config}).Query()
+func (_q *CharacterQuery) QueryFriendships() *FriendshipQuery {
+	query := (&FriendshipClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := cq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := cq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -126,7 +126,7 @@ func (cq *CharacterQuery) QueryFriendships() *FriendshipQuery {
 			sqlgraph.To(friendship.Table, friendship.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, character.FriendshipsTable, character.FriendshipsColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -134,8 +134,8 @@ func (cq *CharacterQuery) QueryFriendships() *FriendshipQuery {
 
 // First returns the first Character entity from the query.
 // Returns a *NotFoundError when no Character was found.
-func (cq *CharacterQuery) First(ctx context.Context) (*Character, error) {
-	nodes, err := cq.Limit(1).All(setContextOp(ctx, cq.ctx, ent.OpQueryFirst))
+func (_q *CharacterQuery) First(ctx context.Context) (*Character, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -146,8 +146,8 @@ func (cq *CharacterQuery) First(ctx context.Context) (*Character, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (cq *CharacterQuery) FirstX(ctx context.Context) *Character {
-	node, err := cq.First(ctx)
+func (_q *CharacterQuery) FirstX(ctx context.Context) *Character {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -156,9 +156,9 @@ func (cq *CharacterQuery) FirstX(ctx context.Context) *Character {
 
 // FirstID returns the first Character ID from the query.
 // Returns a *NotFoundError when no Character ID was found.
-func (cq *CharacterQuery) FirstID(ctx context.Context) (id int, err error) {
+func (_q *CharacterQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = cq.Limit(1).IDs(setContextOp(ctx, cq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -169,8 +169,8 @@ func (cq *CharacterQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (cq *CharacterQuery) FirstIDX(ctx context.Context) int {
-	id, err := cq.FirstID(ctx)
+func (_q *CharacterQuery) FirstIDX(ctx context.Context) int {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -180,8 +180,8 @@ func (cq *CharacterQuery) FirstIDX(ctx context.Context) int {
 // Only returns a single Character entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one Character entity is found.
 // Returns a *NotFoundError when no Character entities are found.
-func (cq *CharacterQuery) Only(ctx context.Context) (*Character, error) {
-	nodes, err := cq.Limit(2).All(setContextOp(ctx, cq.ctx, ent.OpQueryOnly))
+func (_q *CharacterQuery) Only(ctx context.Context) (*Character, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -196,8 +196,8 @@ func (cq *CharacterQuery) Only(ctx context.Context) (*Character, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (cq *CharacterQuery) OnlyX(ctx context.Context) *Character {
-	node, err := cq.Only(ctx)
+func (_q *CharacterQuery) OnlyX(ctx context.Context) *Character {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -207,9 +207,9 @@ func (cq *CharacterQuery) OnlyX(ctx context.Context) *Character {
 // OnlyID is like Only, but returns the only Character ID in the query.
 // Returns a *NotSingularError when more than one Character ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (cq *CharacterQuery) OnlyID(ctx context.Context) (id int, err error) {
+func (_q *CharacterQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = cq.Limit(2).IDs(setContextOp(ctx, cq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -224,8 +224,8 @@ func (cq *CharacterQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (cq *CharacterQuery) OnlyIDX(ctx context.Context) int {
-	id, err := cq.OnlyID(ctx)
+func (_q *CharacterQuery) OnlyIDX(ctx context.Context) int {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -233,18 +233,18 @@ func (cq *CharacterQuery) OnlyIDX(ctx context.Context) int {
 }
 
 // All executes the query and returns a list of Characters.
-func (cq *CharacterQuery) All(ctx context.Context) ([]*Character, error) {
-	ctx = setContextOp(ctx, cq.ctx, ent.OpQueryAll)
-	if err := cq.prepareQuery(ctx); err != nil {
+func (_q *CharacterQuery) All(ctx context.Context) ([]*Character, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*Character, *CharacterQuery]()
-	return withInterceptors[[]*Character](ctx, cq, qr, cq.inters)
+	return withInterceptors[[]*Character](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (cq *CharacterQuery) AllX(ctx context.Context) []*Character {
-	nodes, err := cq.All(ctx)
+func (_q *CharacterQuery) AllX(ctx context.Context) []*Character {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -252,20 +252,20 @@ func (cq *CharacterQuery) AllX(ctx context.Context) []*Character {
 }
 
 // IDs executes the query and returns a list of Character IDs.
-func (cq *CharacterQuery) IDs(ctx context.Context) (ids []int, err error) {
-	if cq.ctx.Unique == nil && cq.path != nil {
-		cq.Unique(true)
+func (_q *CharacterQuery) IDs(ctx context.Context) (ids []int, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, cq.ctx, ent.OpQueryIDs)
-	if err = cq.Select(character.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(character.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (cq *CharacterQuery) IDsX(ctx context.Context) []int {
-	ids, err := cq.IDs(ctx)
+func (_q *CharacterQuery) IDsX(ctx context.Context) []int {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -273,17 +273,17 @@ func (cq *CharacterQuery) IDsX(ctx context.Context) []int {
 }
 
 // Count returns the count of the given query.
-func (cq *CharacterQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, cq.ctx, ent.OpQueryCount)
-	if err := cq.prepareQuery(ctx); err != nil {
+func (_q *CharacterQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, cq, querierCount[*CharacterQuery](), cq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*CharacterQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (cq *CharacterQuery) CountX(ctx context.Context) int {
-	count, err := cq.Count(ctx)
+func (_q *CharacterQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -291,9 +291,9 @@ func (cq *CharacterQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (cq *CharacterQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, cq.ctx, ent.OpQueryExist)
-	switch _, err := cq.FirstID(ctx); {
+func (_q *CharacterQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -304,8 +304,8 @@ func (cq *CharacterQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (cq *CharacterQuery) ExistX(ctx context.Context) bool {
-	exist, err := cq.Exist(ctx)
+func (_q *CharacterQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -314,56 +314,56 @@ func (cq *CharacterQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the CharacterQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (cq *CharacterQuery) Clone() *CharacterQuery {
-	if cq == nil {
+func (_q *CharacterQuery) Clone() *CharacterQuery {
+	if _q == nil {
 		return nil
 	}
 	return &CharacterQuery{
-		config:          cq.config,
-		ctx:             cq.ctx.Clone(),
-		order:           append([]character.OrderOption{}, cq.order...),
-		inters:          append([]Interceptor{}, cq.inters...),
-		predicates:      append([]predicate.Character{}, cq.predicates...),
-		withFriends:     cq.withFriends.Clone(),
-		withResidence:   cq.withResidence.Clone(),
-		withFriendships: cq.withFriendships.Clone(),
+		config:          _q.config,
+		ctx:             _q.ctx.Clone(),
+		order:           append([]character.OrderOption{}, _q.order...),
+		inters:          append([]Interceptor{}, _q.inters...),
+		predicates:      append([]predicate.Character{}, _q.predicates...),
+		withFriends:     _q.withFriends.Clone(),
+		withResidence:   _q.withResidence.Clone(),
+		withFriendships: _q.withFriendships.Clone(),
 		// clone intermediate query.
-		sql:  cq.sql.Clone(),
-		path: cq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
 // WithFriends tells the query-builder to eager-load the nodes that are connected to
 // the "friends" edge. The optional arguments are used to configure the query builder of the edge.
-func (cq *CharacterQuery) WithFriends(opts ...func(*CharacterQuery)) *CharacterQuery {
-	query := (&CharacterClient{config: cq.config}).Query()
+func (_q *CharacterQuery) WithFriends(opts ...func(*CharacterQuery)) *CharacterQuery {
+	query := (&CharacterClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	cq.withFriends = query
-	return cq
+	_q.withFriends = query
+	return _q
 }
 
 // WithResidence tells the query-builder to eager-load the nodes that are connected to
 // the "residence" edge. The optional arguments are used to configure the query builder of the edge.
-func (cq *CharacterQuery) WithResidence(opts ...func(*ResidenceQuery)) *CharacterQuery {
-	query := (&ResidenceClient{config: cq.config}).Query()
+func (_q *CharacterQuery) WithResidence(opts ...func(*ResidenceQuery)) *CharacterQuery {
+	query := (&ResidenceClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	cq.withResidence = query
-	return cq
+	_q.withResidence = query
+	return _q
 }
 
 // WithFriendships tells the query-builder to eager-load the nodes that are connected to
 // the "friendships" edge. The optional arguments are used to configure the query builder of the edge.
-func (cq *CharacterQuery) WithFriendships(opts ...func(*FriendshipQuery)) *CharacterQuery {
-	query := (&FriendshipClient{config: cq.config}).Query()
+func (_q *CharacterQuery) WithFriendships(opts ...func(*FriendshipQuery)) *CharacterQuery {
+	query := (&FriendshipClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	cq.withFriendships = query
-	return cq
+	_q.withFriendships = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -380,10 +380,10 @@ func (cq *CharacterQuery) WithFriendships(opts ...func(*FriendshipQuery)) *Chara
 //		GroupBy(character.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (cq *CharacterQuery) GroupBy(field string, fields ...string) *CharacterGroupBy {
-	cq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &CharacterGroupBy{build: cq}
-	grbuild.flds = &cq.ctx.Fields
+func (_q *CharacterQuery) GroupBy(field string, fields ...string) *CharacterGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &CharacterGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = character.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -401,57 +401,57 @@ func (cq *CharacterQuery) GroupBy(field string, fields ...string) *CharacterGrou
 //	client.Character.Query().
 //		Select(character.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (cq *CharacterQuery) Select(fields ...string) *CharacterSelect {
-	cq.ctx.Fields = append(cq.ctx.Fields, fields...)
-	sbuild := &CharacterSelect{CharacterQuery: cq}
+func (_q *CharacterQuery) Select(fields ...string) *CharacterSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &CharacterSelect{CharacterQuery: _q}
 	sbuild.label = character.Label
-	sbuild.flds, sbuild.scan = &cq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a CharacterSelect configured with the given aggregations.
-func (cq *CharacterQuery) Aggregate(fns ...AggregateFunc) *CharacterSelect {
-	return cq.Select().Aggregate(fns...)
+func (_q *CharacterQuery) Aggregate(fns ...AggregateFunc) *CharacterSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (cq *CharacterQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range cq.inters {
+func (_q *CharacterQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, cq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range cq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !character.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if cq.path != nil {
-		prev, err := cq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		cq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (cq *CharacterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Character, error) {
+func (_q *CharacterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Character, error) {
 	var (
 		nodes       = []*Character{}
-		withFKs     = cq.withFKs
-		_spec       = cq.querySpec()
+		withFKs     = _q.withFKs
+		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
-			cq.withFriends != nil,
-			cq.withResidence != nil,
-			cq.withFriendships != nil,
+			_q.withFriends != nil,
+			_q.withResidence != nil,
+			_q.withFriendships != nil,
 		}
 	)
-	if cq.withResidence != nil {
+	if _q.withResidence != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -461,7 +461,7 @@ func (cq *CharacterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Ch
 		return (*Character).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &Character{config: cq.config}
+		node := &Character{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
@@ -469,27 +469,27 @@ func (cq *CharacterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Ch
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, cq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := cq.withFriends; query != nil {
-		if err := cq.loadFriends(ctx, query, nodes,
+	if query := _q.withFriends; query != nil {
+		if err := _q.loadFriends(ctx, query, nodes,
 			func(n *Character) { n.Edges.Friends = []*Character{} },
 			func(n *Character, e *Character) { n.Edges.Friends = append(n.Edges.Friends, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := cq.withResidence; query != nil {
-		if err := cq.loadResidence(ctx, query, nodes, nil,
+	if query := _q.withResidence; query != nil {
+		if err := _q.loadResidence(ctx, query, nodes, nil,
 			func(n *Character, e *Residence) { n.Edges.Residence = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := cq.withFriendships; query != nil {
-		if err := cq.loadFriendships(ctx, query, nodes,
+	if query := _q.withFriendships; query != nil {
+		if err := _q.loadFriendships(ctx, query, nodes,
 			func(n *Character) { n.Edges.Friendships = []*Friendship{} },
 			func(n *Character, e *Friendship) { n.Edges.Friendships = append(n.Edges.Friendships, e) }); err != nil {
 			return nil, err
@@ -498,7 +498,7 @@ func (cq *CharacterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Ch
 	return nodes, nil
 }
 
-func (cq *CharacterQuery) loadFriends(ctx context.Context, query *CharacterQuery, nodes []*Character, init func(*Character), assign func(*Character, *Character)) error {
+func (_q *CharacterQuery) loadFriends(ctx context.Context, query *CharacterQuery, nodes []*Character, init func(*Character), assign func(*Character, *Character)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int]*Character)
 	nids := make(map[int]map[*Character]struct{})
@@ -559,7 +559,7 @@ func (cq *CharacterQuery) loadFriends(ctx context.Context, query *CharacterQuery
 	}
 	return nil
 }
-func (cq *CharacterQuery) loadResidence(ctx context.Context, query *ResidenceQuery, nodes []*Character, init func(*Character), assign func(*Character, *Residence)) error {
+func (_q *CharacterQuery) loadResidence(ctx context.Context, query *ResidenceQuery, nodes []*Character, init func(*Character), assign func(*Character, *Residence)) error {
 	ids := make([]uuid.UUID, 0, len(nodes))
 	nodeids := make(map[uuid.UUID][]*Character)
 	for i := range nodes {
@@ -591,7 +591,7 @@ func (cq *CharacterQuery) loadResidence(ctx context.Context, query *ResidenceQue
 	}
 	return nil
 }
-func (cq *CharacterQuery) loadFriendships(ctx context.Context, query *FriendshipQuery, nodes []*Character, init func(*Character), assign func(*Character, *Friendship)) error {
+func (_q *CharacterQuery) loadFriendships(ctx context.Context, query *FriendshipQuery, nodes []*Character, init func(*Character), assign func(*Character, *Friendship)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int]*Character)
 	for i := range nodes {
@@ -622,24 +622,24 @@ func (cq *CharacterQuery) loadFriendships(ctx context.Context, query *Friendship
 	return nil
 }
 
-func (cq *CharacterQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := cq.querySpec()
-	_spec.Node.Columns = cq.ctx.Fields
-	if len(cq.ctx.Fields) > 0 {
-		_spec.Unique = cq.ctx.Unique != nil && *cq.ctx.Unique
+func (_q *CharacterQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, cq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (cq *CharacterQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *CharacterQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(character.Table, character.Columns, sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt))
-	_spec.From = cq.sql
-	if unique := cq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if cq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := cq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, character.FieldID)
 		for i := range fields {
@@ -648,20 +648,20 @@ func (cq *CharacterQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := cq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := cq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := cq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := cq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -671,33 +671,33 @@ func (cq *CharacterQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (cq *CharacterQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(cq.driver.Dialect())
+func (_q *CharacterQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(character.Table)
-	columns := cq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = character.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if cq.sql != nil {
-		selector = cq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if cq.ctx.Unique != nil && *cq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, p := range cq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range cq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := cq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := cq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -710,41 +710,41 @@ type CharacterGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (cgb *CharacterGroupBy) Aggregate(fns ...AggregateFunc) *CharacterGroupBy {
-	cgb.fns = append(cgb.fns, fns...)
-	return cgb
+func (_g *CharacterGroupBy) Aggregate(fns ...AggregateFunc) *CharacterGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (cgb *CharacterGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, cgb.build.ctx, ent.OpQueryGroupBy)
-	if err := cgb.build.prepareQuery(ctx); err != nil {
+func (_g *CharacterGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*CharacterQuery, *CharacterGroupBy](ctx, cgb.build, cgb, cgb.build.inters, v)
+	return scanWithInterceptors[*CharacterQuery, *CharacterGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (cgb *CharacterGroupBy) sqlScan(ctx context.Context, root *CharacterQuery, v any) error {
+func (_g *CharacterGroupBy) sqlScan(ctx context.Context, root *CharacterQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(cgb.fns))
-	for _, fn := range cgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*cgb.flds)+len(cgb.fns))
-		for _, f := range *cgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*cgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := cgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -758,27 +758,27 @@ type CharacterSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (cs *CharacterSelect) Aggregate(fns ...AggregateFunc) *CharacterSelect {
-	cs.fns = append(cs.fns, fns...)
-	return cs
+func (_s *CharacterSelect) Aggregate(fns ...AggregateFunc) *CharacterSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (cs *CharacterSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, cs.ctx, ent.OpQuerySelect)
-	if err := cs.prepareQuery(ctx); err != nil {
+func (_s *CharacterSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*CharacterQuery, *CharacterSelect](ctx, cs.CharacterQuery, cs, cs.inters, v)
+	return scanWithInterceptors[*CharacterQuery, *CharacterSelect](ctx, _s.CharacterQuery, _s, _s.inters, v)
 }
 
-func (cs *CharacterSelect) sqlScan(ctx context.Context, root *CharacterQuery, v any) error {
+func (_s *CharacterSelect) sqlScan(ctx context.Context, root *CharacterQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(cs.fns))
-	for _, fn := range cs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*cs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -786,7 +786,7 @@ func (cs *CharacterSelect) sqlScan(ctx context.Context, root *CharacterQuery, v 
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := cs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

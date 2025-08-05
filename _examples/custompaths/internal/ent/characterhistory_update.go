@@ -22,59 +22,59 @@ type CharacterHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the CharacterHistoryUpdate builder.
-func (chu *CharacterHistoryUpdate) Where(ps ...predicate.CharacterHistory) *CharacterHistoryUpdate {
-	chu.mutation.Where(ps...)
-	return chu
+func (_u *CharacterHistoryUpdate) Where(ps ...predicate.CharacterHistory) *CharacterHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetAge sets the "age" field.
-func (chu *CharacterHistoryUpdate) SetAge(i int) *CharacterHistoryUpdate {
-	chu.mutation.ResetAge()
-	chu.mutation.SetAge(i)
-	return chu
+func (_u *CharacterHistoryUpdate) SetAge(v int) *CharacterHistoryUpdate {
+	_u.mutation.ResetAge()
+	_u.mutation.SetAge(v)
+	return _u
 }
 
 // SetNillableAge sets the "age" field if the given value is not nil.
-func (chu *CharacterHistoryUpdate) SetNillableAge(i *int) *CharacterHistoryUpdate {
-	if i != nil {
-		chu.SetAge(*i)
+func (_u *CharacterHistoryUpdate) SetNillableAge(v *int) *CharacterHistoryUpdate {
+	if v != nil {
+		_u.SetAge(*v)
 	}
-	return chu
+	return _u
 }
 
-// AddAge adds i to the "age" field.
-func (chu *CharacterHistoryUpdate) AddAge(i int) *CharacterHistoryUpdate {
-	chu.mutation.AddAge(i)
-	return chu
+// AddAge adds value to the "age" field.
+func (_u *CharacterHistoryUpdate) AddAge(v int) *CharacterHistoryUpdate {
+	_u.mutation.AddAge(v)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (chu *CharacterHistoryUpdate) SetName(s string) *CharacterHistoryUpdate {
-	chu.mutation.SetName(s)
-	return chu
+func (_u *CharacterHistoryUpdate) SetName(v string) *CharacterHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (chu *CharacterHistoryUpdate) SetNillableName(s *string) *CharacterHistoryUpdate {
-	if s != nil {
-		chu.SetName(*s)
+func (_u *CharacterHistoryUpdate) SetNillableName(v *string) *CharacterHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return chu
+	return _u
 }
 
 // Mutation returns the CharacterHistoryMutation object of the builder.
-func (chu *CharacterHistoryUpdate) Mutation() *CharacterHistoryMutation {
-	return chu.mutation
+func (_u *CharacterHistoryUpdate) Mutation() *CharacterHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (chu *CharacterHistoryUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, chu.sqlSave, chu.mutation, chu.hooks)
+func (_u *CharacterHistoryUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (chu *CharacterHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := chu.Save(ctx)
+func (_u *CharacterHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -82,40 +82,40 @@ func (chu *CharacterHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (chu *CharacterHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := chu.Save(ctx)
+func (_u *CharacterHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (chu *CharacterHistoryUpdate) ExecX(ctx context.Context) {
-	if err := chu.Exec(ctx); err != nil {
+func (_u *CharacterHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *CharacterHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(characterhistory.Table, characterhistory.Columns, sqlgraph.NewFieldSpec(characterhistory.FieldID, field.TypeInt))
-	if ps := chu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if chu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(characterhistory.FieldRef, field.TypeUUID)
 	}
-	if value, ok := chu.mutation.Age(); ok {
+	if value, ok := _u.mutation.Age(); ok {
 		_spec.SetField(characterhistory.FieldAge, field.TypeInt, value)
 	}
-	if value, ok := chu.mutation.AddedAge(); ok {
+	if value, ok := _u.mutation.AddedAge(); ok {
 		_spec.AddField(characterhistory.FieldAge, field.TypeInt, value)
 	}
-	if value, ok := chu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(characterhistory.FieldName, field.TypeString, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, chu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{characterhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -123,8 +123,8 @@ func (chu *CharacterHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 		}
 		return 0, err
 	}
-	chu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // CharacterHistoryUpdateOne is the builder for updating a single CharacterHistory entity.
@@ -136,66 +136,66 @@ type CharacterHistoryUpdateOne struct {
 }
 
 // SetAge sets the "age" field.
-func (chuo *CharacterHistoryUpdateOne) SetAge(i int) *CharacterHistoryUpdateOne {
-	chuo.mutation.ResetAge()
-	chuo.mutation.SetAge(i)
-	return chuo
+func (_u *CharacterHistoryUpdateOne) SetAge(v int) *CharacterHistoryUpdateOne {
+	_u.mutation.ResetAge()
+	_u.mutation.SetAge(v)
+	return _u
 }
 
 // SetNillableAge sets the "age" field if the given value is not nil.
-func (chuo *CharacterHistoryUpdateOne) SetNillableAge(i *int) *CharacterHistoryUpdateOne {
-	if i != nil {
-		chuo.SetAge(*i)
+func (_u *CharacterHistoryUpdateOne) SetNillableAge(v *int) *CharacterHistoryUpdateOne {
+	if v != nil {
+		_u.SetAge(*v)
 	}
-	return chuo
+	return _u
 }
 
-// AddAge adds i to the "age" field.
-func (chuo *CharacterHistoryUpdateOne) AddAge(i int) *CharacterHistoryUpdateOne {
-	chuo.mutation.AddAge(i)
-	return chuo
+// AddAge adds value to the "age" field.
+func (_u *CharacterHistoryUpdateOne) AddAge(v int) *CharacterHistoryUpdateOne {
+	_u.mutation.AddAge(v)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (chuo *CharacterHistoryUpdateOne) SetName(s string) *CharacterHistoryUpdateOne {
-	chuo.mutation.SetName(s)
-	return chuo
+func (_u *CharacterHistoryUpdateOne) SetName(v string) *CharacterHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (chuo *CharacterHistoryUpdateOne) SetNillableName(s *string) *CharacterHistoryUpdateOne {
-	if s != nil {
-		chuo.SetName(*s)
+func (_u *CharacterHistoryUpdateOne) SetNillableName(v *string) *CharacterHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return chuo
+	return _u
 }
 
 // Mutation returns the CharacterHistoryMutation object of the builder.
-func (chuo *CharacterHistoryUpdateOne) Mutation() *CharacterHistoryMutation {
-	return chuo.mutation
+func (_u *CharacterHistoryUpdateOne) Mutation() *CharacterHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the CharacterHistoryUpdate builder.
-func (chuo *CharacterHistoryUpdateOne) Where(ps ...predicate.CharacterHistory) *CharacterHistoryUpdateOne {
-	chuo.mutation.Where(ps...)
-	return chuo
+func (_u *CharacterHistoryUpdateOne) Where(ps ...predicate.CharacterHistory) *CharacterHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (chuo *CharacterHistoryUpdateOne) Select(field string, fields ...string) *CharacterHistoryUpdateOne {
-	chuo.fields = append([]string{field}, fields...)
-	return chuo
+func (_u *CharacterHistoryUpdateOne) Select(field string, fields ...string) *CharacterHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated CharacterHistory entity.
-func (chuo *CharacterHistoryUpdateOne) Save(ctx context.Context) (*CharacterHistory, error) {
-	return withHooks(ctx, chuo.sqlSave, chuo.mutation, chuo.hooks)
+func (_u *CharacterHistoryUpdateOne) Save(ctx context.Context) (*CharacterHistory, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (chuo *CharacterHistoryUpdateOne) SaveX(ctx context.Context) *CharacterHistory {
-	node, err := chuo.Save(ctx)
+func (_u *CharacterHistoryUpdateOne) SaveX(ctx context.Context) *CharacterHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -203,26 +203,26 @@ func (chuo *CharacterHistoryUpdateOne) SaveX(ctx context.Context) *CharacterHist
 }
 
 // Exec executes the query on the entity.
-func (chuo *CharacterHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := chuo.Save(ctx)
+func (_u *CharacterHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (chuo *CharacterHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := chuo.Exec(ctx); err != nil {
+func (_u *CharacterHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *CharacterHistory, err error) {
+func (_u *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *CharacterHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(characterhistory.Table, characterhistory.Columns, sqlgraph.NewFieldSpec(characterhistory.FieldID, field.TypeInt))
-	id, ok := chuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "CharacterHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := chuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, characterhistory.FieldID)
 		for _, f := range fields {
@@ -234,29 +234,29 @@ func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Char
 			}
 		}
 	}
-	if ps := chuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if chuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(characterhistory.FieldRef, field.TypeUUID)
 	}
-	if value, ok := chuo.mutation.Age(); ok {
+	if value, ok := _u.mutation.Age(); ok {
 		_spec.SetField(characterhistory.FieldAge, field.TypeInt, value)
 	}
-	if value, ok := chuo.mutation.AddedAge(); ok {
+	if value, ok := _u.mutation.AddedAge(); ok {
 		_spec.AddField(characterhistory.FieldAge, field.TypeInt, value)
 	}
-	if value, ok := chuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(characterhistory.FieldName, field.TypeString, value)
 	}
-	_node = &CharacterHistory{config: chuo.config}
+	_node = &CharacterHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, chuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{characterhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -264,6 +264,6 @@ func (chuo *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Char
 		}
 		return nil, err
 	}
-	chuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

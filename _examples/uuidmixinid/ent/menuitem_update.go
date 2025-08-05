@@ -23,86 +23,86 @@ type MenuItemUpdate struct {
 }
 
 // Where appends a list predicates to the MenuItemUpdate builder.
-func (miu *MenuItemUpdate) Where(ps ...predicate.MenuItem) *MenuItemUpdate {
-	miu.mutation.Where(ps...)
-	return miu
+func (_u *MenuItemUpdate) Where(ps ...predicate.MenuItem) *MenuItemUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (miu *MenuItemUpdate) SetUpdatedAt(t time.Time) *MenuItemUpdate {
-	miu.mutation.SetUpdatedAt(t)
-	return miu
+func (_u *MenuItemUpdate) SetUpdatedAt(v time.Time) *MenuItemUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (miu *MenuItemUpdate) SetName(s string) *MenuItemUpdate {
-	miu.mutation.SetName(s)
-	return miu
+func (_u *MenuItemUpdate) SetName(v string) *MenuItemUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (miu *MenuItemUpdate) SetNillableName(s *string) *MenuItemUpdate {
-	if s != nil {
-		miu.SetName(*s)
+func (_u *MenuItemUpdate) SetNillableName(v *string) *MenuItemUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return miu
+	return _u
 }
 
 // SetPrice sets the "price" field.
-func (miu *MenuItemUpdate) SetPrice(f float64) *MenuItemUpdate {
-	miu.mutation.ResetPrice()
-	miu.mutation.SetPrice(f)
-	return miu
+func (_u *MenuItemUpdate) SetPrice(v float64) *MenuItemUpdate {
+	_u.mutation.ResetPrice()
+	_u.mutation.SetPrice(v)
+	return _u
 }
 
 // SetNillablePrice sets the "price" field if the given value is not nil.
-func (miu *MenuItemUpdate) SetNillablePrice(f *float64) *MenuItemUpdate {
-	if f != nil {
-		miu.SetPrice(*f)
+func (_u *MenuItemUpdate) SetNillablePrice(v *float64) *MenuItemUpdate {
+	if v != nil {
+		_u.SetPrice(*v)
 	}
-	return miu
+	return _u
 }
 
-// AddPrice adds f to the "price" field.
-func (miu *MenuItemUpdate) AddPrice(f float64) *MenuItemUpdate {
-	miu.mutation.AddPrice(f)
-	return miu
+// AddPrice adds value to the "price" field.
+func (_u *MenuItemUpdate) AddPrice(v float64) *MenuItemUpdate {
+	_u.mutation.AddPrice(v)
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (miu *MenuItemUpdate) SetDescription(s string) *MenuItemUpdate {
-	miu.mutation.SetDescription(s)
-	return miu
+func (_u *MenuItemUpdate) SetDescription(v string) *MenuItemUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (miu *MenuItemUpdate) SetNillableDescription(s *string) *MenuItemUpdate {
-	if s != nil {
-		miu.SetDescription(*s)
+func (_u *MenuItemUpdate) SetNillableDescription(v *string) *MenuItemUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return miu
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (miu *MenuItemUpdate) ClearDescription() *MenuItemUpdate {
-	miu.mutation.ClearDescription()
-	return miu
+func (_u *MenuItemUpdate) ClearDescription() *MenuItemUpdate {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // Mutation returns the MenuItemMutation object of the builder.
-func (miu *MenuItemUpdate) Mutation() *MenuItemMutation {
-	return miu.mutation
+func (_u *MenuItemUpdate) Mutation() *MenuItemMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (miu *MenuItemUpdate) Save(ctx context.Context) (int, error) {
-	miu.defaults()
-	return withHooks(ctx, miu.sqlSave, miu.mutation, miu.hooks)
+func (_u *MenuItemUpdate) Save(ctx context.Context) (int, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (miu *MenuItemUpdate) SaveX(ctx context.Context) int {
-	affected, err := miu.Save(ctx)
+func (_u *MenuItemUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -110,34 +110,34 @@ func (miu *MenuItemUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (miu *MenuItemUpdate) Exec(ctx context.Context) error {
-	_, err := miu.Save(ctx)
+func (_u *MenuItemUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (miu *MenuItemUpdate) ExecX(ctx context.Context) {
-	if err := miu.Exec(ctx); err != nil {
+func (_u *MenuItemUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (miu *MenuItemUpdate) defaults() {
-	if _, ok := miu.mutation.UpdatedAt(); !ok {
+func (_u *MenuItemUpdate) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := menuitem.UpdateDefaultUpdatedAt()
-		miu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (miu *MenuItemUpdate) check() error {
-	if v, ok := miu.mutation.Name(); ok {
+func (_u *MenuItemUpdate) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := menuitem.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "MenuItem.name": %w`, err)}
 		}
 	}
-	if v, ok := miu.mutation.Price(); ok {
+	if v, ok := _u.mutation.Price(); ok {
 		if err := menuitem.PriceValidator(v); err != nil {
 			return &ValidationError{Name: "price", err: fmt.Errorf(`ent: validator failed for field "MenuItem.price": %w`, err)}
 		}
@@ -145,37 +145,37 @@ func (miu *MenuItemUpdate) check() error {
 	return nil
 }
 
-func (miu *MenuItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := miu.check(); err != nil {
-		return n, err
+func (_u *MenuItemUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(menuitem.Table, menuitem.Columns, sqlgraph.NewFieldSpec(menuitem.FieldID, field.TypeUUID))
-	if ps := miu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := miu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(menuitem.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := miu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(menuitem.FieldName, field.TypeString, value)
 	}
-	if value, ok := miu.mutation.Price(); ok {
+	if value, ok := _u.mutation.Price(); ok {
 		_spec.SetField(menuitem.FieldPrice, field.TypeFloat64, value)
 	}
-	if value, ok := miu.mutation.AddedPrice(); ok {
+	if value, ok := _u.mutation.AddedPrice(); ok {
 		_spec.AddField(menuitem.FieldPrice, field.TypeFloat64, value)
 	}
-	if value, ok := miu.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(menuitem.FieldDescription, field.TypeString, value)
 	}
-	if miu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(menuitem.FieldDescription, field.TypeString)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, miu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{menuitem.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -183,8 +183,8 @@ func (miu *MenuItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	miu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // MenuItemUpdateOne is the builder for updating a single MenuItem entity.
@@ -196,93 +196,93 @@ type MenuItemUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (miuo *MenuItemUpdateOne) SetUpdatedAt(t time.Time) *MenuItemUpdateOne {
-	miuo.mutation.SetUpdatedAt(t)
-	return miuo
+func (_u *MenuItemUpdateOne) SetUpdatedAt(v time.Time) *MenuItemUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (miuo *MenuItemUpdateOne) SetName(s string) *MenuItemUpdateOne {
-	miuo.mutation.SetName(s)
-	return miuo
+func (_u *MenuItemUpdateOne) SetName(v string) *MenuItemUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (miuo *MenuItemUpdateOne) SetNillableName(s *string) *MenuItemUpdateOne {
-	if s != nil {
-		miuo.SetName(*s)
+func (_u *MenuItemUpdateOne) SetNillableName(v *string) *MenuItemUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return miuo
+	return _u
 }
 
 // SetPrice sets the "price" field.
-func (miuo *MenuItemUpdateOne) SetPrice(f float64) *MenuItemUpdateOne {
-	miuo.mutation.ResetPrice()
-	miuo.mutation.SetPrice(f)
-	return miuo
+func (_u *MenuItemUpdateOne) SetPrice(v float64) *MenuItemUpdateOne {
+	_u.mutation.ResetPrice()
+	_u.mutation.SetPrice(v)
+	return _u
 }
 
 // SetNillablePrice sets the "price" field if the given value is not nil.
-func (miuo *MenuItemUpdateOne) SetNillablePrice(f *float64) *MenuItemUpdateOne {
-	if f != nil {
-		miuo.SetPrice(*f)
+func (_u *MenuItemUpdateOne) SetNillablePrice(v *float64) *MenuItemUpdateOne {
+	if v != nil {
+		_u.SetPrice(*v)
 	}
-	return miuo
+	return _u
 }
 
-// AddPrice adds f to the "price" field.
-func (miuo *MenuItemUpdateOne) AddPrice(f float64) *MenuItemUpdateOne {
-	miuo.mutation.AddPrice(f)
-	return miuo
+// AddPrice adds value to the "price" field.
+func (_u *MenuItemUpdateOne) AddPrice(v float64) *MenuItemUpdateOne {
+	_u.mutation.AddPrice(v)
+	return _u
 }
 
 // SetDescription sets the "description" field.
-func (miuo *MenuItemUpdateOne) SetDescription(s string) *MenuItemUpdateOne {
-	miuo.mutation.SetDescription(s)
-	return miuo
+func (_u *MenuItemUpdateOne) SetDescription(v string) *MenuItemUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (miuo *MenuItemUpdateOne) SetNillableDescription(s *string) *MenuItemUpdateOne {
-	if s != nil {
-		miuo.SetDescription(*s)
+func (_u *MenuItemUpdateOne) SetNillableDescription(v *string) *MenuItemUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
 	}
-	return miuo
+	return _u
 }
 
 // ClearDescription clears the value of the "description" field.
-func (miuo *MenuItemUpdateOne) ClearDescription() *MenuItemUpdateOne {
-	miuo.mutation.ClearDescription()
-	return miuo
+func (_u *MenuItemUpdateOne) ClearDescription() *MenuItemUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
 }
 
 // Mutation returns the MenuItemMutation object of the builder.
-func (miuo *MenuItemUpdateOne) Mutation() *MenuItemMutation {
-	return miuo.mutation
+func (_u *MenuItemUpdateOne) Mutation() *MenuItemMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the MenuItemUpdate builder.
-func (miuo *MenuItemUpdateOne) Where(ps ...predicate.MenuItem) *MenuItemUpdateOne {
-	miuo.mutation.Where(ps...)
-	return miuo
+func (_u *MenuItemUpdateOne) Where(ps ...predicate.MenuItem) *MenuItemUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (miuo *MenuItemUpdateOne) Select(field string, fields ...string) *MenuItemUpdateOne {
-	miuo.fields = append([]string{field}, fields...)
-	return miuo
+func (_u *MenuItemUpdateOne) Select(field string, fields ...string) *MenuItemUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated MenuItem entity.
-func (miuo *MenuItemUpdateOne) Save(ctx context.Context) (*MenuItem, error) {
-	miuo.defaults()
-	return withHooks(ctx, miuo.sqlSave, miuo.mutation, miuo.hooks)
+func (_u *MenuItemUpdateOne) Save(ctx context.Context) (*MenuItem, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (miuo *MenuItemUpdateOne) SaveX(ctx context.Context) *MenuItem {
-	node, err := miuo.Save(ctx)
+func (_u *MenuItemUpdateOne) SaveX(ctx context.Context) *MenuItem {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -290,34 +290,34 @@ func (miuo *MenuItemUpdateOne) SaveX(ctx context.Context) *MenuItem {
 }
 
 // Exec executes the query on the entity.
-func (miuo *MenuItemUpdateOne) Exec(ctx context.Context) error {
-	_, err := miuo.Save(ctx)
+func (_u *MenuItemUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (miuo *MenuItemUpdateOne) ExecX(ctx context.Context) {
-	if err := miuo.Exec(ctx); err != nil {
+func (_u *MenuItemUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (miuo *MenuItemUpdateOne) defaults() {
-	if _, ok := miuo.mutation.UpdatedAt(); !ok {
+func (_u *MenuItemUpdateOne) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := menuitem.UpdateDefaultUpdatedAt()
-		miuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (miuo *MenuItemUpdateOne) check() error {
-	if v, ok := miuo.mutation.Name(); ok {
+func (_u *MenuItemUpdateOne) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := menuitem.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "MenuItem.name": %w`, err)}
 		}
 	}
-	if v, ok := miuo.mutation.Price(); ok {
+	if v, ok := _u.mutation.Price(); ok {
 		if err := menuitem.PriceValidator(v); err != nil {
 			return &ValidationError{Name: "price", err: fmt.Errorf(`ent: validator failed for field "MenuItem.price": %w`, err)}
 		}
@@ -325,17 +325,17 @@ func (miuo *MenuItemUpdateOne) check() error {
 	return nil
 }
 
-func (miuo *MenuItemUpdateOne) sqlSave(ctx context.Context) (_node *MenuItem, err error) {
-	if err := miuo.check(); err != nil {
+func (_u *MenuItemUpdateOne) sqlSave(ctx context.Context) (_node *MenuItem, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(menuitem.Table, menuitem.Columns, sqlgraph.NewFieldSpec(menuitem.FieldID, field.TypeUUID))
-	id, ok := miuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "MenuItem.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := miuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, menuitem.FieldID)
 		for _, f := range fields {
@@ -347,35 +347,35 @@ func (miuo *MenuItemUpdateOne) sqlSave(ctx context.Context) (_node *MenuItem, er
 			}
 		}
 	}
-	if ps := miuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := miuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(menuitem.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := miuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(menuitem.FieldName, field.TypeString, value)
 	}
-	if value, ok := miuo.mutation.Price(); ok {
+	if value, ok := _u.mutation.Price(); ok {
 		_spec.SetField(menuitem.FieldPrice, field.TypeFloat64, value)
 	}
-	if value, ok := miuo.mutation.AddedPrice(); ok {
+	if value, ok := _u.mutation.AddedPrice(); ok {
 		_spec.AddField(menuitem.FieldPrice, field.TypeFloat64, value)
 	}
-	if value, ok := miuo.mutation.Description(); ok {
+	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(menuitem.FieldDescription, field.TypeString, value)
 	}
-	if miuo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(menuitem.FieldDescription, field.TypeString)
 	}
-	_node = &MenuItem{config: miuo.config}
+	_node = &MenuItem{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, miuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{menuitem.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -383,6 +383,6 @@ func (miuo *MenuItemUpdateOne) sqlSave(ctx context.Context) (_node *MenuItem, er
 		}
 		return nil, err
 	}
-	miuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

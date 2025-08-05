@@ -21,53 +21,53 @@ type TestExcludeCreate struct {
 }
 
 // SetOtherID sets the "other_id" field.
-func (tec *TestExcludeCreate) SetOtherID(u uuid.UUID) *TestExcludeCreate {
-	tec.mutation.SetOtherID(u)
-	return tec
+func (_c *TestExcludeCreate) SetOtherID(v uuid.UUID) *TestExcludeCreate {
+	_c.mutation.SetOtherID(v)
+	return _c
 }
 
 // SetNillableOtherID sets the "other_id" field if the given value is not nil.
-func (tec *TestExcludeCreate) SetNillableOtherID(u *uuid.UUID) *TestExcludeCreate {
-	if u != nil {
-		tec.SetOtherID(*u)
+func (_c *TestExcludeCreate) SetNillableOtherID(v *uuid.UUID) *TestExcludeCreate {
+	if v != nil {
+		_c.SetOtherID(*v)
 	}
-	return tec
+	return _c
 }
 
 // SetName sets the "name" field.
-func (tec *TestExcludeCreate) SetName(s string) *TestExcludeCreate {
-	tec.mutation.SetName(s)
-	return tec
+func (_c *TestExcludeCreate) SetName(v string) *TestExcludeCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (tec *TestExcludeCreate) SetID(u uuid.UUID) *TestExcludeCreate {
-	tec.mutation.SetID(u)
-	return tec
+func (_c *TestExcludeCreate) SetID(v uuid.UUID) *TestExcludeCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (tec *TestExcludeCreate) SetNillableID(u *uuid.UUID) *TestExcludeCreate {
-	if u != nil {
-		tec.SetID(*u)
+func (_c *TestExcludeCreate) SetNillableID(v *uuid.UUID) *TestExcludeCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return tec
+	return _c
 }
 
 // Mutation returns the TestExcludeMutation object of the builder.
-func (tec *TestExcludeCreate) Mutation() *TestExcludeMutation {
-	return tec.mutation
+func (_c *TestExcludeCreate) Mutation() *TestExcludeMutation {
+	return _c.mutation
 }
 
 // Save creates the TestExclude in the database.
-func (tec *TestExcludeCreate) Save(ctx context.Context) (*TestExclude, error) {
-	tec.defaults()
-	return withHooks(ctx, tec.sqlSave, tec.mutation, tec.hooks)
+func (_c *TestExcludeCreate) Save(ctx context.Context) (*TestExclude, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (tec *TestExcludeCreate) SaveX(ctx context.Context) *TestExclude {
-	v, err := tec.Save(ctx)
+func (_c *TestExcludeCreate) SaveX(ctx context.Context) *TestExclude {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -75,32 +75,32 @@ func (tec *TestExcludeCreate) SaveX(ctx context.Context) *TestExclude {
 }
 
 // Exec executes the query.
-func (tec *TestExcludeCreate) Exec(ctx context.Context) error {
-	_, err := tec.Save(ctx)
+func (_c *TestExcludeCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tec *TestExcludeCreate) ExecX(ctx context.Context) {
-	if err := tec.Exec(ctx); err != nil {
+func (_c *TestExcludeCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tec *TestExcludeCreate) defaults() {
-	if _, ok := tec.mutation.ID(); !ok {
+func (_c *TestExcludeCreate) defaults() {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := testexclude.DefaultID()
-		tec.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tec *TestExcludeCreate) check() error {
-	if _, ok := tec.mutation.Name(); !ok {
+func (_c *TestExcludeCreate) check() error {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "TestExclude.name"`)}
 	}
-	if v, ok := tec.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := testexclude.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "TestExclude.name": %w`, err)}
 		}
@@ -108,12 +108,12 @@ func (tec *TestExcludeCreate) check() error {
 	return nil
 }
 
-func (tec *TestExcludeCreate) sqlSave(ctx context.Context) (*TestExclude, error) {
-	if err := tec.check(); err != nil {
+func (_c *TestExcludeCreate) sqlSave(ctx context.Context) (*TestExclude, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := tec.createSpec()
-	if err := sqlgraph.CreateNode(ctx, tec.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -126,25 +126,25 @@ func (tec *TestExcludeCreate) sqlSave(ctx context.Context) (*TestExclude, error)
 			return nil, err
 		}
 	}
-	tec.mutation.id = &_node.ID
-	tec.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (tec *TestExcludeCreate) createSpec() (*TestExclude, *sqlgraph.CreateSpec) {
+func (_c *TestExcludeCreate) createSpec() (*TestExclude, *sqlgraph.CreateSpec) {
 	var (
-		_node = &TestExclude{config: tec.config}
+		_node = &TestExclude{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(testexclude.Table, sqlgraph.NewFieldSpec(testexclude.FieldID, field.TypeUUID))
 	)
-	if id, ok := tec.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := tec.mutation.OtherID(); ok {
+	if value, ok := _c.mutation.OtherID(); ok {
 		_spec.SetField(testexclude.FieldOtherID, field.TypeUUID, value)
 		_node.OtherID = value
 	}
-	if value, ok := tec.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(testexclude.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
@@ -159,16 +159,16 @@ type TestExcludeCreateBulk struct {
 }
 
 // Save creates the TestExclude entities in the database.
-func (tecb *TestExcludeCreateBulk) Save(ctx context.Context) ([]*TestExclude, error) {
-	if tecb.err != nil {
-		return nil, tecb.err
+func (_c *TestExcludeCreateBulk) Save(ctx context.Context) ([]*TestExclude, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(tecb.builders))
-	nodes := make([]*TestExclude, len(tecb.builders))
-	mutators := make([]Mutator, len(tecb.builders))
-	for i := range tecb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*TestExclude, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := tecb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TestExcludeMutation)
@@ -182,11 +182,11 @@ func (tecb *TestExcludeCreateBulk) Save(ctx context.Context) ([]*TestExclude, er
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, tecb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, tecb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -206,7 +206,7 @@ func (tecb *TestExcludeCreateBulk) Save(ctx context.Context) ([]*TestExclude, er
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, tecb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -214,8 +214,8 @@ func (tecb *TestExcludeCreateBulk) Save(ctx context.Context) ([]*TestExclude, er
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tecb *TestExcludeCreateBulk) SaveX(ctx context.Context) []*TestExclude {
-	v, err := tecb.Save(ctx)
+func (_c *TestExcludeCreateBulk) SaveX(ctx context.Context) []*TestExclude {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -223,14 +223,14 @@ func (tecb *TestExcludeCreateBulk) SaveX(ctx context.Context) []*TestExclude {
 }
 
 // Exec executes the query.
-func (tecb *TestExcludeCreateBulk) Exec(ctx context.Context) error {
-	_, err := tecb.Save(ctx)
+func (_c *TestExcludeCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tecb *TestExcludeCreateBulk) ExecX(ctx context.Context) {
-	if err := tecb.Exec(ctx); err != nil {
+func (_c *TestExcludeCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

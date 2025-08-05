@@ -57,7 +57,7 @@ func (*TestSkipHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TestSkipHistory fields.
-func (tsh *TestSkipHistory) assignValues(columns []string, values []any) error {
+func (_m *TestSkipHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -67,47 +67,47 @@ func (tsh *TestSkipHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				tsh.ID = *value
+				_m.ID = *value
 			}
 		case testskiphistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				tsh.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case testskiphistory.FieldOperation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value.Valid {
-				tsh.Operation = enthistory.OpType(value.String)
+				_m.Operation = enthistory.OpType(value.String)
 			}
 		case testskiphistory.FieldRef:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value != nil {
-				tsh.Ref = *value
+				_m.Ref = *value
 			}
 		case testskiphistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				tsh.UpdatedBy = new(uuid.UUID)
-				*tsh.UpdatedBy = *value.S.(*uuid.UUID)
+				_m.UpdatedBy = new(uuid.UUID)
+				*_m.UpdatedBy = *value.S.(*uuid.UUID)
 			}
 		case testskiphistory.FieldOtherID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field other_id", values[i])
 			} else if value != nil {
-				tsh.OtherID = *value
+				_m.OtherID = *value
 			}
 		case testskiphistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				tsh.Name = value.String
+				_m.Name = value.String
 			}
 		default:
-			tsh.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -115,52 +115,52 @@ func (tsh *TestSkipHistory) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TestSkipHistory.
 // This includes values selected through modifiers, order, etc.
-func (tsh *TestSkipHistory) Value(name string) (ent.Value, error) {
-	return tsh.selectValues.Get(name)
+func (_m *TestSkipHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this TestSkipHistory.
 // Note that you need to call TestSkipHistory.Unwrap() before calling this method if this TestSkipHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (tsh *TestSkipHistory) Update() *TestSkipHistoryUpdateOne {
-	return NewTestSkipHistoryClient(tsh.config).UpdateOne(tsh)
+func (_m *TestSkipHistory) Update() *TestSkipHistoryUpdateOne {
+	return NewTestSkipHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TestSkipHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (tsh *TestSkipHistory) Unwrap() *TestSkipHistory {
-	_tx, ok := tsh.config.driver.(*txDriver)
+func (_m *TestSkipHistory) Unwrap() *TestSkipHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: TestSkipHistory is not a transactional entity")
 	}
-	tsh.config.driver = _tx.drv
-	return tsh
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (tsh *TestSkipHistory) String() string {
+func (_m *TestSkipHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("TestSkipHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", tsh.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(tsh.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", tsh.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(fmt.Sprintf("%v", tsh.Ref))
+	builder.WriteString(fmt.Sprintf("%v", _m.Ref))
 	builder.WriteString(", ")
-	if v := tsh.UpdatedBy; v != nil {
+	if v := _m.UpdatedBy; v != nil {
 		builder.WriteString("updated_by=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("other_id=")
-	builder.WriteString(fmt.Sprintf("%v", tsh.OtherID))
+	builder.WriteString(fmt.Sprintf("%v", _m.OtherID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(tsh.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteByte(')')
 	return builder.String()
 }

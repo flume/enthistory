@@ -55,7 +55,7 @@ func (*CharacterHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the CharacterHistory fields.
-func (ch *CharacterHistory) assignValues(columns []string, values []any) error {
+func (_m *CharacterHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -66,39 +66,39 @@ func (ch *CharacterHistory) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			ch.ID = int(value.Int64)
+			_m.ID = int(value.Int64)
 		case characterhistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				ch.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case characterhistory.FieldOperation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value.Valid {
-				ch.Operation = enthistory.OpType(value.String)
+				_m.Operation = enthistory.OpType(value.String)
 			}
 		case characterhistory.FieldRef:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value != nil {
-				ch.Ref = *value
+				_m.Ref = *value
 			}
 		case characterhistory.FieldAge:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field age", values[i])
 			} else if value.Valid {
-				ch.Age = int(value.Int64)
+				_m.Age = int(value.Int64)
 			}
 		case characterhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				ch.Name = value.String
+				_m.Name = value.String
 			}
 		default:
-			ch.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -106,47 +106,47 @@ func (ch *CharacterHistory) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the CharacterHistory.
 // This includes values selected through modifiers, order, etc.
-func (ch *CharacterHistory) Value(name string) (ent.Value, error) {
-	return ch.selectValues.Get(name)
+func (_m *CharacterHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this CharacterHistory.
 // Note that you need to call CharacterHistory.Unwrap() before calling this method if this CharacterHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ch *CharacterHistory) Update() *CharacterHistoryUpdateOne {
-	return NewCharacterHistoryClient(ch.config).UpdateOne(ch)
+func (_m *CharacterHistory) Update() *CharacterHistoryUpdateOne {
+	return NewCharacterHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the CharacterHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ch *CharacterHistory) Unwrap() *CharacterHistory {
-	_tx, ok := ch.config.driver.(*txDriver)
+func (_m *CharacterHistory) Unwrap() *CharacterHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: CharacterHistory is not a transactional entity")
 	}
-	ch.config.driver = _tx.drv
-	return ch
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ch *CharacterHistory) String() string {
+func (_m *CharacterHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("CharacterHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ch.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(ch.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", ch.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(fmt.Sprintf("%v", ch.Ref))
+	builder.WriteString(fmt.Sprintf("%v", _m.Ref))
 	builder.WriteString(", ")
 	builder.WriteString("age=")
-	builder.WriteString(fmt.Sprintf("%v", ch.Age))
+	builder.WriteString(fmt.Sprintf("%v", _m.Age))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(ch.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteByte(')')
 	return builder.String()
 }

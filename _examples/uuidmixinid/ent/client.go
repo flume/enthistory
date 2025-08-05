@@ -280,8 +280,8 @@ func (c *MenuItemClient) Update() *MenuItemUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *MenuItemClient) UpdateOne(mi *MenuItem) *MenuItemUpdateOne {
-	mutation := newMenuItemMutation(c.config, OpUpdateOne, withMenuItem(mi))
+func (c *MenuItemClient) UpdateOne(_m *MenuItem) *MenuItemUpdateOne {
+	mutation := newMenuItemMutation(c.config, OpUpdateOne, withMenuItem(_m))
 	return &MenuItemUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -298,8 +298,8 @@ func (c *MenuItemClient) Delete() *MenuItemDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *MenuItemClient) DeleteOne(mi *MenuItem) *MenuItemDeleteOne {
-	return c.DeleteOneID(mi.ID)
+func (c *MenuItemClient) DeleteOne(_m *MenuItem) *MenuItemDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -413,8 +413,8 @@ func (c *MenuItemHistoryClient) Update() *MenuItemHistoryUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *MenuItemHistoryClient) UpdateOne(mih *MenuItemHistory) *MenuItemHistoryUpdateOne {
-	mutation := newMenuItemHistoryMutation(c.config, OpUpdateOne, withMenuItemHistory(mih))
+func (c *MenuItemHistoryClient) UpdateOne(_m *MenuItemHistory) *MenuItemHistoryUpdateOne {
+	mutation := newMenuItemHistoryMutation(c.config, OpUpdateOne, withMenuItemHistory(_m))
 	return &MenuItemHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -431,8 +431,8 @@ func (c *MenuItemHistoryClient) Delete() *MenuItemHistoryDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *MenuItemHistoryClient) DeleteOne(mih *MenuItemHistory) *MenuItemHistoryDeleteOne {
-	return c.DeleteOneID(mih.ID)
+func (c *MenuItemHistoryClient) DeleteOne(_m *MenuItemHistory) *MenuItemHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.

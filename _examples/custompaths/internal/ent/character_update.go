@@ -24,131 +24,131 @@ type CharacterUpdate struct {
 }
 
 // Where appends a list predicates to the CharacterUpdate builder.
-func (cu *CharacterUpdate) Where(ps ...predicate.Character) *CharacterUpdate {
-	cu.mutation.Where(ps...)
-	return cu
+func (_u *CharacterUpdate) Where(ps ...predicate.Character) *CharacterUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetAge sets the "age" field.
-func (cu *CharacterUpdate) SetAge(i int) *CharacterUpdate {
-	cu.mutation.ResetAge()
-	cu.mutation.SetAge(i)
-	return cu
+func (_u *CharacterUpdate) SetAge(v int) *CharacterUpdate {
+	_u.mutation.ResetAge()
+	_u.mutation.SetAge(v)
+	return _u
 }
 
 // SetNillableAge sets the "age" field if the given value is not nil.
-func (cu *CharacterUpdate) SetNillableAge(i *int) *CharacterUpdate {
-	if i != nil {
-		cu.SetAge(*i)
+func (_u *CharacterUpdate) SetNillableAge(v *int) *CharacterUpdate {
+	if v != nil {
+		_u.SetAge(*v)
 	}
-	return cu
+	return _u
 }
 
-// AddAge adds i to the "age" field.
-func (cu *CharacterUpdate) AddAge(i int) *CharacterUpdate {
-	cu.mutation.AddAge(i)
-	return cu
+// AddAge adds value to the "age" field.
+func (_u *CharacterUpdate) AddAge(v int) *CharacterUpdate {
+	_u.mutation.AddAge(v)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (cu *CharacterUpdate) SetName(s string) *CharacterUpdate {
-	cu.mutation.SetName(s)
-	return cu
+func (_u *CharacterUpdate) SetName(v string) *CharacterUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (cu *CharacterUpdate) SetNillableName(s *string) *CharacterUpdate {
-	if s != nil {
-		cu.SetName(*s)
+func (_u *CharacterUpdate) SetNillableName(v *string) *CharacterUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return cu
+	return _u
 }
 
 // AddFriendIDs adds the "friends" edge to the Character entity by IDs.
-func (cu *CharacterUpdate) AddFriendIDs(ids ...uuid.UUID) *CharacterUpdate {
-	cu.mutation.AddFriendIDs(ids...)
-	return cu
+func (_u *CharacterUpdate) AddFriendIDs(ids ...uuid.UUID) *CharacterUpdate {
+	_u.mutation.AddFriendIDs(ids...)
+	return _u
 }
 
 // AddFriends adds the "friends" edges to the Character entity.
-func (cu *CharacterUpdate) AddFriends(c ...*Character) *CharacterUpdate {
-	ids := make([]uuid.UUID, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *CharacterUpdate) AddFriends(v ...*Character) *CharacterUpdate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cu.AddFriendIDs(ids...)
+	return _u.AddFriendIDs(ids...)
 }
 
 // AddFriendshipIDs adds the "friendships" edge to the Friendship entity by IDs.
-func (cu *CharacterUpdate) AddFriendshipIDs(ids ...uuid.UUID) *CharacterUpdate {
-	cu.mutation.AddFriendshipIDs(ids...)
-	return cu
+func (_u *CharacterUpdate) AddFriendshipIDs(ids ...uuid.UUID) *CharacterUpdate {
+	_u.mutation.AddFriendshipIDs(ids...)
+	return _u
 }
 
 // AddFriendships adds the "friendships" edges to the Friendship entity.
-func (cu *CharacterUpdate) AddFriendships(f ...*Friendship) *CharacterUpdate {
-	ids := make([]uuid.UUID, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *CharacterUpdate) AddFriendships(v ...*Friendship) *CharacterUpdate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cu.AddFriendshipIDs(ids...)
+	return _u.AddFriendshipIDs(ids...)
 }
 
 // Mutation returns the CharacterMutation object of the builder.
-func (cu *CharacterUpdate) Mutation() *CharacterMutation {
-	return cu.mutation
+func (_u *CharacterUpdate) Mutation() *CharacterMutation {
+	return _u.mutation
 }
 
 // ClearFriends clears all "friends" edges to the Character entity.
-func (cu *CharacterUpdate) ClearFriends() *CharacterUpdate {
-	cu.mutation.ClearFriends()
-	return cu
+func (_u *CharacterUpdate) ClearFriends() *CharacterUpdate {
+	_u.mutation.ClearFriends()
+	return _u
 }
 
 // RemoveFriendIDs removes the "friends" edge to Character entities by IDs.
-func (cu *CharacterUpdate) RemoveFriendIDs(ids ...uuid.UUID) *CharacterUpdate {
-	cu.mutation.RemoveFriendIDs(ids...)
-	return cu
+func (_u *CharacterUpdate) RemoveFriendIDs(ids ...uuid.UUID) *CharacterUpdate {
+	_u.mutation.RemoveFriendIDs(ids...)
+	return _u
 }
 
 // RemoveFriends removes "friends" edges to Character entities.
-func (cu *CharacterUpdate) RemoveFriends(c ...*Character) *CharacterUpdate {
-	ids := make([]uuid.UUID, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *CharacterUpdate) RemoveFriends(v ...*Character) *CharacterUpdate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cu.RemoveFriendIDs(ids...)
+	return _u.RemoveFriendIDs(ids...)
 }
 
 // ClearFriendships clears all "friendships" edges to the Friendship entity.
-func (cu *CharacterUpdate) ClearFriendships() *CharacterUpdate {
-	cu.mutation.ClearFriendships()
-	return cu
+func (_u *CharacterUpdate) ClearFriendships() *CharacterUpdate {
+	_u.mutation.ClearFriendships()
+	return _u
 }
 
 // RemoveFriendshipIDs removes the "friendships" edge to Friendship entities by IDs.
-func (cu *CharacterUpdate) RemoveFriendshipIDs(ids ...uuid.UUID) *CharacterUpdate {
-	cu.mutation.RemoveFriendshipIDs(ids...)
-	return cu
+func (_u *CharacterUpdate) RemoveFriendshipIDs(ids ...uuid.UUID) *CharacterUpdate {
+	_u.mutation.RemoveFriendshipIDs(ids...)
+	return _u
 }
 
 // RemoveFriendships removes "friendships" edges to Friendship entities.
-func (cu *CharacterUpdate) RemoveFriendships(f ...*Friendship) *CharacterUpdate {
-	ids := make([]uuid.UUID, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *CharacterUpdate) RemoveFriendships(v ...*Friendship) *CharacterUpdate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cu.RemoveFriendshipIDs(ids...)
+	return _u.RemoveFriendshipIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (cu *CharacterUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, cu.sqlSave, cu.mutation, cu.hooks)
+func (_u *CharacterUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cu *CharacterUpdate) SaveX(ctx context.Context) int {
-	affected, err := cu.Save(ctx)
+func (_u *CharacterUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -156,21 +156,21 @@ func (cu *CharacterUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (cu *CharacterUpdate) Exec(ctx context.Context) error {
-	_, err := cu.Save(ctx)
+func (_u *CharacterUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cu *CharacterUpdate) ExecX(ctx context.Context) {
-	if err := cu.Exec(ctx); err != nil {
+func (_u *CharacterUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cu *CharacterUpdate) check() error {
-	if v, ok := cu.mutation.Age(); ok {
+func (_u *CharacterUpdate) check() error {
+	if v, ok := _u.mutation.Age(); ok {
 		if err := character.AgeValidator(v); err != nil {
 			return &ValidationError{Name: "age", err: fmt.Errorf(`ent: validator failed for field "Character.age": %w`, err)}
 		}
@@ -178,28 +178,28 @@ func (cu *CharacterUpdate) check() error {
 	return nil
 }
 
-func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := cu.check(); err != nil {
-		return n, err
+func (_u *CharacterUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(character.Table, character.Columns, sqlgraph.NewFieldSpec(character.FieldID, field.TypeUUID))
-	if ps := cu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := cu.mutation.Age(); ok {
+	if value, ok := _u.mutation.Age(); ok {
 		_spec.SetField(character.FieldAge, field.TypeInt, value)
 	}
-	if value, ok := cu.mutation.AddedAge(); ok {
+	if value, ok := _u.mutation.AddedAge(); ok {
 		_spec.AddField(character.FieldAge, field.TypeInt, value)
 	}
-	if value, ok := cu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(character.FieldName, field.TypeString, value)
 	}
-	if cu.mutation.FriendsCleared() {
+	if _u.mutation.FriendsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -210,7 +210,7 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeUUID),
 			},
 		}
-		createE := &FriendshipCreate{config: cu.config, mutation: newFriendshipMutation(cu.config, OpCreate)}
+		createE := &FriendshipCreate{config: _u.config, mutation: newFriendshipMutation(_u.config, OpCreate)}
 		createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -219,7 +219,7 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.RemovedFriendsIDs(); len(nodes) > 0 && !cu.mutation.FriendsCleared() {
+	if nodes := _u.mutation.RemovedFriendsIDs(); len(nodes) > 0 && !_u.mutation.FriendsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -233,7 +233,7 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &FriendshipCreate{config: cu.config, mutation: newFriendshipMutation(cu.config, OpCreate)}
+		createE := &FriendshipCreate{config: _u.config, mutation: newFriendshipMutation(_u.config, OpCreate)}
 		createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -242,7 +242,7 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.FriendsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FriendsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -256,7 +256,7 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &FriendshipCreate{config: cu.config, mutation: newFriendshipMutation(cu.config, OpCreate)}
+		createE := &FriendshipCreate{config: _u.config, mutation: newFriendshipMutation(_u.config, OpCreate)}
 		createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -265,7 +265,7 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cu.mutation.FriendshipsCleared() {
+	if _u.mutation.FriendshipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -278,7 +278,7 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.RemovedFriendshipsIDs(); len(nodes) > 0 && !cu.mutation.FriendshipsCleared() {
+	if nodes := _u.mutation.RemovedFriendshipsIDs(); len(nodes) > 0 && !_u.mutation.FriendshipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -294,7 +294,7 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.FriendshipsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FriendshipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -310,7 +310,7 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{character.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -318,8 +318,8 @@ func (cu *CharacterUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	cu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // CharacterUpdateOne is the builder for updating a single Character entity.
@@ -331,138 +331,138 @@ type CharacterUpdateOne struct {
 }
 
 // SetAge sets the "age" field.
-func (cuo *CharacterUpdateOne) SetAge(i int) *CharacterUpdateOne {
-	cuo.mutation.ResetAge()
-	cuo.mutation.SetAge(i)
-	return cuo
+func (_u *CharacterUpdateOne) SetAge(v int) *CharacterUpdateOne {
+	_u.mutation.ResetAge()
+	_u.mutation.SetAge(v)
+	return _u
 }
 
 // SetNillableAge sets the "age" field if the given value is not nil.
-func (cuo *CharacterUpdateOne) SetNillableAge(i *int) *CharacterUpdateOne {
-	if i != nil {
-		cuo.SetAge(*i)
+func (_u *CharacterUpdateOne) SetNillableAge(v *int) *CharacterUpdateOne {
+	if v != nil {
+		_u.SetAge(*v)
 	}
-	return cuo
+	return _u
 }
 
-// AddAge adds i to the "age" field.
-func (cuo *CharacterUpdateOne) AddAge(i int) *CharacterUpdateOne {
-	cuo.mutation.AddAge(i)
-	return cuo
+// AddAge adds value to the "age" field.
+func (_u *CharacterUpdateOne) AddAge(v int) *CharacterUpdateOne {
+	_u.mutation.AddAge(v)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (cuo *CharacterUpdateOne) SetName(s string) *CharacterUpdateOne {
-	cuo.mutation.SetName(s)
-	return cuo
+func (_u *CharacterUpdateOne) SetName(v string) *CharacterUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (cuo *CharacterUpdateOne) SetNillableName(s *string) *CharacterUpdateOne {
-	if s != nil {
-		cuo.SetName(*s)
+func (_u *CharacterUpdateOne) SetNillableName(v *string) *CharacterUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return cuo
+	return _u
 }
 
 // AddFriendIDs adds the "friends" edge to the Character entity by IDs.
-func (cuo *CharacterUpdateOne) AddFriendIDs(ids ...uuid.UUID) *CharacterUpdateOne {
-	cuo.mutation.AddFriendIDs(ids...)
-	return cuo
+func (_u *CharacterUpdateOne) AddFriendIDs(ids ...uuid.UUID) *CharacterUpdateOne {
+	_u.mutation.AddFriendIDs(ids...)
+	return _u
 }
 
 // AddFriends adds the "friends" edges to the Character entity.
-func (cuo *CharacterUpdateOne) AddFriends(c ...*Character) *CharacterUpdateOne {
-	ids := make([]uuid.UUID, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *CharacterUpdateOne) AddFriends(v ...*Character) *CharacterUpdateOne {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cuo.AddFriendIDs(ids...)
+	return _u.AddFriendIDs(ids...)
 }
 
 // AddFriendshipIDs adds the "friendships" edge to the Friendship entity by IDs.
-func (cuo *CharacterUpdateOne) AddFriendshipIDs(ids ...uuid.UUID) *CharacterUpdateOne {
-	cuo.mutation.AddFriendshipIDs(ids...)
-	return cuo
+func (_u *CharacterUpdateOne) AddFriendshipIDs(ids ...uuid.UUID) *CharacterUpdateOne {
+	_u.mutation.AddFriendshipIDs(ids...)
+	return _u
 }
 
 // AddFriendships adds the "friendships" edges to the Friendship entity.
-func (cuo *CharacterUpdateOne) AddFriendships(f ...*Friendship) *CharacterUpdateOne {
-	ids := make([]uuid.UUID, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *CharacterUpdateOne) AddFriendships(v ...*Friendship) *CharacterUpdateOne {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cuo.AddFriendshipIDs(ids...)
+	return _u.AddFriendshipIDs(ids...)
 }
 
 // Mutation returns the CharacterMutation object of the builder.
-func (cuo *CharacterUpdateOne) Mutation() *CharacterMutation {
-	return cuo.mutation
+func (_u *CharacterUpdateOne) Mutation() *CharacterMutation {
+	return _u.mutation
 }
 
 // ClearFriends clears all "friends" edges to the Character entity.
-func (cuo *CharacterUpdateOne) ClearFriends() *CharacterUpdateOne {
-	cuo.mutation.ClearFriends()
-	return cuo
+func (_u *CharacterUpdateOne) ClearFriends() *CharacterUpdateOne {
+	_u.mutation.ClearFriends()
+	return _u
 }
 
 // RemoveFriendIDs removes the "friends" edge to Character entities by IDs.
-func (cuo *CharacterUpdateOne) RemoveFriendIDs(ids ...uuid.UUID) *CharacterUpdateOne {
-	cuo.mutation.RemoveFriendIDs(ids...)
-	return cuo
+func (_u *CharacterUpdateOne) RemoveFriendIDs(ids ...uuid.UUID) *CharacterUpdateOne {
+	_u.mutation.RemoveFriendIDs(ids...)
+	return _u
 }
 
 // RemoveFriends removes "friends" edges to Character entities.
-func (cuo *CharacterUpdateOne) RemoveFriends(c ...*Character) *CharacterUpdateOne {
-	ids := make([]uuid.UUID, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_u *CharacterUpdateOne) RemoveFriends(v ...*Character) *CharacterUpdateOne {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cuo.RemoveFriendIDs(ids...)
+	return _u.RemoveFriendIDs(ids...)
 }
 
 // ClearFriendships clears all "friendships" edges to the Friendship entity.
-func (cuo *CharacterUpdateOne) ClearFriendships() *CharacterUpdateOne {
-	cuo.mutation.ClearFriendships()
-	return cuo
+func (_u *CharacterUpdateOne) ClearFriendships() *CharacterUpdateOne {
+	_u.mutation.ClearFriendships()
+	return _u
 }
 
 // RemoveFriendshipIDs removes the "friendships" edge to Friendship entities by IDs.
-func (cuo *CharacterUpdateOne) RemoveFriendshipIDs(ids ...uuid.UUID) *CharacterUpdateOne {
-	cuo.mutation.RemoveFriendshipIDs(ids...)
-	return cuo
+func (_u *CharacterUpdateOne) RemoveFriendshipIDs(ids ...uuid.UUID) *CharacterUpdateOne {
+	_u.mutation.RemoveFriendshipIDs(ids...)
+	return _u
 }
 
 // RemoveFriendships removes "friendships" edges to Friendship entities.
-func (cuo *CharacterUpdateOne) RemoveFriendships(f ...*Friendship) *CharacterUpdateOne {
-	ids := make([]uuid.UUID, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_u *CharacterUpdateOne) RemoveFriendships(v ...*Friendship) *CharacterUpdateOne {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cuo.RemoveFriendshipIDs(ids...)
+	return _u.RemoveFriendshipIDs(ids...)
 }
 
 // Where appends a list predicates to the CharacterUpdate builder.
-func (cuo *CharacterUpdateOne) Where(ps ...predicate.Character) *CharacterUpdateOne {
-	cuo.mutation.Where(ps...)
-	return cuo
+func (_u *CharacterUpdateOne) Where(ps ...predicate.Character) *CharacterUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (cuo *CharacterUpdateOne) Select(field string, fields ...string) *CharacterUpdateOne {
-	cuo.fields = append([]string{field}, fields...)
-	return cuo
+func (_u *CharacterUpdateOne) Select(field string, fields ...string) *CharacterUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Character entity.
-func (cuo *CharacterUpdateOne) Save(ctx context.Context) (*Character, error) {
-	return withHooks(ctx, cuo.sqlSave, cuo.mutation, cuo.hooks)
+func (_u *CharacterUpdateOne) Save(ctx context.Context) (*Character, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (cuo *CharacterUpdateOne) SaveX(ctx context.Context) *Character {
-	node, err := cuo.Save(ctx)
+func (_u *CharacterUpdateOne) SaveX(ctx context.Context) *Character {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -470,21 +470,21 @@ func (cuo *CharacterUpdateOne) SaveX(ctx context.Context) *Character {
 }
 
 // Exec executes the query on the entity.
-func (cuo *CharacterUpdateOne) Exec(ctx context.Context) error {
-	_, err := cuo.Save(ctx)
+func (_u *CharacterUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cuo *CharacterUpdateOne) ExecX(ctx context.Context) {
-	if err := cuo.Exec(ctx); err != nil {
+func (_u *CharacterUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cuo *CharacterUpdateOne) check() error {
-	if v, ok := cuo.mutation.Age(); ok {
+func (_u *CharacterUpdateOne) check() error {
+	if v, ok := _u.mutation.Age(); ok {
 		if err := character.AgeValidator(v); err != nil {
 			return &ValidationError{Name: "age", err: fmt.Errorf(`ent: validator failed for field "Character.age": %w`, err)}
 		}
@@ -492,17 +492,17 @@ func (cuo *CharacterUpdateOne) check() error {
 	return nil
 }
 
-func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, err error) {
-	if err := cuo.check(); err != nil {
+func (_u *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(character.Table, character.Columns, sqlgraph.NewFieldSpec(character.FieldID, field.TypeUUID))
-	id, ok := cuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Character.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := cuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, character.FieldID)
 		for _, f := range fields {
@@ -514,23 +514,23 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 			}
 		}
 	}
-	if ps := cuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := cuo.mutation.Age(); ok {
+	if value, ok := _u.mutation.Age(); ok {
 		_spec.SetField(character.FieldAge, field.TypeInt, value)
 	}
-	if value, ok := cuo.mutation.AddedAge(); ok {
+	if value, ok := _u.mutation.AddedAge(); ok {
 		_spec.AddField(character.FieldAge, field.TypeInt, value)
 	}
-	if value, ok := cuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(character.FieldName, field.TypeString, value)
 	}
-	if cuo.mutation.FriendsCleared() {
+	if _u.mutation.FriendsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -541,7 +541,7 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeUUID),
 			},
 		}
-		createE := &FriendshipCreate{config: cuo.config, mutation: newFriendshipMutation(cuo.config, OpCreate)}
+		createE := &FriendshipCreate{config: _u.config, mutation: newFriendshipMutation(_u.config, OpCreate)}
 		createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -550,7 +550,7 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.RemovedFriendsIDs(); len(nodes) > 0 && !cuo.mutation.FriendsCleared() {
+	if nodes := _u.mutation.RemovedFriendsIDs(); len(nodes) > 0 && !_u.mutation.FriendsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -564,7 +564,7 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &FriendshipCreate{config: cuo.config, mutation: newFriendshipMutation(cuo.config, OpCreate)}
+		createE := &FriendshipCreate{config: _u.config, mutation: newFriendshipMutation(_u.config, OpCreate)}
 		createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -573,7 +573,7 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.FriendsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FriendsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -587,7 +587,7 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &FriendshipCreate{config: cuo.config, mutation: newFriendshipMutation(cuo.config, OpCreate)}
+		createE := &FriendshipCreate{config: _u.config, mutation: newFriendshipMutation(_u.config, OpCreate)}
 		createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
@@ -596,7 +596,7 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cuo.mutation.FriendshipsCleared() {
+	if _u.mutation.FriendshipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -609,7 +609,7 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.RemovedFriendshipsIDs(); len(nodes) > 0 && !cuo.mutation.FriendshipsCleared() {
+	if nodes := _u.mutation.RemovedFriendshipsIDs(); len(nodes) > 0 && !_u.mutation.FriendshipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -625,7 +625,7 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.FriendshipsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.FriendshipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -641,10 +641,10 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_node = &Character{config: cuo.config}
+	_node = &Character{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, cuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{character.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -652,6 +652,6 @@ func (cuo *CharacterUpdateOne) sqlSave(ctx context.Context) (_node *Character, e
 		}
 		return nil, err
 	}
-	cuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }
