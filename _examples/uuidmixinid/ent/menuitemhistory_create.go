@@ -24,135 +24,135 @@ type MenuItemHistoryCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (mihc *MenuItemHistoryCreate) SetCreatedAt(t time.Time) *MenuItemHistoryCreate {
-	mihc.mutation.SetCreatedAt(t)
-	return mihc
+func (_c *MenuItemHistoryCreate) SetCreatedAt(v time.Time) *MenuItemHistoryCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (mihc *MenuItemHistoryCreate) SetNillableCreatedAt(t *time.Time) *MenuItemHistoryCreate {
-	if t != nil {
-		mihc.SetCreatedAt(*t)
+func (_c *MenuItemHistoryCreate) SetNillableCreatedAt(v *time.Time) *MenuItemHistoryCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return mihc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (mihc *MenuItemHistoryCreate) SetUpdatedAt(t time.Time) *MenuItemHistoryCreate {
-	mihc.mutation.SetUpdatedAt(t)
-	return mihc
+func (_c *MenuItemHistoryCreate) SetUpdatedAt(v time.Time) *MenuItemHistoryCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (mihc *MenuItemHistoryCreate) SetNillableUpdatedAt(t *time.Time) *MenuItemHistoryCreate {
-	if t != nil {
-		mihc.SetUpdatedAt(*t)
+func (_c *MenuItemHistoryCreate) SetNillableUpdatedAt(v *time.Time) *MenuItemHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return mihc
+	return _c
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (mihc *MenuItemHistoryCreate) SetHistoryTime(t time.Time) *MenuItemHistoryCreate {
-	mihc.mutation.SetHistoryTime(t)
-	return mihc
+func (_c *MenuItemHistoryCreate) SetHistoryTime(v time.Time) *MenuItemHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (mihc *MenuItemHistoryCreate) SetNillableHistoryTime(t *time.Time) *MenuItemHistoryCreate {
-	if t != nil {
-		mihc.SetHistoryTime(*t)
+func (_c *MenuItemHistoryCreate) SetNillableHistoryTime(v *time.Time) *MenuItemHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return mihc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (mihc *MenuItemHistoryCreate) SetOperation(et enthistory.OpType) *MenuItemHistoryCreate {
-	mihc.mutation.SetOperation(et)
-	return mihc
+func (_c *MenuItemHistoryCreate) SetOperation(v enthistory.OpType) *MenuItemHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (mihc *MenuItemHistoryCreate) SetRef(u uuid.UUID) *MenuItemHistoryCreate {
-	mihc.mutation.SetRef(u)
-	return mihc
+func (_c *MenuItemHistoryCreate) SetRef(v uuid.UUID) *MenuItemHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (mihc *MenuItemHistoryCreate) SetNillableRef(u *uuid.UUID) *MenuItemHistoryCreate {
-	if u != nil {
-		mihc.SetRef(*u)
+func (_c *MenuItemHistoryCreate) SetNillableRef(v *uuid.UUID) *MenuItemHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return mihc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (mihc *MenuItemHistoryCreate) SetUpdatedBy(u uuid.UUID) *MenuItemHistoryCreate {
-	mihc.mutation.SetUpdatedBy(u)
-	return mihc
+func (_c *MenuItemHistoryCreate) SetUpdatedBy(v uuid.UUID) *MenuItemHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (mihc *MenuItemHistoryCreate) SetNillableUpdatedBy(u *uuid.UUID) *MenuItemHistoryCreate {
-	if u != nil {
-		mihc.SetUpdatedBy(*u)
+func (_c *MenuItemHistoryCreate) SetNillableUpdatedBy(v *uuid.UUID) *MenuItemHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return mihc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (mihc *MenuItemHistoryCreate) SetName(s string) *MenuItemHistoryCreate {
-	mihc.mutation.SetName(s)
-	return mihc
+func (_c *MenuItemHistoryCreate) SetName(v string) *MenuItemHistoryCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetPrice sets the "price" field.
-func (mihc *MenuItemHistoryCreate) SetPrice(f float64) *MenuItemHistoryCreate {
-	mihc.mutation.SetPrice(f)
-	return mihc
+func (_c *MenuItemHistoryCreate) SetPrice(v float64) *MenuItemHistoryCreate {
+	_c.mutation.SetPrice(v)
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (mihc *MenuItemHistoryCreate) SetDescription(s string) *MenuItemHistoryCreate {
-	mihc.mutation.SetDescription(s)
-	return mihc
+func (_c *MenuItemHistoryCreate) SetDescription(v string) *MenuItemHistoryCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (mihc *MenuItemHistoryCreate) SetNillableDescription(s *string) *MenuItemHistoryCreate {
-	if s != nil {
-		mihc.SetDescription(*s)
+func (_c *MenuItemHistoryCreate) SetNillableDescription(v *string) *MenuItemHistoryCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return mihc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (mihc *MenuItemHistoryCreate) SetID(u uuid.UUID) *MenuItemHistoryCreate {
-	mihc.mutation.SetID(u)
-	return mihc
+func (_c *MenuItemHistoryCreate) SetID(v uuid.UUID) *MenuItemHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (mihc *MenuItemHistoryCreate) SetNillableID(u *uuid.UUID) *MenuItemHistoryCreate {
-	if u != nil {
-		mihc.SetID(*u)
+func (_c *MenuItemHistoryCreate) SetNillableID(v *uuid.UUID) *MenuItemHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return mihc
+	return _c
 }
 
 // Mutation returns the MenuItemHistoryMutation object of the builder.
-func (mihc *MenuItemHistoryCreate) Mutation() *MenuItemHistoryMutation {
-	return mihc.mutation
+func (_c *MenuItemHistoryCreate) Mutation() *MenuItemHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the MenuItemHistory in the database.
-func (mihc *MenuItemHistoryCreate) Save(ctx context.Context) (*MenuItemHistory, error) {
-	mihc.defaults()
-	return withHooks(ctx, mihc.sqlSave, mihc.mutation, mihc.hooks)
+func (_c *MenuItemHistoryCreate) Save(ctx context.Context) (*MenuItemHistory, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (mihc *MenuItemHistoryCreate) SaveX(ctx context.Context) *MenuItemHistory {
-	v, err := mihc.Save(ctx)
+func (_c *MenuItemHistoryCreate) SaveX(ctx context.Context) *MenuItemHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -160,72 +160,72 @@ func (mihc *MenuItemHistoryCreate) SaveX(ctx context.Context) *MenuItemHistory {
 }
 
 // Exec executes the query.
-func (mihc *MenuItemHistoryCreate) Exec(ctx context.Context) error {
-	_, err := mihc.Save(ctx)
+func (_c *MenuItemHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mihc *MenuItemHistoryCreate) ExecX(ctx context.Context) {
-	if err := mihc.Exec(ctx); err != nil {
+func (_c *MenuItemHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (mihc *MenuItemHistoryCreate) defaults() {
-	if _, ok := mihc.mutation.CreatedAt(); !ok {
+func (_c *MenuItemHistoryCreate) defaults() {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := menuitemhistory.DefaultCreatedAt()
-		mihc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := mihc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		v := menuitemhistory.DefaultUpdatedAt()
-		mihc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := mihc.mutation.HistoryTime(); !ok {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		v := menuitemhistory.DefaultHistoryTime()
-		mihc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := mihc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := menuitemhistory.DefaultID()
-		mihc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (mihc *MenuItemHistoryCreate) check() error {
-	if _, ok := mihc.mutation.CreatedAt(); !ok {
+func (_c *MenuItemHistoryCreate) check() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "MenuItemHistory.created_at"`)}
 	}
-	if _, ok := mihc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "MenuItemHistory.updated_at"`)}
 	}
-	if _, ok := mihc.mutation.HistoryTime(); !ok {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`ent: missing required field "MenuItemHistory.history_time"`)}
 	}
-	if _, ok := mihc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`ent: missing required field "MenuItemHistory.operation"`)}
 	}
-	if v, ok := mihc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := menuitemhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`ent: validator failed for field "MenuItemHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := mihc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "MenuItemHistory.name"`)}
 	}
-	if _, ok := mihc.mutation.Price(); !ok {
+	if _, ok := _c.mutation.Price(); !ok {
 		return &ValidationError{Name: "price", err: errors.New(`ent: missing required field "MenuItemHistory.price"`)}
 	}
 	return nil
 }
 
-func (mihc *MenuItemHistoryCreate) sqlSave(ctx context.Context) (*MenuItemHistory, error) {
-	if err := mihc.check(); err != nil {
+func (_c *MenuItemHistoryCreate) sqlSave(ctx context.Context) (*MenuItemHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := mihc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, mihc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -238,53 +238,53 @@ func (mihc *MenuItemHistoryCreate) sqlSave(ctx context.Context) (*MenuItemHistor
 			return nil, err
 		}
 	}
-	mihc.mutation.id = &_node.ID
-	mihc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (mihc *MenuItemHistoryCreate) createSpec() (*MenuItemHistory, *sqlgraph.CreateSpec) {
+func (_c *MenuItemHistoryCreate) createSpec() (*MenuItemHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &MenuItemHistory{config: mihc.config}
+		_node = &MenuItemHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(menuitemhistory.Table, sqlgraph.NewFieldSpec(menuitemhistory.FieldID, field.TypeUUID))
 	)
-	if id, ok := mihc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := mihc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(menuitemhistory.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := mihc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(menuitemhistory.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := mihc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(menuitemhistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := mihc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(menuitemhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := mihc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(menuitemhistory.FieldRef, field.TypeUUID, value)
 		_node.Ref = value
 	}
-	if value, ok := mihc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(menuitemhistory.FieldUpdatedBy, field.TypeUUID, value)
 		_node.UpdatedBy = &value
 	}
-	if value, ok := mihc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(menuitemhistory.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := mihc.mutation.Price(); ok {
+	if value, ok := _c.mutation.Price(); ok {
 		_spec.SetField(menuitemhistory.FieldPrice, field.TypeFloat64, value)
 		_node.Price = value
 	}
-	if value, ok := mihc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(menuitemhistory.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
@@ -299,16 +299,16 @@ type MenuItemHistoryCreateBulk struct {
 }
 
 // Save creates the MenuItemHistory entities in the database.
-func (mihcb *MenuItemHistoryCreateBulk) Save(ctx context.Context) ([]*MenuItemHistory, error) {
-	if mihcb.err != nil {
-		return nil, mihcb.err
+func (_c *MenuItemHistoryCreateBulk) Save(ctx context.Context) ([]*MenuItemHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(mihcb.builders))
-	nodes := make([]*MenuItemHistory, len(mihcb.builders))
-	mutators := make([]Mutator, len(mihcb.builders))
-	for i := range mihcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*MenuItemHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := mihcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*MenuItemHistoryMutation)
@@ -322,11 +322,11 @@ func (mihcb *MenuItemHistoryCreateBulk) Save(ctx context.Context) ([]*MenuItemHi
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, mihcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, mihcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -346,7 +346,7 @@ func (mihcb *MenuItemHistoryCreateBulk) Save(ctx context.Context) ([]*MenuItemHi
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, mihcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -354,8 +354,8 @@ func (mihcb *MenuItemHistoryCreateBulk) Save(ctx context.Context) ([]*MenuItemHi
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (mihcb *MenuItemHistoryCreateBulk) SaveX(ctx context.Context) []*MenuItemHistory {
-	v, err := mihcb.Save(ctx)
+func (_c *MenuItemHistoryCreateBulk) SaveX(ctx context.Context) []*MenuItemHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -363,14 +363,14 @@ func (mihcb *MenuItemHistoryCreateBulk) SaveX(ctx context.Context) []*MenuItemHi
 }
 
 // Exec executes the query.
-func (mihcb *MenuItemHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := mihcb.Save(ctx)
+func (_c *MenuItemHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mihcb *MenuItemHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := mihcb.Exec(ctx); err != nil {
+func (_c *MenuItemHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

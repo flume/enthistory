@@ -42,41 +42,41 @@ var (
 	MismatchedRefError = errors.New("cannot take diff of histories with different Refs")
 )
 
-func (mih *MenuItemHistory) changes(new *MenuItemHistory) []Change {
+func (_m *MenuItemHistory) changes(new *MenuItemHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(mih.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(menuitemhistory.FieldCreatedAt, mih.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(menuitemhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(mih.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(menuitemhistory.FieldUpdatedAt, mih.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(menuitemhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(mih.Name, new.Name) {
-		changes = append(changes, NewChange(menuitemhistory.FieldName, mih.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(menuitemhistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(mih.Price, new.Price) {
-		changes = append(changes, NewChange(menuitemhistory.FieldPrice, mih.Price, new.Price))
+	if !reflect.DeepEqual(_m.Price, new.Price) {
+		changes = append(changes, NewChange(menuitemhistory.FieldPrice, _m.Price, new.Price))
 	}
-	if !reflect.DeepEqual(mih.Description, new.Description) {
-		changes = append(changes, NewChange(menuitemhistory.FieldDescription, mih.Description, new.Description))
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(menuitemhistory.FieldDescription, _m.Description, new.Description))
 	}
 	return changes
 }
 
-func (mih *MenuItemHistory) Diff(history *MenuItemHistory) (*HistoryDiff[MenuItemHistory], error) {
-	if mih.Ref != history.Ref {
+func (_m *MenuItemHistory) Diff(history *MenuItemHistory) (*HistoryDiff[MenuItemHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, MismatchedRefError
 	}
-	if mih.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (mih.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && mih.ID > history.ID) {
+	if _m.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (_m.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && _m.ID > history.ID) {
 		return &HistoryDiff[MenuItemHistory]{
 			Old:     history,
-			New:     mih,
-			Changes: history.changes(mih),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return &HistoryDiff[MenuItemHistory]{
-		Old:     mih,
+		Old:     _m,
 		New:     history,
-		Changes: mih.changes(history),
+		Changes: _m.changes(history),
 	}, nil
 }
 

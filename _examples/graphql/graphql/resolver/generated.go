@@ -972,483 +972,150 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Query___type_argsName(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "name", ec.unmarshalNString2string)
 	if err != nil {
 		return nil, err
 	}
 	args["name"] = arg0
 	return args, nil
 }
-func (ec *executionContext) field_Query___type_argsName(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["name"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-	if tmp, ok := rawArgs["name"]; ok {
-		return ec.unmarshalNString2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Query_node_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Query_node_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2githubᚗcomᚋgoogleᚋuuidᚐUUID)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
 }
-func (ec *executionContext) field_Query_node_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (uuid.UUID, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal uuid.UUID
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2githubᚗcomᚋgoogleᚋuuidᚐUUID(ctx, tmp)
-	}
-
-	var zeroVal uuid.UUID
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Query_nodes_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Query_nodes_argsIds(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕgithubᚗcomᚋgoogleᚋuuidᚐUUIDᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["ids"] = arg0
 	return args, nil
 }
-func (ec *executionContext) field_Query_nodes_argsIds(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]uuid.UUID, error) {
-	if _, ok := rawArgs["ids"]; !ok {
-		var zeroVal []uuid.UUID
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("ids"))
-	if tmp, ok := rawArgs["ids"]; ok {
-		return ec.unmarshalNID2ᚕgithubᚗcomᚋgoogleᚋuuidᚐUUIDᚄ(ctx, tmp)
-	}
-
-	var zeroVal []uuid.UUID
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Query_todoHistories_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Query_todoHistories_argsAfter(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after", ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor)
 	if err != nil {
 		return nil, err
 	}
 	args["after"] = arg0
-	arg1, err := ec.field_Query_todoHistories_argsFirst(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first", ec.unmarshalOInt2ᚖint)
 	if err != nil {
 		return nil, err
 	}
 	args["first"] = arg1
-	arg2, err := ec.field_Query_todoHistories_argsBefore(ctx, rawArgs)
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before", ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor)
 	if err != nil {
 		return nil, err
 	}
 	args["before"] = arg2
-	arg3, err := ec.field_Query_todoHistories_argsLast(ctx, rawArgs)
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last", ec.unmarshalOInt2ᚖint)
 	if err != nil {
 		return nil, err
 	}
 	args["last"] = arg3
-	arg4, err := ec.field_Query_todoHistories_argsOrderBy(ctx, rawArgs)
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy", ec.unmarshalOTodoHistoryOrder2ᚖ_examplesᚋgraphqlᚋentᚐTodoHistoryOrder)
 	if err != nil {
 		return nil, err
 	}
 	args["orderBy"] = arg4
-	arg5, err := ec.field_Query_todoHistories_argsWhere(ctx, rawArgs)
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where", ec.unmarshalOTodoHistoryWhereInput2ᚖ_examplesᚋgraphqlᚋentᚐTodoHistoryWhereInput)
 	if err != nil {
 		return nil, err
 	}
 	args["where"] = arg5
 	return args, nil
-}
-func (ec *executionContext) field_Query_todoHistories_argsAfter(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*entgql.Cursor[uuid.UUID], error) {
-	if _, ok := rawArgs["after"]; !ok {
-		var zeroVal *entgql.Cursor[uuid.UUID]
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
-	if tmp, ok := rawArgs["after"]; ok {
-		return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, tmp)
-	}
-
-	var zeroVal *entgql.Cursor[uuid.UUID]
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Query_todoHistories_argsFirst(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*int, error) {
-	if _, ok := rawArgs["first"]; !ok {
-		var zeroVal *int
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
-	if tmp, ok := rawArgs["first"]; ok {
-		return ec.unmarshalOInt2ᚖint(ctx, tmp)
-	}
-
-	var zeroVal *int
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Query_todoHistories_argsBefore(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*entgql.Cursor[uuid.UUID], error) {
-	if _, ok := rawArgs["before"]; !ok {
-		var zeroVal *entgql.Cursor[uuid.UUID]
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
-	if tmp, ok := rawArgs["before"]; ok {
-		return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, tmp)
-	}
-
-	var zeroVal *entgql.Cursor[uuid.UUID]
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Query_todoHistories_argsLast(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*int, error) {
-	if _, ok := rawArgs["last"]; !ok {
-		var zeroVal *int
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("last"))
-	if tmp, ok := rawArgs["last"]; ok {
-		return ec.unmarshalOInt2ᚖint(ctx, tmp)
-	}
-
-	var zeroVal *int
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Query_todoHistories_argsOrderBy(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*ent.TodoHistoryOrder, error) {
-	if _, ok := rawArgs["orderBy"]; !ok {
-		var zeroVal *ent.TodoHistoryOrder
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-	if tmp, ok := rawArgs["orderBy"]; ok {
-		return ec.unmarshalOTodoHistoryOrder2ᚖ_examplesᚋgraphqlᚋentᚐTodoHistoryOrder(ctx, tmp)
-	}
-
-	var zeroVal *ent.TodoHistoryOrder
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Query_todoHistories_argsWhere(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*ent.TodoHistoryWhereInput, error) {
-	if _, ok := rawArgs["where"]; !ok {
-		var zeroVal *ent.TodoHistoryWhereInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-	if tmp, ok := rawArgs["where"]; ok {
-		return ec.unmarshalOTodoHistoryWhereInput2ᚖ_examplesᚋgraphqlᚋentᚐTodoHistoryWhereInput(ctx, tmp)
-	}
-
-	var zeroVal *ent.TodoHistoryWhereInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Query_todos_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Query_todos_argsAfter(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after", ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor)
 	if err != nil {
 		return nil, err
 	}
 	args["after"] = arg0
-	arg1, err := ec.field_Query_todos_argsFirst(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first", ec.unmarshalOInt2ᚖint)
 	if err != nil {
 		return nil, err
 	}
 	args["first"] = arg1
-	arg2, err := ec.field_Query_todos_argsBefore(ctx, rawArgs)
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before", ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor)
 	if err != nil {
 		return nil, err
 	}
 	args["before"] = arg2
-	arg3, err := ec.field_Query_todos_argsLast(ctx, rawArgs)
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last", ec.unmarshalOInt2ᚖint)
 	if err != nil {
 		return nil, err
 	}
 	args["last"] = arg3
-	arg4, err := ec.field_Query_todos_argsOrderBy(ctx, rawArgs)
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy", ec.unmarshalOTodoOrder2ᚖ_examplesᚋgraphqlᚋentᚐTodoOrder)
 	if err != nil {
 		return nil, err
 	}
 	args["orderBy"] = arg4
-	arg5, err := ec.field_Query_todos_argsWhere(ctx, rawArgs)
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where", ec.unmarshalOTodoWhereInput2ᚖ_examplesᚋgraphqlᚋentᚐTodoWhereInput)
 	if err != nil {
 		return nil, err
 	}
 	args["where"] = arg5
 	return args, nil
 }
-func (ec *executionContext) field_Query_todos_argsAfter(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*entgql.Cursor[uuid.UUID], error) {
-	if _, ok := rawArgs["after"]; !ok {
-		var zeroVal *entgql.Cursor[uuid.UUID]
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
-	if tmp, ok := rawArgs["after"]; ok {
-		return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, tmp)
-	}
-
-	var zeroVal *entgql.Cursor[uuid.UUID]
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Query_todos_argsFirst(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*int, error) {
-	if _, ok := rawArgs["first"]; !ok {
-		var zeroVal *int
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
-	if tmp, ok := rawArgs["first"]; ok {
-		return ec.unmarshalOInt2ᚖint(ctx, tmp)
-	}
-
-	var zeroVal *int
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Query_todos_argsBefore(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*entgql.Cursor[uuid.UUID], error) {
-	if _, ok := rawArgs["before"]; !ok {
-		var zeroVal *entgql.Cursor[uuid.UUID]
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
-	if tmp, ok := rawArgs["before"]; ok {
-		return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, tmp)
-	}
-
-	var zeroVal *entgql.Cursor[uuid.UUID]
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Query_todos_argsLast(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*int, error) {
-	if _, ok := rawArgs["last"]; !ok {
-		var zeroVal *int
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("last"))
-	if tmp, ok := rawArgs["last"]; ok {
-		return ec.unmarshalOInt2ᚖint(ctx, tmp)
-	}
-
-	var zeroVal *int
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Query_todos_argsOrderBy(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*ent.TodoOrder, error) {
-	if _, ok := rawArgs["orderBy"]; !ok {
-		var zeroVal *ent.TodoOrder
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-	if tmp, ok := rawArgs["orderBy"]; ok {
-		return ec.unmarshalOTodoOrder2ᚖ_examplesᚋgraphqlᚋentᚐTodoOrder(ctx, tmp)
-	}
-
-	var zeroVal *ent.TodoOrder
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Query_todos_argsWhere(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*ent.TodoWhereInput, error) {
-	if _, ok := rawArgs["where"]; !ok {
-		var zeroVal *ent.TodoWhereInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-	if tmp, ok := rawArgs["where"]; ok {
-		return ec.unmarshalOTodoWhereInput2ᚖ_examplesᚋgraphqlᚋentᚐTodoWhereInput(ctx, tmp)
-	}
-
-	var zeroVal *ent.TodoWhereInput
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field___Directive_args_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field___Directive_args_argsIncludeDeprecated(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "includeDeprecated", ec.unmarshalOBoolean2ᚖbool)
 	if err != nil {
 		return nil, err
 	}
 	args["includeDeprecated"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field___Directive_args_argsIncludeDeprecated(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*bool, error) {
-	if _, ok := rawArgs["includeDeprecated"]; !ok {
-		var zeroVal *bool
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("includeDeprecated"))
-	if tmp, ok := rawArgs["includeDeprecated"]; ok {
-		return ec.unmarshalOBoolean2ᚖbool(ctx, tmp)
-	}
-
-	var zeroVal *bool
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field___Field_args_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field___Field_args_argsIncludeDeprecated(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "includeDeprecated", ec.unmarshalOBoolean2ᚖbool)
 	if err != nil {
 		return nil, err
 	}
 	args["includeDeprecated"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field___Field_args_argsIncludeDeprecated(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*bool, error) {
-	if _, ok := rawArgs["includeDeprecated"]; !ok {
-		var zeroVal *bool
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("includeDeprecated"))
-	if tmp, ok := rawArgs["includeDeprecated"]; ok {
-		return ec.unmarshalOBoolean2ᚖbool(ctx, tmp)
-	}
-
-	var zeroVal *bool
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field___Type_enumValues_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field___Type_enumValues_argsIncludeDeprecated(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "includeDeprecated", ec.unmarshalOBoolean2bool)
 	if err != nil {
 		return nil, err
 	}
 	args["includeDeprecated"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field___Type_enumValues_argsIncludeDeprecated(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (bool, error) {
-	if _, ok := rawArgs["includeDeprecated"]; !ok {
-		var zeroVal bool
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("includeDeprecated"))
-	if tmp, ok := rawArgs["includeDeprecated"]; ok {
-		return ec.unmarshalOBoolean2bool(ctx, tmp)
-	}
-
-	var zeroVal bool
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field___Type_fields_argsIncludeDeprecated(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "includeDeprecated", ec.unmarshalOBoolean2bool)
 	if err != nil {
 		return nil, err
 	}
 	args["includeDeprecated"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field___Type_fields_argsIncludeDeprecated(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (bool, error) {
-	if _, ok := rawArgs["includeDeprecated"]; !ok {
-		var zeroVal bool
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("includeDeprecated"))
-	if tmp, ok := rawArgs["includeDeprecated"]; ok {
-		return ec.unmarshalOBoolean2bool(ctx, tmp)
-	}
-
-	var zeroVal bool
-	return zeroVal, nil
 }
 
 // endregion ***************************** args.gotpl *****************************

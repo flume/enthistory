@@ -318,8 +318,8 @@ func (c *TestExcludeClient) Update() *TestExcludeUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *TestExcludeClient) UpdateOne(te *TestExclude) *TestExcludeUpdateOne {
-	mutation := newTestExcludeMutation(c.config, OpUpdateOne, withTestExclude(te))
+func (c *TestExcludeClient) UpdateOne(_m *TestExclude) *TestExcludeUpdateOne {
+	mutation := newTestExcludeMutation(c.config, OpUpdateOne, withTestExclude(_m))
 	return &TestExcludeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -336,8 +336,8 @@ func (c *TestExcludeClient) Delete() *TestExcludeDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *TestExcludeClient) DeleteOne(te *TestExclude) *TestExcludeDeleteOne {
-	return c.DeleteOneID(te.ID)
+func (c *TestExcludeClient) DeleteOne(_m *TestExclude) *TestExcludeDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -451,8 +451,8 @@ func (c *TestSkipClient) Update() *TestSkipUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *TestSkipClient) UpdateOne(ts *TestSkip) *TestSkipUpdateOne {
-	mutation := newTestSkipMutation(c.config, OpUpdateOne, withTestSkip(ts))
+func (c *TestSkipClient) UpdateOne(_m *TestSkip) *TestSkipUpdateOne {
+	mutation := newTestSkipMutation(c.config, OpUpdateOne, withTestSkip(_m))
 	return &TestSkipUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -469,8 +469,8 @@ func (c *TestSkipClient) Delete() *TestSkipDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *TestSkipClient) DeleteOne(ts *TestSkip) *TestSkipDeleteOne {
-	return c.DeleteOneID(ts.ID)
+func (c *TestSkipClient) DeleteOne(_m *TestSkip) *TestSkipDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -584,8 +584,8 @@ func (c *TestSkipHistoryClient) Update() *TestSkipHistoryUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *TestSkipHistoryClient) UpdateOne(tsh *TestSkipHistory) *TestSkipHistoryUpdateOne {
-	mutation := newTestSkipHistoryMutation(c.config, OpUpdateOne, withTestSkipHistory(tsh))
+func (c *TestSkipHistoryClient) UpdateOne(_m *TestSkipHistory) *TestSkipHistoryUpdateOne {
+	mutation := newTestSkipHistoryMutation(c.config, OpUpdateOne, withTestSkipHistory(_m))
 	return &TestSkipHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -602,8 +602,8 @@ func (c *TestSkipHistoryClient) Delete() *TestSkipHistoryDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *TestSkipHistoryClient) DeleteOne(tsh *TestSkipHistory) *TestSkipHistoryDeleteOne {
-	return c.DeleteOneID(tsh.ID)
+func (c *TestSkipHistoryClient) DeleteOne(_m *TestSkipHistory) *TestSkipHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -717,8 +717,8 @@ func (c *TodoClient) Update() *TodoUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *TodoClient) UpdateOne(t *Todo) *TodoUpdateOne {
-	mutation := newTodoMutation(c.config, OpUpdateOne, withTodo(t))
+func (c *TodoClient) UpdateOne(_m *Todo) *TodoUpdateOne {
+	mutation := newTodoMutation(c.config, OpUpdateOne, withTodo(_m))
 	return &TodoUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -735,8 +735,8 @@ func (c *TodoClient) Delete() *TodoDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *TodoClient) DeleteOne(t *Todo) *TodoDeleteOne {
-	return c.DeleteOneID(t.ID)
+func (c *TodoClient) DeleteOne(_m *Todo) *TodoDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -850,8 +850,8 @@ func (c *TodoHistoryClient) Update() *TodoHistoryUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *TodoHistoryClient) UpdateOne(th *TodoHistory) *TodoHistoryUpdateOne {
-	mutation := newTodoHistoryMutation(c.config, OpUpdateOne, withTodoHistory(th))
+func (c *TodoHistoryClient) UpdateOne(_m *TodoHistory) *TodoHistoryUpdateOne {
+	mutation := newTodoHistoryMutation(c.config, OpUpdateOne, withTodoHistory(_m))
 	return &TodoHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -868,8 +868,8 @@ func (c *TodoHistoryClient) Delete() *TodoHistoryDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *TodoHistoryClient) DeleteOne(th *TodoHistory) *TodoHistoryDeleteOne {
-	return c.DeleteOneID(th.ID)
+func (c *TodoHistoryClient) DeleteOne(_m *TodoHistory) *TodoHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.

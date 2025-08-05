@@ -24,101 +24,101 @@ type TestSkipHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (tshc *TestSkipHistoryCreate) SetHistoryTime(t time.Time) *TestSkipHistoryCreate {
-	tshc.mutation.SetHistoryTime(t)
-	return tshc
+func (_c *TestSkipHistoryCreate) SetHistoryTime(v time.Time) *TestSkipHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (tshc *TestSkipHistoryCreate) SetNillableHistoryTime(t *time.Time) *TestSkipHistoryCreate {
-	if t != nil {
-		tshc.SetHistoryTime(*t)
+func (_c *TestSkipHistoryCreate) SetNillableHistoryTime(v *time.Time) *TestSkipHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return tshc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (tshc *TestSkipHistoryCreate) SetOperation(et enthistory.OpType) *TestSkipHistoryCreate {
-	tshc.mutation.SetOperation(et)
-	return tshc
+func (_c *TestSkipHistoryCreate) SetOperation(v enthistory.OpType) *TestSkipHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (tshc *TestSkipHistoryCreate) SetRef(u uuid.UUID) *TestSkipHistoryCreate {
-	tshc.mutation.SetRef(u)
-	return tshc
+func (_c *TestSkipHistoryCreate) SetRef(v uuid.UUID) *TestSkipHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (tshc *TestSkipHistoryCreate) SetNillableRef(u *uuid.UUID) *TestSkipHistoryCreate {
-	if u != nil {
-		tshc.SetRef(*u)
+func (_c *TestSkipHistoryCreate) SetNillableRef(v *uuid.UUID) *TestSkipHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return tshc
+	return _c
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (tshc *TestSkipHistoryCreate) SetUpdatedBy(u uuid.UUID) *TestSkipHistoryCreate {
-	tshc.mutation.SetUpdatedBy(u)
-	return tshc
+func (_c *TestSkipHistoryCreate) SetUpdatedBy(v uuid.UUID) *TestSkipHistoryCreate {
+	_c.mutation.SetUpdatedBy(v)
+	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (tshc *TestSkipHistoryCreate) SetNillableUpdatedBy(u *uuid.UUID) *TestSkipHistoryCreate {
-	if u != nil {
-		tshc.SetUpdatedBy(*u)
+func (_c *TestSkipHistoryCreate) SetNillableUpdatedBy(v *uuid.UUID) *TestSkipHistoryCreate {
+	if v != nil {
+		_c.SetUpdatedBy(*v)
 	}
-	return tshc
+	return _c
 }
 
 // SetOtherID sets the "other_id" field.
-func (tshc *TestSkipHistoryCreate) SetOtherID(u uuid.UUID) *TestSkipHistoryCreate {
-	tshc.mutation.SetOtherID(u)
-	return tshc
+func (_c *TestSkipHistoryCreate) SetOtherID(v uuid.UUID) *TestSkipHistoryCreate {
+	_c.mutation.SetOtherID(v)
+	return _c
 }
 
 // SetNillableOtherID sets the "other_id" field if the given value is not nil.
-func (tshc *TestSkipHistoryCreate) SetNillableOtherID(u *uuid.UUID) *TestSkipHistoryCreate {
-	if u != nil {
-		tshc.SetOtherID(*u)
+func (_c *TestSkipHistoryCreate) SetNillableOtherID(v *uuid.UUID) *TestSkipHistoryCreate {
+	if v != nil {
+		_c.SetOtherID(*v)
 	}
-	return tshc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (tshc *TestSkipHistoryCreate) SetName(s string) *TestSkipHistoryCreate {
-	tshc.mutation.SetName(s)
-	return tshc
+func (_c *TestSkipHistoryCreate) SetName(v string) *TestSkipHistoryCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (tshc *TestSkipHistoryCreate) SetID(u uuid.UUID) *TestSkipHistoryCreate {
-	tshc.mutation.SetID(u)
-	return tshc
+func (_c *TestSkipHistoryCreate) SetID(v uuid.UUID) *TestSkipHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (tshc *TestSkipHistoryCreate) SetNillableID(u *uuid.UUID) *TestSkipHistoryCreate {
-	if u != nil {
-		tshc.SetID(*u)
+func (_c *TestSkipHistoryCreate) SetNillableID(v *uuid.UUID) *TestSkipHistoryCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return tshc
+	return _c
 }
 
 // Mutation returns the TestSkipHistoryMutation object of the builder.
-func (tshc *TestSkipHistoryCreate) Mutation() *TestSkipHistoryMutation {
-	return tshc.mutation
+func (_c *TestSkipHistoryCreate) Mutation() *TestSkipHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the TestSkipHistory in the database.
-func (tshc *TestSkipHistoryCreate) Save(ctx context.Context) (*TestSkipHistory, error) {
-	tshc.defaults()
-	return withHooks(ctx, tshc.sqlSave, tshc.mutation, tshc.hooks)
+func (_c *TestSkipHistoryCreate) Save(ctx context.Context) (*TestSkipHistory, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (tshc *TestSkipHistoryCreate) SaveX(ctx context.Context) *TestSkipHistory {
-	v, err := tshc.Save(ctx)
+func (_c *TestSkipHistoryCreate) SaveX(ctx context.Context) *TestSkipHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -126,55 +126,55 @@ func (tshc *TestSkipHistoryCreate) SaveX(ctx context.Context) *TestSkipHistory {
 }
 
 // Exec executes the query.
-func (tshc *TestSkipHistoryCreate) Exec(ctx context.Context) error {
-	_, err := tshc.Save(ctx)
+func (_c *TestSkipHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tshc *TestSkipHistoryCreate) ExecX(ctx context.Context) {
-	if err := tshc.Exec(ctx); err != nil {
+func (_c *TestSkipHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tshc *TestSkipHistoryCreate) defaults() {
-	if _, ok := tshc.mutation.HistoryTime(); !ok {
+func (_c *TestSkipHistoryCreate) defaults() {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		v := testskiphistory.DefaultHistoryTime()
-		tshc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
-	if _, ok := tshc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := testskiphistory.DefaultID()
-		tshc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tshc *TestSkipHistoryCreate) check() error {
-	if _, ok := tshc.mutation.HistoryTime(); !ok {
+func (_c *TestSkipHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`ent: missing required field "TestSkipHistory.history_time"`)}
 	}
-	if _, ok := tshc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`ent: missing required field "TestSkipHistory.operation"`)}
 	}
-	if v, ok := tshc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := testskiphistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`ent: validator failed for field "TestSkipHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := tshc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "TestSkipHistory.name"`)}
 	}
 	return nil
 }
 
-func (tshc *TestSkipHistoryCreate) sqlSave(ctx context.Context) (*TestSkipHistory, error) {
-	if err := tshc.check(); err != nil {
+func (_c *TestSkipHistoryCreate) sqlSave(ctx context.Context) (*TestSkipHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := tshc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, tshc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -187,41 +187,41 @@ func (tshc *TestSkipHistoryCreate) sqlSave(ctx context.Context) (*TestSkipHistor
 			return nil, err
 		}
 	}
-	tshc.mutation.id = &_node.ID
-	tshc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (tshc *TestSkipHistoryCreate) createSpec() (*TestSkipHistory, *sqlgraph.CreateSpec) {
+func (_c *TestSkipHistoryCreate) createSpec() (*TestSkipHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &TestSkipHistory{config: tshc.config}
+		_node = &TestSkipHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(testskiphistory.Table, sqlgraph.NewFieldSpec(testskiphistory.FieldID, field.TypeUUID))
 	)
-	if id, ok := tshc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := tshc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(testskiphistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := tshc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(testskiphistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := tshc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(testskiphistory.FieldRef, field.TypeUUID, value)
 		_node.Ref = value
 	}
-	if value, ok := tshc.mutation.UpdatedBy(); ok {
+	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(testskiphistory.FieldUpdatedBy, field.TypeUUID, value)
 		_node.UpdatedBy = &value
 	}
-	if value, ok := tshc.mutation.OtherID(); ok {
+	if value, ok := _c.mutation.OtherID(); ok {
 		_spec.SetField(testskiphistory.FieldOtherID, field.TypeUUID, value)
 		_node.OtherID = value
 	}
-	if value, ok := tshc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(testskiphistory.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
@@ -236,16 +236,16 @@ type TestSkipHistoryCreateBulk struct {
 }
 
 // Save creates the TestSkipHistory entities in the database.
-func (tshcb *TestSkipHistoryCreateBulk) Save(ctx context.Context) ([]*TestSkipHistory, error) {
-	if tshcb.err != nil {
-		return nil, tshcb.err
+func (_c *TestSkipHistoryCreateBulk) Save(ctx context.Context) ([]*TestSkipHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(tshcb.builders))
-	nodes := make([]*TestSkipHistory, len(tshcb.builders))
-	mutators := make([]Mutator, len(tshcb.builders))
-	for i := range tshcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*TestSkipHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := tshcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TestSkipHistoryMutation)
@@ -259,11 +259,11 @@ func (tshcb *TestSkipHistoryCreateBulk) Save(ctx context.Context) ([]*TestSkipHi
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, tshcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, tshcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -283,7 +283,7 @@ func (tshcb *TestSkipHistoryCreateBulk) Save(ctx context.Context) ([]*TestSkipHi
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, tshcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -291,8 +291,8 @@ func (tshcb *TestSkipHistoryCreateBulk) Save(ctx context.Context) ([]*TestSkipHi
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tshcb *TestSkipHistoryCreateBulk) SaveX(ctx context.Context) []*TestSkipHistory {
-	v, err := tshcb.Save(ctx)
+func (_c *TestSkipHistoryCreateBulk) SaveX(ctx context.Context) []*TestSkipHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -300,14 +300,14 @@ func (tshcb *TestSkipHistoryCreateBulk) SaveX(ctx context.Context) []*TestSkipHi
 }
 
 // Exec executes the query.
-func (tshcb *TestSkipHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := tshcb.Save(ctx)
+func (_c *TestSkipHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tshcb *TestSkipHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := tshcb.Exec(ctx); err != nil {
+func (_c *TestSkipHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

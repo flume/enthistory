@@ -29,40 +29,40 @@ type MenuItemQuery struct {
 }
 
 // Where adds a new predicate for the MenuItemQuery builder.
-func (miq *MenuItemQuery) Where(ps ...predicate.MenuItem) *MenuItemQuery {
-	miq.predicates = append(miq.predicates, ps...)
-	return miq
+func (_q *MenuItemQuery) Where(ps ...predicate.MenuItem) *MenuItemQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (miq *MenuItemQuery) Limit(limit int) *MenuItemQuery {
-	miq.ctx.Limit = &limit
-	return miq
+func (_q *MenuItemQuery) Limit(limit int) *MenuItemQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (miq *MenuItemQuery) Offset(offset int) *MenuItemQuery {
-	miq.ctx.Offset = &offset
-	return miq
+func (_q *MenuItemQuery) Offset(offset int) *MenuItemQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (miq *MenuItemQuery) Unique(unique bool) *MenuItemQuery {
-	miq.ctx.Unique = &unique
-	return miq
+func (_q *MenuItemQuery) Unique(unique bool) *MenuItemQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (miq *MenuItemQuery) Order(o ...menuitem.OrderOption) *MenuItemQuery {
-	miq.order = append(miq.order, o...)
-	return miq
+func (_q *MenuItemQuery) Order(o ...menuitem.OrderOption) *MenuItemQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first MenuItem entity from the query.
 // Returns a *NotFoundError when no MenuItem was found.
-func (miq *MenuItemQuery) First(ctx context.Context) (*MenuItem, error) {
-	nodes, err := miq.Limit(1).All(setContextOp(ctx, miq.ctx, ent.OpQueryFirst))
+func (_q *MenuItemQuery) First(ctx context.Context) (*MenuItem, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -73,8 +73,8 @@ func (miq *MenuItemQuery) First(ctx context.Context) (*MenuItem, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (miq *MenuItemQuery) FirstX(ctx context.Context) *MenuItem {
-	node, err := miq.First(ctx)
+func (_q *MenuItemQuery) FirstX(ctx context.Context) *MenuItem {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -83,9 +83,9 @@ func (miq *MenuItemQuery) FirstX(ctx context.Context) *MenuItem {
 
 // FirstID returns the first MenuItem ID from the query.
 // Returns a *NotFoundError when no MenuItem ID was found.
-func (miq *MenuItemQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *MenuItemQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = miq.Limit(1).IDs(setContextOp(ctx, miq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -96,8 +96,8 @@ func (miq *MenuItemQuery) FirstID(ctx context.Context) (id uuid.UUID, err error)
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (miq *MenuItemQuery) FirstIDX(ctx context.Context) uuid.UUID {
-	id, err := miq.FirstID(ctx)
+func (_q *MenuItemQuery) FirstIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -107,8 +107,8 @@ func (miq *MenuItemQuery) FirstIDX(ctx context.Context) uuid.UUID {
 // Only returns a single MenuItem entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one MenuItem entity is found.
 // Returns a *NotFoundError when no MenuItem entities are found.
-func (miq *MenuItemQuery) Only(ctx context.Context) (*MenuItem, error) {
-	nodes, err := miq.Limit(2).All(setContextOp(ctx, miq.ctx, ent.OpQueryOnly))
+func (_q *MenuItemQuery) Only(ctx context.Context) (*MenuItem, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -123,8 +123,8 @@ func (miq *MenuItemQuery) Only(ctx context.Context) (*MenuItem, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (miq *MenuItemQuery) OnlyX(ctx context.Context) *MenuItem {
-	node, err := miq.Only(ctx)
+func (_q *MenuItemQuery) OnlyX(ctx context.Context) *MenuItem {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -134,9 +134,9 @@ func (miq *MenuItemQuery) OnlyX(ctx context.Context) *MenuItem {
 // OnlyID is like Only, but returns the only MenuItem ID in the query.
 // Returns a *NotSingularError when more than one MenuItem ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (miq *MenuItemQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *MenuItemQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = miq.Limit(2).IDs(setContextOp(ctx, miq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -151,8 +151,8 @@ func (miq *MenuItemQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) 
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (miq *MenuItemQuery) OnlyIDX(ctx context.Context) uuid.UUID {
-	id, err := miq.OnlyID(ctx)
+func (_q *MenuItemQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -160,18 +160,18 @@ func (miq *MenuItemQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 }
 
 // All executes the query and returns a list of MenuItems.
-func (miq *MenuItemQuery) All(ctx context.Context) ([]*MenuItem, error) {
-	ctx = setContextOp(ctx, miq.ctx, ent.OpQueryAll)
-	if err := miq.prepareQuery(ctx); err != nil {
+func (_q *MenuItemQuery) All(ctx context.Context) ([]*MenuItem, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*MenuItem, *MenuItemQuery]()
-	return withInterceptors[[]*MenuItem](ctx, miq, qr, miq.inters)
+	return withInterceptors[[]*MenuItem](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (miq *MenuItemQuery) AllX(ctx context.Context) []*MenuItem {
-	nodes, err := miq.All(ctx)
+func (_q *MenuItemQuery) AllX(ctx context.Context) []*MenuItem {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -179,20 +179,20 @@ func (miq *MenuItemQuery) AllX(ctx context.Context) []*MenuItem {
 }
 
 // IDs executes the query and returns a list of MenuItem IDs.
-func (miq *MenuItemQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
-	if miq.ctx.Unique == nil && miq.path != nil {
-		miq.Unique(true)
+func (_q *MenuItemQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, miq.ctx, ent.OpQueryIDs)
-	if err = miq.Select(menuitem.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(menuitem.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (miq *MenuItemQuery) IDsX(ctx context.Context) []uuid.UUID {
-	ids, err := miq.IDs(ctx)
+func (_q *MenuItemQuery) IDsX(ctx context.Context) []uuid.UUID {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -200,17 +200,17 @@ func (miq *MenuItemQuery) IDsX(ctx context.Context) []uuid.UUID {
 }
 
 // Count returns the count of the given query.
-func (miq *MenuItemQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, miq.ctx, ent.OpQueryCount)
-	if err := miq.prepareQuery(ctx); err != nil {
+func (_q *MenuItemQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, miq, querierCount[*MenuItemQuery](), miq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*MenuItemQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (miq *MenuItemQuery) CountX(ctx context.Context) int {
-	count, err := miq.Count(ctx)
+func (_q *MenuItemQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -218,9 +218,9 @@ func (miq *MenuItemQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (miq *MenuItemQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, miq.ctx, ent.OpQueryExist)
-	switch _, err := miq.FirstID(ctx); {
+func (_q *MenuItemQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -231,8 +231,8 @@ func (miq *MenuItemQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (miq *MenuItemQuery) ExistX(ctx context.Context) bool {
-	exist, err := miq.Exist(ctx)
+func (_q *MenuItemQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -241,19 +241,19 @@ func (miq *MenuItemQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the MenuItemQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (miq *MenuItemQuery) Clone() *MenuItemQuery {
-	if miq == nil {
+func (_q *MenuItemQuery) Clone() *MenuItemQuery {
+	if _q == nil {
 		return nil
 	}
 	return &MenuItemQuery{
-		config:     miq.config,
-		ctx:        miq.ctx.Clone(),
-		order:      append([]menuitem.OrderOption{}, miq.order...),
-		inters:     append([]Interceptor{}, miq.inters...),
-		predicates: append([]predicate.MenuItem{}, miq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]menuitem.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.MenuItem{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  miq.sql.Clone(),
-		path: miq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -271,10 +271,10 @@ func (miq *MenuItemQuery) Clone() *MenuItemQuery {
 //		GroupBy(menuitem.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (miq *MenuItemQuery) GroupBy(field string, fields ...string) *MenuItemGroupBy {
-	miq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &MenuItemGroupBy{build: miq}
-	grbuild.flds = &miq.ctx.Fields
+func (_q *MenuItemQuery) GroupBy(field string, fields ...string) *MenuItemGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &MenuItemGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = menuitem.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -292,62 +292,62 @@ func (miq *MenuItemQuery) GroupBy(field string, fields ...string) *MenuItemGroup
 //	client.MenuItem.Query().
 //		Select(menuitem.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (miq *MenuItemQuery) Select(fields ...string) *MenuItemSelect {
-	miq.ctx.Fields = append(miq.ctx.Fields, fields...)
-	sbuild := &MenuItemSelect{MenuItemQuery: miq}
+func (_q *MenuItemQuery) Select(fields ...string) *MenuItemSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &MenuItemSelect{MenuItemQuery: _q}
 	sbuild.label = menuitem.Label
-	sbuild.flds, sbuild.scan = &miq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a MenuItemSelect configured with the given aggregations.
-func (miq *MenuItemQuery) Aggregate(fns ...AggregateFunc) *MenuItemSelect {
-	return miq.Select().Aggregate(fns...)
+func (_q *MenuItemQuery) Aggregate(fns ...AggregateFunc) *MenuItemSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (miq *MenuItemQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range miq.inters {
+func (_q *MenuItemQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, miq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range miq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !menuitem.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if miq.path != nil {
-		prev, err := miq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		miq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (miq *MenuItemQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*MenuItem, error) {
+func (_q *MenuItemQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*MenuItem, error) {
 	var (
 		nodes = []*MenuItem{}
-		_spec = miq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*MenuItem).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &MenuItem{config: miq.config}
+		node := &MenuItem{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, miq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -356,24 +356,24 @@ func (miq *MenuItemQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Me
 	return nodes, nil
 }
 
-func (miq *MenuItemQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := miq.querySpec()
-	_spec.Node.Columns = miq.ctx.Fields
-	if len(miq.ctx.Fields) > 0 {
-		_spec.Unique = miq.ctx.Unique != nil && *miq.ctx.Unique
+func (_q *MenuItemQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, miq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (miq *MenuItemQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *MenuItemQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(menuitem.Table, menuitem.Columns, sqlgraph.NewFieldSpec(menuitem.FieldID, field.TypeUUID))
-	_spec.From = miq.sql
-	if unique := miq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if miq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := miq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, menuitem.FieldID)
 		for i := range fields {
@@ -382,20 +382,20 @@ func (miq *MenuItemQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := miq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := miq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := miq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := miq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -405,33 +405,33 @@ func (miq *MenuItemQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (miq *MenuItemQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(miq.driver.Dialect())
+func (_q *MenuItemQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(menuitem.Table)
-	columns := miq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = menuitem.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if miq.sql != nil {
-		selector = miq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if miq.ctx.Unique != nil && *miq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, p := range miq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range miq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := miq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := miq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -444,41 +444,41 @@ type MenuItemGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (migb *MenuItemGroupBy) Aggregate(fns ...AggregateFunc) *MenuItemGroupBy {
-	migb.fns = append(migb.fns, fns...)
-	return migb
+func (_g *MenuItemGroupBy) Aggregate(fns ...AggregateFunc) *MenuItemGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (migb *MenuItemGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, migb.build.ctx, ent.OpQueryGroupBy)
-	if err := migb.build.prepareQuery(ctx); err != nil {
+func (_g *MenuItemGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*MenuItemQuery, *MenuItemGroupBy](ctx, migb.build, migb, migb.build.inters, v)
+	return scanWithInterceptors[*MenuItemQuery, *MenuItemGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (migb *MenuItemGroupBy) sqlScan(ctx context.Context, root *MenuItemQuery, v any) error {
+func (_g *MenuItemGroupBy) sqlScan(ctx context.Context, root *MenuItemQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(migb.fns))
-	for _, fn := range migb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*migb.flds)+len(migb.fns))
-		for _, f := range *migb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*migb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := migb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -492,27 +492,27 @@ type MenuItemSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (mis *MenuItemSelect) Aggregate(fns ...AggregateFunc) *MenuItemSelect {
-	mis.fns = append(mis.fns, fns...)
-	return mis
+func (_s *MenuItemSelect) Aggregate(fns ...AggregateFunc) *MenuItemSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (mis *MenuItemSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, mis.ctx, ent.OpQuerySelect)
-	if err := mis.prepareQuery(ctx); err != nil {
+func (_s *MenuItemSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*MenuItemQuery, *MenuItemSelect](ctx, mis.MenuItemQuery, mis, mis.inters, v)
+	return scanWithInterceptors[*MenuItemQuery, *MenuItemSelect](ctx, _s.MenuItemQuery, _s, _s.inters, v)
 }
 
-func (mis *MenuItemSelect) sqlScan(ctx context.Context, root *MenuItemQuery, v any) error {
+func (_s *MenuItemSelect) sqlScan(ctx context.Context, root *MenuItemQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(mis.fns))
-	for _, fn := range mis.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*mis.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -520,7 +520,7 @@ func (mis *MenuItemSelect) sqlScan(ctx context.Context, root *MenuItemQuery, v a
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := mis.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

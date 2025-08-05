@@ -28,40 +28,40 @@ type ResidenceHistoryQuery struct {
 }
 
 // Where adds a new predicate for the ResidenceHistoryQuery builder.
-func (rhq *ResidenceHistoryQuery) Where(ps ...predicate.ResidenceHistory) *ResidenceHistoryQuery {
-	rhq.predicates = append(rhq.predicates, ps...)
-	return rhq
+func (_q *ResidenceHistoryQuery) Where(ps ...predicate.ResidenceHistory) *ResidenceHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (rhq *ResidenceHistoryQuery) Limit(limit int) *ResidenceHistoryQuery {
-	rhq.ctx.Limit = &limit
-	return rhq
+func (_q *ResidenceHistoryQuery) Limit(limit int) *ResidenceHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (rhq *ResidenceHistoryQuery) Offset(offset int) *ResidenceHistoryQuery {
-	rhq.ctx.Offset = &offset
-	return rhq
+func (_q *ResidenceHistoryQuery) Offset(offset int) *ResidenceHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (rhq *ResidenceHistoryQuery) Unique(unique bool) *ResidenceHistoryQuery {
-	rhq.ctx.Unique = &unique
-	return rhq
+func (_q *ResidenceHistoryQuery) Unique(unique bool) *ResidenceHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (rhq *ResidenceHistoryQuery) Order(o ...residencehistory.OrderOption) *ResidenceHistoryQuery {
-	rhq.order = append(rhq.order, o...)
-	return rhq
+func (_q *ResidenceHistoryQuery) Order(o ...residencehistory.OrderOption) *ResidenceHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first ResidenceHistory entity from the query.
 // Returns a *NotFoundError when no ResidenceHistory was found.
-func (rhq *ResidenceHistoryQuery) First(ctx context.Context) (*ResidenceHistory, error) {
-	nodes, err := rhq.Limit(1).All(setContextOp(ctx, rhq.ctx, ent.OpQueryFirst))
+func (_q *ResidenceHistoryQuery) First(ctx context.Context) (*ResidenceHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -72,8 +72,8 @@ func (rhq *ResidenceHistoryQuery) First(ctx context.Context) (*ResidenceHistory,
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (rhq *ResidenceHistoryQuery) FirstX(ctx context.Context) *ResidenceHistory {
-	node, err := rhq.First(ctx)
+func (_q *ResidenceHistoryQuery) FirstX(ctx context.Context) *ResidenceHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -82,9 +82,9 @@ func (rhq *ResidenceHistoryQuery) FirstX(ctx context.Context) *ResidenceHistory 
 
 // FirstID returns the first ResidenceHistory ID from the query.
 // Returns a *NotFoundError when no ResidenceHistory ID was found.
-func (rhq *ResidenceHistoryQuery) FirstID(ctx context.Context) (id int, err error) {
+func (_q *ResidenceHistoryQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = rhq.Limit(1).IDs(setContextOp(ctx, rhq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -95,8 +95,8 @@ func (rhq *ResidenceHistoryQuery) FirstID(ctx context.Context) (id int, err erro
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (rhq *ResidenceHistoryQuery) FirstIDX(ctx context.Context) int {
-	id, err := rhq.FirstID(ctx)
+func (_q *ResidenceHistoryQuery) FirstIDX(ctx context.Context) int {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -106,8 +106,8 @@ func (rhq *ResidenceHistoryQuery) FirstIDX(ctx context.Context) int {
 // Only returns a single ResidenceHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one ResidenceHistory entity is found.
 // Returns a *NotFoundError when no ResidenceHistory entities are found.
-func (rhq *ResidenceHistoryQuery) Only(ctx context.Context) (*ResidenceHistory, error) {
-	nodes, err := rhq.Limit(2).All(setContextOp(ctx, rhq.ctx, ent.OpQueryOnly))
+func (_q *ResidenceHistoryQuery) Only(ctx context.Context) (*ResidenceHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -122,8 +122,8 @@ func (rhq *ResidenceHistoryQuery) Only(ctx context.Context) (*ResidenceHistory, 
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (rhq *ResidenceHistoryQuery) OnlyX(ctx context.Context) *ResidenceHistory {
-	node, err := rhq.Only(ctx)
+func (_q *ResidenceHistoryQuery) OnlyX(ctx context.Context) *ResidenceHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -133,9 +133,9 @@ func (rhq *ResidenceHistoryQuery) OnlyX(ctx context.Context) *ResidenceHistory {
 // OnlyID is like Only, but returns the only ResidenceHistory ID in the query.
 // Returns a *NotSingularError when more than one ResidenceHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (rhq *ResidenceHistoryQuery) OnlyID(ctx context.Context) (id int, err error) {
+func (_q *ResidenceHistoryQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = rhq.Limit(2).IDs(setContextOp(ctx, rhq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -150,8 +150,8 @@ func (rhq *ResidenceHistoryQuery) OnlyID(ctx context.Context) (id int, err error
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (rhq *ResidenceHistoryQuery) OnlyIDX(ctx context.Context) int {
-	id, err := rhq.OnlyID(ctx)
+func (_q *ResidenceHistoryQuery) OnlyIDX(ctx context.Context) int {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -159,18 +159,18 @@ func (rhq *ResidenceHistoryQuery) OnlyIDX(ctx context.Context) int {
 }
 
 // All executes the query and returns a list of ResidenceHistories.
-func (rhq *ResidenceHistoryQuery) All(ctx context.Context) ([]*ResidenceHistory, error) {
-	ctx = setContextOp(ctx, rhq.ctx, ent.OpQueryAll)
-	if err := rhq.prepareQuery(ctx); err != nil {
+func (_q *ResidenceHistoryQuery) All(ctx context.Context) ([]*ResidenceHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*ResidenceHistory, *ResidenceHistoryQuery]()
-	return withInterceptors[[]*ResidenceHistory](ctx, rhq, qr, rhq.inters)
+	return withInterceptors[[]*ResidenceHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (rhq *ResidenceHistoryQuery) AllX(ctx context.Context) []*ResidenceHistory {
-	nodes, err := rhq.All(ctx)
+func (_q *ResidenceHistoryQuery) AllX(ctx context.Context) []*ResidenceHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -178,20 +178,20 @@ func (rhq *ResidenceHistoryQuery) AllX(ctx context.Context) []*ResidenceHistory 
 }
 
 // IDs executes the query and returns a list of ResidenceHistory IDs.
-func (rhq *ResidenceHistoryQuery) IDs(ctx context.Context) (ids []int, err error) {
-	if rhq.ctx.Unique == nil && rhq.path != nil {
-		rhq.Unique(true)
+func (_q *ResidenceHistoryQuery) IDs(ctx context.Context) (ids []int, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, rhq.ctx, ent.OpQueryIDs)
-	if err = rhq.Select(residencehistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(residencehistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (rhq *ResidenceHistoryQuery) IDsX(ctx context.Context) []int {
-	ids, err := rhq.IDs(ctx)
+func (_q *ResidenceHistoryQuery) IDsX(ctx context.Context) []int {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -199,17 +199,17 @@ func (rhq *ResidenceHistoryQuery) IDsX(ctx context.Context) []int {
 }
 
 // Count returns the count of the given query.
-func (rhq *ResidenceHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, rhq.ctx, ent.OpQueryCount)
-	if err := rhq.prepareQuery(ctx); err != nil {
+func (_q *ResidenceHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, rhq, querierCount[*ResidenceHistoryQuery](), rhq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*ResidenceHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (rhq *ResidenceHistoryQuery) CountX(ctx context.Context) int {
-	count, err := rhq.Count(ctx)
+func (_q *ResidenceHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -217,9 +217,9 @@ func (rhq *ResidenceHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (rhq *ResidenceHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, rhq.ctx, ent.OpQueryExist)
-	switch _, err := rhq.FirstID(ctx); {
+func (_q *ResidenceHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -230,8 +230,8 @@ func (rhq *ResidenceHistoryQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (rhq *ResidenceHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := rhq.Exist(ctx)
+func (_q *ResidenceHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -240,19 +240,19 @@ func (rhq *ResidenceHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the ResidenceHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (rhq *ResidenceHistoryQuery) Clone() *ResidenceHistoryQuery {
-	if rhq == nil {
+func (_q *ResidenceHistoryQuery) Clone() *ResidenceHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &ResidenceHistoryQuery{
-		config:     rhq.config,
-		ctx:        rhq.ctx.Clone(),
-		order:      append([]residencehistory.OrderOption{}, rhq.order...),
-		inters:     append([]Interceptor{}, rhq.inters...),
-		predicates: append([]predicate.ResidenceHistory{}, rhq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]residencehistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.ResidenceHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  rhq.sql.Clone(),
-		path: rhq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -270,10 +270,10 @@ func (rhq *ResidenceHistoryQuery) Clone() *ResidenceHistoryQuery {
 //		GroupBy(residencehistory.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (rhq *ResidenceHistoryQuery) GroupBy(field string, fields ...string) *ResidenceHistoryGroupBy {
-	rhq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &ResidenceHistoryGroupBy{build: rhq}
-	grbuild.flds = &rhq.ctx.Fields
+func (_q *ResidenceHistoryQuery) GroupBy(field string, fields ...string) *ResidenceHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &ResidenceHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = residencehistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -291,62 +291,62 @@ func (rhq *ResidenceHistoryQuery) GroupBy(field string, fields ...string) *Resid
 //	client.ResidenceHistory.Query().
 //		Select(residencehistory.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (rhq *ResidenceHistoryQuery) Select(fields ...string) *ResidenceHistorySelect {
-	rhq.ctx.Fields = append(rhq.ctx.Fields, fields...)
-	sbuild := &ResidenceHistorySelect{ResidenceHistoryQuery: rhq}
+func (_q *ResidenceHistoryQuery) Select(fields ...string) *ResidenceHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &ResidenceHistorySelect{ResidenceHistoryQuery: _q}
 	sbuild.label = residencehistory.Label
-	sbuild.flds, sbuild.scan = &rhq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a ResidenceHistorySelect configured with the given aggregations.
-func (rhq *ResidenceHistoryQuery) Aggregate(fns ...AggregateFunc) *ResidenceHistorySelect {
-	return rhq.Select().Aggregate(fns...)
+func (_q *ResidenceHistoryQuery) Aggregate(fns ...AggregateFunc) *ResidenceHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (rhq *ResidenceHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range rhq.inters {
+func (_q *ResidenceHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, rhq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range rhq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !residencehistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if rhq.path != nil {
-		prev, err := rhq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		rhq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (rhq *ResidenceHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ResidenceHistory, error) {
+func (_q *ResidenceHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ResidenceHistory, error) {
 	var (
 		nodes = []*ResidenceHistory{}
-		_spec = rhq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ResidenceHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &ResidenceHistory{config: rhq.config}
+		node := &ResidenceHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, rhq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -355,24 +355,24 @@ func (rhq *ResidenceHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook
 	return nodes, nil
 }
 
-func (rhq *ResidenceHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := rhq.querySpec()
-	_spec.Node.Columns = rhq.ctx.Fields
-	if len(rhq.ctx.Fields) > 0 {
-		_spec.Unique = rhq.ctx.Unique != nil && *rhq.ctx.Unique
+func (_q *ResidenceHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, rhq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (rhq *ResidenceHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *ResidenceHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(residencehistory.Table, residencehistory.Columns, sqlgraph.NewFieldSpec(residencehistory.FieldID, field.TypeInt))
-	_spec.From = rhq.sql
-	if unique := rhq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if rhq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := rhq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, residencehistory.FieldID)
 		for i := range fields {
@@ -381,20 +381,20 @@ func (rhq *ResidenceHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := rhq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := rhq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := rhq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := rhq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -404,33 +404,33 @@ func (rhq *ResidenceHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (rhq *ResidenceHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(rhq.driver.Dialect())
+func (_q *ResidenceHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(residencehistory.Table)
-	columns := rhq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = residencehistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if rhq.sql != nil {
-		selector = rhq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if rhq.ctx.Unique != nil && *rhq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, p := range rhq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range rhq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := rhq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := rhq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -443,41 +443,41 @@ type ResidenceHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (rhgb *ResidenceHistoryGroupBy) Aggregate(fns ...AggregateFunc) *ResidenceHistoryGroupBy {
-	rhgb.fns = append(rhgb.fns, fns...)
-	return rhgb
+func (_g *ResidenceHistoryGroupBy) Aggregate(fns ...AggregateFunc) *ResidenceHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (rhgb *ResidenceHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, rhgb.build.ctx, ent.OpQueryGroupBy)
-	if err := rhgb.build.prepareQuery(ctx); err != nil {
+func (_g *ResidenceHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ResidenceHistoryQuery, *ResidenceHistoryGroupBy](ctx, rhgb.build, rhgb, rhgb.build.inters, v)
+	return scanWithInterceptors[*ResidenceHistoryQuery, *ResidenceHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (rhgb *ResidenceHistoryGroupBy) sqlScan(ctx context.Context, root *ResidenceHistoryQuery, v any) error {
+func (_g *ResidenceHistoryGroupBy) sqlScan(ctx context.Context, root *ResidenceHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(rhgb.fns))
-	for _, fn := range rhgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*rhgb.flds)+len(rhgb.fns))
-		for _, f := range *rhgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*rhgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := rhgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -491,27 +491,27 @@ type ResidenceHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (rhs *ResidenceHistorySelect) Aggregate(fns ...AggregateFunc) *ResidenceHistorySelect {
-	rhs.fns = append(rhs.fns, fns...)
-	return rhs
+func (_s *ResidenceHistorySelect) Aggregate(fns ...AggregateFunc) *ResidenceHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (rhs *ResidenceHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, rhs.ctx, ent.OpQuerySelect)
-	if err := rhs.prepareQuery(ctx); err != nil {
+func (_s *ResidenceHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ResidenceHistoryQuery, *ResidenceHistorySelect](ctx, rhs.ResidenceHistoryQuery, rhs, rhs.inters, v)
+	return scanWithInterceptors[*ResidenceHistoryQuery, *ResidenceHistorySelect](ctx, _s.ResidenceHistoryQuery, _s, _s.inters, v)
 }
 
-func (rhs *ResidenceHistorySelect) sqlScan(ctx context.Context, root *ResidenceHistoryQuery, v any) error {
+func (_s *ResidenceHistorySelect) sqlScan(ctx context.Context, root *ResidenceHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(rhs.fns))
-	for _, fn := range rhs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*rhs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -519,7 +519,7 @@ func (rhs *ResidenceHistorySelect) sqlScan(ctx context.Context, root *ResidenceH
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := rhs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

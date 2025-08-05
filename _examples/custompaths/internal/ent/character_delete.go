@@ -20,56 +20,56 @@ type CharacterDelete struct {
 }
 
 // Where appends a list predicates to the CharacterDelete builder.
-func (cd *CharacterDelete) Where(ps ...predicate.Character) *CharacterDelete {
-	cd.mutation.Where(ps...)
-	return cd
+func (_d *CharacterDelete) Where(ps ...predicate.Character) *CharacterDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (cd *CharacterDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, cd.sqlExec, cd.mutation, cd.hooks)
+func (_d *CharacterDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cd *CharacterDelete) ExecX(ctx context.Context) int {
-	n, err := cd.Exec(ctx)
+func (_d *CharacterDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (cd *CharacterDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *CharacterDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(character.Table, sqlgraph.NewFieldSpec(character.FieldID, field.TypeUUID))
-	if ps := cd.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, cd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	cd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // CharacterDeleteOne is the builder for deleting a single Character entity.
 type CharacterDeleteOne struct {
-	cd *CharacterDelete
+	_d *CharacterDelete
 }
 
 // Where appends a list predicates to the CharacterDelete builder.
-func (cdo *CharacterDeleteOne) Where(ps ...predicate.Character) *CharacterDeleteOne {
-	cdo.cd.mutation.Where(ps...)
-	return cdo
+func (_d *CharacterDeleteOne) Where(ps ...predicate.Character) *CharacterDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (cdo *CharacterDeleteOne) Exec(ctx context.Context) error {
-	n, err := cdo.cd.Exec(ctx)
+func (_d *CharacterDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (cdo *CharacterDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cdo *CharacterDeleteOne) ExecX(ctx context.Context) {
-	if err := cdo.Exec(ctx); err != nil {
+func (_d *CharacterDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

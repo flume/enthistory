@@ -20,56 +20,56 @@ type TestSkipHistoryDelete struct {
 }
 
 // Where appends a list predicates to the TestSkipHistoryDelete builder.
-func (tshd *TestSkipHistoryDelete) Where(ps ...predicate.TestSkipHistory) *TestSkipHistoryDelete {
-	tshd.mutation.Where(ps...)
-	return tshd
+func (_d *TestSkipHistoryDelete) Where(ps ...predicate.TestSkipHistory) *TestSkipHistoryDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (tshd *TestSkipHistoryDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, tshd.sqlExec, tshd.mutation, tshd.hooks)
+func (_d *TestSkipHistoryDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tshd *TestSkipHistoryDelete) ExecX(ctx context.Context) int {
-	n, err := tshd.Exec(ctx)
+func (_d *TestSkipHistoryDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (tshd *TestSkipHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *TestSkipHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(testskiphistory.Table, sqlgraph.NewFieldSpec(testskiphistory.FieldID, field.TypeUUID))
-	if ps := tshd.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, tshd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	tshd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // TestSkipHistoryDeleteOne is the builder for deleting a single TestSkipHistory entity.
 type TestSkipHistoryDeleteOne struct {
-	tshd *TestSkipHistoryDelete
+	_d *TestSkipHistoryDelete
 }
 
 // Where appends a list predicates to the TestSkipHistoryDelete builder.
-func (tshdo *TestSkipHistoryDeleteOne) Where(ps ...predicate.TestSkipHistory) *TestSkipHistoryDeleteOne {
-	tshdo.tshd.mutation.Where(ps...)
-	return tshdo
+func (_d *TestSkipHistoryDeleteOne) Where(ps ...predicate.TestSkipHistory) *TestSkipHistoryDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (tshdo *TestSkipHistoryDeleteOne) Exec(ctx context.Context) error {
-	n, err := tshdo.tshd.Exec(ctx)
+func (_d *TestSkipHistoryDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (tshdo *TestSkipHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tshdo *TestSkipHistoryDeleteOne) ExecX(ctx context.Context) {
-	if err := tshdo.Exec(ctx); err != nil {
+func (_d *TestSkipHistoryDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

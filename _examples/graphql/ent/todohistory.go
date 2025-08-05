@@ -57,7 +57,7 @@ func (*TodoHistory) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TodoHistory fields.
-func (th *TodoHistory) assignValues(columns []string, values []any) error {
+func (_m *TodoHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -67,47 +67,47 @@ func (th *TodoHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				th.ID = *value
+				_m.ID = *value
 			}
 		case todohistory.FieldHistoryTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field history_time", values[i])
 			} else if value.Valid {
-				th.HistoryTime = value.Time
+				_m.HistoryTime = value.Time
 			}
 		case todohistory.FieldOperation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value.Valid {
-				th.Operation = enthistory.OpType(value.String)
+				_m.Operation = enthistory.OpType(value.String)
 			}
 		case todohistory.FieldRef:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field ref", values[i])
 			} else if value != nil {
-				th.Ref = *value
+				_m.Ref = *value
 			}
 		case todohistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				th.UpdatedBy = new(uuid.UUID)
-				*th.UpdatedBy = *value.S.(*uuid.UUID)
+				_m.UpdatedBy = new(uuid.UUID)
+				*_m.UpdatedBy = *value.S.(*uuid.UUID)
 			}
 		case todohistory.FieldOtherID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field other_id", values[i])
 			} else if value != nil {
-				th.OtherID = *value
+				_m.OtherID = *value
 			}
 		case todohistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				th.Name = value.String
+				_m.Name = value.String
 			}
 		default:
-			th.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -115,52 +115,52 @@ func (th *TodoHistory) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TodoHistory.
 // This includes values selected through modifiers, order, etc.
-func (th *TodoHistory) Value(name string) (ent.Value, error) {
-	return th.selectValues.Get(name)
+func (_m *TodoHistory) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this TodoHistory.
 // Note that you need to call TodoHistory.Unwrap() before calling this method if this TodoHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (th *TodoHistory) Update() *TodoHistoryUpdateOne {
-	return NewTodoHistoryClient(th.config).UpdateOne(th)
+func (_m *TodoHistory) Update() *TodoHistoryUpdateOne {
+	return NewTodoHistoryClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TodoHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (th *TodoHistory) Unwrap() *TodoHistory {
-	_tx, ok := th.config.driver.(*txDriver)
+func (_m *TodoHistory) Unwrap() *TodoHistory {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: TodoHistory is not a transactional entity")
 	}
-	th.config.driver = _tx.drv
-	return th
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (th *TodoHistory) String() string {
+func (_m *TodoHistory) String() string {
 	var builder strings.Builder
 	builder.WriteString("TodoHistory(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", th.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
-	builder.WriteString(th.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("operation=")
-	builder.WriteString(fmt.Sprintf("%v", th.Operation))
+	builder.WriteString(fmt.Sprintf("%v", _m.Operation))
 	builder.WriteString(", ")
 	builder.WriteString("ref=")
-	builder.WriteString(fmt.Sprintf("%v", th.Ref))
+	builder.WriteString(fmt.Sprintf("%v", _m.Ref))
 	builder.WriteString(", ")
-	if v := th.UpdatedBy; v != nil {
+	if v := _m.UpdatedBy; v != nil {
 		builder.WriteString("updated_by=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("other_id=")
-	builder.WriteString(fmt.Sprintf("%v", th.OtherID))
+	builder.WriteString(fmt.Sprintf("%v", _m.OtherID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(th.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteByte(')')
 	return builder.String()
 }

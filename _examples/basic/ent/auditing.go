@@ -44,123 +44,123 @@ var (
 	MismatchedRefError = errors.New("cannot take diff of histories with different Refs")
 )
 
-func (ch *CharacterHistory) changes(new *CharacterHistory) []Change {
+func (_m *CharacterHistory) changes(new *CharacterHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(ch.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(characterhistory.FieldCreatedAt, ch.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(characterhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(ch.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(characterhistory.FieldUpdatedAt, ch.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(characterhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(ch.Age, new.Age) {
-		changes = append(changes, NewChange(characterhistory.FieldAge, ch.Age, new.Age))
+	if !reflect.DeepEqual(_m.Age, new.Age) {
+		changes = append(changes, NewChange(characterhistory.FieldAge, _m.Age, new.Age))
 	}
-	if !reflect.DeepEqual(ch.TypedAge, new.TypedAge) {
-		changes = append(changes, NewChange(characterhistory.FieldTypedAge, ch.TypedAge, new.TypedAge))
+	if !reflect.DeepEqual(_m.TypedAge, new.TypedAge) {
+		changes = append(changes, NewChange(characterhistory.FieldTypedAge, _m.TypedAge, new.TypedAge))
 	}
-	if !reflect.DeepEqual(ch.Name, new.Name) {
-		changes = append(changes, NewChange(characterhistory.FieldName, ch.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(characterhistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(ch.Nicknames, new.Nicknames) {
-		changes = append(changes, NewChange(characterhistory.FieldNicknames, ch.Nicknames, new.Nicknames))
+	if !reflect.DeepEqual(_m.Nicknames, new.Nicknames) {
+		changes = append(changes, NewChange(characterhistory.FieldNicknames, _m.Nicknames, new.Nicknames))
 	}
-	if !reflect.DeepEqual(ch.Info, new.Info) {
-		changes = append(changes, NewChange(characterhistory.FieldInfo, ch.Info, new.Info))
+	if !reflect.DeepEqual(_m.Info, new.Info) {
+		changes = append(changes, NewChange(characterhistory.FieldInfo, _m.Info, new.Info))
 	}
-	if !reflect.DeepEqual(ch.InfoStruct, new.InfoStruct) {
-		changes = append(changes, NewChange(characterhistory.FieldInfoStruct, ch.InfoStruct, new.InfoStruct))
+	if !reflect.DeepEqual(_m.InfoStruct, new.InfoStruct) {
+		changes = append(changes, NewChange(characterhistory.FieldInfoStruct, _m.InfoStruct, new.InfoStruct))
 	}
-	if !reflect.DeepEqual(ch.Level, new.Level) {
-		changes = append(changes, NewChange(characterhistory.FieldLevel, ch.Level, new.Level))
+	if !reflect.DeepEqual(_m.Level, new.Level) {
+		changes = append(changes, NewChange(characterhistory.FieldLevel, _m.Level, new.Level))
 	}
-	if !reflect.DeepEqual(ch.Species, new.Species) {
-		changes = append(changes, NewChange(characterhistory.FieldSpecies, ch.Species, new.Species))
+	if !reflect.DeepEqual(_m.Species, new.Species) {
+		changes = append(changes, NewChange(characterhistory.FieldSpecies, _m.Species, new.Species))
 	}
 	return changes
 }
 
-func (ch *CharacterHistory) Diff(history *CharacterHistory) (*HistoryDiff[CharacterHistory], error) {
-	if ch.Ref != history.Ref {
+func (_m *CharacterHistory) Diff(history *CharacterHistory) (*HistoryDiff[CharacterHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, MismatchedRefError
 	}
-	if ch.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (ch.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && ch.ID > history.ID) {
+	if _m.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (_m.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && _m.ID > history.ID) {
 		return &HistoryDiff[CharacterHistory]{
 			Old:     history,
-			New:     ch,
-			Changes: history.changes(ch),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return &HistoryDiff[CharacterHistory]{
-		Old:     ch,
+		Old:     _m,
 		New:     history,
-		Changes: ch.changes(history),
+		Changes: _m.changes(history),
 	}, nil
 }
 
-func (fh *FriendshipHistory) changes(new *FriendshipHistory) []Change {
+func (_m *FriendshipHistory) changes(new *FriendshipHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(fh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(friendshiphistory.FieldCreatedAt, fh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(friendshiphistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(fh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(friendshiphistory.FieldUpdatedAt, fh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(friendshiphistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(fh.CharacterID, new.CharacterID) {
-		changes = append(changes, NewChange(friendshiphistory.FieldCharacterID, fh.CharacterID, new.CharacterID))
+	if !reflect.DeepEqual(_m.CharacterID, new.CharacterID) {
+		changes = append(changes, NewChange(friendshiphistory.FieldCharacterID, _m.CharacterID, new.CharacterID))
 	}
-	if !reflect.DeepEqual(fh.FriendID, new.FriendID) {
-		changes = append(changes, NewChange(friendshiphistory.FieldFriendID, fh.FriendID, new.FriendID))
+	if !reflect.DeepEqual(_m.FriendID, new.FriendID) {
+		changes = append(changes, NewChange(friendshiphistory.FieldFriendID, _m.FriendID, new.FriendID))
 	}
 	return changes
 }
 
-func (fh *FriendshipHistory) Diff(history *FriendshipHistory) (*HistoryDiff[FriendshipHistory], error) {
-	if fh.Ref != history.Ref {
+func (_m *FriendshipHistory) Diff(history *FriendshipHistory) (*HistoryDiff[FriendshipHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, MismatchedRefError
 	}
-	if fh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (fh.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && fh.ID > history.ID) {
+	if _m.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (_m.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && _m.ID > history.ID) {
 		return &HistoryDiff[FriendshipHistory]{
 			Old:     history,
-			New:     fh,
-			Changes: history.changes(fh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return &HistoryDiff[FriendshipHistory]{
-		Old:     fh,
+		Old:     _m,
 		New:     history,
-		Changes: fh.changes(history),
+		Changes: _m.changes(history),
 	}, nil
 }
 
-func (rh *ResidenceHistory) changes(new *ResidenceHistory) []Change {
+func (_m *ResidenceHistory) changes(new *ResidenceHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(rh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(residencehistory.FieldCreatedAt, rh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(residencehistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(rh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(residencehistory.FieldUpdatedAt, rh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(residencehistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(rh.Name, new.Name) {
-		changes = append(changes, NewChange(residencehistory.FieldName, rh.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(residencehistory.FieldName, _m.Name, new.Name))
 	}
 	return changes
 }
 
-func (rh *ResidenceHistory) Diff(history *ResidenceHistory) (*HistoryDiff[ResidenceHistory], error) {
-	if rh.Ref != history.Ref {
+func (_m *ResidenceHistory) Diff(history *ResidenceHistory) (*HistoryDiff[ResidenceHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, MismatchedRefError
 	}
-	if rh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (rh.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && rh.ID > history.ID) {
+	if _m.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (_m.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && _m.ID > history.ID) {
 		return &HistoryDiff[ResidenceHistory]{
 			Old:     history,
-			New:     rh,
-			Changes: history.changes(rh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return &HistoryDiff[ResidenceHistory]{
-		Old:     rh,
+		Old:     _m,
 		New:     history,
-		Changes: rh.changes(history),
+		Changes: _m.changes(history),
 	}, nil
 }
 

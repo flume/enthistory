@@ -20,56 +20,56 @@ type TestSkipDelete struct {
 }
 
 // Where appends a list predicates to the TestSkipDelete builder.
-func (tsd *TestSkipDelete) Where(ps ...predicate.TestSkip) *TestSkipDelete {
-	tsd.mutation.Where(ps...)
-	return tsd
+func (_d *TestSkipDelete) Where(ps ...predicate.TestSkip) *TestSkipDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (tsd *TestSkipDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, tsd.sqlExec, tsd.mutation, tsd.hooks)
+func (_d *TestSkipDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tsd *TestSkipDelete) ExecX(ctx context.Context) int {
-	n, err := tsd.Exec(ctx)
+func (_d *TestSkipDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (tsd *TestSkipDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *TestSkipDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(testskip.Table, sqlgraph.NewFieldSpec(testskip.FieldID, field.TypeUUID))
-	if ps := tsd.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, tsd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	tsd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // TestSkipDeleteOne is the builder for deleting a single TestSkip entity.
 type TestSkipDeleteOne struct {
-	tsd *TestSkipDelete
+	_d *TestSkipDelete
 }
 
 // Where appends a list predicates to the TestSkipDelete builder.
-func (tsdo *TestSkipDeleteOne) Where(ps ...predicate.TestSkip) *TestSkipDeleteOne {
-	tsdo.tsd.mutation.Where(ps...)
-	return tsdo
+func (_d *TestSkipDeleteOne) Where(ps ...predicate.TestSkip) *TestSkipDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (tsdo *TestSkipDeleteOne) Exec(ctx context.Context) error {
-	n, err := tsdo.tsd.Exec(ctx)
+func (_d *TestSkipDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (tsdo *TestSkipDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tsdo *TestSkipDeleteOne) ExecX(ctx context.Context) {
-	if err := tsdo.Exec(ctx); err != nil {
+func (_d *TestSkipDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

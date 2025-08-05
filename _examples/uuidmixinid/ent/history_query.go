@@ -12,28 +12,28 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-func (mi *MenuItem) History() *MenuItemHistoryQuery {
-	historyClient := NewMenuItemHistoryClient(mi.config)
-	return historyClient.Query().Where(menuitemhistory.Ref(mi.ID))
+func (_m *MenuItem) History() *MenuItemHistoryQuery {
+	historyClient := NewMenuItemHistoryClient(_m.config)
+	return historyClient.Query().Where(menuitemhistory.Ref(_m.ID))
 }
 
-func (mih *MenuItemHistory) Next(ctx context.Context) (*MenuItemHistory, error) {
-	client := NewMenuItemHistoryClient(mih.config)
+func (_m *MenuItemHistory) Next(ctx context.Context) (*MenuItemHistory, error) {
+	client := NewMenuItemHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			menuitemhistory.Ref(mih.Ref),
-			menuitemhistory.HistoryTimeGT(mih.HistoryTime),
+			menuitemhistory.Ref(_m.Ref),
+			menuitemhistory.HistoryTimeGT(_m.HistoryTime),
 		).
 		Order(menuitemhistory.ByHistoryTime()).
 		First(ctx)
 }
 
-func (mih *MenuItemHistory) Prev(ctx context.Context) (*MenuItemHistory, error) {
-	client := NewMenuItemHistoryClient(mih.config)
+func (_m *MenuItemHistory) Prev(ctx context.Context) (*MenuItemHistory, error) {
+	client := NewMenuItemHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			menuitemhistory.Ref(mih.Ref),
-			menuitemhistory.HistoryTimeLT(mih.HistoryTime),
+			menuitemhistory.Ref(_m.Ref),
+			menuitemhistory.HistoryTimeLT(_m.HistoryTime),
 		).
 		Order(menuitemhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
@@ -58,13 +58,13 @@ func (mihq *MenuItemHistoryQuery) AsOf(ctx context.Context, time time.Time) (*Me
 		First(ctx)
 }
 
-func (mih *MenuItemHistory) Restore(ctx context.Context) (*MenuItem, error) {
-	client := NewMenuItemClient(mih.config)
+func (_m *MenuItemHistory) Restore(ctx context.Context) (*MenuItem, error) {
+	client := NewMenuItemClient(_m.config)
 	return client.
-		UpdateOneID(mih.Ref).
-		SetUpdatedAt(mih.UpdatedAt).
-		SetName(mih.Name).
-		SetPrice(mih.Price).
-		SetDescription(mih.Description).
+		UpdateOneID(_m.Ref).
+		SetUpdatedAt(_m.UpdatedAt).
+		SetName(_m.Name).
+		SetPrice(_m.Price).
+		SetDescription(_m.Description).
 		Save(ctx)
 }

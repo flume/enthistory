@@ -21,53 +21,53 @@ type TestSkipCreate struct {
 }
 
 // SetOtherID sets the "other_id" field.
-func (tsc *TestSkipCreate) SetOtherID(u uuid.UUID) *TestSkipCreate {
-	tsc.mutation.SetOtherID(u)
-	return tsc
+func (_c *TestSkipCreate) SetOtherID(v uuid.UUID) *TestSkipCreate {
+	_c.mutation.SetOtherID(v)
+	return _c
 }
 
 // SetNillableOtherID sets the "other_id" field if the given value is not nil.
-func (tsc *TestSkipCreate) SetNillableOtherID(u *uuid.UUID) *TestSkipCreate {
-	if u != nil {
-		tsc.SetOtherID(*u)
+func (_c *TestSkipCreate) SetNillableOtherID(v *uuid.UUID) *TestSkipCreate {
+	if v != nil {
+		_c.SetOtherID(*v)
 	}
-	return tsc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (tsc *TestSkipCreate) SetName(s string) *TestSkipCreate {
-	tsc.mutation.SetName(s)
-	return tsc
+func (_c *TestSkipCreate) SetName(v string) *TestSkipCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (tsc *TestSkipCreate) SetID(u uuid.UUID) *TestSkipCreate {
-	tsc.mutation.SetID(u)
-	return tsc
+func (_c *TestSkipCreate) SetID(v uuid.UUID) *TestSkipCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (tsc *TestSkipCreate) SetNillableID(u *uuid.UUID) *TestSkipCreate {
-	if u != nil {
-		tsc.SetID(*u)
+func (_c *TestSkipCreate) SetNillableID(v *uuid.UUID) *TestSkipCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return tsc
+	return _c
 }
 
 // Mutation returns the TestSkipMutation object of the builder.
-func (tsc *TestSkipCreate) Mutation() *TestSkipMutation {
-	return tsc.mutation
+func (_c *TestSkipCreate) Mutation() *TestSkipMutation {
+	return _c.mutation
 }
 
 // Save creates the TestSkip in the database.
-func (tsc *TestSkipCreate) Save(ctx context.Context) (*TestSkip, error) {
-	tsc.defaults()
-	return withHooks(ctx, tsc.sqlSave, tsc.mutation, tsc.hooks)
+func (_c *TestSkipCreate) Save(ctx context.Context) (*TestSkip, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (tsc *TestSkipCreate) SaveX(ctx context.Context) *TestSkip {
-	v, err := tsc.Save(ctx)
+func (_c *TestSkipCreate) SaveX(ctx context.Context) *TestSkip {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -75,32 +75,32 @@ func (tsc *TestSkipCreate) SaveX(ctx context.Context) *TestSkip {
 }
 
 // Exec executes the query.
-func (tsc *TestSkipCreate) Exec(ctx context.Context) error {
-	_, err := tsc.Save(ctx)
+func (_c *TestSkipCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tsc *TestSkipCreate) ExecX(ctx context.Context) {
-	if err := tsc.Exec(ctx); err != nil {
+func (_c *TestSkipCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tsc *TestSkipCreate) defaults() {
-	if _, ok := tsc.mutation.ID(); !ok {
+func (_c *TestSkipCreate) defaults() {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := testskip.DefaultID()
-		tsc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tsc *TestSkipCreate) check() error {
-	if _, ok := tsc.mutation.Name(); !ok {
+func (_c *TestSkipCreate) check() error {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "TestSkip.name"`)}
 	}
-	if v, ok := tsc.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := testskip.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "TestSkip.name": %w`, err)}
 		}
@@ -108,12 +108,12 @@ func (tsc *TestSkipCreate) check() error {
 	return nil
 }
 
-func (tsc *TestSkipCreate) sqlSave(ctx context.Context) (*TestSkip, error) {
-	if err := tsc.check(); err != nil {
+func (_c *TestSkipCreate) sqlSave(ctx context.Context) (*TestSkip, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := tsc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, tsc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -126,25 +126,25 @@ func (tsc *TestSkipCreate) sqlSave(ctx context.Context) (*TestSkip, error) {
 			return nil, err
 		}
 	}
-	tsc.mutation.id = &_node.ID
-	tsc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (tsc *TestSkipCreate) createSpec() (*TestSkip, *sqlgraph.CreateSpec) {
+func (_c *TestSkipCreate) createSpec() (*TestSkip, *sqlgraph.CreateSpec) {
 	var (
-		_node = &TestSkip{config: tsc.config}
+		_node = &TestSkip{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(testskip.Table, sqlgraph.NewFieldSpec(testskip.FieldID, field.TypeUUID))
 	)
-	if id, ok := tsc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := tsc.mutation.OtherID(); ok {
+	if value, ok := _c.mutation.OtherID(); ok {
 		_spec.SetField(testskip.FieldOtherID, field.TypeUUID, value)
 		_node.OtherID = value
 	}
-	if value, ok := tsc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(testskip.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
@@ -159,16 +159,16 @@ type TestSkipCreateBulk struct {
 }
 
 // Save creates the TestSkip entities in the database.
-func (tscb *TestSkipCreateBulk) Save(ctx context.Context) ([]*TestSkip, error) {
-	if tscb.err != nil {
-		return nil, tscb.err
+func (_c *TestSkipCreateBulk) Save(ctx context.Context) ([]*TestSkip, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(tscb.builders))
-	nodes := make([]*TestSkip, len(tscb.builders))
-	mutators := make([]Mutator, len(tscb.builders))
-	for i := range tscb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*TestSkip, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := tscb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TestSkipMutation)
@@ -182,11 +182,11 @@ func (tscb *TestSkipCreateBulk) Save(ctx context.Context) ([]*TestSkip, error) {
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, tscb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, tscb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -206,7 +206,7 @@ func (tscb *TestSkipCreateBulk) Save(ctx context.Context) ([]*TestSkip, error) {
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, tscb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -214,8 +214,8 @@ func (tscb *TestSkipCreateBulk) Save(ctx context.Context) ([]*TestSkip, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tscb *TestSkipCreateBulk) SaveX(ctx context.Context) []*TestSkip {
-	v, err := tscb.Save(ctx)
+func (_c *TestSkipCreateBulk) SaveX(ctx context.Context) []*TestSkip {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -223,14 +223,14 @@ func (tscb *TestSkipCreateBulk) SaveX(ctx context.Context) []*TestSkip {
 }
 
 // Exec executes the query.
-func (tscb *TestSkipCreateBulk) Exec(ctx context.Context) error {
-	_, err := tscb.Save(ctx)
+func (_c *TestSkipCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tscb *TestSkipCreateBulk) ExecX(ctx context.Context) {
-	if err := tscb.Exec(ctx); err != nil {
+func (_c *TestSkipCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

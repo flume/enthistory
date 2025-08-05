@@ -24,71 +24,71 @@ type FriendshipHistoryCreate struct {
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (fhc *FriendshipHistoryCreate) SetHistoryTime(t time.Time) *FriendshipHistoryCreate {
-	fhc.mutation.SetHistoryTime(t)
-	return fhc
+func (_c *FriendshipHistoryCreate) SetHistoryTime(v time.Time) *FriendshipHistoryCreate {
+	_c.mutation.SetHistoryTime(v)
+	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (fhc *FriendshipHistoryCreate) SetNillableHistoryTime(t *time.Time) *FriendshipHistoryCreate {
-	if t != nil {
-		fhc.SetHistoryTime(*t)
+func (_c *FriendshipHistoryCreate) SetNillableHistoryTime(v *time.Time) *FriendshipHistoryCreate {
+	if v != nil {
+		_c.SetHistoryTime(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetOperation sets the "operation" field.
-func (fhc *FriendshipHistoryCreate) SetOperation(et enthistory.OpType) *FriendshipHistoryCreate {
-	fhc.mutation.SetOperation(et)
-	return fhc
+func (_c *FriendshipHistoryCreate) SetOperation(v enthistory.OpType) *FriendshipHistoryCreate {
+	_c.mutation.SetOperation(v)
+	return _c
 }
 
 // SetRef sets the "ref" field.
-func (fhc *FriendshipHistoryCreate) SetRef(u uuid.UUID) *FriendshipHistoryCreate {
-	fhc.mutation.SetRef(u)
-	return fhc
+func (_c *FriendshipHistoryCreate) SetRef(v uuid.UUID) *FriendshipHistoryCreate {
+	_c.mutation.SetRef(v)
+	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (fhc *FriendshipHistoryCreate) SetNillableRef(u *uuid.UUID) *FriendshipHistoryCreate {
-	if u != nil {
-		fhc.SetRef(*u)
+func (_c *FriendshipHistoryCreate) SetNillableRef(v *uuid.UUID) *FriendshipHistoryCreate {
+	if v != nil {
+		_c.SetRef(*v)
 	}
-	return fhc
+	return _c
 }
 
 // SetCharacterID sets the "character_id" field.
-func (fhc *FriendshipHistoryCreate) SetCharacterID(u uuid.UUID) *FriendshipHistoryCreate {
-	fhc.mutation.SetCharacterID(u)
-	return fhc
+func (_c *FriendshipHistoryCreate) SetCharacterID(v uuid.UUID) *FriendshipHistoryCreate {
+	_c.mutation.SetCharacterID(v)
+	return _c
 }
 
 // SetFriendID sets the "friend_id" field.
-func (fhc *FriendshipHistoryCreate) SetFriendID(u uuid.UUID) *FriendshipHistoryCreate {
-	fhc.mutation.SetFriendID(u)
-	return fhc
+func (_c *FriendshipHistoryCreate) SetFriendID(v uuid.UUID) *FriendshipHistoryCreate {
+	_c.mutation.SetFriendID(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (fhc *FriendshipHistoryCreate) SetID(i int) *FriendshipHistoryCreate {
-	fhc.mutation.SetID(i)
-	return fhc
+func (_c *FriendshipHistoryCreate) SetID(v int) *FriendshipHistoryCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // Mutation returns the FriendshipHistoryMutation object of the builder.
-func (fhc *FriendshipHistoryCreate) Mutation() *FriendshipHistoryMutation {
-	return fhc.mutation
+func (_c *FriendshipHistoryCreate) Mutation() *FriendshipHistoryMutation {
+	return _c.mutation
 }
 
 // Save creates the FriendshipHistory in the database.
-func (fhc *FriendshipHistoryCreate) Save(ctx context.Context) (*FriendshipHistory, error) {
-	fhc.defaults()
-	return withHooks(ctx, fhc.sqlSave, fhc.mutation, fhc.hooks)
+func (_c *FriendshipHistoryCreate) Save(ctx context.Context) (*FriendshipHistory, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (fhc *FriendshipHistoryCreate) SaveX(ctx context.Context) *FriendshipHistory {
-	v, err := fhc.Save(ctx)
+func (_c *FriendshipHistoryCreate) SaveX(ctx context.Context) *FriendshipHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -96,54 +96,54 @@ func (fhc *FriendshipHistoryCreate) SaveX(ctx context.Context) *FriendshipHistor
 }
 
 // Exec executes the query.
-func (fhc *FriendshipHistoryCreate) Exec(ctx context.Context) error {
-	_, err := fhc.Save(ctx)
+func (_c *FriendshipHistoryCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fhc *FriendshipHistoryCreate) ExecX(ctx context.Context) {
-	if err := fhc.Exec(ctx); err != nil {
+func (_c *FriendshipHistoryCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (fhc *FriendshipHistoryCreate) defaults() {
-	if _, ok := fhc.mutation.HistoryTime(); !ok {
+func (_c *FriendshipHistoryCreate) defaults() {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		v := friendshiphistory.DefaultHistoryTime()
-		fhc.mutation.SetHistoryTime(v)
+		_c.mutation.SetHistoryTime(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (fhc *FriendshipHistoryCreate) check() error {
-	if _, ok := fhc.mutation.HistoryTime(); !ok {
+func (_c *FriendshipHistoryCreate) check() error {
+	if _, ok := _c.mutation.HistoryTime(); !ok {
 		return &ValidationError{Name: "history_time", err: errors.New(`ent: missing required field "FriendshipHistory.history_time"`)}
 	}
-	if _, ok := fhc.mutation.Operation(); !ok {
+	if _, ok := _c.mutation.Operation(); !ok {
 		return &ValidationError{Name: "operation", err: errors.New(`ent: missing required field "FriendshipHistory.operation"`)}
 	}
-	if v, ok := fhc.mutation.Operation(); ok {
+	if v, ok := _c.mutation.Operation(); ok {
 		if err := friendshiphistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`ent: validator failed for field "FriendshipHistory.operation": %w`, err)}
 		}
 	}
-	if _, ok := fhc.mutation.CharacterID(); !ok {
+	if _, ok := _c.mutation.CharacterID(); !ok {
 		return &ValidationError{Name: "character_id", err: errors.New(`ent: missing required field "FriendshipHistory.character_id"`)}
 	}
-	if _, ok := fhc.mutation.FriendID(); !ok {
+	if _, ok := _c.mutation.FriendID(); !ok {
 		return &ValidationError{Name: "friend_id", err: errors.New(`ent: missing required field "FriendshipHistory.friend_id"`)}
 	}
 	return nil
 }
 
-func (fhc *FriendshipHistoryCreate) sqlSave(ctx context.Context) (*FriendshipHistory, error) {
-	if err := fhc.check(); err != nil {
+func (_c *FriendshipHistoryCreate) sqlSave(ctx context.Context) (*FriendshipHistory, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := fhc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, fhc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -153,37 +153,37 @@ func (fhc *FriendshipHistoryCreate) sqlSave(ctx context.Context) (*FriendshipHis
 		id := _spec.ID.Value.(int64)
 		_node.ID = int(id)
 	}
-	fhc.mutation.id = &_node.ID
-	fhc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (fhc *FriendshipHistoryCreate) createSpec() (*FriendshipHistory, *sqlgraph.CreateSpec) {
+func (_c *FriendshipHistoryCreate) createSpec() (*FriendshipHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &FriendshipHistory{config: fhc.config}
+		_node = &FriendshipHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(friendshiphistory.Table, sqlgraph.NewFieldSpec(friendshiphistory.FieldID, field.TypeInt))
 	)
-	if id, ok := fhc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := fhc.mutation.HistoryTime(); ok {
+	if value, ok := _c.mutation.HistoryTime(); ok {
 		_spec.SetField(friendshiphistory.FieldHistoryTime, field.TypeTime, value)
 		_node.HistoryTime = value
 	}
-	if value, ok := fhc.mutation.Operation(); ok {
+	if value, ok := _c.mutation.Operation(); ok {
 		_spec.SetField(friendshiphistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := fhc.mutation.Ref(); ok {
+	if value, ok := _c.mutation.Ref(); ok {
 		_spec.SetField(friendshiphistory.FieldRef, field.TypeUUID, value)
 		_node.Ref = value
 	}
-	if value, ok := fhc.mutation.CharacterID(); ok {
+	if value, ok := _c.mutation.CharacterID(); ok {
 		_spec.SetField(friendshiphistory.FieldCharacterID, field.TypeUUID, value)
 		_node.CharacterID = value
 	}
-	if value, ok := fhc.mutation.FriendID(); ok {
+	if value, ok := _c.mutation.FriendID(); ok {
 		_spec.SetField(friendshiphistory.FieldFriendID, field.TypeUUID, value)
 		_node.FriendID = value
 	}
@@ -198,16 +198,16 @@ type FriendshipHistoryCreateBulk struct {
 }
 
 // Save creates the FriendshipHistory entities in the database.
-func (fhcb *FriendshipHistoryCreateBulk) Save(ctx context.Context) ([]*FriendshipHistory, error) {
-	if fhcb.err != nil {
-		return nil, fhcb.err
+func (_c *FriendshipHistoryCreateBulk) Save(ctx context.Context) ([]*FriendshipHistory, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(fhcb.builders))
-	nodes := make([]*FriendshipHistory, len(fhcb.builders))
-	mutators := make([]Mutator, len(fhcb.builders))
-	for i := range fhcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*FriendshipHistory, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := fhcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*FriendshipHistoryMutation)
@@ -221,11 +221,11 @@ func (fhcb *FriendshipHistoryCreateBulk) Save(ctx context.Context) ([]*Friendshi
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, fhcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, fhcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -249,7 +249,7 @@ func (fhcb *FriendshipHistoryCreateBulk) Save(ctx context.Context) ([]*Friendshi
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, fhcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -257,8 +257,8 @@ func (fhcb *FriendshipHistoryCreateBulk) Save(ctx context.Context) ([]*Friendshi
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (fhcb *FriendshipHistoryCreateBulk) SaveX(ctx context.Context) []*FriendshipHistory {
-	v, err := fhcb.Save(ctx)
+func (_c *FriendshipHistoryCreateBulk) SaveX(ctx context.Context) []*FriendshipHistory {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -266,14 +266,14 @@ func (fhcb *FriendshipHistoryCreateBulk) SaveX(ctx context.Context) []*Friendshi
 }
 
 // Exec executes the query.
-func (fhcb *FriendshipHistoryCreateBulk) Exec(ctx context.Context) error {
-	_, err := fhcb.Save(ctx)
+func (_c *FriendshipHistoryCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fhcb *FriendshipHistoryCreateBulk) ExecX(ctx context.Context) {
-	if err := fhcb.Exec(ctx); err != nil {
+func (_c *FriendshipHistoryCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

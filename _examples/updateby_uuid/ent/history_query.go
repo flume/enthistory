@@ -13,28 +13,28 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-func (o *Organization) History() *OrganizationHistoryQuery {
-	historyClient := NewOrganizationHistoryClient(o.config)
-	return historyClient.Query().Where(organizationhistory.Ref(o.ID))
+func (_m *Organization) History() *OrganizationHistoryQuery {
+	historyClient := NewOrganizationHistoryClient(_m.config)
+	return historyClient.Query().Where(organizationhistory.Ref(_m.ID))
 }
 
-func (oh *OrganizationHistory) Next(ctx context.Context) (*OrganizationHistory, error) {
-	client := NewOrganizationHistoryClient(oh.config)
+func (_m *OrganizationHistory) Next(ctx context.Context) (*OrganizationHistory, error) {
+	client := NewOrganizationHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			organizationhistory.Ref(oh.Ref),
-			organizationhistory.HistoryTimeGT(oh.HistoryTime),
+			organizationhistory.Ref(_m.Ref),
+			organizationhistory.HistoryTimeGT(_m.HistoryTime),
 		).
 		Order(organizationhistory.ByHistoryTime()).
 		First(ctx)
 }
 
-func (oh *OrganizationHistory) Prev(ctx context.Context) (*OrganizationHistory, error) {
-	client := NewOrganizationHistoryClient(oh.config)
+func (_m *OrganizationHistory) Prev(ctx context.Context) (*OrganizationHistory, error) {
+	client := NewOrganizationHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			organizationhistory.Ref(oh.Ref),
-			organizationhistory.HistoryTimeLT(oh.HistoryTime),
+			organizationhistory.Ref(_m.Ref),
+			organizationhistory.HistoryTimeLT(_m.HistoryTime),
 		).
 		Order(organizationhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
@@ -59,38 +59,38 @@ func (ohq *OrganizationHistoryQuery) AsOf(ctx context.Context, time time.Time) (
 		First(ctx)
 }
 
-func (oh *OrganizationHistory) Restore(ctx context.Context) (*Organization, error) {
-	client := NewOrganizationClient(oh.config)
+func (_m *OrganizationHistory) Restore(ctx context.Context) (*Organization, error) {
+	client := NewOrganizationClient(_m.config)
 	return client.
-		UpdateOneID(oh.Ref).
-		SetUpdatedAt(oh.UpdatedAt).
-		SetName(oh.Name).
-		SetInfo(oh.Info).
+		UpdateOneID(_m.Ref).
+		SetUpdatedAt(_m.UpdatedAt).
+		SetName(_m.Name).
+		SetInfo(_m.Info).
 		Save(ctx)
 }
 
-func (s *Store) History() *StoreHistoryQuery {
-	historyClient := NewStoreHistoryClient(s.config)
-	return historyClient.Query().Where(storehistory.Ref(s.ID))
+func (_m *Store) History() *StoreHistoryQuery {
+	historyClient := NewStoreHistoryClient(_m.config)
+	return historyClient.Query().Where(storehistory.Ref(_m.ID))
 }
 
-func (sh *StoreHistory) Next(ctx context.Context) (*StoreHistory, error) {
-	client := NewStoreHistoryClient(sh.config)
+func (_m *StoreHistory) Next(ctx context.Context) (*StoreHistory, error) {
+	client := NewStoreHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			storehistory.Ref(sh.Ref),
-			storehistory.HistoryTimeGT(sh.HistoryTime),
+			storehistory.Ref(_m.Ref),
+			storehistory.HistoryTimeGT(_m.HistoryTime),
 		).
 		Order(storehistory.ByHistoryTime()).
 		First(ctx)
 }
 
-func (sh *StoreHistory) Prev(ctx context.Context) (*StoreHistory, error) {
-	client := NewStoreHistoryClient(sh.config)
+func (_m *StoreHistory) Prev(ctx context.Context) (*StoreHistory, error) {
+	client := NewStoreHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			storehistory.Ref(sh.Ref),
-			storehistory.HistoryTimeLT(sh.HistoryTime),
+			storehistory.Ref(_m.Ref),
+			storehistory.HistoryTimeLT(_m.HistoryTime),
 		).
 		Order(storehistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
@@ -115,13 +115,13 @@ func (shq *StoreHistoryQuery) AsOf(ctx context.Context, time time.Time) (*StoreH
 		First(ctx)
 }
 
-func (sh *StoreHistory) Restore(ctx context.Context) (*Store, error) {
-	client := NewStoreClient(sh.config)
+func (_m *StoreHistory) Restore(ctx context.Context) (*Store, error) {
+	client := NewStoreClient(_m.config)
 	return client.
-		UpdateOneID(sh.Ref).
-		SetUpdatedAt(sh.UpdatedAt).
-		SetName(sh.Name).
-		SetRegion(sh.Region).
-		SetOrganizationID(sh.OrganizationID).
+		UpdateOneID(_m.Ref).
+		SetUpdatedAt(_m.UpdatedAt).
+		SetName(_m.Name).
+		SetRegion(_m.Region).
+		SetOrganizationID(_m.OrganizationID).
 		Save(ctx)
 }

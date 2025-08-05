@@ -28,40 +28,40 @@ type CharacterHistoryQuery struct {
 }
 
 // Where adds a new predicate for the CharacterHistoryQuery builder.
-func (chq *CharacterHistoryQuery) Where(ps ...predicate.CharacterHistory) *CharacterHistoryQuery {
-	chq.predicates = append(chq.predicates, ps...)
-	return chq
+func (_q *CharacterHistoryQuery) Where(ps ...predicate.CharacterHistory) *CharacterHistoryQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (chq *CharacterHistoryQuery) Limit(limit int) *CharacterHistoryQuery {
-	chq.ctx.Limit = &limit
-	return chq
+func (_q *CharacterHistoryQuery) Limit(limit int) *CharacterHistoryQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (chq *CharacterHistoryQuery) Offset(offset int) *CharacterHistoryQuery {
-	chq.ctx.Offset = &offset
-	return chq
+func (_q *CharacterHistoryQuery) Offset(offset int) *CharacterHistoryQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (chq *CharacterHistoryQuery) Unique(unique bool) *CharacterHistoryQuery {
-	chq.ctx.Unique = &unique
-	return chq
+func (_q *CharacterHistoryQuery) Unique(unique bool) *CharacterHistoryQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (chq *CharacterHistoryQuery) Order(o ...characterhistory.OrderOption) *CharacterHistoryQuery {
-	chq.order = append(chq.order, o...)
-	return chq
+func (_q *CharacterHistoryQuery) Order(o ...characterhistory.OrderOption) *CharacterHistoryQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first CharacterHistory entity from the query.
 // Returns a *NotFoundError when no CharacterHistory was found.
-func (chq *CharacterHistoryQuery) First(ctx context.Context) (*CharacterHistory, error) {
-	nodes, err := chq.Limit(1).All(setContextOp(ctx, chq.ctx, ent.OpQueryFirst))
+func (_q *CharacterHistoryQuery) First(ctx context.Context) (*CharacterHistory, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -72,8 +72,8 @@ func (chq *CharacterHistoryQuery) First(ctx context.Context) (*CharacterHistory,
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (chq *CharacterHistoryQuery) FirstX(ctx context.Context) *CharacterHistory {
-	node, err := chq.First(ctx)
+func (_q *CharacterHistoryQuery) FirstX(ctx context.Context) *CharacterHistory {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -82,9 +82,9 @@ func (chq *CharacterHistoryQuery) FirstX(ctx context.Context) *CharacterHistory 
 
 // FirstID returns the first CharacterHistory ID from the query.
 // Returns a *NotFoundError when no CharacterHistory ID was found.
-func (chq *CharacterHistoryQuery) FirstID(ctx context.Context) (id int, err error) {
+func (_q *CharacterHistoryQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = chq.Limit(1).IDs(setContextOp(ctx, chq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -95,8 +95,8 @@ func (chq *CharacterHistoryQuery) FirstID(ctx context.Context) (id int, err erro
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (chq *CharacterHistoryQuery) FirstIDX(ctx context.Context) int {
-	id, err := chq.FirstID(ctx)
+func (_q *CharacterHistoryQuery) FirstIDX(ctx context.Context) int {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -106,8 +106,8 @@ func (chq *CharacterHistoryQuery) FirstIDX(ctx context.Context) int {
 // Only returns a single CharacterHistory entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one CharacterHistory entity is found.
 // Returns a *NotFoundError when no CharacterHistory entities are found.
-func (chq *CharacterHistoryQuery) Only(ctx context.Context) (*CharacterHistory, error) {
-	nodes, err := chq.Limit(2).All(setContextOp(ctx, chq.ctx, ent.OpQueryOnly))
+func (_q *CharacterHistoryQuery) Only(ctx context.Context) (*CharacterHistory, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -122,8 +122,8 @@ func (chq *CharacterHistoryQuery) Only(ctx context.Context) (*CharacterHistory, 
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (chq *CharacterHistoryQuery) OnlyX(ctx context.Context) *CharacterHistory {
-	node, err := chq.Only(ctx)
+func (_q *CharacterHistoryQuery) OnlyX(ctx context.Context) *CharacterHistory {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -133,9 +133,9 @@ func (chq *CharacterHistoryQuery) OnlyX(ctx context.Context) *CharacterHistory {
 // OnlyID is like Only, but returns the only CharacterHistory ID in the query.
 // Returns a *NotSingularError when more than one CharacterHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (chq *CharacterHistoryQuery) OnlyID(ctx context.Context) (id int, err error) {
+func (_q *CharacterHistoryQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = chq.Limit(2).IDs(setContextOp(ctx, chq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -150,8 +150,8 @@ func (chq *CharacterHistoryQuery) OnlyID(ctx context.Context) (id int, err error
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (chq *CharacterHistoryQuery) OnlyIDX(ctx context.Context) int {
-	id, err := chq.OnlyID(ctx)
+func (_q *CharacterHistoryQuery) OnlyIDX(ctx context.Context) int {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -159,18 +159,18 @@ func (chq *CharacterHistoryQuery) OnlyIDX(ctx context.Context) int {
 }
 
 // All executes the query and returns a list of CharacterHistories.
-func (chq *CharacterHistoryQuery) All(ctx context.Context) ([]*CharacterHistory, error) {
-	ctx = setContextOp(ctx, chq.ctx, ent.OpQueryAll)
-	if err := chq.prepareQuery(ctx); err != nil {
+func (_q *CharacterHistoryQuery) All(ctx context.Context) ([]*CharacterHistory, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*CharacterHistory, *CharacterHistoryQuery]()
-	return withInterceptors[[]*CharacterHistory](ctx, chq, qr, chq.inters)
+	return withInterceptors[[]*CharacterHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (chq *CharacterHistoryQuery) AllX(ctx context.Context) []*CharacterHistory {
-	nodes, err := chq.All(ctx)
+func (_q *CharacterHistoryQuery) AllX(ctx context.Context) []*CharacterHistory {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -178,20 +178,20 @@ func (chq *CharacterHistoryQuery) AllX(ctx context.Context) []*CharacterHistory 
 }
 
 // IDs executes the query and returns a list of CharacterHistory IDs.
-func (chq *CharacterHistoryQuery) IDs(ctx context.Context) (ids []int, err error) {
-	if chq.ctx.Unique == nil && chq.path != nil {
-		chq.Unique(true)
+func (_q *CharacterHistoryQuery) IDs(ctx context.Context) (ids []int, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, chq.ctx, ent.OpQueryIDs)
-	if err = chq.Select(characterhistory.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(characterhistory.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (chq *CharacterHistoryQuery) IDsX(ctx context.Context) []int {
-	ids, err := chq.IDs(ctx)
+func (_q *CharacterHistoryQuery) IDsX(ctx context.Context) []int {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -199,17 +199,17 @@ func (chq *CharacterHistoryQuery) IDsX(ctx context.Context) []int {
 }
 
 // Count returns the count of the given query.
-func (chq *CharacterHistoryQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, chq.ctx, ent.OpQueryCount)
-	if err := chq.prepareQuery(ctx); err != nil {
+func (_q *CharacterHistoryQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, chq, querierCount[*CharacterHistoryQuery](), chq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*CharacterHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (chq *CharacterHistoryQuery) CountX(ctx context.Context) int {
-	count, err := chq.Count(ctx)
+func (_q *CharacterHistoryQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -217,9 +217,9 @@ func (chq *CharacterHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (chq *CharacterHistoryQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, chq.ctx, ent.OpQueryExist)
-	switch _, err := chq.FirstID(ctx); {
+func (_q *CharacterHistoryQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -230,8 +230,8 @@ func (chq *CharacterHistoryQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (chq *CharacterHistoryQuery) ExistX(ctx context.Context) bool {
-	exist, err := chq.Exist(ctx)
+func (_q *CharacterHistoryQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -240,19 +240,19 @@ func (chq *CharacterHistoryQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the CharacterHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (chq *CharacterHistoryQuery) Clone() *CharacterHistoryQuery {
-	if chq == nil {
+func (_q *CharacterHistoryQuery) Clone() *CharacterHistoryQuery {
+	if _q == nil {
 		return nil
 	}
 	return &CharacterHistoryQuery{
-		config:     chq.config,
-		ctx:        chq.ctx.Clone(),
-		order:      append([]characterhistory.OrderOption{}, chq.order...),
-		inters:     append([]Interceptor{}, chq.inters...),
-		predicates: append([]predicate.CharacterHistory{}, chq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]characterhistory.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.CharacterHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  chq.sql.Clone(),
-		path: chq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -270,10 +270,10 @@ func (chq *CharacterHistoryQuery) Clone() *CharacterHistoryQuery {
 //		GroupBy(characterhistory.FieldHistoryTime).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (chq *CharacterHistoryQuery) GroupBy(field string, fields ...string) *CharacterHistoryGroupBy {
-	chq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &CharacterHistoryGroupBy{build: chq}
-	grbuild.flds = &chq.ctx.Fields
+func (_q *CharacterHistoryQuery) GroupBy(field string, fields ...string) *CharacterHistoryGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &CharacterHistoryGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = characterhistory.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -291,62 +291,62 @@ func (chq *CharacterHistoryQuery) GroupBy(field string, fields ...string) *Chara
 //	client.CharacterHistory.Query().
 //		Select(characterhistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (chq *CharacterHistoryQuery) Select(fields ...string) *CharacterHistorySelect {
-	chq.ctx.Fields = append(chq.ctx.Fields, fields...)
-	sbuild := &CharacterHistorySelect{CharacterHistoryQuery: chq}
+func (_q *CharacterHistoryQuery) Select(fields ...string) *CharacterHistorySelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &CharacterHistorySelect{CharacterHistoryQuery: _q}
 	sbuild.label = characterhistory.Label
-	sbuild.flds, sbuild.scan = &chq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a CharacterHistorySelect configured with the given aggregations.
-func (chq *CharacterHistoryQuery) Aggregate(fns ...AggregateFunc) *CharacterHistorySelect {
-	return chq.Select().Aggregate(fns...)
+func (_q *CharacterHistoryQuery) Aggregate(fns ...AggregateFunc) *CharacterHistorySelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (chq *CharacterHistoryQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range chq.inters {
+func (_q *CharacterHistoryQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, chq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range chq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !characterhistory.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if chq.path != nil {
-		prev, err := chq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		chq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (chq *CharacterHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*CharacterHistory, error) {
+func (_q *CharacterHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*CharacterHistory, error) {
 	var (
 		nodes = []*CharacterHistory{}
-		_spec = chq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*CharacterHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &CharacterHistory{config: chq.config}
+		node := &CharacterHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, chq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -355,24 +355,24 @@ func (chq *CharacterHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook
 	return nodes, nil
 }
 
-func (chq *CharacterHistoryQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := chq.querySpec()
-	_spec.Node.Columns = chq.ctx.Fields
-	if len(chq.ctx.Fields) > 0 {
-		_spec.Unique = chq.ctx.Unique != nil && *chq.ctx.Unique
+func (_q *CharacterHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, chq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (chq *CharacterHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *CharacterHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(characterhistory.Table, characterhistory.Columns, sqlgraph.NewFieldSpec(characterhistory.FieldID, field.TypeInt))
-	_spec.From = chq.sql
-	if unique := chq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if chq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := chq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, characterhistory.FieldID)
 		for i := range fields {
@@ -381,20 +381,20 @@ func (chq *CharacterHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := chq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := chq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := chq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := chq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -404,33 +404,33 @@ func (chq *CharacterHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (chq *CharacterHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(chq.driver.Dialect())
+func (_q *CharacterHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(characterhistory.Table)
-	columns := chq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = characterhistory.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if chq.sql != nil {
-		selector = chq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if chq.ctx.Unique != nil && *chq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, p := range chq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range chq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := chq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := chq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -443,41 +443,41 @@ type CharacterHistoryGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (chgb *CharacterHistoryGroupBy) Aggregate(fns ...AggregateFunc) *CharacterHistoryGroupBy {
-	chgb.fns = append(chgb.fns, fns...)
-	return chgb
+func (_g *CharacterHistoryGroupBy) Aggregate(fns ...AggregateFunc) *CharacterHistoryGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (chgb *CharacterHistoryGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, chgb.build.ctx, ent.OpQueryGroupBy)
-	if err := chgb.build.prepareQuery(ctx); err != nil {
+func (_g *CharacterHistoryGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*CharacterHistoryQuery, *CharacterHistoryGroupBy](ctx, chgb.build, chgb, chgb.build.inters, v)
+	return scanWithInterceptors[*CharacterHistoryQuery, *CharacterHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (chgb *CharacterHistoryGroupBy) sqlScan(ctx context.Context, root *CharacterHistoryQuery, v any) error {
+func (_g *CharacterHistoryGroupBy) sqlScan(ctx context.Context, root *CharacterHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(chgb.fns))
-	for _, fn := range chgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*chgb.flds)+len(chgb.fns))
-		for _, f := range *chgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*chgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := chgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -491,27 +491,27 @@ type CharacterHistorySelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (chs *CharacterHistorySelect) Aggregate(fns ...AggregateFunc) *CharacterHistorySelect {
-	chs.fns = append(chs.fns, fns...)
-	return chs
+func (_s *CharacterHistorySelect) Aggregate(fns ...AggregateFunc) *CharacterHistorySelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (chs *CharacterHistorySelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, chs.ctx, ent.OpQuerySelect)
-	if err := chs.prepareQuery(ctx); err != nil {
+func (_s *CharacterHistorySelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*CharacterHistoryQuery, *CharacterHistorySelect](ctx, chs.CharacterHistoryQuery, chs, chs.inters, v)
+	return scanWithInterceptors[*CharacterHistoryQuery, *CharacterHistorySelect](ctx, _s.CharacterHistoryQuery, _s, _s.inters, v)
 }
 
-func (chs *CharacterHistorySelect) sqlScan(ctx context.Context, root *CharacterHistoryQuery, v any) error {
+func (_s *CharacterHistorySelect) sqlScan(ctx context.Context, root *CharacterHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(chs.fns))
-	for _, fn := range chs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*chs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -519,7 +519,7 @@ func (chs *CharacterHistorySelect) sqlScan(ctx context.Context, root *CharacterH
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := chs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

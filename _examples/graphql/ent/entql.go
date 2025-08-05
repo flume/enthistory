@@ -111,13 +111,13 @@ type predicateAdder interface {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (teq *TestExcludeQuery) addPredicate(pred func(s *sql.Selector)) {
-	teq.predicates = append(teq.predicates, pred)
+func (_q *TestExcludeQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TestExcludeQuery builder.
-func (teq *TestExcludeQuery) Filter() *TestExcludeFilter {
-	return &TestExcludeFilter{config: teq.config, predicateAdder: teq}
+func (_q *TestExcludeQuery) Filter() *TestExcludeFilter {
+	return &TestExcludeFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -161,13 +161,13 @@ func (f *TestExcludeFilter) WhereName(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (tsq *TestSkipQuery) addPredicate(pred func(s *sql.Selector)) {
-	tsq.predicates = append(tsq.predicates, pred)
+func (_q *TestSkipQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TestSkipQuery builder.
-func (tsq *TestSkipQuery) Filter() *TestSkipFilter {
-	return &TestSkipFilter{config: tsq.config, predicateAdder: tsq}
+func (_q *TestSkipQuery) Filter() *TestSkipFilter {
+	return &TestSkipFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -211,13 +211,13 @@ func (f *TestSkipFilter) WhereName(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (tshq *TestSkipHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	tshq.predicates = append(tshq.predicates, pred)
+func (_q *TestSkipHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TestSkipHistoryQuery builder.
-func (tshq *TestSkipHistoryQuery) Filter() *TestSkipHistoryFilter {
-	return &TestSkipHistoryFilter{config: tshq.config, predicateAdder: tshq}
+func (_q *TestSkipHistoryQuery) Filter() *TestSkipHistoryFilter {
+	return &TestSkipHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -281,13 +281,13 @@ func (f *TestSkipHistoryFilter) WhereName(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (tq *TodoQuery) addPredicate(pred func(s *sql.Selector)) {
-	tq.predicates = append(tq.predicates, pred)
+func (_q *TodoQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TodoQuery builder.
-func (tq *TodoQuery) Filter() *TodoFilter {
-	return &TodoFilter{config: tq.config, predicateAdder: tq}
+func (_q *TodoQuery) Filter() *TodoFilter {
+	return &TodoFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -331,13 +331,13 @@ func (f *TodoFilter) WhereName(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (thq *TodoHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	thq.predicates = append(thq.predicates, pred)
+func (_q *TodoHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
 }
 
 // Filter returns a Filter implementation to apply filters on the TodoHistoryQuery builder.
-func (thq *TodoHistoryQuery) Filter() *TodoHistoryFilter {
-	return &TodoHistoryFilter{config: thq.config, predicateAdder: thq}
+func (_q *TodoHistoryQuery) Filter() *TodoHistoryFilter {
+	return &TodoHistoryFilter{config: _q.config, predicateAdder: _q}
 }
 
 // addPredicate implements the predicateAdder interface.

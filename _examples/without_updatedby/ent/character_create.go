@@ -24,120 +24,120 @@ type CharacterCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (cc *CharacterCreate) SetCreatedAt(t time.Time) *CharacterCreate {
-	cc.mutation.SetCreatedAt(t)
-	return cc
+func (_c *CharacterCreate) SetCreatedAt(v time.Time) *CharacterCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (cc *CharacterCreate) SetNillableCreatedAt(t *time.Time) *CharacterCreate {
-	if t != nil {
-		cc.SetCreatedAt(*t)
+func (_c *CharacterCreate) SetNillableCreatedAt(v *time.Time) *CharacterCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (cc *CharacterCreate) SetUpdatedAt(t time.Time) *CharacterCreate {
-	cc.mutation.SetUpdatedAt(t)
-	return cc
+func (_c *CharacterCreate) SetUpdatedAt(v time.Time) *CharacterCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (cc *CharacterCreate) SetNillableUpdatedAt(t *time.Time) *CharacterCreate {
-	if t != nil {
-		cc.SetUpdatedAt(*t)
+func (_c *CharacterCreate) SetNillableUpdatedAt(v *time.Time) *CharacterCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return cc
+	return _c
 }
 
 // SetAge sets the "age" field.
-func (cc *CharacterCreate) SetAge(i int) *CharacterCreate {
-	cc.mutation.SetAge(i)
-	return cc
+func (_c *CharacterCreate) SetAge(v int) *CharacterCreate {
+	_c.mutation.SetAge(v)
+	return _c
 }
 
 // SetName sets the "name" field.
-func (cc *CharacterCreate) SetName(s string) *CharacterCreate {
-	cc.mutation.SetName(s)
-	return cc
+func (_c *CharacterCreate) SetName(v string) *CharacterCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetNicknames sets the "nicknames" field.
-func (cc *CharacterCreate) SetNicknames(s []string) *CharacterCreate {
-	cc.mutation.SetNicknames(s)
-	return cc
+func (_c *CharacterCreate) SetNicknames(v []string) *CharacterCreate {
+	_c.mutation.SetNicknames(v)
+	return _c
 }
 
 // SetInfo sets the "info" field.
-func (cc *CharacterCreate) SetInfo(m map[string]interface{}) *CharacterCreate {
-	cc.mutation.SetInfo(m)
-	return cc
+func (_c *CharacterCreate) SetInfo(v map[string]interface{}) *CharacterCreate {
+	_c.mutation.SetInfo(v)
+	return _c
 }
 
 // AddFriendIDs adds the "friends" edge to the Character entity by IDs.
-func (cc *CharacterCreate) AddFriendIDs(ids ...int) *CharacterCreate {
-	cc.mutation.AddFriendIDs(ids...)
-	return cc
+func (_c *CharacterCreate) AddFriendIDs(ids ...int) *CharacterCreate {
+	_c.mutation.AddFriendIDs(ids...)
+	return _c
 }
 
 // AddFriends adds the "friends" edges to the Character entity.
-func (cc *CharacterCreate) AddFriends(c ...*Character) *CharacterCreate {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *CharacterCreate) AddFriends(v ...*Character) *CharacterCreate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddFriendIDs(ids...)
+	return _c.AddFriendIDs(ids...)
 }
 
 // SetResidenceID sets the "residence" edge to the Residence entity by ID.
-func (cc *CharacterCreate) SetResidenceID(id uuid.UUID) *CharacterCreate {
-	cc.mutation.SetResidenceID(id)
-	return cc
+func (_c *CharacterCreate) SetResidenceID(id uuid.UUID) *CharacterCreate {
+	_c.mutation.SetResidenceID(id)
+	return _c
 }
 
 // SetNillableResidenceID sets the "residence" edge to the Residence entity by ID if the given value is not nil.
-func (cc *CharacterCreate) SetNillableResidenceID(id *uuid.UUID) *CharacterCreate {
+func (_c *CharacterCreate) SetNillableResidenceID(id *uuid.UUID) *CharacterCreate {
 	if id != nil {
-		cc = cc.SetResidenceID(*id)
+		_c = _c.SetResidenceID(*id)
 	}
-	return cc
+	return _c
 }
 
 // SetResidence sets the "residence" edge to the Residence entity.
-func (cc *CharacterCreate) SetResidence(r *Residence) *CharacterCreate {
-	return cc.SetResidenceID(r.ID)
+func (_c *CharacterCreate) SetResidence(v *Residence) *CharacterCreate {
+	return _c.SetResidenceID(v.ID)
 }
 
 // AddFriendshipIDs adds the "friendships" edge to the Friendship entity by IDs.
-func (cc *CharacterCreate) AddFriendshipIDs(ids ...string) *CharacterCreate {
-	cc.mutation.AddFriendshipIDs(ids...)
-	return cc
+func (_c *CharacterCreate) AddFriendshipIDs(ids ...string) *CharacterCreate {
+	_c.mutation.AddFriendshipIDs(ids...)
+	return _c
 }
 
 // AddFriendships adds the "friendships" edges to the Friendship entity.
-func (cc *CharacterCreate) AddFriendships(f ...*Friendship) *CharacterCreate {
-	ids := make([]string, len(f))
-	for i := range f {
-		ids[i] = f[i].ID
+func (_c *CharacterCreate) AddFriendships(v ...*Friendship) *CharacterCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return cc.AddFriendshipIDs(ids...)
+	return _c.AddFriendshipIDs(ids...)
 }
 
 // Mutation returns the CharacterMutation object of the builder.
-func (cc *CharacterCreate) Mutation() *CharacterMutation {
-	return cc.mutation
+func (_c *CharacterCreate) Mutation() *CharacterMutation {
+	return _c.mutation
 }
 
 // Save creates the Character in the database.
-func (cc *CharacterCreate) Save(ctx context.Context) (*Character, error) {
-	cc.defaults()
-	return withHooks(ctx, cc.sqlSave, cc.mutation, cc.hooks)
+func (_c *CharacterCreate) Save(ctx context.Context) (*Character, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (cc *CharacterCreate) SaveX(ctx context.Context) *Character {
-	v, err := cc.Save(ctx)
+func (_c *CharacterCreate) SaveX(ctx context.Context) *Character {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -145,58 +145,58 @@ func (cc *CharacterCreate) SaveX(ctx context.Context) *Character {
 }
 
 // Exec executes the query.
-func (cc *CharacterCreate) Exec(ctx context.Context) error {
-	_, err := cc.Save(ctx)
+func (_c *CharacterCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (cc *CharacterCreate) ExecX(ctx context.Context) {
-	if err := cc.Exec(ctx); err != nil {
+func (_c *CharacterCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (cc *CharacterCreate) defaults() {
-	if _, ok := cc.mutation.CreatedAt(); !ok {
+func (_c *CharacterCreate) defaults() {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := character.DefaultCreatedAt()
-		cc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := cc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		v := character.DefaultUpdatedAt()
-		cc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (cc *CharacterCreate) check() error {
-	if _, ok := cc.mutation.CreatedAt(); !ok {
+func (_c *CharacterCreate) check() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Character.created_at"`)}
 	}
-	if _, ok := cc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Character.updated_at"`)}
 	}
-	if _, ok := cc.mutation.Age(); !ok {
+	if _, ok := _c.mutation.Age(); !ok {
 		return &ValidationError{Name: "age", err: errors.New(`ent: missing required field "Character.age"`)}
 	}
-	if v, ok := cc.mutation.Age(); ok {
+	if v, ok := _c.mutation.Age(); ok {
 		if err := character.AgeValidator(v); err != nil {
 			return &ValidationError{Name: "age", err: fmt.Errorf(`ent: validator failed for field "Character.age": %w`, err)}
 		}
 	}
-	if _, ok := cc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Character.name"`)}
 	}
 	return nil
 }
 
-func (cc *CharacterCreate) sqlSave(ctx context.Context) (*Character, error) {
-	if err := cc.check(); err != nil {
+func (_c *CharacterCreate) sqlSave(ctx context.Context) (*Character, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := cc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, cc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -204,41 +204,41 @@ func (cc *CharacterCreate) sqlSave(ctx context.Context) (*Character, error) {
 	}
 	id := _spec.ID.Value.(int64)
 	_node.ID = int(id)
-	cc.mutation.id = &_node.ID
-	cc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (cc *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
+func (_c *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Character{config: cc.config}
+		_node = &Character{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(character.Table, sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt))
 	)
-	if value, ok := cc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(character.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := cc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(character.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := cc.mutation.Age(); ok {
+	if value, ok := _c.mutation.Age(); ok {
 		_spec.SetField(character.FieldAge, field.TypeInt, value)
 		_node.Age = value
 	}
-	if value, ok := cc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(character.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := cc.mutation.Nicknames(); ok {
+	if value, ok := _c.mutation.Nicknames(); ok {
 		_spec.SetField(character.FieldNicknames, field.TypeJSON, value)
 		_node.Nicknames = value
 	}
-	if value, ok := cc.mutation.Info(); ok {
+	if value, ok := _c.mutation.Info(); ok {
 		_spec.SetField(character.FieldInfo, field.TypeJSON, value)
 		_node.Info = value
 	}
-	if nodes := cc.mutation.FriendsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FriendsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -252,13 +252,13 @@ func (cc *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		createE := &FriendshipCreate{config: cc.config, mutation: newFriendshipMutation(cc.config, OpCreate)}
+		createE := &FriendshipCreate{config: _c.config, mutation: newFriendshipMutation(_c.config, OpCreate)}
 		createE.defaults()
 		_, specE := createE.createSpec()
 		edge.Target.Fields = specE.Fields
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.ResidenceIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ResidenceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -275,7 +275,7 @@ func (cc *CharacterCreate) createSpec() (*Character, *sqlgraph.CreateSpec) {
 		_node.residence_occupants = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.FriendshipsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FriendshipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: true,
@@ -302,16 +302,16 @@ type CharacterCreateBulk struct {
 }
 
 // Save creates the Character entities in the database.
-func (ccb *CharacterCreateBulk) Save(ctx context.Context) ([]*Character, error) {
-	if ccb.err != nil {
-		return nil, ccb.err
+func (_c *CharacterCreateBulk) Save(ctx context.Context) ([]*Character, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(ccb.builders))
-	nodes := make([]*Character, len(ccb.builders))
-	mutators := make([]Mutator, len(ccb.builders))
-	for i := range ccb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Character, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := ccb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*CharacterMutation)
@@ -325,11 +325,11 @@ func (ccb *CharacterCreateBulk) Save(ctx context.Context) ([]*Character, error) 
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, ccb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, ccb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -353,7 +353,7 @@ func (ccb *CharacterCreateBulk) Save(ctx context.Context) ([]*Character, error) 
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, ccb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -361,8 +361,8 @@ func (ccb *CharacterCreateBulk) Save(ctx context.Context) ([]*Character, error) 
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (ccb *CharacterCreateBulk) SaveX(ctx context.Context) []*Character {
-	v, err := ccb.Save(ctx)
+func (_c *CharacterCreateBulk) SaveX(ctx context.Context) []*Character {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -370,14 +370,14 @@ func (ccb *CharacterCreateBulk) SaveX(ctx context.Context) []*Character {
 }
 
 // Exec executes the query.
-func (ccb *CharacterCreateBulk) Exec(ctx context.Context) error {
-	_, err := ccb.Save(ctx)
+func (_c *CharacterCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (ccb *CharacterCreateBulk) ExecX(ctx context.Context) {
-	if err := ccb.Exec(ctx); err != nil {
+func (_c *CharacterCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

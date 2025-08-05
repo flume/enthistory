@@ -23,31 +23,31 @@ type MenuItemHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the MenuItemHistoryUpdate builder.
-func (mihu *MenuItemHistoryUpdate) Where(ps ...predicate.MenuItemHistory) *MenuItemHistoryUpdate {
-	mihu.mutation.Where(ps...)
-	return mihu
+func (_u *MenuItemHistoryUpdate) Where(ps ...predicate.MenuItemHistory) *MenuItemHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (mihu *MenuItemHistoryUpdate) SetUpdatedAt(t time.Time) *MenuItemHistoryUpdate {
-	mihu.mutation.SetUpdatedAt(t)
-	return mihu
+func (_u *MenuItemHistoryUpdate) SetUpdatedAt(v time.Time) *MenuItemHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the MenuItemHistoryMutation object of the builder.
-func (mihu *MenuItemHistoryUpdate) Mutation() *MenuItemHistoryMutation {
-	return mihu.mutation
+func (_u *MenuItemHistoryUpdate) Mutation() *MenuItemHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (mihu *MenuItemHistoryUpdate) Save(ctx context.Context) (int, error) {
-	mihu.defaults()
-	return withHooks(ctx, mihu.sqlSave, mihu.mutation, mihu.hooks)
+func (_u *MenuItemHistoryUpdate) Save(ctx context.Context) (int, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (mihu *MenuItemHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := mihu.Save(ctx)
+func (_u *MenuItemHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -55,48 +55,48 @@ func (mihu *MenuItemHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (mihu *MenuItemHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := mihu.Save(ctx)
+func (_u *MenuItemHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mihu *MenuItemHistoryUpdate) ExecX(ctx context.Context) {
-	if err := mihu.Exec(ctx); err != nil {
+func (_u *MenuItemHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (mihu *MenuItemHistoryUpdate) defaults() {
-	if _, ok := mihu.mutation.UpdatedAt(); !ok {
+func (_u *MenuItemHistoryUpdate) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := menuitemhistory.UpdateDefaultUpdatedAt()
-		mihu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
-func (mihu *MenuItemHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *MenuItemHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(menuitemhistory.Table, menuitemhistory.Columns, sqlgraph.NewFieldSpec(menuitemhistory.FieldID, field.TypeUUID))
-	if ps := mihu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := mihu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(menuitemhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if mihu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(menuitemhistory.FieldRef, field.TypeUUID)
 	}
-	if mihu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(menuitemhistory.FieldUpdatedBy, field.TypeUUID)
 	}
-	if mihu.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(menuitemhistory.FieldDescription, field.TypeString)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, mihu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{menuitemhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -104,8 +104,8 @@ func (mihu *MenuItemHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 		}
 		return 0, err
 	}
-	mihu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // MenuItemHistoryUpdateOne is the builder for updating a single MenuItemHistory entity.
@@ -117,38 +117,38 @@ type MenuItemHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (mihuo *MenuItemHistoryUpdateOne) SetUpdatedAt(t time.Time) *MenuItemHistoryUpdateOne {
-	mihuo.mutation.SetUpdatedAt(t)
-	return mihuo
+func (_u *MenuItemHistoryUpdateOne) SetUpdatedAt(v time.Time) *MenuItemHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the MenuItemHistoryMutation object of the builder.
-func (mihuo *MenuItemHistoryUpdateOne) Mutation() *MenuItemHistoryMutation {
-	return mihuo.mutation
+func (_u *MenuItemHistoryUpdateOne) Mutation() *MenuItemHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the MenuItemHistoryUpdate builder.
-func (mihuo *MenuItemHistoryUpdateOne) Where(ps ...predicate.MenuItemHistory) *MenuItemHistoryUpdateOne {
-	mihuo.mutation.Where(ps...)
-	return mihuo
+func (_u *MenuItemHistoryUpdateOne) Where(ps ...predicate.MenuItemHistory) *MenuItemHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (mihuo *MenuItemHistoryUpdateOne) Select(field string, fields ...string) *MenuItemHistoryUpdateOne {
-	mihuo.fields = append([]string{field}, fields...)
-	return mihuo
+func (_u *MenuItemHistoryUpdateOne) Select(field string, fields ...string) *MenuItemHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated MenuItemHistory entity.
-func (mihuo *MenuItemHistoryUpdateOne) Save(ctx context.Context) (*MenuItemHistory, error) {
-	mihuo.defaults()
-	return withHooks(ctx, mihuo.sqlSave, mihuo.mutation, mihuo.hooks)
+func (_u *MenuItemHistoryUpdateOne) Save(ctx context.Context) (*MenuItemHistory, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (mihuo *MenuItemHistoryUpdateOne) SaveX(ctx context.Context) *MenuItemHistory {
-	node, err := mihuo.Save(ctx)
+func (_u *MenuItemHistoryUpdateOne) SaveX(ctx context.Context) *MenuItemHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -156,34 +156,34 @@ func (mihuo *MenuItemHistoryUpdateOne) SaveX(ctx context.Context) *MenuItemHisto
 }
 
 // Exec executes the query on the entity.
-func (mihuo *MenuItemHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := mihuo.Save(ctx)
+func (_u *MenuItemHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mihuo *MenuItemHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := mihuo.Exec(ctx); err != nil {
+func (_u *MenuItemHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (mihuo *MenuItemHistoryUpdateOne) defaults() {
-	if _, ok := mihuo.mutation.UpdatedAt(); !ok {
+func (_u *MenuItemHistoryUpdateOne) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := menuitemhistory.UpdateDefaultUpdatedAt()
-		mihuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
-func (mihuo *MenuItemHistoryUpdateOne) sqlSave(ctx context.Context) (_node *MenuItemHistory, err error) {
+func (_u *MenuItemHistoryUpdateOne) sqlSave(ctx context.Context) (_node *MenuItemHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(menuitemhistory.Table, menuitemhistory.Columns, sqlgraph.NewFieldSpec(menuitemhistory.FieldID, field.TypeUUID))
-	id, ok := mihuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "MenuItemHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := mihuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, menuitemhistory.FieldID)
 		for _, f := range fields {
@@ -195,29 +195,29 @@ func (mihuo *MenuItemHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Menu
 			}
 		}
 	}
-	if ps := mihuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := mihuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(menuitemhistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if mihuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(menuitemhistory.FieldRef, field.TypeUUID)
 	}
-	if mihuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(menuitemhistory.FieldUpdatedBy, field.TypeUUID)
 	}
-	if mihuo.mutation.DescriptionCleared() {
+	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(menuitemhistory.FieldDescription, field.TypeString)
 	}
-	_node = &MenuItemHistory{config: mihuo.config}
+	_node = &MenuItemHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, mihuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{menuitemhistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -225,6 +225,6 @@ func (mihuo *MenuItemHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Menu
 		}
 		return nil, err
 	}
-	mihuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

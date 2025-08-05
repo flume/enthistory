@@ -76,7 +76,7 @@ func (*Character) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Character fields.
-func (c *Character) assignValues(columns []string, values []any) error {
+func (_m *Character) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -86,22 +86,22 @@ func (c *Character) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				c.ID = *value
+				_m.ID = *value
 			}
 		case character.FieldAge:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field age", values[i])
 			} else if value.Valid {
-				c.Age = int(value.Int64)
+				_m.Age = int(value.Int64)
 			}
 		case character.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				c.Name = value.String
+				_m.Name = value.String
 			}
 		default:
-			c.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -109,48 +109,48 @@ func (c *Character) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Character.
 // This includes values selected through modifiers, order, etc.
-func (c *Character) Value(name string) (ent.Value, error) {
-	return c.selectValues.Get(name)
+func (_m *Character) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryFriends queries the "friends" edge of the Character entity.
-func (c *Character) QueryFriends() *CharacterQuery {
-	return NewCharacterClient(c.config).QueryFriends(c)
+func (_m *Character) QueryFriends() *CharacterQuery {
+	return NewCharacterClient(_m.config).QueryFriends(_m)
 }
 
 // QueryFriendships queries the "friendships" edge of the Character entity.
-func (c *Character) QueryFriendships() *FriendshipQuery {
-	return NewCharacterClient(c.config).QueryFriendships(c)
+func (_m *Character) QueryFriendships() *FriendshipQuery {
+	return NewCharacterClient(_m.config).QueryFriendships(_m)
 }
 
 // Update returns a builder for updating this Character.
 // Note that you need to call Character.Unwrap() before calling this method if this Character
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (c *Character) Update() *CharacterUpdateOne {
-	return NewCharacterClient(c.config).UpdateOne(c)
+func (_m *Character) Update() *CharacterUpdateOne {
+	return NewCharacterClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Character entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (c *Character) Unwrap() *Character {
-	_tx, ok := c.config.driver.(*txDriver)
+func (_m *Character) Unwrap() *Character {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: Character is not a transactional entity")
 	}
-	c.config.driver = _tx.drv
-	return c
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (c *Character) String() string {
+func (_m *Character) String() string {
 	var builder strings.Builder
 	builder.WriteString("Character(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", c.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("age=")
-	builder.WriteString(fmt.Sprintf("%v", c.Age))
+	builder.WriteString(fmt.Sprintf("%v", _m.Age))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(c.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteByte(')')
 	return builder.String()
 }

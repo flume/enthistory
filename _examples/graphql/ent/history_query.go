@@ -13,28 +13,28 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-func (ts *TestSkip) History() *TestSkipHistoryQuery {
-	historyClient := NewTestSkipHistoryClient(ts.config)
-	return historyClient.Query().Where(testskiphistory.Ref(ts.ID))
+func (_m *TestSkip) History() *TestSkipHistoryQuery {
+	historyClient := NewTestSkipHistoryClient(_m.config)
+	return historyClient.Query().Where(testskiphistory.Ref(_m.ID))
 }
 
-func (tsh *TestSkipHistory) Next(ctx context.Context) (*TestSkipHistory, error) {
-	client := NewTestSkipHistoryClient(tsh.config)
+func (_m *TestSkipHistory) Next(ctx context.Context) (*TestSkipHistory, error) {
+	client := NewTestSkipHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			testskiphistory.Ref(tsh.Ref),
-			testskiphistory.HistoryTimeGT(tsh.HistoryTime),
+			testskiphistory.Ref(_m.Ref),
+			testskiphistory.HistoryTimeGT(_m.HistoryTime),
 		).
 		Order(testskiphistory.ByHistoryTime()).
 		First(ctx)
 }
 
-func (tsh *TestSkipHistory) Prev(ctx context.Context) (*TestSkipHistory, error) {
-	client := NewTestSkipHistoryClient(tsh.config)
+func (_m *TestSkipHistory) Prev(ctx context.Context) (*TestSkipHistory, error) {
+	client := NewTestSkipHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			testskiphistory.Ref(tsh.Ref),
-			testskiphistory.HistoryTimeLT(tsh.HistoryTime),
+			testskiphistory.Ref(_m.Ref),
+			testskiphistory.HistoryTimeLT(_m.HistoryTime),
 		).
 		Order(testskiphistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
@@ -59,37 +59,37 @@ func (tshq *TestSkipHistoryQuery) AsOf(ctx context.Context, time time.Time) (*Te
 		First(ctx)
 }
 
-func (tsh *TestSkipHistory) Restore(ctx context.Context) (*TestSkip, error) {
-	client := NewTestSkipClient(tsh.config)
+func (_m *TestSkipHistory) Restore(ctx context.Context) (*TestSkip, error) {
+	client := NewTestSkipClient(_m.config)
 	return client.
-		UpdateOneID(tsh.Ref).
-		SetOtherID(tsh.OtherID).
-		SetName(tsh.Name).
+		UpdateOneID(_m.Ref).
+		SetOtherID(_m.OtherID).
+		SetName(_m.Name).
 		Save(ctx)
 }
 
-func (t *Todo) History() *TodoHistoryQuery {
-	historyClient := NewTodoHistoryClient(t.config)
-	return historyClient.Query().Where(todohistory.Ref(t.ID))
+func (_m *Todo) History() *TodoHistoryQuery {
+	historyClient := NewTodoHistoryClient(_m.config)
+	return historyClient.Query().Where(todohistory.Ref(_m.ID))
 }
 
-func (th *TodoHistory) Next(ctx context.Context) (*TodoHistory, error) {
-	client := NewTodoHistoryClient(th.config)
+func (_m *TodoHistory) Next(ctx context.Context) (*TodoHistory, error) {
+	client := NewTodoHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			todohistory.Ref(th.Ref),
-			todohistory.HistoryTimeGT(th.HistoryTime),
+			todohistory.Ref(_m.Ref),
+			todohistory.HistoryTimeGT(_m.HistoryTime),
 		).
 		Order(todohistory.ByHistoryTime()).
 		First(ctx)
 }
 
-func (th *TodoHistory) Prev(ctx context.Context) (*TodoHistory, error) {
-	client := NewTodoHistoryClient(th.config)
+func (_m *TodoHistory) Prev(ctx context.Context) (*TodoHistory, error) {
+	client := NewTodoHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			todohistory.Ref(th.Ref),
-			todohistory.HistoryTimeLT(th.HistoryTime),
+			todohistory.Ref(_m.Ref),
+			todohistory.HistoryTimeLT(_m.HistoryTime),
 		).
 		Order(todohistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
@@ -114,11 +114,11 @@ func (thq *TodoHistoryQuery) AsOf(ctx context.Context, time time.Time) (*TodoHis
 		First(ctx)
 }
 
-func (th *TodoHistory) Restore(ctx context.Context) (*Todo, error) {
-	client := NewTodoClient(th.config)
+func (_m *TodoHistory) Restore(ctx context.Context) (*Todo, error) {
+	client := NewTodoClient(_m.config)
 	return client.
-		UpdateOneID(th.Ref).
-		SetOtherID(th.OtherID).
-		SetName(th.Name).
+		UpdateOneID(_m.Ref).
+		SetOtherID(_m.OtherID).
+		SetName(_m.Name).
 		Save(ctx)
 }

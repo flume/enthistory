@@ -24,73 +24,73 @@ type StoreHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the StoreHistoryUpdate builder.
-func (shu *StoreHistoryUpdate) Where(ps ...predicate.StoreHistory) *StoreHistoryUpdate {
-	shu.mutation.Where(ps...)
-	return shu
+func (_u *StoreHistoryUpdate) Where(ps ...predicate.StoreHistory) *StoreHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (shu *StoreHistoryUpdate) SetUpdatedAt(t time.Time) *StoreHistoryUpdate {
-	shu.mutation.SetUpdatedAt(t)
-	return shu
+func (_u *StoreHistoryUpdate) SetUpdatedAt(v time.Time) *StoreHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (shu *StoreHistoryUpdate) SetName(s string) *StoreHistoryUpdate {
-	shu.mutation.SetName(s)
-	return shu
+func (_u *StoreHistoryUpdate) SetName(v string) *StoreHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (shu *StoreHistoryUpdate) SetNillableName(s *string) *StoreHistoryUpdate {
-	if s != nil {
-		shu.SetName(*s)
+func (_u *StoreHistoryUpdate) SetNillableName(v *string) *StoreHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return shu
+	return _u
 }
 
 // SetRegion sets the "region" field.
-func (shu *StoreHistoryUpdate) SetRegion(s string) *StoreHistoryUpdate {
-	shu.mutation.SetRegion(s)
-	return shu
+func (_u *StoreHistoryUpdate) SetRegion(v string) *StoreHistoryUpdate {
+	_u.mutation.SetRegion(v)
+	return _u
 }
 
 // SetNillableRegion sets the "region" field if the given value is not nil.
-func (shu *StoreHistoryUpdate) SetNillableRegion(s *string) *StoreHistoryUpdate {
-	if s != nil {
-		shu.SetRegion(*s)
+func (_u *StoreHistoryUpdate) SetNillableRegion(v *string) *StoreHistoryUpdate {
+	if v != nil {
+		_u.SetRegion(*v)
 	}
-	return shu
+	return _u
 }
 
 // SetOrganizationID sets the "organization_id" field.
-func (shu *StoreHistoryUpdate) SetOrganizationID(u uuid.UUID) *StoreHistoryUpdate {
-	shu.mutation.SetOrganizationID(u)
-	return shu
+func (_u *StoreHistoryUpdate) SetOrganizationID(v uuid.UUID) *StoreHistoryUpdate {
+	_u.mutation.SetOrganizationID(v)
+	return _u
 }
 
 // SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (shu *StoreHistoryUpdate) SetNillableOrganizationID(u *uuid.UUID) *StoreHistoryUpdate {
-	if u != nil {
-		shu.SetOrganizationID(*u)
+func (_u *StoreHistoryUpdate) SetNillableOrganizationID(v *uuid.UUID) *StoreHistoryUpdate {
+	if v != nil {
+		_u.SetOrganizationID(*v)
 	}
-	return shu
+	return _u
 }
 
 // Mutation returns the StoreHistoryMutation object of the builder.
-func (shu *StoreHistoryUpdate) Mutation() *StoreHistoryMutation {
-	return shu.mutation
+func (_u *StoreHistoryUpdate) Mutation() *StoreHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (shu *StoreHistoryUpdate) Save(ctx context.Context) (int, error) {
-	shu.defaults()
-	return withHooks(ctx, shu.sqlSave, shu.mutation, shu.hooks)
+func (_u *StoreHistoryUpdate) Save(ctx context.Context) (int, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (shu *StoreHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := shu.Save(ctx)
+func (_u *StoreHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -98,54 +98,54 @@ func (shu *StoreHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (shu *StoreHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := shu.Save(ctx)
+func (_u *StoreHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shu *StoreHistoryUpdate) ExecX(ctx context.Context) {
-	if err := shu.Exec(ctx); err != nil {
+func (_u *StoreHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (shu *StoreHistoryUpdate) defaults() {
-	if _, ok := shu.mutation.UpdatedAt(); !ok {
+func (_u *StoreHistoryUpdate) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := storehistory.UpdateDefaultUpdatedAt()
-		shu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
-func (shu *StoreHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *StoreHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(storehistory.Table, storehistory.Columns, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeInt))
-	if ps := shu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := shu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(storehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if shu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(storehistory.FieldRef, field.TypeUUID)
 	}
-	if shu.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(storehistory.FieldUpdatedBy, field.TypeUUID)
 	}
-	if value, ok := shu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(storehistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := shu.mutation.Region(); ok {
+	if value, ok := _u.mutation.Region(); ok {
 		_spec.SetField(storehistory.FieldRegion, field.TypeString, value)
 	}
-	if value, ok := shu.mutation.OrganizationID(); ok {
+	if value, ok := _u.mutation.OrganizationID(); ok {
 		_spec.SetField(storehistory.FieldOrganizationID, field.TypeUUID, value)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, shu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{storehistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -153,8 +153,8 @@ func (shu *StoreHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	shu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // StoreHistoryUpdateOne is the builder for updating a single StoreHistory entity.
@@ -166,80 +166,80 @@ type StoreHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (shuo *StoreHistoryUpdateOne) SetUpdatedAt(t time.Time) *StoreHistoryUpdateOne {
-	shuo.mutation.SetUpdatedAt(t)
-	return shuo
+func (_u *StoreHistoryUpdateOne) SetUpdatedAt(v time.Time) *StoreHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (shuo *StoreHistoryUpdateOne) SetName(s string) *StoreHistoryUpdateOne {
-	shuo.mutation.SetName(s)
-	return shuo
+func (_u *StoreHistoryUpdateOne) SetName(v string) *StoreHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (shuo *StoreHistoryUpdateOne) SetNillableName(s *string) *StoreHistoryUpdateOne {
-	if s != nil {
-		shuo.SetName(*s)
+func (_u *StoreHistoryUpdateOne) SetNillableName(v *string) *StoreHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return shuo
+	return _u
 }
 
 // SetRegion sets the "region" field.
-func (shuo *StoreHistoryUpdateOne) SetRegion(s string) *StoreHistoryUpdateOne {
-	shuo.mutation.SetRegion(s)
-	return shuo
+func (_u *StoreHistoryUpdateOne) SetRegion(v string) *StoreHistoryUpdateOne {
+	_u.mutation.SetRegion(v)
+	return _u
 }
 
 // SetNillableRegion sets the "region" field if the given value is not nil.
-func (shuo *StoreHistoryUpdateOne) SetNillableRegion(s *string) *StoreHistoryUpdateOne {
-	if s != nil {
-		shuo.SetRegion(*s)
+func (_u *StoreHistoryUpdateOne) SetNillableRegion(v *string) *StoreHistoryUpdateOne {
+	if v != nil {
+		_u.SetRegion(*v)
 	}
-	return shuo
+	return _u
 }
 
 // SetOrganizationID sets the "organization_id" field.
-func (shuo *StoreHistoryUpdateOne) SetOrganizationID(u uuid.UUID) *StoreHistoryUpdateOne {
-	shuo.mutation.SetOrganizationID(u)
-	return shuo
+func (_u *StoreHistoryUpdateOne) SetOrganizationID(v uuid.UUID) *StoreHistoryUpdateOne {
+	_u.mutation.SetOrganizationID(v)
+	return _u
 }
 
 // SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (shuo *StoreHistoryUpdateOne) SetNillableOrganizationID(u *uuid.UUID) *StoreHistoryUpdateOne {
-	if u != nil {
-		shuo.SetOrganizationID(*u)
+func (_u *StoreHistoryUpdateOne) SetNillableOrganizationID(v *uuid.UUID) *StoreHistoryUpdateOne {
+	if v != nil {
+		_u.SetOrganizationID(*v)
 	}
-	return shuo
+	return _u
 }
 
 // Mutation returns the StoreHistoryMutation object of the builder.
-func (shuo *StoreHistoryUpdateOne) Mutation() *StoreHistoryMutation {
-	return shuo.mutation
+func (_u *StoreHistoryUpdateOne) Mutation() *StoreHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the StoreHistoryUpdate builder.
-func (shuo *StoreHistoryUpdateOne) Where(ps ...predicate.StoreHistory) *StoreHistoryUpdateOne {
-	shuo.mutation.Where(ps...)
-	return shuo
+func (_u *StoreHistoryUpdateOne) Where(ps ...predicate.StoreHistory) *StoreHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (shuo *StoreHistoryUpdateOne) Select(field string, fields ...string) *StoreHistoryUpdateOne {
-	shuo.fields = append([]string{field}, fields...)
-	return shuo
+func (_u *StoreHistoryUpdateOne) Select(field string, fields ...string) *StoreHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated StoreHistory entity.
-func (shuo *StoreHistoryUpdateOne) Save(ctx context.Context) (*StoreHistory, error) {
-	shuo.defaults()
-	return withHooks(ctx, shuo.sqlSave, shuo.mutation, shuo.hooks)
+func (_u *StoreHistoryUpdateOne) Save(ctx context.Context) (*StoreHistory, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (shuo *StoreHistoryUpdateOne) SaveX(ctx context.Context) *StoreHistory {
-	node, err := shuo.Save(ctx)
+func (_u *StoreHistoryUpdateOne) SaveX(ctx context.Context) *StoreHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -247,34 +247,34 @@ func (shuo *StoreHistoryUpdateOne) SaveX(ctx context.Context) *StoreHistory {
 }
 
 // Exec executes the query on the entity.
-func (shuo *StoreHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := shuo.Save(ctx)
+func (_u *StoreHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (shuo *StoreHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := shuo.Exec(ctx); err != nil {
+func (_u *StoreHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (shuo *StoreHistoryUpdateOne) defaults() {
-	if _, ok := shuo.mutation.UpdatedAt(); !ok {
+func (_u *StoreHistoryUpdateOne) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := storehistory.UpdateDefaultUpdatedAt()
-		shuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
-func (shuo *StoreHistoryUpdateOne) sqlSave(ctx context.Context) (_node *StoreHistory, err error) {
+func (_u *StoreHistoryUpdateOne) sqlSave(ctx context.Context) (_node *StoreHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(storehistory.Table, storehistory.Columns, sqlgraph.NewFieldSpec(storehistory.FieldID, field.TypeInt))
-	id, ok := shuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "StoreHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := shuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, storehistory.FieldID)
 		for _, f := range fields {
@@ -286,35 +286,35 @@ func (shuo *StoreHistoryUpdateOne) sqlSave(ctx context.Context) (_node *StoreHis
 			}
 		}
 	}
-	if ps := shuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := shuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(storehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if shuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(storehistory.FieldRef, field.TypeUUID)
 	}
-	if shuo.mutation.UpdatedByCleared() {
+	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(storehistory.FieldUpdatedBy, field.TypeUUID)
 	}
-	if value, ok := shuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(storehistory.FieldName, field.TypeString, value)
 	}
-	if value, ok := shuo.mutation.Region(); ok {
+	if value, ok := _u.mutation.Region(); ok {
 		_spec.SetField(storehistory.FieldRegion, field.TypeString, value)
 	}
-	if value, ok := shuo.mutation.OrganizationID(); ok {
+	if value, ok := _u.mutation.OrganizationID(); ok {
 		_spec.SetField(storehistory.FieldOrganizationID, field.TypeUUID, value)
 	}
-	_node = &StoreHistory{config: shuo.config}
+	_node = &StoreHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, shuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{storehistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -322,6 +322,6 @@ func (shuo *StoreHistoryUpdateOne) sqlSave(ctx context.Context) (_node *StoreHis
 		}
 		return nil, err
 	}
-	shuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

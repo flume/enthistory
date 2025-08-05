@@ -31,40 +31,40 @@ type TestExcludeQuery struct {
 }
 
 // Where adds a new predicate for the TestExcludeQuery builder.
-func (teq *TestExcludeQuery) Where(ps ...predicate.TestExclude) *TestExcludeQuery {
-	teq.predicates = append(teq.predicates, ps...)
-	return teq
+func (_q *TestExcludeQuery) Where(ps ...predicate.TestExclude) *TestExcludeQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (teq *TestExcludeQuery) Limit(limit int) *TestExcludeQuery {
-	teq.ctx.Limit = &limit
-	return teq
+func (_q *TestExcludeQuery) Limit(limit int) *TestExcludeQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (teq *TestExcludeQuery) Offset(offset int) *TestExcludeQuery {
-	teq.ctx.Offset = &offset
-	return teq
+func (_q *TestExcludeQuery) Offset(offset int) *TestExcludeQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (teq *TestExcludeQuery) Unique(unique bool) *TestExcludeQuery {
-	teq.ctx.Unique = &unique
-	return teq
+func (_q *TestExcludeQuery) Unique(unique bool) *TestExcludeQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (teq *TestExcludeQuery) Order(o ...testexclude.OrderOption) *TestExcludeQuery {
-	teq.order = append(teq.order, o...)
-	return teq
+func (_q *TestExcludeQuery) Order(o ...testexclude.OrderOption) *TestExcludeQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first TestExclude entity from the query.
 // Returns a *NotFoundError when no TestExclude was found.
-func (teq *TestExcludeQuery) First(ctx context.Context) (*TestExclude, error) {
-	nodes, err := teq.Limit(1).All(setContextOp(ctx, teq.ctx, ent.OpQueryFirst))
+func (_q *TestExcludeQuery) First(ctx context.Context) (*TestExclude, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -75,8 +75,8 @@ func (teq *TestExcludeQuery) First(ctx context.Context) (*TestExclude, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (teq *TestExcludeQuery) FirstX(ctx context.Context) *TestExclude {
-	node, err := teq.First(ctx)
+func (_q *TestExcludeQuery) FirstX(ctx context.Context) *TestExclude {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -85,9 +85,9 @@ func (teq *TestExcludeQuery) FirstX(ctx context.Context) *TestExclude {
 
 // FirstID returns the first TestExclude ID from the query.
 // Returns a *NotFoundError when no TestExclude ID was found.
-func (teq *TestExcludeQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *TestExcludeQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = teq.Limit(1).IDs(setContextOp(ctx, teq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -98,8 +98,8 @@ func (teq *TestExcludeQuery) FirstID(ctx context.Context) (id uuid.UUID, err err
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (teq *TestExcludeQuery) FirstIDX(ctx context.Context) uuid.UUID {
-	id, err := teq.FirstID(ctx)
+func (_q *TestExcludeQuery) FirstIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -109,8 +109,8 @@ func (teq *TestExcludeQuery) FirstIDX(ctx context.Context) uuid.UUID {
 // Only returns a single TestExclude entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one TestExclude entity is found.
 // Returns a *NotFoundError when no TestExclude entities are found.
-func (teq *TestExcludeQuery) Only(ctx context.Context) (*TestExclude, error) {
-	nodes, err := teq.Limit(2).All(setContextOp(ctx, teq.ctx, ent.OpQueryOnly))
+func (_q *TestExcludeQuery) Only(ctx context.Context) (*TestExclude, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -125,8 +125,8 @@ func (teq *TestExcludeQuery) Only(ctx context.Context) (*TestExclude, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (teq *TestExcludeQuery) OnlyX(ctx context.Context) *TestExclude {
-	node, err := teq.Only(ctx)
+func (_q *TestExcludeQuery) OnlyX(ctx context.Context) *TestExclude {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -136,9 +136,9 @@ func (teq *TestExcludeQuery) OnlyX(ctx context.Context) *TestExclude {
 // OnlyID is like Only, but returns the only TestExclude ID in the query.
 // Returns a *NotSingularError when more than one TestExclude ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (teq *TestExcludeQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *TestExcludeQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = teq.Limit(2).IDs(setContextOp(ctx, teq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -153,8 +153,8 @@ func (teq *TestExcludeQuery) OnlyID(ctx context.Context) (id uuid.UUID, err erro
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (teq *TestExcludeQuery) OnlyIDX(ctx context.Context) uuid.UUID {
-	id, err := teq.OnlyID(ctx)
+func (_q *TestExcludeQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -162,18 +162,18 @@ func (teq *TestExcludeQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 }
 
 // All executes the query and returns a list of TestExcludes.
-func (teq *TestExcludeQuery) All(ctx context.Context) ([]*TestExclude, error) {
-	ctx = setContextOp(ctx, teq.ctx, ent.OpQueryAll)
-	if err := teq.prepareQuery(ctx); err != nil {
+func (_q *TestExcludeQuery) All(ctx context.Context) ([]*TestExclude, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*TestExclude, *TestExcludeQuery]()
-	return withInterceptors[[]*TestExclude](ctx, teq, qr, teq.inters)
+	return withInterceptors[[]*TestExclude](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (teq *TestExcludeQuery) AllX(ctx context.Context) []*TestExclude {
-	nodes, err := teq.All(ctx)
+func (_q *TestExcludeQuery) AllX(ctx context.Context) []*TestExclude {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -181,20 +181,20 @@ func (teq *TestExcludeQuery) AllX(ctx context.Context) []*TestExclude {
 }
 
 // IDs executes the query and returns a list of TestExclude IDs.
-func (teq *TestExcludeQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
-	if teq.ctx.Unique == nil && teq.path != nil {
-		teq.Unique(true)
+func (_q *TestExcludeQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, teq.ctx, ent.OpQueryIDs)
-	if err = teq.Select(testexclude.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(testexclude.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (teq *TestExcludeQuery) IDsX(ctx context.Context) []uuid.UUID {
-	ids, err := teq.IDs(ctx)
+func (_q *TestExcludeQuery) IDsX(ctx context.Context) []uuid.UUID {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -202,17 +202,17 @@ func (teq *TestExcludeQuery) IDsX(ctx context.Context) []uuid.UUID {
 }
 
 // Count returns the count of the given query.
-func (teq *TestExcludeQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, teq.ctx, ent.OpQueryCount)
-	if err := teq.prepareQuery(ctx); err != nil {
+func (_q *TestExcludeQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, teq, querierCount[*TestExcludeQuery](), teq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*TestExcludeQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (teq *TestExcludeQuery) CountX(ctx context.Context) int {
-	count, err := teq.Count(ctx)
+func (_q *TestExcludeQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -220,9 +220,9 @@ func (teq *TestExcludeQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (teq *TestExcludeQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, teq.ctx, ent.OpQueryExist)
-	switch _, err := teq.FirstID(ctx); {
+func (_q *TestExcludeQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -233,8 +233,8 @@ func (teq *TestExcludeQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (teq *TestExcludeQuery) ExistX(ctx context.Context) bool {
-	exist, err := teq.Exist(ctx)
+func (_q *TestExcludeQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -243,19 +243,19 @@ func (teq *TestExcludeQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the TestExcludeQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (teq *TestExcludeQuery) Clone() *TestExcludeQuery {
-	if teq == nil {
+func (_q *TestExcludeQuery) Clone() *TestExcludeQuery {
+	if _q == nil {
 		return nil
 	}
 	return &TestExcludeQuery{
-		config:     teq.config,
-		ctx:        teq.ctx.Clone(),
-		order:      append([]testexclude.OrderOption{}, teq.order...),
-		inters:     append([]Interceptor{}, teq.inters...),
-		predicates: append([]predicate.TestExclude{}, teq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]testexclude.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.TestExclude{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  teq.sql.Clone(),
-		path: teq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -273,10 +273,10 @@ func (teq *TestExcludeQuery) Clone() *TestExcludeQuery {
 //		GroupBy(testexclude.FieldOtherID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (teq *TestExcludeQuery) GroupBy(field string, fields ...string) *TestExcludeGroupBy {
-	teq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &TestExcludeGroupBy{build: teq}
-	grbuild.flds = &teq.ctx.Fields
+func (_q *TestExcludeQuery) GroupBy(field string, fields ...string) *TestExcludeGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &TestExcludeGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = testexclude.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -294,99 +294,99 @@ func (teq *TestExcludeQuery) GroupBy(field string, fields ...string) *TestExclud
 //	client.TestExclude.Query().
 //		Select(testexclude.FieldOtherID).
 //		Scan(ctx, &v)
-func (teq *TestExcludeQuery) Select(fields ...string) *TestExcludeSelect {
-	teq.ctx.Fields = append(teq.ctx.Fields, fields...)
-	sbuild := &TestExcludeSelect{TestExcludeQuery: teq}
+func (_q *TestExcludeQuery) Select(fields ...string) *TestExcludeSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &TestExcludeSelect{TestExcludeQuery: _q}
 	sbuild.label = testexclude.Label
-	sbuild.flds, sbuild.scan = &teq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a TestExcludeSelect configured with the given aggregations.
-func (teq *TestExcludeQuery) Aggregate(fns ...AggregateFunc) *TestExcludeSelect {
-	return teq.Select().Aggregate(fns...)
+func (_q *TestExcludeQuery) Aggregate(fns ...AggregateFunc) *TestExcludeSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (teq *TestExcludeQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range teq.inters {
+func (_q *TestExcludeQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, teq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range teq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !testexclude.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if teq.path != nil {
-		prev, err := teq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		teq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (teq *TestExcludeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TestExclude, error) {
+func (_q *TestExcludeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TestExclude, error) {
 	var (
 		nodes = []*TestExclude{}
-		_spec = teq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*TestExclude).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &TestExclude{config: teq.config}
+		node := &TestExclude{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	if len(teq.modifiers) > 0 {
-		_spec.Modifiers = teq.modifiers
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, teq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	for i := range teq.loadTotal {
-		if err := teq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (teq *TestExcludeQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := teq.querySpec()
-	if len(teq.modifiers) > 0 {
-		_spec.Modifiers = teq.modifiers
+func (_q *TestExcludeQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = teq.ctx.Fields
-	if len(teq.ctx.Fields) > 0 {
-		_spec.Unique = teq.ctx.Unique != nil && *teq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, teq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (teq *TestExcludeQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *TestExcludeQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(testexclude.Table, testexclude.Columns, sqlgraph.NewFieldSpec(testexclude.FieldID, field.TypeUUID))
-	_spec.From = teq.sql
-	if unique := teq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if teq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := teq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, testexclude.FieldID)
 		for i := range fields {
@@ -395,20 +395,20 @@ func (teq *TestExcludeQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := teq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := teq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := teq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := teq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -418,33 +418,33 @@ func (teq *TestExcludeQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (teq *TestExcludeQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(teq.driver.Dialect())
+func (_q *TestExcludeQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(testexclude.Table)
-	columns := teq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = testexclude.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if teq.sql != nil {
-		selector = teq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if teq.ctx.Unique != nil && *teq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, p := range teq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range teq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := teq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := teq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -457,41 +457,41 @@ type TestExcludeGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (tegb *TestExcludeGroupBy) Aggregate(fns ...AggregateFunc) *TestExcludeGroupBy {
-	tegb.fns = append(tegb.fns, fns...)
-	return tegb
+func (_g *TestExcludeGroupBy) Aggregate(fns ...AggregateFunc) *TestExcludeGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tegb *TestExcludeGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tegb.build.ctx, ent.OpQueryGroupBy)
-	if err := tegb.build.prepareQuery(ctx); err != nil {
+func (_g *TestExcludeGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TestExcludeQuery, *TestExcludeGroupBy](ctx, tegb.build, tegb, tegb.build.inters, v)
+	return scanWithInterceptors[*TestExcludeQuery, *TestExcludeGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (tegb *TestExcludeGroupBy) sqlScan(ctx context.Context, root *TestExcludeQuery, v any) error {
+func (_g *TestExcludeGroupBy) sqlScan(ctx context.Context, root *TestExcludeQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(tegb.fns))
-	for _, fn := range tegb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*tegb.flds)+len(tegb.fns))
-		for _, f := range *tegb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*tegb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tegb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -505,27 +505,27 @@ type TestExcludeSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (tes *TestExcludeSelect) Aggregate(fns ...AggregateFunc) *TestExcludeSelect {
-	tes.fns = append(tes.fns, fns...)
-	return tes
+func (_s *TestExcludeSelect) Aggregate(fns ...AggregateFunc) *TestExcludeSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tes *TestExcludeSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tes.ctx, ent.OpQuerySelect)
-	if err := tes.prepareQuery(ctx); err != nil {
+func (_s *TestExcludeSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TestExcludeQuery, *TestExcludeSelect](ctx, tes.TestExcludeQuery, tes, tes.inters, v)
+	return scanWithInterceptors[*TestExcludeQuery, *TestExcludeSelect](ctx, _s.TestExcludeQuery, _s, _s.inters, v)
 }
 
-func (tes *TestExcludeSelect) sqlScan(ctx context.Context, root *TestExcludeQuery, v any) error {
+func (_s *TestExcludeSelect) sqlScan(ctx context.Context, root *TestExcludeQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(tes.fns))
-	for _, fn := range tes.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*tes.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -533,7 +533,7 @@ func (tes *TestExcludeSelect) sqlScan(ctx context.Context, root *TestExcludeQuer
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tes.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

@@ -23,82 +23,82 @@ type ResidenceCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (rc *ResidenceCreate) SetCreatedAt(t time.Time) *ResidenceCreate {
-	rc.mutation.SetCreatedAt(t)
-	return rc
+func (_c *ResidenceCreate) SetCreatedAt(v time.Time) *ResidenceCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (rc *ResidenceCreate) SetNillableCreatedAt(t *time.Time) *ResidenceCreate {
-	if t != nil {
-		rc.SetCreatedAt(*t)
+func (_c *ResidenceCreate) SetNillableCreatedAt(v *time.Time) *ResidenceCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return rc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (rc *ResidenceCreate) SetUpdatedAt(t time.Time) *ResidenceCreate {
-	rc.mutation.SetUpdatedAt(t)
-	return rc
+func (_c *ResidenceCreate) SetUpdatedAt(v time.Time) *ResidenceCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (rc *ResidenceCreate) SetNillableUpdatedAt(t *time.Time) *ResidenceCreate {
-	if t != nil {
-		rc.SetUpdatedAt(*t)
+func (_c *ResidenceCreate) SetNillableUpdatedAt(v *time.Time) *ResidenceCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return rc
+	return _c
 }
 
 // SetName sets the "name" field.
-func (rc *ResidenceCreate) SetName(s string) *ResidenceCreate {
-	rc.mutation.SetName(s)
-	return rc
+func (_c *ResidenceCreate) SetName(v string) *ResidenceCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetID sets the "id" field.
-func (rc *ResidenceCreate) SetID(u uuid.UUID) *ResidenceCreate {
-	rc.mutation.SetID(u)
-	return rc
+func (_c *ResidenceCreate) SetID(v uuid.UUID) *ResidenceCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (rc *ResidenceCreate) SetNillableID(u *uuid.UUID) *ResidenceCreate {
-	if u != nil {
-		rc.SetID(*u)
+func (_c *ResidenceCreate) SetNillableID(v *uuid.UUID) *ResidenceCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return rc
+	return _c
 }
 
 // AddOccupantIDs adds the "occupants" edge to the Character entity by IDs.
-func (rc *ResidenceCreate) AddOccupantIDs(ids ...int) *ResidenceCreate {
-	rc.mutation.AddOccupantIDs(ids...)
-	return rc
+func (_c *ResidenceCreate) AddOccupantIDs(ids ...int) *ResidenceCreate {
+	_c.mutation.AddOccupantIDs(ids...)
+	return _c
 }
 
 // AddOccupants adds the "occupants" edges to the Character entity.
-func (rc *ResidenceCreate) AddOccupants(c ...*Character) *ResidenceCreate {
-	ids := make([]int, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+func (_c *ResidenceCreate) AddOccupants(v ...*Character) *ResidenceCreate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return rc.AddOccupantIDs(ids...)
+	return _c.AddOccupantIDs(ids...)
 }
 
 // Mutation returns the ResidenceMutation object of the builder.
-func (rc *ResidenceCreate) Mutation() *ResidenceMutation {
-	return rc.mutation
+func (_c *ResidenceCreate) Mutation() *ResidenceMutation {
+	return _c.mutation
 }
 
 // Save creates the Residence in the database.
-func (rc *ResidenceCreate) Save(ctx context.Context) (*Residence, error) {
-	rc.defaults()
-	return withHooks(ctx, rc.sqlSave, rc.mutation, rc.hooks)
+func (_c *ResidenceCreate) Save(ctx context.Context) (*Residence, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (rc *ResidenceCreate) SaveX(ctx context.Context) *Residence {
-	v, err := rc.Save(ctx)
+func (_c *ResidenceCreate) SaveX(ctx context.Context) *Residence {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -106,54 +106,54 @@ func (rc *ResidenceCreate) SaveX(ctx context.Context) *Residence {
 }
 
 // Exec executes the query.
-func (rc *ResidenceCreate) Exec(ctx context.Context) error {
-	_, err := rc.Save(ctx)
+func (_c *ResidenceCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (rc *ResidenceCreate) ExecX(ctx context.Context) {
-	if err := rc.Exec(ctx); err != nil {
+func (_c *ResidenceCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (rc *ResidenceCreate) defaults() {
-	if _, ok := rc.mutation.CreatedAt(); !ok {
+func (_c *ResidenceCreate) defaults() {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := residence.DefaultCreatedAt()
-		rc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := rc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		v := residence.DefaultUpdatedAt()
-		rc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := rc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := residence.DefaultID()
-		rc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (rc *ResidenceCreate) check() error {
-	if _, ok := rc.mutation.CreatedAt(); !ok {
+func (_c *ResidenceCreate) check() error {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Residence.created_at"`)}
 	}
-	if _, ok := rc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Residence.updated_at"`)}
 	}
-	if _, ok := rc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Residence.name"`)}
 	}
 	return nil
 }
 
-func (rc *ResidenceCreate) sqlSave(ctx context.Context) (*Residence, error) {
-	if err := rc.check(); err != nil {
+func (_c *ResidenceCreate) sqlSave(ctx context.Context) (*Residence, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := rc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, rc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -166,33 +166,33 @@ func (rc *ResidenceCreate) sqlSave(ctx context.Context) (*Residence, error) {
 			return nil, err
 		}
 	}
-	rc.mutation.id = &_node.ID
-	rc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (rc *ResidenceCreate) createSpec() (*Residence, *sqlgraph.CreateSpec) {
+func (_c *ResidenceCreate) createSpec() (*Residence, *sqlgraph.CreateSpec) {
 	var (
-		_node = &Residence{config: rc.config}
+		_node = &Residence{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(residence.Table, sqlgraph.NewFieldSpec(residence.FieldID, field.TypeUUID))
 	)
-	if id, ok := rc.mutation.ID(); ok {
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := rc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(residence.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := rc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(residence.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := rc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(residence.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if nodes := rc.mutation.OccupantsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.OccupantsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -219,16 +219,16 @@ type ResidenceCreateBulk struct {
 }
 
 // Save creates the Residence entities in the database.
-func (rcb *ResidenceCreateBulk) Save(ctx context.Context) ([]*Residence, error) {
-	if rcb.err != nil {
-		return nil, rcb.err
+func (_c *ResidenceCreateBulk) Save(ctx context.Context) ([]*Residence, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(rcb.builders))
-	nodes := make([]*Residence, len(rcb.builders))
-	mutators := make([]Mutator, len(rcb.builders))
-	for i := range rcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*Residence, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := rcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ResidenceMutation)
@@ -242,11 +242,11 @@ func (rcb *ResidenceCreateBulk) Save(ctx context.Context) ([]*Residence, error) 
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, rcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, rcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -266,7 +266,7 @@ func (rcb *ResidenceCreateBulk) Save(ctx context.Context) ([]*Residence, error) 
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, rcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -274,8 +274,8 @@ func (rcb *ResidenceCreateBulk) Save(ctx context.Context) ([]*Residence, error) 
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (rcb *ResidenceCreateBulk) SaveX(ctx context.Context) []*Residence {
-	v, err := rcb.Save(ctx)
+func (_c *ResidenceCreateBulk) SaveX(ctx context.Context) []*Residence {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -283,14 +283,14 @@ func (rcb *ResidenceCreateBulk) SaveX(ctx context.Context) []*Residence {
 }
 
 // Exec executes the query.
-func (rcb *ResidenceCreateBulk) Exec(ctx context.Context) error {
-	_, err := rcb.Save(ctx)
+func (_c *ResidenceCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (rcb *ResidenceCreateBulk) ExecX(ctx context.Context) {
-	if err := rcb.Exec(ctx); err != nil {
+func (_c *ResidenceCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -43,76 +43,76 @@ var (
 	MismatchedRefError = errors.New("cannot take diff of histories with different Refs")
 )
 
-func (oh *OrganizationHistory) changes(new *OrganizationHistory) []Change {
+func (_m *OrganizationHistory) changes(new *OrganizationHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(oh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(organizationhistory.FieldCreatedAt, oh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(organizationhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(oh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(organizationhistory.FieldUpdatedAt, oh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(organizationhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(oh.Name, new.Name) {
-		changes = append(changes, NewChange(organizationhistory.FieldName, oh.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(organizationhistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(oh.Info, new.Info) {
-		changes = append(changes, NewChange(organizationhistory.FieldInfo, oh.Info, new.Info))
+	if !reflect.DeepEqual(_m.Info, new.Info) {
+		changes = append(changes, NewChange(organizationhistory.FieldInfo, _m.Info, new.Info))
 	}
 	return changes
 }
 
-func (oh *OrganizationHistory) Diff(history *OrganizationHistory) (*HistoryDiff[OrganizationHistory], error) {
-	if oh.Ref != history.Ref {
+func (_m *OrganizationHistory) Diff(history *OrganizationHistory) (*HistoryDiff[OrganizationHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, MismatchedRefError
 	}
-	if oh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (oh.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && oh.ID > history.ID) {
+	if _m.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (_m.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && _m.ID > history.ID) {
 		return &HistoryDiff[OrganizationHistory]{
 			Old:     history,
-			New:     oh,
-			Changes: history.changes(oh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return &HistoryDiff[OrganizationHistory]{
-		Old:     oh,
+		Old:     _m,
 		New:     history,
-		Changes: oh.changes(history),
+		Changes: _m.changes(history),
 	}, nil
 }
 
-func (sh *StoreHistory) changes(new *StoreHistory) []Change {
+func (_m *StoreHistory) changes(new *StoreHistory) []Change {
 	var changes []Change
-	if !reflect.DeepEqual(sh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(storehistory.FieldCreatedAt, sh.CreatedAt, new.CreatedAt))
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(storehistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
 	}
-	if !reflect.DeepEqual(sh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(storehistory.FieldUpdatedAt, sh.UpdatedAt, new.UpdatedAt))
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(storehistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
 	}
-	if !reflect.DeepEqual(sh.Name, new.Name) {
-		changes = append(changes, NewChange(storehistory.FieldName, sh.Name, new.Name))
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(storehistory.FieldName, _m.Name, new.Name))
 	}
-	if !reflect.DeepEqual(sh.Region, new.Region) {
-		changes = append(changes, NewChange(storehistory.FieldRegion, sh.Region, new.Region))
+	if !reflect.DeepEqual(_m.Region, new.Region) {
+		changes = append(changes, NewChange(storehistory.FieldRegion, _m.Region, new.Region))
 	}
-	if !reflect.DeepEqual(sh.OrganizationID, new.OrganizationID) {
-		changes = append(changes, NewChange(storehistory.FieldOrganizationID, sh.OrganizationID, new.OrganizationID))
+	if !reflect.DeepEqual(_m.OrganizationID, new.OrganizationID) {
+		changes = append(changes, NewChange(storehistory.FieldOrganizationID, _m.OrganizationID, new.OrganizationID))
 	}
 	return changes
 }
 
-func (sh *StoreHistory) Diff(history *StoreHistory) (*HistoryDiff[StoreHistory], error) {
-	if sh.Ref != history.Ref {
+func (_m *StoreHistory) Diff(history *StoreHistory) (*HistoryDiff[StoreHistory], error) {
+	if _m.Ref != history.Ref {
 		return nil, MismatchedRefError
 	}
-	if sh.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (sh.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && sh.ID > history.ID) {
+	if _m.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (_m.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && _m.ID > history.ID) {
 		return &HistoryDiff[StoreHistory]{
 			Old:     history,
-			New:     sh,
-			Changes: history.changes(sh),
+			New:     _m,
+			Changes: history.changes(_m),
 		}, nil
 	}
 	return &HistoryDiff[StoreHistory]{
-		Old:     sh,
+		Old:     _m,
 		New:     history,
-		Changes: sh.changes(history),
+		Changes: _m.changes(history),
 	}, nil
 }
 

@@ -13,28 +13,28 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-func (c *Character) History() *CharacterHistoryQuery {
-	historyClient := NewCharacterHistoryClient(c.config)
-	return historyClient.Query().Where(characterhistory.Ref(c.ID))
+func (_m *Character) History() *CharacterHistoryQuery {
+	historyClient := NewCharacterHistoryClient(_m.config)
+	return historyClient.Query().Where(characterhistory.Ref(_m.ID))
 }
 
-func (ch *CharacterHistory) Next(ctx context.Context) (*CharacterHistory, error) {
-	client := NewCharacterHistoryClient(ch.config)
+func (_m *CharacterHistory) Next(ctx context.Context) (*CharacterHistory, error) {
+	client := NewCharacterHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			characterhistory.Ref(ch.Ref),
-			characterhistory.HistoryTimeGT(ch.HistoryTime),
+			characterhistory.Ref(_m.Ref),
+			characterhistory.HistoryTimeGT(_m.HistoryTime),
 		).
 		Order(characterhistory.ByHistoryTime()).
 		First(ctx)
 }
 
-func (ch *CharacterHistory) Prev(ctx context.Context) (*CharacterHistory, error) {
-	client := NewCharacterHistoryClient(ch.config)
+func (_m *CharacterHistory) Prev(ctx context.Context) (*CharacterHistory, error) {
+	client := NewCharacterHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			characterhistory.Ref(ch.Ref),
-			characterhistory.HistoryTimeLT(ch.HistoryTime),
+			characterhistory.Ref(_m.Ref),
+			characterhistory.HistoryTimeLT(_m.HistoryTime),
 		).
 		Order(characterhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
@@ -59,37 +59,37 @@ func (chq *CharacterHistoryQuery) AsOf(ctx context.Context, time time.Time) (*Ch
 		First(ctx)
 }
 
-func (ch *CharacterHistory) Restore(ctx context.Context) (*Character, error) {
-	client := NewCharacterClient(ch.config)
+func (_m *CharacterHistory) Restore(ctx context.Context) (*Character, error) {
+	client := NewCharacterClient(_m.config)
 	return client.
-		UpdateOneID(ch.Ref).
-		SetAge(ch.Age).
-		SetName(ch.Name).
+		UpdateOneID(_m.Ref).
+		SetAge(_m.Age).
+		SetName(_m.Name).
 		Save(ctx)
 }
 
-func (f *Friendship) History() *FriendshipHistoryQuery {
-	historyClient := NewFriendshipHistoryClient(f.config)
-	return historyClient.Query().Where(friendshiphistory.Ref(f.ID))
+func (_m *Friendship) History() *FriendshipHistoryQuery {
+	historyClient := NewFriendshipHistoryClient(_m.config)
+	return historyClient.Query().Where(friendshiphistory.Ref(_m.ID))
 }
 
-func (fh *FriendshipHistory) Next(ctx context.Context) (*FriendshipHistory, error) {
-	client := NewFriendshipHistoryClient(fh.config)
+func (_m *FriendshipHistory) Next(ctx context.Context) (*FriendshipHistory, error) {
+	client := NewFriendshipHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			friendshiphistory.Ref(fh.Ref),
-			friendshiphistory.HistoryTimeGT(fh.HistoryTime),
+			friendshiphistory.Ref(_m.Ref),
+			friendshiphistory.HistoryTimeGT(_m.HistoryTime),
 		).
 		Order(friendshiphistory.ByHistoryTime()).
 		First(ctx)
 }
 
-func (fh *FriendshipHistory) Prev(ctx context.Context) (*FriendshipHistory, error) {
-	client := NewFriendshipHistoryClient(fh.config)
+func (_m *FriendshipHistory) Prev(ctx context.Context) (*FriendshipHistory, error) {
+	client := NewFriendshipHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			friendshiphistory.Ref(fh.Ref),
-			friendshiphistory.HistoryTimeLT(fh.HistoryTime),
+			friendshiphistory.Ref(_m.Ref),
+			friendshiphistory.HistoryTimeLT(_m.HistoryTime),
 		).
 		Order(friendshiphistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
@@ -114,11 +114,11 @@ func (fhq *FriendshipHistoryQuery) AsOf(ctx context.Context, time time.Time) (*F
 		First(ctx)
 }
 
-func (fh *FriendshipHistory) Restore(ctx context.Context) (*Friendship, error) {
-	client := NewFriendshipClient(fh.config)
+func (_m *FriendshipHistory) Restore(ctx context.Context) (*Friendship, error) {
+	client := NewFriendshipClient(_m.config)
 	return client.
-		UpdateOneID(fh.Ref).
-		SetCharacterID(fh.CharacterID).
-		SetFriendID(fh.FriendID).
+		UpdateOneID(_m.Ref).
+		SetCharacterID(_m.CharacterID).
+		SetFriendID(_m.FriendID).
 		Save(ctx)
 }

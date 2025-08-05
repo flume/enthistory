@@ -25,84 +25,84 @@ type StoreUpdate struct {
 }
 
 // Where appends a list predicates to the StoreUpdate builder.
-func (su *StoreUpdate) Where(ps ...predicate.Store) *StoreUpdate {
-	su.mutation.Where(ps...)
-	return su
+func (_u *StoreUpdate) Where(ps ...predicate.Store) *StoreUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (su *StoreUpdate) SetUpdatedAt(t time.Time) *StoreUpdate {
-	su.mutation.SetUpdatedAt(t)
-	return su
+func (_u *StoreUpdate) SetUpdatedAt(v time.Time) *StoreUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (su *StoreUpdate) SetName(s string) *StoreUpdate {
-	su.mutation.SetName(s)
-	return su
+func (_u *StoreUpdate) SetName(v string) *StoreUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (su *StoreUpdate) SetNillableName(s *string) *StoreUpdate {
-	if s != nil {
-		su.SetName(*s)
+func (_u *StoreUpdate) SetNillableName(v *string) *StoreUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return su
+	return _u
 }
 
 // SetRegion sets the "region" field.
-func (su *StoreUpdate) SetRegion(s string) *StoreUpdate {
-	su.mutation.SetRegion(s)
-	return su
+func (_u *StoreUpdate) SetRegion(v string) *StoreUpdate {
+	_u.mutation.SetRegion(v)
+	return _u
 }
 
 // SetNillableRegion sets the "region" field if the given value is not nil.
-func (su *StoreUpdate) SetNillableRegion(s *string) *StoreUpdate {
-	if s != nil {
-		su.SetRegion(*s)
+func (_u *StoreUpdate) SetNillableRegion(v *string) *StoreUpdate {
+	if v != nil {
+		_u.SetRegion(*v)
 	}
-	return su
+	return _u
 }
 
 // SetOrganizationID sets the "organization_id" field.
-func (su *StoreUpdate) SetOrganizationID(u uuid.UUID) *StoreUpdate {
-	su.mutation.SetOrganizationID(u)
-	return su
+func (_u *StoreUpdate) SetOrganizationID(v uuid.UUID) *StoreUpdate {
+	_u.mutation.SetOrganizationID(v)
+	return _u
 }
 
 // SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (su *StoreUpdate) SetNillableOrganizationID(u *uuid.UUID) *StoreUpdate {
-	if u != nil {
-		su.SetOrganizationID(*u)
+func (_u *StoreUpdate) SetNillableOrganizationID(v *uuid.UUID) *StoreUpdate {
+	if v != nil {
+		_u.SetOrganizationID(*v)
 	}
-	return su
+	return _u
 }
 
 // SetOrganization sets the "organization" edge to the Organization entity.
-func (su *StoreUpdate) SetOrganization(o *Organization) *StoreUpdate {
-	return su.SetOrganizationID(o.ID)
+func (_u *StoreUpdate) SetOrganization(v *Organization) *StoreUpdate {
+	return _u.SetOrganizationID(v.ID)
 }
 
 // Mutation returns the StoreMutation object of the builder.
-func (su *StoreUpdate) Mutation() *StoreMutation {
-	return su.mutation
+func (_u *StoreUpdate) Mutation() *StoreMutation {
+	return _u.mutation
 }
 
 // ClearOrganization clears the "organization" edge to the Organization entity.
-func (su *StoreUpdate) ClearOrganization() *StoreUpdate {
-	su.mutation.ClearOrganization()
-	return su
+func (_u *StoreUpdate) ClearOrganization() *StoreUpdate {
+	_u.mutation.ClearOrganization()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (su *StoreUpdate) Save(ctx context.Context) (int, error) {
-	su.defaults()
-	return withHooks(ctx, su.sqlSave, su.mutation, su.hooks)
+func (_u *StoreUpdate) Save(ctx context.Context) (int, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (su *StoreUpdate) SaveX(ctx context.Context) int {
-	affected, err := su.Save(ctx)
+func (_u *StoreUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -110,56 +110,56 @@ func (su *StoreUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (su *StoreUpdate) Exec(ctx context.Context) error {
-	_, err := su.Save(ctx)
+func (_u *StoreUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (su *StoreUpdate) ExecX(ctx context.Context) {
-	if err := su.Exec(ctx); err != nil {
+func (_u *StoreUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (su *StoreUpdate) defaults() {
-	if _, ok := su.mutation.UpdatedAt(); !ok {
+func (_u *StoreUpdate) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := store.UpdateDefaultUpdatedAt()
-		su.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (su *StoreUpdate) check() error {
-	if su.mutation.OrganizationCleared() && len(su.mutation.OrganizationIDs()) > 0 {
+func (_u *StoreUpdate) check() error {
+	if _u.mutation.OrganizationCleared() && len(_u.mutation.OrganizationIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Store.organization"`)
 	}
 	return nil
 }
 
-func (su *StoreUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := su.check(); err != nil {
-		return n, err
+func (_u *StoreUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(store.Table, store.Columns, sqlgraph.NewFieldSpec(store.FieldID, field.TypeUUID))
-	if ps := su.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := su.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(store.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := su.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(store.FieldName, field.TypeString, value)
 	}
-	if value, ok := su.mutation.Region(); ok {
+	if value, ok := _u.mutation.Region(); ok {
 		_spec.SetField(store.FieldRegion, field.TypeString, value)
 	}
-	if su.mutation.OrganizationCleared() {
+	if _u.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -172,7 +172,7 @@ func (su *StoreUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := su.mutation.OrganizationIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -188,7 +188,7 @@ func (su *StoreUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{store.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -196,8 +196,8 @@ func (su *StoreUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	su.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // StoreUpdateOne is the builder for updating a single Store entity.
@@ -209,91 +209,91 @@ type StoreUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (suo *StoreUpdateOne) SetUpdatedAt(t time.Time) *StoreUpdateOne {
-	suo.mutation.SetUpdatedAt(t)
-	return suo
+func (_u *StoreUpdateOne) SetUpdatedAt(v time.Time) *StoreUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetName sets the "name" field.
-func (suo *StoreUpdateOne) SetName(s string) *StoreUpdateOne {
-	suo.mutation.SetName(s)
-	return suo
+func (_u *StoreUpdateOne) SetName(v string) *StoreUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (suo *StoreUpdateOne) SetNillableName(s *string) *StoreUpdateOne {
-	if s != nil {
-		suo.SetName(*s)
+func (_u *StoreUpdateOne) SetNillableName(v *string) *StoreUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetRegion sets the "region" field.
-func (suo *StoreUpdateOne) SetRegion(s string) *StoreUpdateOne {
-	suo.mutation.SetRegion(s)
-	return suo
+func (_u *StoreUpdateOne) SetRegion(v string) *StoreUpdateOne {
+	_u.mutation.SetRegion(v)
+	return _u
 }
 
 // SetNillableRegion sets the "region" field if the given value is not nil.
-func (suo *StoreUpdateOne) SetNillableRegion(s *string) *StoreUpdateOne {
-	if s != nil {
-		suo.SetRegion(*s)
+func (_u *StoreUpdateOne) SetNillableRegion(v *string) *StoreUpdateOne {
+	if v != nil {
+		_u.SetRegion(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetOrganizationID sets the "organization_id" field.
-func (suo *StoreUpdateOne) SetOrganizationID(u uuid.UUID) *StoreUpdateOne {
-	suo.mutation.SetOrganizationID(u)
-	return suo
+func (_u *StoreUpdateOne) SetOrganizationID(v uuid.UUID) *StoreUpdateOne {
+	_u.mutation.SetOrganizationID(v)
+	return _u
 }
 
 // SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (suo *StoreUpdateOne) SetNillableOrganizationID(u *uuid.UUID) *StoreUpdateOne {
-	if u != nil {
-		suo.SetOrganizationID(*u)
+func (_u *StoreUpdateOne) SetNillableOrganizationID(v *uuid.UUID) *StoreUpdateOne {
+	if v != nil {
+		_u.SetOrganizationID(*v)
 	}
-	return suo
+	return _u
 }
 
 // SetOrganization sets the "organization" edge to the Organization entity.
-func (suo *StoreUpdateOne) SetOrganization(o *Organization) *StoreUpdateOne {
-	return suo.SetOrganizationID(o.ID)
+func (_u *StoreUpdateOne) SetOrganization(v *Organization) *StoreUpdateOne {
+	return _u.SetOrganizationID(v.ID)
 }
 
 // Mutation returns the StoreMutation object of the builder.
-func (suo *StoreUpdateOne) Mutation() *StoreMutation {
-	return suo.mutation
+func (_u *StoreUpdateOne) Mutation() *StoreMutation {
+	return _u.mutation
 }
 
 // ClearOrganization clears the "organization" edge to the Organization entity.
-func (suo *StoreUpdateOne) ClearOrganization() *StoreUpdateOne {
-	suo.mutation.ClearOrganization()
-	return suo
+func (_u *StoreUpdateOne) ClearOrganization() *StoreUpdateOne {
+	_u.mutation.ClearOrganization()
+	return _u
 }
 
 // Where appends a list predicates to the StoreUpdate builder.
-func (suo *StoreUpdateOne) Where(ps ...predicate.Store) *StoreUpdateOne {
-	suo.mutation.Where(ps...)
-	return suo
+func (_u *StoreUpdateOne) Where(ps ...predicate.Store) *StoreUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (suo *StoreUpdateOne) Select(field string, fields ...string) *StoreUpdateOne {
-	suo.fields = append([]string{field}, fields...)
-	return suo
+func (_u *StoreUpdateOne) Select(field string, fields ...string) *StoreUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Store entity.
-func (suo *StoreUpdateOne) Save(ctx context.Context) (*Store, error) {
-	suo.defaults()
-	return withHooks(ctx, suo.sqlSave, suo.mutation, suo.hooks)
+func (_u *StoreUpdateOne) Save(ctx context.Context) (*Store, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (suo *StoreUpdateOne) SaveX(ctx context.Context) *Store {
-	node, err := suo.Save(ctx)
+func (_u *StoreUpdateOne) SaveX(ctx context.Context) *Store {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -301,45 +301,45 @@ func (suo *StoreUpdateOne) SaveX(ctx context.Context) *Store {
 }
 
 // Exec executes the query on the entity.
-func (suo *StoreUpdateOne) Exec(ctx context.Context) error {
-	_, err := suo.Save(ctx)
+func (_u *StoreUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (suo *StoreUpdateOne) ExecX(ctx context.Context) {
-	if err := suo.Exec(ctx); err != nil {
+func (_u *StoreUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (suo *StoreUpdateOne) defaults() {
-	if _, ok := suo.mutation.UpdatedAt(); !ok {
+func (_u *StoreUpdateOne) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := store.UpdateDefaultUpdatedAt()
-		suo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (suo *StoreUpdateOne) check() error {
-	if suo.mutation.OrganizationCleared() && len(suo.mutation.OrganizationIDs()) > 0 {
+func (_u *StoreUpdateOne) check() error {
+	if _u.mutation.OrganizationCleared() && len(_u.mutation.OrganizationIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Store.organization"`)
 	}
 	return nil
 }
 
-func (suo *StoreUpdateOne) sqlSave(ctx context.Context) (_node *Store, err error) {
-	if err := suo.check(); err != nil {
+func (_u *StoreUpdateOne) sqlSave(ctx context.Context) (_node *Store, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(store.Table, store.Columns, sqlgraph.NewFieldSpec(store.FieldID, field.TypeUUID))
-	id, ok := suo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Store.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := suo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, store.FieldID)
 		for _, f := range fields {
@@ -351,23 +351,23 @@ func (suo *StoreUpdateOne) sqlSave(ctx context.Context) (_node *Store, err error
 			}
 		}
 	}
-	if ps := suo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := suo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(store.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if value, ok := suo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(store.FieldName, field.TypeString, value)
 	}
-	if value, ok := suo.mutation.Region(); ok {
+	if value, ok := _u.mutation.Region(); ok {
 		_spec.SetField(store.FieldRegion, field.TypeString, value)
 	}
-	if suo.mutation.OrganizationCleared() {
+	if _u.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -380,7 +380,7 @@ func (suo *StoreUpdateOne) sqlSave(ctx context.Context) (_node *Store, err error
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := suo.mutation.OrganizationIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -396,10 +396,10 @@ func (suo *StoreUpdateOne) sqlSave(ctx context.Context) (_node *Store, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_node = &Store{config: suo.config}
+	_node = &Store{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, suo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{store.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -407,6 +407,6 @@ func (suo *StoreUpdateOne) sqlSave(ctx context.Context) (_node *Store, err error
 		}
 		return nil, err
 	}
-	suo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

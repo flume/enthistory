@@ -23,31 +23,31 @@ type FriendshipHistoryUpdate struct {
 }
 
 // Where appends a list predicates to the FriendshipHistoryUpdate builder.
-func (fhu *FriendshipHistoryUpdate) Where(ps ...predicate.FriendshipHistory) *FriendshipHistoryUpdate {
-	fhu.mutation.Where(ps...)
-	return fhu
+func (_u *FriendshipHistoryUpdate) Where(ps ...predicate.FriendshipHistory) *FriendshipHistoryUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (fhu *FriendshipHistoryUpdate) SetUpdatedAt(t time.Time) *FriendshipHistoryUpdate {
-	fhu.mutation.SetUpdatedAt(t)
-	return fhu
+func (_u *FriendshipHistoryUpdate) SetUpdatedAt(v time.Time) *FriendshipHistoryUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the FriendshipHistoryMutation object of the builder.
-func (fhu *FriendshipHistoryUpdate) Mutation() *FriendshipHistoryMutation {
-	return fhu.mutation
+func (_u *FriendshipHistoryUpdate) Mutation() *FriendshipHistoryMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (fhu *FriendshipHistoryUpdate) Save(ctx context.Context) (int, error) {
-	fhu.defaults()
-	return withHooks(ctx, fhu.sqlSave, fhu.mutation, fhu.hooks)
+func (_u *FriendshipHistoryUpdate) Save(ctx context.Context) (int, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (fhu *FriendshipHistoryUpdate) SaveX(ctx context.Context) int {
-	affected, err := fhu.Save(ctx)
+func (_u *FriendshipHistoryUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -55,42 +55,42 @@ func (fhu *FriendshipHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (fhu *FriendshipHistoryUpdate) Exec(ctx context.Context) error {
-	_, err := fhu.Save(ctx)
+func (_u *FriendshipHistoryUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fhu *FriendshipHistoryUpdate) ExecX(ctx context.Context) {
-	if err := fhu.Exec(ctx); err != nil {
+func (_u *FriendshipHistoryUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (fhu *FriendshipHistoryUpdate) defaults() {
-	if _, ok := fhu.mutation.UpdatedAt(); !ok {
+func (_u *FriendshipHistoryUpdate) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := friendshiphistory.UpdateDefaultUpdatedAt()
-		fhu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
-func (fhu *FriendshipHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *FriendshipHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(friendshiphistory.Table, friendshiphistory.Columns, sqlgraph.NewFieldSpec(friendshiphistory.FieldID, field.TypeInt))
-	if ps := fhu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := fhu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(friendshiphistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if fhu.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(friendshiphistory.FieldRef, field.TypeString)
 	}
-	if n, err = sqlgraph.UpdateNodes(ctx, fhu.driver, _spec); err != nil {
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{friendshiphistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -98,8 +98,8 @@ func (fhu *FriendshipHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 		}
 		return 0, err
 	}
-	fhu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // FriendshipHistoryUpdateOne is the builder for updating a single FriendshipHistory entity.
@@ -111,38 +111,38 @@ type FriendshipHistoryUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (fhuo *FriendshipHistoryUpdateOne) SetUpdatedAt(t time.Time) *FriendshipHistoryUpdateOne {
-	fhuo.mutation.SetUpdatedAt(t)
-	return fhuo
+func (_u *FriendshipHistoryUpdateOne) SetUpdatedAt(v time.Time) *FriendshipHistoryUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the FriendshipHistoryMutation object of the builder.
-func (fhuo *FriendshipHistoryUpdateOne) Mutation() *FriendshipHistoryMutation {
-	return fhuo.mutation
+func (_u *FriendshipHistoryUpdateOne) Mutation() *FriendshipHistoryMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the FriendshipHistoryUpdate builder.
-func (fhuo *FriendshipHistoryUpdateOne) Where(ps ...predicate.FriendshipHistory) *FriendshipHistoryUpdateOne {
-	fhuo.mutation.Where(ps...)
-	return fhuo
+func (_u *FriendshipHistoryUpdateOne) Where(ps ...predicate.FriendshipHistory) *FriendshipHistoryUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (fhuo *FriendshipHistoryUpdateOne) Select(field string, fields ...string) *FriendshipHistoryUpdateOne {
-	fhuo.fields = append([]string{field}, fields...)
-	return fhuo
+func (_u *FriendshipHistoryUpdateOne) Select(field string, fields ...string) *FriendshipHistoryUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated FriendshipHistory entity.
-func (fhuo *FriendshipHistoryUpdateOne) Save(ctx context.Context) (*FriendshipHistory, error) {
-	fhuo.defaults()
-	return withHooks(ctx, fhuo.sqlSave, fhuo.mutation, fhuo.hooks)
+func (_u *FriendshipHistoryUpdateOne) Save(ctx context.Context) (*FriendshipHistory, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (fhuo *FriendshipHistoryUpdateOne) SaveX(ctx context.Context) *FriendshipHistory {
-	node, err := fhuo.Save(ctx)
+func (_u *FriendshipHistoryUpdateOne) SaveX(ctx context.Context) *FriendshipHistory {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -150,34 +150,34 @@ func (fhuo *FriendshipHistoryUpdateOne) SaveX(ctx context.Context) *FriendshipHi
 }
 
 // Exec executes the query on the entity.
-func (fhuo *FriendshipHistoryUpdateOne) Exec(ctx context.Context) error {
-	_, err := fhuo.Save(ctx)
+func (_u *FriendshipHistoryUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fhuo *FriendshipHistoryUpdateOne) ExecX(ctx context.Context) {
-	if err := fhuo.Exec(ctx); err != nil {
+func (_u *FriendshipHistoryUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (fhuo *FriendshipHistoryUpdateOne) defaults() {
-	if _, ok := fhuo.mutation.UpdatedAt(); !ok {
+func (_u *FriendshipHistoryUpdateOne) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
 		v := friendshiphistory.UpdateDefaultUpdatedAt()
-		fhuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
-func (fhuo *FriendshipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FriendshipHistory, err error) {
+func (_u *FriendshipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FriendshipHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(friendshiphistory.Table, friendshiphistory.Columns, sqlgraph.NewFieldSpec(friendshiphistory.FieldID, field.TypeInt))
-	id, ok := fhuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "FriendshipHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := fhuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, friendshiphistory.FieldID)
 		for _, f := range fields {
@@ -189,23 +189,23 @@ func (fhuo *FriendshipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Fri
 			}
 		}
 	}
-	if ps := fhuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := fhuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(friendshiphistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if fhuo.mutation.RefCleared() {
+	if _u.mutation.RefCleared() {
 		_spec.ClearField(friendshiphistory.FieldRef, field.TypeString)
 	}
-	_node = &FriendshipHistory{config: fhuo.config}
+	_node = &FriendshipHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, fhuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{friendshiphistory.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -213,6 +213,6 @@ func (fhuo *FriendshipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Fri
 		}
 		return nil, err
 	}
-	fhuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

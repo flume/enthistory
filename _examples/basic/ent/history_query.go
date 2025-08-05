@@ -14,28 +14,28 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-func (c *Character) History() *CharacterHistoryQuery {
-	historyClient := NewCharacterHistoryClient(c.config)
-	return historyClient.Query().Where(characterhistory.Ref(c.ID))
+func (_m *Character) History() *CharacterHistoryQuery {
+	historyClient := NewCharacterHistoryClient(_m.config)
+	return historyClient.Query().Where(characterhistory.Ref(_m.ID))
 }
 
-func (ch *CharacterHistory) Next(ctx context.Context) (*CharacterHistory, error) {
-	client := NewCharacterHistoryClient(ch.config)
+func (_m *CharacterHistory) Next(ctx context.Context) (*CharacterHistory, error) {
+	client := NewCharacterHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			characterhistory.Ref(ch.Ref),
-			characterhistory.HistoryTimeGT(ch.HistoryTime),
+			characterhistory.Ref(_m.Ref),
+			characterhistory.HistoryTimeGT(_m.HistoryTime),
 		).
 		Order(characterhistory.ByHistoryTime()).
 		First(ctx)
 }
 
-func (ch *CharacterHistory) Prev(ctx context.Context) (*CharacterHistory, error) {
-	client := NewCharacterHistoryClient(ch.config)
+func (_m *CharacterHistory) Prev(ctx context.Context) (*CharacterHistory, error) {
+	client := NewCharacterHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			characterhistory.Ref(ch.Ref),
-			characterhistory.HistoryTimeLT(ch.HistoryTime),
+			characterhistory.Ref(_m.Ref),
+			characterhistory.HistoryTimeLT(_m.HistoryTime),
 		).
 		Order(characterhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
@@ -60,44 +60,44 @@ func (chq *CharacterHistoryQuery) AsOf(ctx context.Context, time time.Time) (*Ch
 		First(ctx)
 }
 
-func (ch *CharacterHistory) Restore(ctx context.Context) (*Character, error) {
-	client := NewCharacterClient(ch.config)
+func (_m *CharacterHistory) Restore(ctx context.Context) (*Character, error) {
+	client := NewCharacterClient(_m.config)
 	return client.
-		UpdateOneID(ch.Ref).
-		SetUpdatedAt(ch.UpdatedAt).
-		SetAge(ch.Age).
-		SetTypedAge(ch.TypedAge).
-		SetName(ch.Name).
-		SetNicknames(ch.Nicknames).
-		SetInfo(ch.Info).
-		SetInfoStruct(ch.InfoStruct).
-		SetNillableLevel(ch.Level).
-		SetSpecies(ch.Species).
+		UpdateOneID(_m.Ref).
+		SetUpdatedAt(_m.UpdatedAt).
+		SetAge(_m.Age).
+		SetTypedAge(_m.TypedAge).
+		SetName(_m.Name).
+		SetNicknames(_m.Nicknames).
+		SetInfo(_m.Info).
+		SetInfoStruct(_m.InfoStruct).
+		SetNillableLevel(_m.Level).
+		SetSpecies(_m.Species).
 		Save(ctx)
 }
 
-func (f *Friendship) History() *FriendshipHistoryQuery {
-	historyClient := NewFriendshipHistoryClient(f.config)
-	return historyClient.Query().Where(friendshiphistory.Ref(f.ID))
+func (_m *Friendship) History() *FriendshipHistoryQuery {
+	historyClient := NewFriendshipHistoryClient(_m.config)
+	return historyClient.Query().Where(friendshiphistory.Ref(_m.ID))
 }
 
-func (fh *FriendshipHistory) Next(ctx context.Context) (*FriendshipHistory, error) {
-	client := NewFriendshipHistoryClient(fh.config)
+func (_m *FriendshipHistory) Next(ctx context.Context) (*FriendshipHistory, error) {
+	client := NewFriendshipHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			friendshiphistory.Ref(fh.Ref),
-			friendshiphistory.HistoryTimeGT(fh.HistoryTime),
+			friendshiphistory.Ref(_m.Ref),
+			friendshiphistory.HistoryTimeGT(_m.HistoryTime),
 		).
 		Order(friendshiphistory.ByHistoryTime()).
 		First(ctx)
 }
 
-func (fh *FriendshipHistory) Prev(ctx context.Context) (*FriendshipHistory, error) {
-	client := NewFriendshipHistoryClient(fh.config)
+func (_m *FriendshipHistory) Prev(ctx context.Context) (*FriendshipHistory, error) {
+	client := NewFriendshipHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			friendshiphistory.Ref(fh.Ref),
-			friendshiphistory.HistoryTimeLT(fh.HistoryTime),
+			friendshiphistory.Ref(_m.Ref),
+			friendshiphistory.HistoryTimeLT(_m.HistoryTime),
 		).
 		Order(friendshiphistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
@@ -122,38 +122,38 @@ func (fhq *FriendshipHistoryQuery) AsOf(ctx context.Context, time time.Time) (*F
 		First(ctx)
 }
 
-func (fh *FriendshipHistory) Restore(ctx context.Context) (*Friendship, error) {
-	client := NewFriendshipClient(fh.config)
+func (_m *FriendshipHistory) Restore(ctx context.Context) (*Friendship, error) {
+	client := NewFriendshipClient(_m.config)
 	return client.
-		UpdateOneID(fh.Ref).
-		SetUpdatedAt(fh.UpdatedAt).
-		SetCharacterID(fh.CharacterID).
-		SetFriendID(fh.FriendID).
+		UpdateOneID(_m.Ref).
+		SetUpdatedAt(_m.UpdatedAt).
+		SetCharacterID(_m.CharacterID).
+		SetFriendID(_m.FriendID).
 		Save(ctx)
 }
 
-func (r *Residence) History() *ResidenceHistoryQuery {
-	historyClient := NewResidenceHistoryClient(r.config)
-	return historyClient.Query().Where(residencehistory.Ref(r.ID))
+func (_m *Residence) History() *ResidenceHistoryQuery {
+	historyClient := NewResidenceHistoryClient(_m.config)
+	return historyClient.Query().Where(residencehistory.Ref(_m.ID))
 }
 
-func (rh *ResidenceHistory) Next(ctx context.Context) (*ResidenceHistory, error) {
-	client := NewResidenceHistoryClient(rh.config)
+func (_m *ResidenceHistory) Next(ctx context.Context) (*ResidenceHistory, error) {
+	client := NewResidenceHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			residencehistory.Ref(rh.Ref),
-			residencehistory.HistoryTimeGT(rh.HistoryTime),
+			residencehistory.Ref(_m.Ref),
+			residencehistory.HistoryTimeGT(_m.HistoryTime),
 		).
 		Order(residencehistory.ByHistoryTime()).
 		First(ctx)
 }
 
-func (rh *ResidenceHistory) Prev(ctx context.Context) (*ResidenceHistory, error) {
-	client := NewResidenceHistoryClient(rh.config)
+func (_m *ResidenceHistory) Prev(ctx context.Context) (*ResidenceHistory, error) {
+	client := NewResidenceHistoryClient(_m.config)
 	return client.Query().
 		Where(
-			residencehistory.Ref(rh.Ref),
-			residencehistory.HistoryTimeLT(rh.HistoryTime),
+			residencehistory.Ref(_m.Ref),
+			residencehistory.HistoryTimeLT(_m.HistoryTime),
 		).
 		Order(residencehistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
@@ -178,11 +178,11 @@ func (rhq *ResidenceHistoryQuery) AsOf(ctx context.Context, time time.Time) (*Re
 		First(ctx)
 }
 
-func (rh *ResidenceHistory) Restore(ctx context.Context) (*Residence, error) {
-	client := NewResidenceClient(rh.config)
+func (_m *ResidenceHistory) Restore(ctx context.Context) (*Residence, error) {
+	client := NewResidenceClient(_m.config)
 	return client.
-		UpdateOneID(rh.Ref).
-		SetUpdatedAt(rh.UpdatedAt).
-		SetName(rh.Name).
+		UpdateOneID(_m.Ref).
+		SetUpdatedAt(_m.UpdatedAt).
+		SetName(_m.Name).
 		Save(ctx)
 }
