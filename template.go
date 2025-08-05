@@ -75,12 +75,12 @@ func calculateHooks(original, history gen.Type) string {
 	const hookPrefix = "enthistory.HistoryTrigger"
 	const hookRegister = "c.%s.Use(%s)\n"
 	for _, trigger := range triggers {
-		switch {
-		case trigger == OpTypeInsert:
+		switch trigger {
+		case OpTypeInsert:
 			res += fmt.Sprintf(hookRegister, original.Name, fmt.Sprintf("%sInsert[*%sMutation]()", hookPrefix, original.Name))
-		case trigger == OpTypeUpdate:
+		case OpTypeUpdate:
 			res += fmt.Sprintf(hookRegister, original.Name, fmt.Sprintf("%sUpdate[*%sMutation]()", hookPrefix, original.Name))
-		case trigger == OpTypeDelete:
+		case OpTypeDelete:
 			res += fmt.Sprintf(hookRegister, original.Name, fmt.Sprintf("%sDelete[*%sMutation]()", hookPrefix, original.Name))
 		}
 	}
