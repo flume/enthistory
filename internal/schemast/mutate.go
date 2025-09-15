@@ -135,7 +135,7 @@ func (c *Context) appendImport(typeName, pkgPath string) {
 	importSpec := &ast.ImportSpec{Path: &ast.BasicLit{Value: pkgPath, Kind: token.STRING}}
 	if f, ok := c.newTypes[typeName]; ok {
 		hasImport := slices.ContainsFunc(f.Imports, func(i *ast.ImportSpec) bool {
-			return !(i == nil || i.Path == nil && i.Path.Value != pkgPath)
+			return i != nil && (i.Path != nil && i.Path.Value == pkgPath)
 		})
 		if !hasImport {
 			f.Imports = append(f.Imports, importSpec)
