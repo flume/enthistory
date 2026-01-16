@@ -560,16 +560,16 @@ func (h *historyEdge) Descriptor() *edge.Descriptor {
 
 // reverseEdge creates an edge from the history schema back to the original entity.
 // This enables traversal like historyRecord.QueryCharacter().
-// The edge uses the "ref" field as the foreign key to the original entity.
+// Note: We intentionally do NOT use Field("ref") because that would create a FK constraint,
+// which would prevent creating history records for DELETE operations (the original entity
+// no longer exists when the delete hook runs).
 func reverseEdge(schemaName string) ent.Edge {
 	edgeName := strings.ToLower(schemaName)
 	return &historyEdge{
 		desc: &edge.Descriptor{
-			Name:      edgeName,
-			Type:      schemaName,
-			Field:     "ref",
-			Unique:    true,
-			Immutable: true,
+			Name:   edgeName,
+			Type:   schemaName,
+			Unique: true,
 		},
 	}
 }

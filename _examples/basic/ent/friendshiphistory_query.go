@@ -24,6 +24,7 @@ type FriendshipHistoryQuery struct {
 	inters         []Interceptor
 	predicates     []predicate.FriendshipHistory
 	withFriendship *FriendshipQuery
+	withFKs        bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -369,11 +370,18 @@ func (_q *FriendshipHistoryQuery) prepareQuery(ctx context.Context) error {
 func (_q *FriendshipHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*FriendshipHistory, error) {
 	var (
 		nodes       = []*FriendshipHistory{}
+		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
 		loadedTypes = [1]bool{
 			_q.withFriendship != nil,
 		}
 	)
+	if _q.withFriendship != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, friendshiphistory.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*FriendshipHistory).scanValues(nil, columns)
 	}
@@ -405,7 +413,10 @@ func (_q *FriendshipHistoryQuery) loadFriendship(ctx context.Context, query *Fri
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*FriendshipHistory)
 	for i := range nodes {
-		fk := nodes[i].Ref
+		if nodes[i].friendship_history_friendship == nil {
+			continue
+		}
+		fk := *nodes[i].friendship_history_friendship
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -422,7 +433,7 @@ func (_q *FriendshipHistoryQuery) loadFriendship(ctx context.Context, query *Fri
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "ref" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "friendship_history_friendship" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -455,9 +466,6 @@ func (_q *FriendshipHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != friendshiphistory.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
-		}
-		if _q.withFriendship != nil {
-			_spec.Node.AddColumnOnce(friendshiphistory.FieldRef)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

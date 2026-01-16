@@ -35,7 +35,10 @@ func main() {
 			Features: []gen.Feature{gen.FeatureSnapshot},
 		},
 		entc.Extensions(
-			enthistory.NewHistoryExtension(enthistory.WithAuditing()),
+			enthistory.NewHistoryExtension(
+				enthistory.WithAuditing(),
+				enthistory.WithReverseEdgeExtension(),
+			),
 		),
 	); err != nil {
 		log.Fatal("running ent codegen:", err)

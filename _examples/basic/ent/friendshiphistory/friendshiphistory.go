@@ -43,7 +43,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "friendship" package.
 	FriendshipInverseTable = "friendship"
 	// FriendshipColumn is the table column denoting the friendship relation/edge.
-	FriendshipColumn = "ref"
+	FriendshipColumn = "friendship_history_friendship"
 )
 
 // Columns holds all SQL columns for friendshiphistory fields.
@@ -59,10 +59,21 @@ var Columns = []string{
 	FieldFriendID,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "friendship_history"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"friendship_history_friendship",
+}
+
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}

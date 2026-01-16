@@ -37,8 +37,9 @@ type ResidenceHistory struct {
 	Name string `json:"name,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ResidenceHistoryQuery when eager-loading is set.
-	Edges        ResidenceHistoryEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                       ResidenceHistoryEdges `json:"edges"`
+	residence_history_residence *uuid.UUID
+	selectValues                sql.SelectValues
 }
 
 // ResidenceHistoryEdges holds the relations/edges for other nodes in the graph.
@@ -74,6 +75,8 @@ func (*ResidenceHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case residencehistory.FieldRef:
 			values[i] = new(uuid.UUID)
+		case residencehistory.ForeignKeys[0]: // residence_history_residence
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -137,6 +140,13 @@ func (_m *ResidenceHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
 				_m.Name = value.String
+			}
+		case residencehistory.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field residence_history_residence", values[i])
+			} else if value.Valid {
+				_m.residence_history_residence = new(uuid.UUID)
+				*_m.residence_history_residence = *value.S.(*uuid.UUID)
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

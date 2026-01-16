@@ -45,9 +45,7 @@ func (FriendshipHistory) Fields() []ent.Field {
 func (FriendshipHistory) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("friendship", Friendship.Type).
-			Unique().
-			Immutable().
-			Field("ref")}
+			Unique()}
 }
 func (FriendshipHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{entsql.Annotation{Table: "friendship_history"}, enthistory.Annotations{IsHistory: true, Triggers: []enthistory.OpType{enthistory.OpTypeInsert, enthistory.OpTypeUpdate, enthistory.OpTypeDelete}}}

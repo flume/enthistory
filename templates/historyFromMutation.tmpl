@@ -107,6 +107,9 @@ import (
                             SetOperation(EntOpToHistoryOp(m.Op())).
                             SetHistoryTime(time.Now()).
                             SetRef(id)
+                        {{- if $.Annotations.HistoryConfig.ReverseEdge }}
+                        create = create.SetNillable{{ $name }}ID(&id)
+                        {{- end }}
 
                         {{- if not (eq $updatedByKey "") }}
                             {{- if (eq $updatedByValueType "int") }}
@@ -167,6 +170,9 @@ import (
                                 SetOperation(EntOpToHistoryOp(m.Op())).
                                 SetHistoryTime(time.Now()).
                                 SetRef(id)
+                            {{- if $.Annotations.HistoryConfig.ReverseEdge }}
+                            create = create.SetNillable{{ $name }}ID(&id)
+                            {{- end }}
 
                             {{- if not (eq $updatedByKey "") }}
                                 {{- if (eq $updatedByValueType "int") }}
@@ -239,6 +245,10 @@ import (
                                 {{- end }}
                                     create = create.SetUpdatedBy(updatedBy)
                                 }
+                            {{- end }}
+
+                            {{- if $.Annotations.HistoryConfig.ReverseEdge }}
+                            create = create.SetNillable{{ $name }}ID(&id)
                             {{- end }}
 
                             _, err = create.

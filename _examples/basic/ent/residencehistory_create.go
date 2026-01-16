@@ -250,6 +250,10 @@ func (_c *ResidenceHistoryCreate) createSpec() (*ResidenceHistory, *sqlgraph.Cre
 		_spec.SetField(residencehistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := _c.mutation.Ref(); ok {
+		_spec.SetField(residencehistory.FieldRef, field.TypeUUID, value)
+		_node.Ref = value
+	}
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(residencehistory.FieldUpdatedBy, field.TypeInt, value)
 		_node.UpdatedBy = &value
@@ -272,7 +276,7 @@ func (_c *ResidenceHistoryCreate) createSpec() (*ResidenceHistory, *sqlgraph.Cre
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.Ref = nodes[0]
+		_node.residence_history_residence = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

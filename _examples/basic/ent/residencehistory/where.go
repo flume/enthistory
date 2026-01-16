@@ -248,6 +248,26 @@ func RefNotIn(vs ...uuid.UUID) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldNotIn(FieldRef, vs...))
 }
 
+// RefGT applies the GT predicate on the "ref" field.
+func RefGT(v uuid.UUID) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldGT(FieldRef, v))
+}
+
+// RefGTE applies the GTE predicate on the "ref" field.
+func RefGTE(v uuid.UUID) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldGTE(FieldRef, v))
+}
+
+// RefLT applies the LT predicate on the "ref" field.
+func RefLT(v uuid.UUID) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldLT(FieldRef, v))
+}
+
+// RefLTE applies the LTE predicate on the "ref" field.
+func RefLTE(v uuid.UUID) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldLTE(FieldRef, v))
+}
+
 // RefIsNil applies the IsNil predicate on the "ref" field.
 func RefIsNil() predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldIsNull(FieldRef))

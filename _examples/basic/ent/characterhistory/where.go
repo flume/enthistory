@@ -270,6 +270,26 @@ func RefNotIn(vs ...int) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldNotIn(FieldRef, vs...))
 }
 
+// RefGT applies the GT predicate on the "ref" field.
+func RefGT(v int) predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldGT(FieldRef, v))
+}
+
+// RefGTE applies the GTE predicate on the "ref" field.
+func RefGTE(v int) predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldGTE(FieldRef, v))
+}
+
+// RefLT applies the LT predicate on the "ref" field.
+func RefLT(v int) predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldLT(FieldRef, v))
+}
+
+// RefLTE applies the LTE predicate on the "ref" field.
+func RefLTE(v int) predicate.CharacterHistory {
+	return predicate.CharacterHistory(sql.FieldLTE(FieldRef, v))
+}
+
 // RefIsNil applies the IsNil predicate on the "ref" field.
 func RefIsNil() predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldIsNull(FieldRef))

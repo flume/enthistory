@@ -45,6 +45,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "ref", Type: field.TypeInt, Nullable: true},
 		{Name: "updated_by", Type: field.TypeInt, Nullable: true},
 		{Name: "age", Type: field.TypeInt},
 		{Name: "typed_age", Type: field.TypeUint64},
@@ -54,7 +55,7 @@ var (
 		{Name: "info_struct", Type: field.TypeJSON, Nullable: true},
 		{Name: "level", Type: field.TypeInt, Nullable: true},
 		{Name: "species", Type: field.TypeString, Nullable: true},
-		{Name: "ref", Type: field.TypeInt, Nullable: true},
+		{Name: "character_history_character", Type: field.TypeInt, Nullable: true},
 	}
 	// CharacterHistoryTable holds the schema information for the "character_history" table.
 	CharacterHistoryTable = &schema.Table{
@@ -64,7 +65,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "character_history_character_character",
-				Columns:    []*schema.Column{CharacterHistoryColumns[14]},
+				Columns:    []*schema.Column{CharacterHistoryColumns[15]},
 				RefColumns: []*schema.Column{CharacterColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -119,10 +120,11 @@ var (
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeInt, Nullable: true},
 		{Name: "character_id", Type: field.TypeInt},
 		{Name: "friend_id", Type: field.TypeInt},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "friendship_history_friendship", Type: field.TypeString, Nullable: true},
 	}
 	// FriendshipHistoryTable holds the schema information for the "friendship_history" table.
 	FriendshipHistoryTable = &schema.Table{
@@ -132,7 +134,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "friendship_history_friendship_friendship",
-				Columns:    []*schema.Column{FriendshipHistoryColumns[8]},
+				Columns:    []*schema.Column{FriendshipHistoryColumns[9]},
 				RefColumns: []*schema.Column{FriendshipColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -165,9 +167,10 @@ var (
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "history_time", Type: field.TypeTime},
 		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "ref", Type: field.TypeUUID, Nullable: true},
 		{Name: "updated_by", Type: field.TypeInt, Nullable: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "ref", Type: field.TypeUUID, Nullable: true},
+		{Name: "residence_history_residence", Type: field.TypeUUID, Nullable: true},
 	}
 	// ResidenceHistoryTable holds the schema information for the "residence_history" table.
 	ResidenceHistoryTable = &schema.Table{
@@ -177,7 +180,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "residence_history_residence_residence",
-				Columns:    []*schema.Column{ResidenceHistoryColumns[7]},
+				Columns:    []*schema.Column{ResidenceHistoryColumns[8]},
 				RefColumns: []*schema.Column{ResidenceColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

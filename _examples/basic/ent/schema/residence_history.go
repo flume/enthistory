@@ -44,9 +44,7 @@ func (ResidenceHistory) Fields() []ent.Field {
 func (ResidenceHistory) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("residence", Residence.Type).
-			Unique().
-			Immutable().
-			Field("ref")}
+			Unique()}
 }
 func (ResidenceHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{entsql.Annotation{Table: "residence_history"}, enthistory.Annotations{IsHistory: true, Triggers: []enthistory.OpType{enthistory.OpTypeInsert, enthistory.OpTypeUpdate, enthistory.OpTypeDelete}}}

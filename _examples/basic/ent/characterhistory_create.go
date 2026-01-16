@@ -330,6 +330,10 @@ func (_c *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cre
 		_spec.SetField(characterhistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := _c.mutation.Ref(); ok {
+		_spec.SetField(characterhistory.FieldRef, field.TypeInt, value)
+		_node.Ref = value
+	}
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(characterhistory.FieldUpdatedBy, field.TypeInt, value)
 		_node.UpdatedBy = &value
@@ -380,7 +384,7 @@ func (_c *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cre
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.Ref = nodes[0]
+		_node.character_history_character = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

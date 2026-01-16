@@ -38,8 +38,9 @@ type FriendshipHistory struct {
 	FriendID int `json:"friend_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FriendshipHistoryQuery when eager-loading is set.
-	Edges        FriendshipHistoryEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                         FriendshipHistoryEdges `json:"edges"`
+	friendship_history_friendship *string
+	selectValues                  sql.SelectValues
 }
 
 // FriendshipHistoryEdges holds the relations/edges for other nodes in the graph.
@@ -73,6 +74,8 @@ func (*FriendshipHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case friendshiphistory.FieldCreatedAt, friendshiphistory.FieldUpdatedAt, friendshiphistory.FieldHistoryTime:
 			values[i] = new(sql.NullTime)
+		case friendshiphistory.ForeignKeys[0]: // friendship_history_friendship
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -142,6 +145,13 @@ func (_m *FriendshipHistory) assignValues(columns []string, values []any) error 
 				return fmt.Errorf("unexpected type %T for field friend_id", values[i])
 			} else if value.Valid {
 				_m.FriendID = int(value.Int64)
+			}
+		case friendshiphistory.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field friendship_history_friendship", values[i])
+			} else if value.Valid {
+				_m.friendship_history_friendship = new(string)
+				*_m.friendship_history_friendship = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

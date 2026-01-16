@@ -25,6 +25,7 @@ type ResidenceHistoryQuery struct {
 	inters        []Interceptor
 	predicates    []predicate.ResidenceHistory
 	withResidence *ResidenceQuery
+	withFKs       bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -370,11 +371,18 @@ func (_q *ResidenceHistoryQuery) prepareQuery(ctx context.Context) error {
 func (_q *ResidenceHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ResidenceHistory, error) {
 	var (
 		nodes       = []*ResidenceHistory{}
+		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
 		loadedTypes = [1]bool{
 			_q.withResidence != nil,
 		}
 	)
+	if _q.withResidence != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, residencehistory.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ResidenceHistory).scanValues(nil, columns)
 	}
@@ -406,7 +414,10 @@ func (_q *ResidenceHistoryQuery) loadResidence(ctx context.Context, query *Resid
 	ids := make([]uuid.UUID, 0, len(nodes))
 	nodeids := make(map[uuid.UUID][]*ResidenceHistory)
 	for i := range nodes {
-		fk := nodes[i].Ref
+		if nodes[i].residence_history_residence == nil {
+			continue
+		}
+		fk := *nodes[i].residence_history_residence
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -423,7 +434,7 @@ func (_q *ResidenceHistoryQuery) loadResidence(ctx context.Context, query *Resid
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "ref" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "residence_history_residence" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -456,9 +467,6 @@ func (_q *ResidenceHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != residencehistory.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
-		}
-		if _q.withResidence != nil {
-			_spec.Node.AddColumnOnce(residencehistory.FieldRef)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

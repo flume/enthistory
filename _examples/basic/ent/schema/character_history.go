@@ -69,9 +69,7 @@ func (CharacterHistory) Fields() []ent.Field {
 func (CharacterHistory) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("character", Character.Type).
-			Unique().
-			Immutable().
-			Field("ref")}
+			Unique()}
 }
 func (CharacterHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{entsql.Annotation{Table: "character_history"}, enthistory.Annotations{IsHistory: true, Triggers: []enthistory.OpType{enthistory.OpTypeInsert, enthistory.OpTypeUpdate, enthistory.OpTypeDelete}}}

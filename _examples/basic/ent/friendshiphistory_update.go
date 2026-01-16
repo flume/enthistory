@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/basic/ent/friendship"
 	"_examples/basic/ent/friendshiphistory"
 	"_examples/basic/ent/predicate"
 	"context"
@@ -34,9 +35,34 @@ func (_u *FriendshipHistoryUpdate) SetUpdatedAt(v time.Time) *FriendshipHistoryU
 	return _u
 }
 
+// SetFriendshipID sets the "friendship" edge to the Friendship entity by ID.
+func (_u *FriendshipHistoryUpdate) SetFriendshipID(id string) *FriendshipHistoryUpdate {
+	_u.mutation.SetFriendshipID(id)
+	return _u
+}
+
+// SetNillableFriendshipID sets the "friendship" edge to the Friendship entity by ID if the given value is not nil.
+func (_u *FriendshipHistoryUpdate) SetNillableFriendshipID(id *string) *FriendshipHistoryUpdate {
+	if id != nil {
+		_u = _u.SetFriendshipID(*id)
+	}
+	return _u
+}
+
+// SetFriendship sets the "friendship" edge to the Friendship entity.
+func (_u *FriendshipHistoryUpdate) SetFriendship(v *Friendship) *FriendshipHistoryUpdate {
+	return _u.SetFriendshipID(v.ID)
+}
+
 // Mutation returns the FriendshipHistoryMutation object of the builder.
 func (_u *FriendshipHistoryUpdate) Mutation() *FriendshipHistoryMutation {
 	return _u.mutation
+}
+
+// ClearFriendship clears the "friendship" edge to the Friendship entity.
+func (_u *FriendshipHistoryUpdate) ClearFriendship() *FriendshipHistoryUpdate {
+	_u.mutation.ClearFriendship()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -87,8 +113,40 @@ func (_u *FriendshipHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(friendshiphistory.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if _u.mutation.RefCleared() {
+		_spec.ClearField(friendshiphistory.FieldRef, field.TypeString)
+	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(friendshiphistory.FieldUpdatedBy, field.TypeInt)
+	}
+	if _u.mutation.FriendshipCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   friendshiphistory.FriendshipTable,
+			Columns: []string{friendshiphistory.FriendshipColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FriendshipIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   friendshiphistory.FriendshipTable,
+			Columns: []string{friendshiphistory.FriendshipColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -116,9 +174,34 @@ func (_u *FriendshipHistoryUpdateOne) SetUpdatedAt(v time.Time) *FriendshipHisto
 	return _u
 }
 
+// SetFriendshipID sets the "friendship" edge to the Friendship entity by ID.
+func (_u *FriendshipHistoryUpdateOne) SetFriendshipID(id string) *FriendshipHistoryUpdateOne {
+	_u.mutation.SetFriendshipID(id)
+	return _u
+}
+
+// SetNillableFriendshipID sets the "friendship" edge to the Friendship entity by ID if the given value is not nil.
+func (_u *FriendshipHistoryUpdateOne) SetNillableFriendshipID(id *string) *FriendshipHistoryUpdateOne {
+	if id != nil {
+		_u = _u.SetFriendshipID(*id)
+	}
+	return _u
+}
+
+// SetFriendship sets the "friendship" edge to the Friendship entity.
+func (_u *FriendshipHistoryUpdateOne) SetFriendship(v *Friendship) *FriendshipHistoryUpdateOne {
+	return _u.SetFriendshipID(v.ID)
+}
+
 // Mutation returns the FriendshipHistoryMutation object of the builder.
 func (_u *FriendshipHistoryUpdateOne) Mutation() *FriendshipHistoryMutation {
 	return _u.mutation
+}
+
+// ClearFriendship clears the "friendship" edge to the Friendship entity.
+func (_u *FriendshipHistoryUpdateOne) ClearFriendship() *FriendshipHistoryUpdateOne {
+	_u.mutation.ClearFriendship()
+	return _u
 }
 
 // Where appends a list predicates to the FriendshipHistoryUpdate builder.
@@ -199,8 +282,40 @@ func (_u *FriendshipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Frien
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(friendshiphistory.FieldUpdatedAt, field.TypeTime, value)
 	}
+	if _u.mutation.RefCleared() {
+		_spec.ClearField(friendshiphistory.FieldRef, field.TypeString)
+	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(friendshiphistory.FieldUpdatedBy, field.TypeInt)
+	}
+	if _u.mutation.FriendshipCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   friendshiphistory.FriendshipTable,
+			Columns: []string{friendshiphistory.FriendshipColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FriendshipIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   friendshiphistory.FriendshipTable,
+			Columns: []string{friendshiphistory.FriendshipColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &FriendshipHistory{config: _u.config}
 	_spec.Assign = _node.assignValues

@@ -52,8 +52,9 @@ type CharacterHistory struct {
 	Species models.SpeciesType `json:"species,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CharacterHistoryQuery when eager-loading is set.
-	Edges        CharacterHistoryEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                       CharacterHistoryEdges `json:"edges"`
+	character_history_character *int
+	selectValues                sql.SelectValues
 }
 
 // CharacterHistoryEdges holds the relations/edges for other nodes in the graph.
@@ -89,6 +90,8 @@ func (*CharacterHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case characterhistory.FieldCreatedAt, characterhistory.FieldUpdatedAt, characterhistory.FieldHistoryTime:
 			values[i] = new(sql.NullTime)
+		case characterhistory.ForeignKeys[0]: // character_history_character
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -201,6 +204,13 @@ func (_m *CharacterHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field species", values[i])
 			} else if value.Valid {
 				_m.Species = models.SpeciesType(value.String)
+			}
+		case characterhistory.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field character_history_character", value)
+			} else if value.Valid {
+				_m.character_history_character = new(int)
+				*_m.character_history_character = int(value.Int64)
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

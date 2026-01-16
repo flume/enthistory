@@ -13,8 +13,9 @@ var (
 )
 
 type Config struct {
-	Auditing  bool
-	UpdatedBy *UpdatedBy
+	Auditing    bool
+	UpdatedBy   *UpdatedBy
+	ReverseEdge bool
 }
 
 func (c Config) Name() string {
@@ -33,6 +34,14 @@ type ExtensionOption = func(*HistoryExtension)
 func WithAuditing() ExtensionOption {
 	return func(ex *HistoryExtension) {
 		ex.config.Auditing = true
+	}
+}
+
+// WithReverseEdgeExtension enables the extension to populate the reverse edge FK
+// when creating history records. Use this in conjunction with WithReverseEdge() in Generate().
+func WithReverseEdgeExtension() ExtensionOption {
+	return func(ex *HistoryExtension) {
+		ex.config.ReverseEdge = true
 	}
 }
 

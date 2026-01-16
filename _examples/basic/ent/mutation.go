@@ -1316,6 +1316,8 @@ type CharacterHistoryMutation struct {
 	updated_at       *time.Time
 	history_time     *time.Time
 	operation        *enthistory.OpType
+	ref              *int
+	addref           *int
 	updated_by       *int
 	addupdated_by    *int
 	age              *int
@@ -1582,12 +1584,13 @@ func (m *CharacterHistoryMutation) ResetOperation() {
 
 // SetRef sets the "ref" field.
 func (m *CharacterHistoryMutation) SetRef(i int) {
-	m.character = &i
+	m.ref = &i
+	m.addref = nil
 }
 
 // Ref returns the value of the "ref" field in the mutation.
 func (m *CharacterHistoryMutation) Ref() (r int, exists bool) {
-	v := m.character
+	v := m.ref
 	if v == nil {
 		return
 	}
@@ -1611,9 +1614,28 @@ func (m *CharacterHistoryMutation) OldRef(ctx context.Context) (v int, err error
 	return oldValue.Ref, nil
 }
 
+// AddRef adds i to the "ref" field.
+func (m *CharacterHistoryMutation) AddRef(i int) {
+	if m.addref != nil {
+		*m.addref += i
+	} else {
+		m.addref = &i
+	}
+}
+
+// AddedRef returns the value that was added to the "ref" field in this mutation.
+func (m *CharacterHistoryMutation) AddedRef() (r int, exists bool) {
+	v := m.addref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
 // ClearRef clears the value of the "ref" field.
 func (m *CharacterHistoryMutation) ClearRef() {
-	m.character = nil
+	m.ref = nil
+	m.addref = nil
 	m.clearedFields[characterhistory.FieldRef] = struct{}{}
 }
 
@@ -1625,7 +1647,8 @@ func (m *CharacterHistoryMutation) RefCleared() bool {
 
 // ResetRef resets all changes to the "ref" field.
 func (m *CharacterHistoryMutation) ResetRef() {
-	m.character = nil
+	m.ref = nil
+	m.addref = nil
 	delete(m.clearedFields, characterhistory.FieldRef)
 }
 
@@ -2137,12 +2160,11 @@ func (m *CharacterHistoryMutation) SetCharacterID(id int) {
 // ClearCharacter clears the "character" edge to the Character entity.
 func (m *CharacterHistoryMutation) ClearCharacter() {
 	m.clearedcharacter = true
-	m.clearedFields[characterhistory.FieldRef] = struct{}{}
 }
 
 // CharacterCleared reports if the "character" edge to the Character entity was cleared.
 func (m *CharacterHistoryMutation) CharacterCleared() bool {
-	return m.RefCleared() || m.clearedcharacter
+	return m.clearedcharacter
 }
 
 // CharacterID returns the "character" edge ID in the mutation.
@@ -2216,7 +2238,7 @@ func (m *CharacterHistoryMutation) Fields() []string {
 	if m.operation != nil {
 		fields = append(fields, characterhistory.FieldOperation)
 	}
-	if m.character != nil {
+	if m.ref != nil {
 		fields = append(fields, characterhistory.FieldRef)
 	}
 	if m.updated_by != nil {
@@ -2434,6 +2456,9 @@ func (m *CharacterHistoryMutation) SetField(name string, value ent.Value) error 
 // this mutation.
 func (m *CharacterHistoryMutation) AddedFields() []string {
 	var fields []string
+	if m.addref != nil {
+		fields = append(fields, characterhistory.FieldRef)
+	}
 	if m.addupdated_by != nil {
 		fields = append(fields, characterhistory.FieldUpdatedBy)
 	}
@@ -2454,6 +2479,8 @@ func (m *CharacterHistoryMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *CharacterHistoryMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
+	case characterhistory.FieldRef:
+		return m.AddedRef()
 	case characterhistory.FieldUpdatedBy:
 		return m.AddedUpdatedBy()
 	case characterhistory.FieldAge:
@@ -2471,6 +2498,13 @@ func (m *CharacterHistoryMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *CharacterHistoryMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case characterhistory.FieldRef:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddRef(v)
+		return nil
 	case characterhistory.FieldUpdatedBy:
 		v, ok := value.(int)
 		if !ok {
@@ -3298,6 +3332,7 @@ type FriendshipHistoryMutation struct {
 	updated_at        *time.Time
 	history_time      *time.Time
 	operation         *enthistory.OpType
+	ref               *string
 	updated_by        *int
 	addupdated_by     *int
 	character_id      *int
@@ -3562,12 +3597,12 @@ func (m *FriendshipHistoryMutation) ResetOperation() {
 
 // SetRef sets the "ref" field.
 func (m *FriendshipHistoryMutation) SetRef(s string) {
-	m.friendship = &s
+	m.ref = &s
 }
 
 // Ref returns the value of the "ref" field in the mutation.
 func (m *FriendshipHistoryMutation) Ref() (r string, exists bool) {
-	v := m.friendship
+	v := m.ref
 	if v == nil {
 		return
 	}
@@ -3593,7 +3628,7 @@ func (m *FriendshipHistoryMutation) OldRef(ctx context.Context) (v string, err e
 
 // ClearRef clears the value of the "ref" field.
 func (m *FriendshipHistoryMutation) ClearRef() {
-	m.friendship = nil
+	m.ref = nil
 	m.clearedFields[friendshiphistory.FieldRef] = struct{}{}
 }
 
@@ -3605,7 +3640,7 @@ func (m *FriendshipHistoryMutation) RefCleared() bool {
 
 // ResetRef resets all changes to the "ref" field.
 func (m *FriendshipHistoryMutation) ResetRef() {
-	m.friendship = nil
+	m.ref = nil
 	delete(m.clearedFields, friendshiphistory.FieldRef)
 }
 
@@ -3799,12 +3834,11 @@ func (m *FriendshipHistoryMutation) SetFriendshipID(id string) {
 // ClearFriendship clears the "friendship" edge to the Friendship entity.
 func (m *FriendshipHistoryMutation) ClearFriendship() {
 	m.clearedfriendship = true
-	m.clearedFields[friendshiphistory.FieldRef] = struct{}{}
 }
 
 // FriendshipCleared reports if the "friendship" edge to the Friendship entity was cleared.
 func (m *FriendshipHistoryMutation) FriendshipCleared() bool {
-	return m.RefCleared() || m.clearedfriendship
+	return m.clearedfriendship
 }
 
 // FriendshipID returns the "friendship" edge ID in the mutation.
@@ -3878,7 +3912,7 @@ func (m *FriendshipHistoryMutation) Fields() []string {
 	if m.operation != nil {
 		fields = append(fields, friendshiphistory.FieldOperation)
 	}
-	if m.friendship != nil {
+	if m.ref != nil {
 		fields = append(fields, friendshiphistory.FieldRef)
 	}
 	if m.updated_by != nil {
@@ -4752,6 +4786,7 @@ type ResidenceHistoryMutation struct {
 	updated_at       *time.Time
 	history_time     *time.Time
 	operation        *enthistory.OpType
+	ref              *uuid.UUID
 	updated_by       *int
 	addupdated_by    *int
 	name             *string
@@ -5013,12 +5048,12 @@ func (m *ResidenceHistoryMutation) ResetOperation() {
 
 // SetRef sets the "ref" field.
 func (m *ResidenceHistoryMutation) SetRef(u uuid.UUID) {
-	m.residence = &u
+	m.ref = &u
 }
 
 // Ref returns the value of the "ref" field in the mutation.
 func (m *ResidenceHistoryMutation) Ref() (r uuid.UUID, exists bool) {
-	v := m.residence
+	v := m.ref
 	if v == nil {
 		return
 	}
@@ -5044,7 +5079,7 @@ func (m *ResidenceHistoryMutation) OldRef(ctx context.Context) (v uuid.UUID, err
 
 // ClearRef clears the value of the "ref" field.
 func (m *ResidenceHistoryMutation) ClearRef() {
-	m.residence = nil
+	m.ref = nil
 	m.clearedFields[residencehistory.FieldRef] = struct{}{}
 }
 
@@ -5056,7 +5091,7 @@ func (m *ResidenceHistoryMutation) RefCleared() bool {
 
 // ResetRef resets all changes to the "ref" field.
 func (m *ResidenceHistoryMutation) ResetRef() {
-	m.residence = nil
+	m.ref = nil
 	delete(m.clearedFields, residencehistory.FieldRef)
 }
 
@@ -5174,12 +5209,11 @@ func (m *ResidenceHistoryMutation) SetResidenceID(id uuid.UUID) {
 // ClearResidence clears the "residence" edge to the Residence entity.
 func (m *ResidenceHistoryMutation) ClearResidence() {
 	m.clearedresidence = true
-	m.clearedFields[residencehistory.FieldRef] = struct{}{}
 }
 
 // ResidenceCleared reports if the "residence" edge to the Residence entity was cleared.
 func (m *ResidenceHistoryMutation) ResidenceCleared() bool {
-	return m.RefCleared() || m.clearedresidence
+	return m.clearedresidence
 }
 
 // ResidenceID returns the "residence" edge ID in the mutation.
@@ -5253,7 +5287,7 @@ func (m *ResidenceHistoryMutation) Fields() []string {
 	if m.operation != nil {
 		fields = append(fields, residencehistory.FieldOperation)
 	}
-	if m.residence != nil {
+	if m.ref != nil {
 		fields = append(fields, residencehistory.FieldRef)
 	}
 	if m.updated_by != nil {

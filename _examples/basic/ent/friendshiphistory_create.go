@@ -258,6 +258,10 @@ func (_c *FriendshipHistoryCreate) createSpec() (*FriendshipHistory, *sqlgraph.C
 		_spec.SetField(friendshiphistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
+	if value, ok := _c.mutation.Ref(); ok {
+		_spec.SetField(friendshiphistory.FieldRef, field.TypeString, value)
+		_node.Ref = value
+	}
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(friendshiphistory.FieldUpdatedBy, field.TypeInt, value)
 		_node.UpdatedBy = &value
@@ -284,7 +288,7 @@ func (_c *FriendshipHistoryCreate) createSpec() (*FriendshipHistory, *sqlgraph.C
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.Ref = nodes[0]
+		_node.friendship_history_friendship = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

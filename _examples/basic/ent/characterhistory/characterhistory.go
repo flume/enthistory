@@ -56,7 +56,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "character" package.
 	CharacterInverseTable = "character"
 	// CharacterColumn is the table column denoting the character relation/edge.
-	CharacterColumn = "ref"
+	CharacterColumn = "character_history_character"
 )
 
 // Columns holds all SQL columns for characterhistory fields.
@@ -78,10 +78,21 @@ var Columns = []string{
 	FieldSpecies,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "character_history"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"character_history_character",
+}
+
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
