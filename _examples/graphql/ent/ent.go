@@ -8,6 +8,8 @@ import (
 	"_examples/graphql/ent/testskiphistory"
 	"_examples/graphql/ent/todo"
 	"_examples/graphql/ent/todohistory"
+	"_examples/graphql/ent/user"
+	"_examples/graphql/ent/userhistory"
 	"context"
 	"errors"
 	"fmt"
@@ -82,6 +84,8 @@ func checkColumn(t, c string) error {
 			testskiphistory.Table: testskiphistory.ValidColumn,
 			todo.Table:            todo.ValidColumn,
 			todohistory.Table:     todohistory.ValidColumn,
+			user.Table:            user.ValidColumn,
+			userhistory.Table:     userhistory.ValidColumn,
 		})
 	})
 	return columnCheck(t, c)

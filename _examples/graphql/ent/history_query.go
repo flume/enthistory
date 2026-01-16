@@ -9,6 +9,7 @@ import (
 
 	"_examples/graphql/ent/testskiphistory"
 	"_examples/graphql/ent/todohistory"
+	"_examples/graphql/ent/userhistory"
 
 	"entgo.io/ent/dialect/sql"
 )
@@ -120,5 +121,60 @@ func (_m *TodoHistory) Restore(ctx context.Context) (*Todo, error) {
 		UpdateOneID(_m.Ref).
 		SetOtherID(_m.OtherID).
 		SetName(_m.Name).
+		Save(ctx)
+}
+
+func (_m *User) History() *UserHistoryQuery {
+	historyClient := NewUserHistoryClient(_m.config)
+	return historyClient.Query().Where(userhistory.Ref(_m.ID))
+}
+
+func (_m *UserHistory) Next(ctx context.Context) (*UserHistory, error) {
+	client := NewUserHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			userhistory.Ref(_m.Ref),
+			userhistory.HistoryTimeGT(_m.HistoryTime),
+		).
+		Order(userhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (_m *UserHistory) Prev(ctx context.Context) (*UserHistory, error) {
+	client := NewUserHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			userhistory.Ref(_m.Ref),
+			userhistory.HistoryTimeLT(_m.HistoryTime),
+		).
+		Order(userhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (uhq *UserHistoryQuery) Earliest(ctx context.Context) (*UserHistory, error) {
+	return uhq.
+		Order(userhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (uhq *UserHistoryQuery) Latest(ctx context.Context) (*UserHistory, error) {
+	return uhq.
+		Order(userhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (uhq *UserHistoryQuery) AsOf(ctx context.Context, time time.Time) (*UserHistory, error) {
+	return uhq.
+		Where(userhistory.HistoryTimeLTE(time)).
+		Order(userhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (_m *UserHistory) Restore(ctx context.Context) (*User, error) {
+	client := NewUserClient(_m.config)
+	return client.
+		UpdateOneID(_m.Ref).
+		SetName(_m.Name).
+		SetEmail(_m.Email).
 		Save(ctx)
 }

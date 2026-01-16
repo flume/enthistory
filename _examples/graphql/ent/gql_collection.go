@@ -6,6 +6,8 @@ import (
 	"_examples/graphql/ent/testexclude"
 	"_examples/graphql/ent/todo"
 	"_examples/graphql/ent/todohistory"
+	"_examples/graphql/ent/user"
+	"_examples/graphql/ent/userhistory"
 	"context"
 
 	"entgo.io/contrib/entgql"
@@ -310,6 +312,170 @@ func newTodoHistoryPaginateArgs(rv map[string]any) *todohistoryPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*TodoHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithTodoHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *UserQuery) CollectFields(ctx context.Context, satisfies ...string) (*UserQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(user.Columns))
+		selectedFields = []string{user.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "name":
+			if _, ok := fieldSeen[user.FieldName]; !ok {
+				selectedFields = append(selectedFields, user.FieldName)
+				fieldSeen[user.FieldName] = struct{}{}
+			}
+		case "email":
+			if _, ok := fieldSeen[user.FieldEmail]; !ok {
+				selectedFields = append(selectedFields, user.FieldEmail)
+				fieldSeen[user.FieldEmail] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type userPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []UserPaginateOption
+}
+
+func newUserPaginateArgs(rv map[string]any) *userPaginateArgs {
+	args := &userPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*UserWhereInput); ok {
+		args.opts = append(args.opts, WithUserFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *UserHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*UserHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *UserHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(userhistory.Columns))
+		selectedFields = []string{userhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[userhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, userhistory.FieldHistoryTime)
+				fieldSeen[userhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[userhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, userhistory.FieldOperation)
+				fieldSeen[userhistory.FieldOperation] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[userhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, userhistory.FieldRef)
+				fieldSeen[userhistory.FieldRef] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[userhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, userhistory.FieldUpdatedBy)
+				fieldSeen[userhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[userhistory.FieldName]; !ok {
+				selectedFields = append(selectedFields, userhistory.FieldName)
+				fieldSeen[userhistory.FieldName] = struct{}{}
+			}
+		case "email":
+			if _, ok := fieldSeen[userhistory.FieldEmail]; !ok {
+				selectedFields = append(selectedFields, userhistory.FieldEmail)
+				fieldSeen[userhistory.FieldEmail] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type userhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []UserHistoryPaginateOption
+}
+
+func newUserHistoryPaginateArgs(rv map[string]any) *userhistoryPaginateArgs {
+	args := &userhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*UserHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithUserHistoryFilter(v.Filter))
 	}
 	return args
 }

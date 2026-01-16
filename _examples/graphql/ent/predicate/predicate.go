@@ -20,3 +20,9 @@ type Todo func(*sql.Selector)
 
 // TodoHistory is the predicate function for todohistory builders.
 type TodoHistory func(*sql.Selector)
+
+// User is the predicate function for user builders.
+type User func(*sql.Selector)
+
+// UserHistory is the predicate function for userhistory builders.
+type UserHistory func(*sql.Selector)
