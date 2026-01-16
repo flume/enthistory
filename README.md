@@ -44,6 +44,8 @@ func main() {
 		enthistory.WithImmutableFields(),
 		// Without this line, all triggers will be used as the default
 		enthistory.WithTriggers(enthistory.OpTypeInsert),
+		// Enable reverse edges from history to original entities
+		enthistory.WithReverseEdge(),
 	); err != nil {
 		log.Fatal(fmt.Sprintf("running enthistory codegen: %v", err))
 	}
@@ -53,7 +55,11 @@ func main() {
 			Features: []gen.Feature{gen.FeatureSnapshot},
 		},
 		entc.Extensions(
-			enthistory.NewHistoryExtension(enthistory.WithAuditing()),
+			enthistory.NewHistoryExtension(
+				enthistory.WithAuditing(),
+				// Required when using WithReverseEdge() above
+				enthistory.WithReverseEdgeExtension(),
+			),
 		),
 	); err != nil {
 		log.Fatal("running ent codegen:", err)
@@ -258,7 +264,42 @@ enthistory.WithUpdatedBy("userId", enthistory.ValueTypeUUID)
 enthistory.WithUpdatedBy("userEmail", enthistory.ValueTypeString)
 ```
 
-## Extenstion Configuration Options
+### Reverse Edge
+
+By default, history tables do not have an edge back to the original entity. If you want to traverse from a history
+record back to its original entity, you can enable reverse edges using the `enthistory.WithReverseEdge()` option in the
+`Generate()` function.
+
+```go
+enthistory.Generate("./schema", []ent.Interface{
+    schema.Character{},
+},
+    enthistory.WithReverseEdge(),
+)
+```
+
+When enabled, history schemas will include an edge pointing back to the original entity. For example, `CharacterHistory`
+will have a `character` edge that allows queries like:
+
+```go
+// Get a history record
+historyRecord, _ := character.History().Earliest(ctx)
+
+// Traverse from history back to the original character
+originalCharacter, _ := historyRecord.QueryCharacter().Only(ctx)
+
+// Or use eager loading
+historyRecords, _ := client.CharacterHistory.Query().
+    Where(characterhistory.RefEQ(characterID)).
+    WithCharacter().
+    All(ctx)
+```
+
+**Note:** This option must be used together with `enthistory.WithReverseEdgeExtension()` in the extension configuration
+to fully enable the feature. The reverse edge uses `ON DELETE SET NULL` semantics, so querying the edge for a deleted
+entity will return a "not found" error.
+
+## Extension Configuration Options
 
 ### Auditing
 
@@ -267,6 +308,24 @@ initializing the extension.
 
 For a complete example of using a custom schema path, refer to the [custompaths](./_examples/custompaths/ent/entc.go)
 example.
+
+### Reverse Edge Extension
+
+To enable reverse edges from history tables back to their original entities, you must use
+`enthistory.WithReverseEdgeExtension()` when initializing the extension. This works together with
+`enthistory.WithReverseEdge()` in the schema generation to populate the foreign key when creating history records.
+
+```go
+entc.Extensions(
+    enthistory.NewHistoryExtension(
+        enthistory.WithReverseEdgeExtension(),
+    ),
+)
+```
+
+When both options are enabled together, history records will automatically have their reverse edge foreign key populated
+during create, update, and delete operations. This allows you to traverse from any history record back to the original
+entity using the generated query methods (e.g., `QueryCharacter()`, `WithCharacter()`).
 
 ## Caveats
 
