@@ -20,6 +20,7 @@ func main() {
 	err := enthistory.Generate("./ent/schema", []ent.Interface{
 		schema.TestSkip{},
 		schema.Todo{},
+		schema.User{},
 	},
 		enthistory.WithUpdatedBy("userId", enthistory.ValueTypeUUID),
 		enthistory.WithInheritIdType(),

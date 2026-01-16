@@ -77,6 +77,34 @@ var (
 		Columns:    TodoHistoryColumns,
 		PrimaryKey: []*schema.Column{TodoHistoryColumns[0]},
 	}
+	// UsersColumns holds the columns for the "users" table.
+	UsersColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "name", Type: field.TypeString},
+		{Name: "email", Type: field.TypeString, Nullable: true},
+	}
+	// UsersTable holds the schema information for the "users" table.
+	UsersTable = &schema.Table{
+		Name:       "users",
+		Columns:    UsersColumns,
+		PrimaryKey: []*schema.Column{UsersColumns[0]},
+	}
+	// UserHistoryColumns holds the columns for the "user_history" table.
+	UserHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "ref", Type: field.TypeUUID, Nullable: true},
+		{Name: "updated_by", Type: field.TypeUUID, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "email", Type: field.TypeString, Nullable: true},
+	}
+	// UserHistoryTable holds the schema information for the "user_history" table.
+	UserHistoryTable = &schema.Table{
+		Name:       "user_history",
+		Columns:    UserHistoryColumns,
+		PrimaryKey: []*schema.Column{UserHistoryColumns[0]},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		TestExcludeTable,
@@ -84,6 +112,8 @@ var (
 		TestskipHistoryTable,
 		TodosTable,
 		TodoHistoryTable,
+		UsersTable,
+		UserHistoryTable,
 	}
 )
 
@@ -99,5 +129,11 @@ func init() {
 	}
 	TodoHistoryTable.Annotation = &entsql.Annotation{
 		Table: "todo_history",
+	}
+	UsersTable.Annotation = &entsql.Annotation{
+		Table: "users",
+	}
+	UserHistoryTable.Annotation = &entsql.Annotation{
+		Table: "user_history",
 	}
 }

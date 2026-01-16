@@ -22,6 +22,10 @@ type Tx struct {
 	Todo *TodoClient
 	// TodoHistory is the client for interacting with the TodoHistory builders.
 	TodoHistory *TodoHistoryClient
+	// User is the client for interacting with the User builders.
+	User *UserClient
+	// UserHistory is the client for interacting with the UserHistory builders.
+	UserHistory *UserHistoryClient
 
 	// lazily loaded.
 	client     *Client
@@ -158,6 +162,8 @@ func (tx *Tx) init() {
 	tx.TestSkipHistory = NewTestSkipHistoryClient(tx.config)
 	tx.Todo = NewTodoClient(tx.config)
 	tx.TodoHistory = NewTodoHistoryClient(tx.config)
+	tx.User = NewUserClient(tx.config)
+	tx.UserHistory = NewUserHistoryClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.
