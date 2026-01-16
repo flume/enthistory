@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/basic/ent/character"
 	"_examples/basic/ent/characterhistory"
 	"_examples/basic/ent/predicate"
 	"context"
@@ -18,10 +19,11 @@ import (
 // CharacterHistoryQuery is the builder for querying CharacterHistory entities.
 type CharacterHistoryQuery struct {
 	config
-	ctx        *QueryContext
-	order      []characterhistory.OrderOption
-	inters     []Interceptor
-	predicates []predicate.CharacterHistory
+	ctx           *QueryContext
+	order         []characterhistory.OrderOption
+	inters        []Interceptor
+	predicates    []predicate.CharacterHistory
+	withCharacter *CharacterQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -56,6 +58,28 @@ func (_q *CharacterHistoryQuery) Unique(unique bool) *CharacterHistoryQuery {
 func (_q *CharacterHistoryQuery) Order(o ...characterhistory.OrderOption) *CharacterHistoryQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryCharacter chains the current query on the "character" edge.
+func (_q *CharacterHistoryQuery) QueryCharacter() *CharacterQuery {
+	query := (&CharacterClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(characterhistory.Table, characterhistory.FieldID, selector),
+			sqlgraph.To(character.Table, character.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, characterhistory.CharacterTable, characterhistory.CharacterColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first CharacterHistory entity from the query.
@@ -245,15 +269,27 @@ func (_q *CharacterHistoryQuery) Clone() *CharacterHistoryQuery {
 		return nil
 	}
 	return &CharacterHistoryQuery{
-		config:     _q.config,
-		ctx:        _q.ctx.Clone(),
-		order:      append([]characterhistory.OrderOption{}, _q.order...),
-		inters:     append([]Interceptor{}, _q.inters...),
-		predicates: append([]predicate.CharacterHistory{}, _q.predicates...),
+		config:        _q.config,
+		ctx:           _q.ctx.Clone(),
+		order:         append([]characterhistory.OrderOption{}, _q.order...),
+		inters:        append([]Interceptor{}, _q.inters...),
+		predicates:    append([]predicate.CharacterHistory{}, _q.predicates...),
+		withCharacter: _q.withCharacter.Clone(),
 		// clone intermediate query.
 		sql:  _q.sql.Clone(),
 		path: _q.path,
 	}
+}
+
+// WithCharacter tells the query-builder to eager-load the nodes that are connected to
+// the "character" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *CharacterHistoryQuery) WithCharacter(opts ...func(*CharacterQuery)) *CharacterHistoryQuery {
+	query := (&CharacterClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCharacter = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -332,8 +368,11 @@ func (_q *CharacterHistoryQuery) prepareQuery(ctx context.Context) error {
 
 func (_q *CharacterHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*CharacterHistory, error) {
 	var (
-		nodes = []*CharacterHistory{}
-		_spec = _q.querySpec()
+		nodes       = []*CharacterHistory{}
+		_spec       = _q.querySpec()
+		loadedTypes = [1]bool{
+			_q.withCharacter != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*CharacterHistory).scanValues(nil, columns)
@@ -341,6 +380,7 @@ func (_q *CharacterHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &CharacterHistory{config: _q.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -352,7 +392,43 @@ func (_q *CharacterHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := _q.withCharacter; query != nil {
+		if err := _q.loadCharacter(ctx, query, nodes, nil,
+			func(n *CharacterHistory, e *Character) { n.Edges.Character = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (_q *CharacterHistoryQuery) loadCharacter(ctx context.Context, query *CharacterQuery, nodes []*CharacterHistory, init func(*CharacterHistory), assign func(*CharacterHistory, *Character)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*CharacterHistory)
+	for i := range nodes {
+		fk := nodes[i].Ref
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(character.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "ref" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (_q *CharacterHistoryQuery) sqlCount(ctx context.Context) (int, error) {
@@ -379,6 +455,9 @@ func (_q *CharacterHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != characterhistory.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if _q.withCharacter != nil {
+			_spec.Node.AddColumnOnce(characterhistory.FieldRef)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

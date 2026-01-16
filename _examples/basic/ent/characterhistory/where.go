@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 
 	"github.com/flume/enthistory"
 )
@@ -267,26 +268,6 @@ func RefIn(vs ...int) predicate.CharacterHistory {
 // RefNotIn applies the NotIn predicate on the "ref" field.
 func RefNotIn(vs ...int) predicate.CharacterHistory {
 	return predicate.CharacterHistory(sql.FieldNotIn(FieldRef, vs...))
-}
-
-// RefGT applies the GT predicate on the "ref" field.
-func RefGT(v int) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldGT(FieldRef, v))
-}
-
-// RefGTE applies the GTE predicate on the "ref" field.
-func RefGTE(v int) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldGTE(FieldRef, v))
-}
-
-// RefLT applies the LT predicate on the "ref" field.
-func RefLT(v int) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldLT(FieldRef, v))
-}
-
-// RefLTE applies the LTE predicate on the "ref" field.
-func RefLTE(v int) predicate.CharacterHistory {
-	return predicate.CharacterHistory(sql.FieldLTE(FieldRef, v))
 }
 
 // RefIsNil applies the IsNil predicate on the "ref" field.
@@ -680,6 +661,29 @@ func SpeciesEqualFold(v models.SpeciesType) predicate.CharacterHistory {
 func SpeciesContainsFold(v models.SpeciesType) predicate.CharacterHistory {
 	vc := string(v)
 	return predicate.CharacterHistory(sql.FieldContainsFold(FieldSpecies, vc))
+}
+
+// HasCharacter applies the HasEdge predicate on the "character" edge.
+func HasCharacter() predicate.CharacterHistory {
+	return predicate.CharacterHistory(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, CharacterTable, CharacterColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCharacterWith applies the HasEdge predicate on the "character" edge with a given conditions (other predicates).
+func HasCharacterWith(preds ...predicate.Character) predicate.CharacterHistory {
+	return predicate.CharacterHistory(func(s *sql.Selector) {
+		step := newCharacterStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

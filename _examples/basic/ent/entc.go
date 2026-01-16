@@ -25,6 +25,7 @@ func main() {
 		enthistory.WithUpdatedBy("userId", enthistory.ValueTypeInt),
 		enthistory.WithHistoryTimeIndex(),
 		enthistory.WithImmutableFields(),
+		enthistory.WithReverseEdge(),
 	); err != nil {
 		log.Fatal(fmt.Sprintf("running enthistory codegen: %v", err))
 	}

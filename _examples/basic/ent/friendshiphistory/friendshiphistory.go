@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 
 	"github.com/flume/enthistory"
 )
@@ -32,8 +33,17 @@ const (
 	FieldCharacterID = "character_id"
 	// FieldFriendID holds the string denoting the friend_id field in the database.
 	FieldFriendID = "friend_id"
+	// EdgeFriendship holds the string denoting the friendship edge name in mutations.
+	EdgeFriendship = "friendship"
 	// Table holds the table name of the friendshiphistory in the database.
 	Table = "friendship_history"
+	// FriendshipTable is the table that holds the friendship relation/edge.
+	FriendshipTable = "friendship_history"
+	// FriendshipInverseTable is the table name for the Friendship entity.
+	// It exists in this package in order to avoid circular dependency with the "friendship" package.
+	FriendshipInverseTable = "friendship"
+	// FriendshipColumn is the table column denoting the friendship relation/edge.
+	FriendshipColumn = "ref"
 )
 
 // Columns holds all SQL columns for friendshiphistory fields.
@@ -126,4 +136,18 @@ func ByCharacterID(opts ...sql.OrderTermOption) OrderOption {
 // ByFriendID orders the results by the friend_id field.
 func ByFriendID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFriendID, opts...).ToFunc()
+}
+
+// ByFriendshipField orders the results by friendship field.
+func ByFriendshipField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFriendshipStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newFriendshipStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FriendshipInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, FriendshipTable, FriendshipColumn),
+	)
 }

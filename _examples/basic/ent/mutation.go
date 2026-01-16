@@ -1309,33 +1309,33 @@ func (m *CharacterMutation) ResetEdge(name string) error {
 // CharacterHistoryMutation represents an operation that mutates the CharacterHistory nodes in the graph.
 type CharacterHistoryMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *int
-	created_at      *time.Time
-	updated_at      *time.Time
-	history_time    *time.Time
-	operation       *enthistory.OpType
-	ref             *int
-	addref          *int
-	updated_by      *int
-	addupdated_by   *int
-	age             *int
-	addage          *int
-	typed_age       *models.Uint64
-	addtyped_age    *models.Uint64
-	name            *string
-	nicknames       *[]string
-	appendnicknames []string
-	info            *map[string]interface{}
-	info_struct     *models.InfoStruct
-	level           *int
-	addlevel        *int
-	species         *models.SpeciesType
-	clearedFields   map[string]struct{}
-	done            bool
-	oldValue        func(context.Context) (*CharacterHistory, error)
-	predicates      []predicate.CharacterHistory
+	op               Op
+	typ              string
+	id               *int
+	created_at       *time.Time
+	updated_at       *time.Time
+	history_time     *time.Time
+	operation        *enthistory.OpType
+	updated_by       *int
+	addupdated_by    *int
+	age              *int
+	addage           *int
+	typed_age        *models.Uint64
+	addtyped_age     *models.Uint64
+	name             *string
+	nicknames        *[]string
+	appendnicknames  []string
+	info             *map[string]interface{}
+	info_struct      *models.InfoStruct
+	level            *int
+	addlevel         *int
+	species          *models.SpeciesType
+	clearedFields    map[string]struct{}
+	character        *int
+	clearedcharacter bool
+	done             bool
+	oldValue         func(context.Context) (*CharacterHistory, error)
+	predicates       []predicate.CharacterHistory
 }
 
 var _ ent.Mutation = (*CharacterHistoryMutation)(nil)
@@ -1582,13 +1582,12 @@ func (m *CharacterHistoryMutation) ResetOperation() {
 
 // SetRef sets the "ref" field.
 func (m *CharacterHistoryMutation) SetRef(i int) {
-	m.ref = &i
-	m.addref = nil
+	m.character = &i
 }
 
 // Ref returns the value of the "ref" field in the mutation.
 func (m *CharacterHistoryMutation) Ref() (r int, exists bool) {
-	v := m.ref
+	v := m.character
 	if v == nil {
 		return
 	}
@@ -1612,28 +1611,9 @@ func (m *CharacterHistoryMutation) OldRef(ctx context.Context) (v int, err error
 	return oldValue.Ref, nil
 }
 
-// AddRef adds i to the "ref" field.
-func (m *CharacterHistoryMutation) AddRef(i int) {
-	if m.addref != nil {
-		*m.addref += i
-	} else {
-		m.addref = &i
-	}
-}
-
-// AddedRef returns the value that was added to the "ref" field in this mutation.
-func (m *CharacterHistoryMutation) AddedRef() (r int, exists bool) {
-	v := m.addref
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
 // ClearRef clears the value of the "ref" field.
 func (m *CharacterHistoryMutation) ClearRef() {
-	m.ref = nil
-	m.addref = nil
+	m.character = nil
 	m.clearedFields[characterhistory.FieldRef] = struct{}{}
 }
 
@@ -1645,8 +1625,7 @@ func (m *CharacterHistoryMutation) RefCleared() bool {
 
 // ResetRef resets all changes to the "ref" field.
 func (m *CharacterHistoryMutation) ResetRef() {
-	m.ref = nil
-	m.addref = nil
+	m.character = nil
 	delete(m.clearedFields, characterhistory.FieldRef)
 }
 
@@ -2150,6 +2129,46 @@ func (m *CharacterHistoryMutation) ResetSpecies() {
 	delete(m.clearedFields, characterhistory.FieldSpecies)
 }
 
+// SetCharacterID sets the "character" edge to the Character entity by id.
+func (m *CharacterHistoryMutation) SetCharacterID(id int) {
+	m.character = &id
+}
+
+// ClearCharacter clears the "character" edge to the Character entity.
+func (m *CharacterHistoryMutation) ClearCharacter() {
+	m.clearedcharacter = true
+	m.clearedFields[characterhistory.FieldRef] = struct{}{}
+}
+
+// CharacterCleared reports if the "character" edge to the Character entity was cleared.
+func (m *CharacterHistoryMutation) CharacterCleared() bool {
+	return m.RefCleared() || m.clearedcharacter
+}
+
+// CharacterID returns the "character" edge ID in the mutation.
+func (m *CharacterHistoryMutation) CharacterID() (id int, exists bool) {
+	if m.character != nil {
+		return *m.character, true
+	}
+	return
+}
+
+// CharacterIDs returns the "character" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// CharacterID instead. It exists only for internal usage by the builders.
+func (m *CharacterHistoryMutation) CharacterIDs() (ids []int) {
+	if id := m.character; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetCharacter resets all changes to the "character" edge.
+func (m *CharacterHistoryMutation) ResetCharacter() {
+	m.character = nil
+	m.clearedcharacter = false
+}
+
 // Where appends a list predicates to the CharacterHistoryMutation builder.
 func (m *CharacterHistoryMutation) Where(ps ...predicate.CharacterHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -2197,7 +2216,7 @@ func (m *CharacterHistoryMutation) Fields() []string {
 	if m.operation != nil {
 		fields = append(fields, characterhistory.FieldOperation)
 	}
-	if m.ref != nil {
+	if m.character != nil {
 		fields = append(fields, characterhistory.FieldRef)
 	}
 	if m.updated_by != nil {
@@ -2415,9 +2434,6 @@ func (m *CharacterHistoryMutation) SetField(name string, value ent.Value) error 
 // this mutation.
 func (m *CharacterHistoryMutation) AddedFields() []string {
 	var fields []string
-	if m.addref != nil {
-		fields = append(fields, characterhistory.FieldRef)
-	}
 	if m.addupdated_by != nil {
 		fields = append(fields, characterhistory.FieldUpdatedBy)
 	}
@@ -2438,8 +2454,6 @@ func (m *CharacterHistoryMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *CharacterHistoryMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case characterhistory.FieldRef:
-		return m.AddedRef()
 	case characterhistory.FieldUpdatedBy:
 		return m.AddedUpdatedBy()
 	case characterhistory.FieldAge:
@@ -2457,13 +2471,6 @@ func (m *CharacterHistoryMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *CharacterHistoryMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case characterhistory.FieldRef:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddRef(v)
-		return nil
 	case characterhistory.FieldUpdatedBy:
 		v, ok := value.(int)
 		if !ok {
@@ -2612,19 +2619,28 @@ func (m *CharacterHistoryMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *CharacterHistoryMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.character != nil {
+		edges = append(edges, characterhistory.EdgeCharacter)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *CharacterHistoryMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case characterhistory.EdgeCharacter:
+		if id := m.character; id != nil {
+			return []ent.Value{*id}
+		}
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *CharacterHistoryMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
 	return edges
 }
 
@@ -2636,25 +2652,42 @@ func (m *CharacterHistoryMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *CharacterHistoryMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedcharacter {
+		edges = append(edges, characterhistory.EdgeCharacter)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *CharacterHistoryMutation) EdgeCleared(name string) bool {
+	switch name {
+	case characterhistory.EdgeCharacter:
+		return m.clearedcharacter
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *CharacterHistoryMutation) ClearEdge(name string) error {
+	switch name {
+	case characterhistory.EdgeCharacter:
+		m.ClearCharacter()
+		return nil
+	}
 	return fmt.Errorf("unknown CharacterHistory unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *CharacterHistoryMutation) ResetEdge(name string) error {
+	switch name {
+	case characterhistory.EdgeCharacter:
+		m.ResetCharacter()
+		return nil
+	}
 	return fmt.Errorf("unknown CharacterHistory edge %s", name)
 }
 
@@ -3258,24 +3291,25 @@ func (m *FriendshipMutation) ResetEdge(name string) error {
 // FriendshipHistoryMutation represents an operation that mutates the FriendshipHistory nodes in the graph.
 type FriendshipHistoryMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *int
-	created_at      *time.Time
-	updated_at      *time.Time
-	history_time    *time.Time
-	operation       *enthistory.OpType
-	ref             *string
-	updated_by      *int
-	addupdated_by   *int
-	character_id    *int
-	addcharacter_id *int
-	friend_id       *int
-	addfriend_id    *int
-	clearedFields   map[string]struct{}
-	done            bool
-	oldValue        func(context.Context) (*FriendshipHistory, error)
-	predicates      []predicate.FriendshipHistory
+	op                Op
+	typ               string
+	id                *int
+	created_at        *time.Time
+	updated_at        *time.Time
+	history_time      *time.Time
+	operation         *enthistory.OpType
+	updated_by        *int
+	addupdated_by     *int
+	character_id      *int
+	addcharacter_id   *int
+	friend_id         *int
+	addfriend_id      *int
+	clearedFields     map[string]struct{}
+	friendship        *string
+	clearedfriendship bool
+	done              bool
+	oldValue          func(context.Context) (*FriendshipHistory, error)
+	predicates        []predicate.FriendshipHistory
 }
 
 var _ ent.Mutation = (*FriendshipHistoryMutation)(nil)
@@ -3528,12 +3562,12 @@ func (m *FriendshipHistoryMutation) ResetOperation() {
 
 // SetRef sets the "ref" field.
 func (m *FriendshipHistoryMutation) SetRef(s string) {
-	m.ref = &s
+	m.friendship = &s
 }
 
 // Ref returns the value of the "ref" field in the mutation.
 func (m *FriendshipHistoryMutation) Ref() (r string, exists bool) {
-	v := m.ref
+	v := m.friendship
 	if v == nil {
 		return
 	}
@@ -3559,7 +3593,7 @@ func (m *FriendshipHistoryMutation) OldRef(ctx context.Context) (v string, err e
 
 // ClearRef clears the value of the "ref" field.
 func (m *FriendshipHistoryMutation) ClearRef() {
-	m.ref = nil
+	m.friendship = nil
 	m.clearedFields[friendshiphistory.FieldRef] = struct{}{}
 }
 
@@ -3571,7 +3605,7 @@ func (m *FriendshipHistoryMutation) RefCleared() bool {
 
 // ResetRef resets all changes to the "ref" field.
 func (m *FriendshipHistoryMutation) ResetRef() {
-	m.ref = nil
+	m.friendship = nil
 	delete(m.clearedFields, friendshiphistory.FieldRef)
 }
 
@@ -3757,6 +3791,46 @@ func (m *FriendshipHistoryMutation) ResetFriendID() {
 	m.addfriend_id = nil
 }
 
+// SetFriendshipID sets the "friendship" edge to the Friendship entity by id.
+func (m *FriendshipHistoryMutation) SetFriendshipID(id string) {
+	m.friendship = &id
+}
+
+// ClearFriendship clears the "friendship" edge to the Friendship entity.
+func (m *FriendshipHistoryMutation) ClearFriendship() {
+	m.clearedfriendship = true
+	m.clearedFields[friendshiphistory.FieldRef] = struct{}{}
+}
+
+// FriendshipCleared reports if the "friendship" edge to the Friendship entity was cleared.
+func (m *FriendshipHistoryMutation) FriendshipCleared() bool {
+	return m.RefCleared() || m.clearedfriendship
+}
+
+// FriendshipID returns the "friendship" edge ID in the mutation.
+func (m *FriendshipHistoryMutation) FriendshipID() (id string, exists bool) {
+	if m.friendship != nil {
+		return *m.friendship, true
+	}
+	return
+}
+
+// FriendshipIDs returns the "friendship" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// FriendshipID instead. It exists only for internal usage by the builders.
+func (m *FriendshipHistoryMutation) FriendshipIDs() (ids []string) {
+	if id := m.friendship; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetFriendship resets all changes to the "friendship" edge.
+func (m *FriendshipHistoryMutation) ResetFriendship() {
+	m.friendship = nil
+	m.clearedfriendship = false
+}
+
 // Where appends a list predicates to the FriendshipHistoryMutation builder.
 func (m *FriendshipHistoryMutation) Where(ps ...predicate.FriendshipHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -3804,7 +3878,7 @@ func (m *FriendshipHistoryMutation) Fields() []string {
 	if m.operation != nil {
 		fields = append(fields, friendshiphistory.FieldOperation)
 	}
-	if m.ref != nil {
+	if m.friendship != nil {
 		fields = append(fields, friendshiphistory.FieldRef)
 	}
 	if m.updated_by != nil {
@@ -4063,19 +4137,28 @@ func (m *FriendshipHistoryMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *FriendshipHistoryMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.friendship != nil {
+		edges = append(edges, friendshiphistory.EdgeFriendship)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *FriendshipHistoryMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case friendshiphistory.EdgeFriendship:
+		if id := m.friendship; id != nil {
+			return []ent.Value{*id}
+		}
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *FriendshipHistoryMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
 	return edges
 }
 
@@ -4087,25 +4170,42 @@ func (m *FriendshipHistoryMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *FriendshipHistoryMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedfriendship {
+		edges = append(edges, friendshiphistory.EdgeFriendship)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *FriendshipHistoryMutation) EdgeCleared(name string) bool {
+	switch name {
+	case friendshiphistory.EdgeFriendship:
+		return m.clearedfriendship
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *FriendshipHistoryMutation) ClearEdge(name string) error {
+	switch name {
+	case friendshiphistory.EdgeFriendship:
+		m.ClearFriendship()
+		return nil
+	}
 	return fmt.Errorf("unknown FriendshipHistory unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *FriendshipHistoryMutation) ResetEdge(name string) error {
+	switch name {
+	case friendshiphistory.EdgeFriendship:
+		m.ResetFriendship()
+		return nil
+	}
 	return fmt.Errorf("unknown FriendshipHistory edge %s", name)
 }
 
@@ -4645,21 +4745,22 @@ func (m *ResidenceMutation) ResetEdge(name string) error {
 // ResidenceHistoryMutation represents an operation that mutates the ResidenceHistory nodes in the graph.
 type ResidenceHistoryMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	created_at    *time.Time
-	updated_at    *time.Time
-	history_time  *time.Time
-	operation     *enthistory.OpType
-	ref           *uuid.UUID
-	updated_by    *int
-	addupdated_by *int
-	name          *string
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*ResidenceHistory, error)
-	predicates    []predicate.ResidenceHistory
+	op               Op
+	typ              string
+	id               *int
+	created_at       *time.Time
+	updated_at       *time.Time
+	history_time     *time.Time
+	operation        *enthistory.OpType
+	updated_by       *int
+	addupdated_by    *int
+	name             *string
+	clearedFields    map[string]struct{}
+	residence        *uuid.UUID
+	clearedresidence bool
+	done             bool
+	oldValue         func(context.Context) (*ResidenceHistory, error)
+	predicates       []predicate.ResidenceHistory
 }
 
 var _ ent.Mutation = (*ResidenceHistoryMutation)(nil)
@@ -4912,12 +5013,12 @@ func (m *ResidenceHistoryMutation) ResetOperation() {
 
 // SetRef sets the "ref" field.
 func (m *ResidenceHistoryMutation) SetRef(u uuid.UUID) {
-	m.ref = &u
+	m.residence = &u
 }
 
 // Ref returns the value of the "ref" field in the mutation.
 func (m *ResidenceHistoryMutation) Ref() (r uuid.UUID, exists bool) {
-	v := m.ref
+	v := m.residence
 	if v == nil {
 		return
 	}
@@ -4943,7 +5044,7 @@ func (m *ResidenceHistoryMutation) OldRef(ctx context.Context) (v uuid.UUID, err
 
 // ClearRef clears the value of the "ref" field.
 func (m *ResidenceHistoryMutation) ClearRef() {
-	m.ref = nil
+	m.residence = nil
 	m.clearedFields[residencehistory.FieldRef] = struct{}{}
 }
 
@@ -4955,7 +5056,7 @@ func (m *ResidenceHistoryMutation) RefCleared() bool {
 
 // ResetRef resets all changes to the "ref" field.
 func (m *ResidenceHistoryMutation) ResetRef() {
-	m.ref = nil
+	m.residence = nil
 	delete(m.clearedFields, residencehistory.FieldRef)
 }
 
@@ -5065,6 +5166,46 @@ func (m *ResidenceHistoryMutation) ResetName() {
 	m.name = nil
 }
 
+// SetResidenceID sets the "residence" edge to the Residence entity by id.
+func (m *ResidenceHistoryMutation) SetResidenceID(id uuid.UUID) {
+	m.residence = &id
+}
+
+// ClearResidence clears the "residence" edge to the Residence entity.
+func (m *ResidenceHistoryMutation) ClearResidence() {
+	m.clearedresidence = true
+	m.clearedFields[residencehistory.FieldRef] = struct{}{}
+}
+
+// ResidenceCleared reports if the "residence" edge to the Residence entity was cleared.
+func (m *ResidenceHistoryMutation) ResidenceCleared() bool {
+	return m.RefCleared() || m.clearedresidence
+}
+
+// ResidenceID returns the "residence" edge ID in the mutation.
+func (m *ResidenceHistoryMutation) ResidenceID() (id uuid.UUID, exists bool) {
+	if m.residence != nil {
+		return *m.residence, true
+	}
+	return
+}
+
+// ResidenceIDs returns the "residence" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ResidenceID instead. It exists only for internal usage by the builders.
+func (m *ResidenceHistoryMutation) ResidenceIDs() (ids []uuid.UUID) {
+	if id := m.residence; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetResidence resets all changes to the "residence" edge.
+func (m *ResidenceHistoryMutation) ResetResidence() {
+	m.residence = nil
+	m.clearedresidence = false
+}
+
 // Where appends a list predicates to the ResidenceHistoryMutation builder.
 func (m *ResidenceHistoryMutation) Where(ps ...predicate.ResidenceHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -5112,7 +5253,7 @@ func (m *ResidenceHistoryMutation) Fields() []string {
 	if m.operation != nil {
 		fields = append(fields, residencehistory.FieldOperation)
 	}
-	if m.ref != nil {
+	if m.residence != nil {
 		fields = append(fields, residencehistory.FieldRef)
 	}
 	if m.updated_by != nil {
@@ -5330,19 +5471,28 @@ func (m *ResidenceHistoryMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ResidenceHistoryMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.residence != nil {
+		edges = append(edges, residencehistory.EdgeResidence)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *ResidenceHistoryMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case residencehistory.EdgeResidence:
+		if id := m.residence; id != nil {
+			return []ent.Value{*id}
+		}
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ResidenceHistoryMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
 	return edges
 }
 
@@ -5354,24 +5504,41 @@ func (m *ResidenceHistoryMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ResidenceHistoryMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedresidence {
+		edges = append(edges, residencehistory.EdgeResidence)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *ResidenceHistoryMutation) EdgeCleared(name string) bool {
+	switch name {
+	case residencehistory.EdgeResidence:
+		return m.clearedresidence
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *ResidenceHistoryMutation) ClearEdge(name string) error {
+	switch name {
+	case residencehistory.EdgeResidence:
+		m.ClearResidence()
+		return nil
+	}
 	return fmt.Errorf("unknown ResidenceHistory unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *ResidenceHistoryMutation) ResetEdge(name string) error {
+	switch name {
+	case residencehistory.EdgeResidence:
+		m.ResetResidence()
+		return nil
+	}
 	return fmt.Errorf("unknown ResidenceHistory edge %s", name)
 }

@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/basic/ent/character"
 	"_examples/basic/ent/characterhistory"
 	"_examples/basic/ent/schema/models"
 	"encoding/json"
@@ -48,8 +49,31 @@ type CharacterHistory struct {
 	// Level holds the value of the "level" field.
 	Level *int `json:"level,omitempty"`
 	// Species holds the value of the "species" field.
-	Species      models.SpeciesType `json:"species,omitempty"`
+	Species models.SpeciesType `json:"species,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the CharacterHistoryQuery when eager-loading is set.
+	Edges        CharacterHistoryEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// CharacterHistoryEdges holds the relations/edges for other nodes in the graph.
+type CharacterHistoryEdges struct {
+	// Character holds the value of the character edge.
+	Character *Character `json:"character,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// CharacterOrErr returns the Character value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e CharacterHistoryEdges) CharacterOrErr() (*Character, error) {
+	if e.Character != nil {
+		return e.Character, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: character.Label}
+	}
+	return nil, &NotLoadedError{edge: "character"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -189,6 +213,11 @@ func (_m *CharacterHistory) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *CharacterHistory) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryCharacter queries the "character" edge of the CharacterHistory entity.
+func (_m *CharacterHistory) QueryCharacter() *CharacterQuery {
+	return NewCharacterHistoryClient(_m.config).QueryCharacter(_m)
 }
 
 // Update returns a builder for updating this CharacterHistory.

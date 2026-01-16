@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/basic/ent/friendship"
 	"_examples/basic/ent/friendshiphistory"
 	"context"
 	"errors"
@@ -114,6 +115,25 @@ func (_c *FriendshipHistoryCreate) SetFriendID(v int) *FriendshipHistoryCreate {
 func (_c *FriendshipHistoryCreate) SetID(v int) *FriendshipHistoryCreate {
 	_c.mutation.SetID(v)
 	return _c
+}
+
+// SetFriendshipID sets the "friendship" edge to the Friendship entity by ID.
+func (_c *FriendshipHistoryCreate) SetFriendshipID(id string) *FriendshipHistoryCreate {
+	_c.mutation.SetFriendshipID(id)
+	return _c
+}
+
+// SetNillableFriendshipID sets the "friendship" edge to the Friendship entity by ID if the given value is not nil.
+func (_c *FriendshipHistoryCreate) SetNillableFriendshipID(id *string) *FriendshipHistoryCreate {
+	if id != nil {
+		_c = _c.SetFriendshipID(*id)
+	}
+	return _c
+}
+
+// SetFriendship sets the "friendship" edge to the Friendship entity.
+func (_c *FriendshipHistoryCreate) SetFriendship(v *Friendship) *FriendshipHistoryCreate {
+	return _c.SetFriendshipID(v.ID)
 }
 
 // Mutation returns the FriendshipHistoryMutation object of the builder.
@@ -238,10 +258,6 @@ func (_c *FriendshipHistoryCreate) createSpec() (*FriendshipHistory, *sqlgraph.C
 		_spec.SetField(friendshiphistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := _c.mutation.Ref(); ok {
-		_spec.SetField(friendshiphistory.FieldRef, field.TypeString, value)
-		_node.Ref = value
-	}
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(friendshiphistory.FieldUpdatedBy, field.TypeInt, value)
 		_node.UpdatedBy = &value
@@ -253,6 +269,23 @@ func (_c *FriendshipHistoryCreate) createSpec() (*FriendshipHistory, *sqlgraph.C
 	if value, ok := _c.mutation.FriendID(); ok {
 		_spec.SetField(friendshiphistory.FieldFriendID, field.TypeInt, value)
 		_node.FriendID = value
+	}
+	if nodes := _c.mutation.FriendshipIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   friendshiphistory.FriendshipTable,
+			Columns: []string{friendshiphistory.FriendshipColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(friendship.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.Ref = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

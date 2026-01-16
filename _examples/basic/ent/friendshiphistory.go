@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/basic/ent/friendship"
 	"_examples/basic/ent/friendshiphistory"
 	"fmt"
 	"strings"
@@ -34,8 +35,31 @@ type FriendshipHistory struct {
 	// CharacterID holds the value of the "character_id" field.
 	CharacterID int `json:"character_id,omitempty"`
 	// FriendID holds the value of the "friend_id" field.
-	FriendID     int `json:"friend_id,omitempty"`
+	FriendID int `json:"friend_id,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the FriendshipHistoryQuery when eager-loading is set.
+	Edges        FriendshipHistoryEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// FriendshipHistoryEdges holds the relations/edges for other nodes in the graph.
+type FriendshipHistoryEdges struct {
+	// Friendship holds the value of the friendship edge.
+	Friendship *Friendship `json:"friendship,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// FriendshipOrErr returns the Friendship value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e FriendshipHistoryEdges) FriendshipOrErr() (*Friendship, error) {
+	if e.Friendship != nil {
+		return e.Friendship, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: friendship.Label}
+	}
+	return nil, &NotLoadedError{edge: "friendship"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -130,6 +154,11 @@ func (_m *FriendshipHistory) assignValues(columns []string, values []any) error 
 // This includes values selected through modifiers, order, etc.
 func (_m *FriendshipHistory) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryFriendship queries the "friendship" edge of the FriendshipHistory entity.
+func (_m *FriendshipHistory) QueryFriendship() *FriendshipQuery {
+	return NewFriendshipHistoryClient(_m.config).QueryFriendship(_m)
 }
 
 // Update returns a builder for updating this FriendshipHistory.

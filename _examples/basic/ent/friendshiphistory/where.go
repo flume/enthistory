@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 
 	"github.com/flume/enthistory"
 )
@@ -434,6 +435,29 @@ func FriendIDLT(v int) predicate.FriendshipHistory {
 // FriendIDLTE applies the LTE predicate on the "friend_id" field.
 func FriendIDLTE(v int) predicate.FriendshipHistory {
 	return predicate.FriendshipHistory(sql.FieldLTE(FieldFriendID, v))
+}
+
+// HasFriendship applies the HasEdge predicate on the "friendship" edge.
+func HasFriendship() predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, FriendshipTable, FriendshipColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFriendshipWith applies the HasEdge predicate on the "friendship" edge with a given conditions (other predicates).
+func HasFriendshipWith(preds ...predicate.Friendship) predicate.FriendshipHistory {
+	return predicate.FriendshipHistory(func(s *sql.Selector) {
+		step := newFriendshipStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

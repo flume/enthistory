@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
@@ -247,26 +248,6 @@ func RefNotIn(vs ...uuid.UUID) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldNotIn(FieldRef, vs...))
 }
 
-// RefGT applies the GT predicate on the "ref" field.
-func RefGT(v uuid.UUID) predicate.ResidenceHistory {
-	return predicate.ResidenceHistory(sql.FieldGT(FieldRef, v))
-}
-
-// RefGTE applies the GTE predicate on the "ref" field.
-func RefGTE(v uuid.UUID) predicate.ResidenceHistory {
-	return predicate.ResidenceHistory(sql.FieldGTE(FieldRef, v))
-}
-
-// RefLT applies the LT predicate on the "ref" field.
-func RefLT(v uuid.UUID) predicate.ResidenceHistory {
-	return predicate.ResidenceHistory(sql.FieldLT(FieldRef, v))
-}
-
-// RefLTE applies the LTE predicate on the "ref" field.
-func RefLTE(v uuid.UUID) predicate.ResidenceHistory {
-	return predicate.ResidenceHistory(sql.FieldLTE(FieldRef, v))
-}
-
 // RefIsNil applies the IsNil predicate on the "ref" field.
 func RefIsNil() predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldIsNull(FieldRef))
@@ -390,6 +371,29 @@ func NameEqualFold(v string) predicate.ResidenceHistory {
 // NameContainsFold applies the ContainsFold predicate on the "name" field.
 func NameContainsFold(v string) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldContainsFold(FieldName, v))
+}
+
+// HasResidence applies the HasEdge predicate on the "residence" edge.
+func HasResidence() predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ResidenceTable, ResidenceColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasResidenceWith applies the HasEdge predicate on the "residence" edge with a given conditions (other predicates).
+func HasResidenceWith(preds ...predicate.Residence) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(func(s *sql.Selector) {
+		step := newResidenceStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

@@ -4,6 +4,7 @@ package ent
 
 import (
 	"_examples/basic/ent/predicate"
+	"_examples/basic/ent/residence"
 	"_examples/basic/ent/residencehistory"
 	"context"
 	"fmt"
@@ -13,15 +14,17 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // ResidenceHistoryQuery is the builder for querying ResidenceHistory entities.
 type ResidenceHistoryQuery struct {
 	config
-	ctx        *QueryContext
-	order      []residencehistory.OrderOption
-	inters     []Interceptor
-	predicates []predicate.ResidenceHistory
+	ctx           *QueryContext
+	order         []residencehistory.OrderOption
+	inters        []Interceptor
+	predicates    []predicate.ResidenceHistory
+	withResidence *ResidenceQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -56,6 +59,28 @@ func (_q *ResidenceHistoryQuery) Unique(unique bool) *ResidenceHistoryQuery {
 func (_q *ResidenceHistoryQuery) Order(o ...residencehistory.OrderOption) *ResidenceHistoryQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryResidence chains the current query on the "residence" edge.
+func (_q *ResidenceHistoryQuery) QueryResidence() *ResidenceQuery {
+	query := (&ResidenceClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(residencehistory.Table, residencehistory.FieldID, selector),
+			sqlgraph.To(residence.Table, residence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, residencehistory.ResidenceTable, residencehistory.ResidenceColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first ResidenceHistory entity from the query.
@@ -245,15 +270,27 @@ func (_q *ResidenceHistoryQuery) Clone() *ResidenceHistoryQuery {
 		return nil
 	}
 	return &ResidenceHistoryQuery{
-		config:     _q.config,
-		ctx:        _q.ctx.Clone(),
-		order:      append([]residencehistory.OrderOption{}, _q.order...),
-		inters:     append([]Interceptor{}, _q.inters...),
-		predicates: append([]predicate.ResidenceHistory{}, _q.predicates...),
+		config:        _q.config,
+		ctx:           _q.ctx.Clone(),
+		order:         append([]residencehistory.OrderOption{}, _q.order...),
+		inters:        append([]Interceptor{}, _q.inters...),
+		predicates:    append([]predicate.ResidenceHistory{}, _q.predicates...),
+		withResidence: _q.withResidence.Clone(),
 		// clone intermediate query.
 		sql:  _q.sql.Clone(),
 		path: _q.path,
 	}
+}
+
+// WithResidence tells the query-builder to eager-load the nodes that are connected to
+// the "residence" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ResidenceHistoryQuery) WithResidence(opts ...func(*ResidenceQuery)) *ResidenceHistoryQuery {
+	query := (&ResidenceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withResidence = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -332,8 +369,11 @@ func (_q *ResidenceHistoryQuery) prepareQuery(ctx context.Context) error {
 
 func (_q *ResidenceHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ResidenceHistory, error) {
 	var (
-		nodes = []*ResidenceHistory{}
-		_spec = _q.querySpec()
+		nodes       = []*ResidenceHistory{}
+		_spec       = _q.querySpec()
+		loadedTypes = [1]bool{
+			_q.withResidence != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ResidenceHistory).scanValues(nil, columns)
@@ -341,6 +381,7 @@ func (_q *ResidenceHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &ResidenceHistory{config: _q.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -352,7 +393,43 @@ func (_q *ResidenceHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := _q.withResidence; query != nil {
+		if err := _q.loadResidence(ctx, query, nodes, nil,
+			func(n *ResidenceHistory, e *Residence) { n.Edges.Residence = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (_q *ResidenceHistoryQuery) loadResidence(ctx context.Context, query *ResidenceQuery, nodes []*ResidenceHistory, init func(*ResidenceHistory), assign func(*ResidenceHistory, *Residence)) error {
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*ResidenceHistory)
+	for i := range nodes {
+		fk := nodes[i].Ref
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(residence.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "ref" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (_q *ResidenceHistoryQuery) sqlCount(ctx context.Context) (int, error) {
@@ -379,6 +456,9 @@ func (_q *ResidenceHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != residencehistory.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if _q.withResidence != nil {
+			_spec.Node.AddColumnOnce(residencehistory.FieldRef)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

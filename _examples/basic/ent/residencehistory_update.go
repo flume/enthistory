@@ -87,9 +87,6 @@ func (_u *ResidenceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(residencehistory.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if _u.mutation.RefCleared() {
-		_spec.ClearField(residencehistory.FieldRef, field.TypeUUID)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(residencehistory.FieldUpdatedBy, field.TypeInt)
 	}
@@ -201,9 +198,6 @@ func (_u *ResidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Reside
 	}
 	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(residencehistory.FieldUpdatedAt, field.TypeTime, value)
-	}
-	if _u.mutation.RefCleared() {
-		_spec.ClearField(residencehistory.FieldRef, field.TypeUUID)
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(residencehistory.FieldUpdatedBy, field.TypeInt)

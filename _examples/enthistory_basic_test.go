@@ -490,6 +490,80 @@ func TestEntHistoryBasic(t *testing.T) {
 				assert.Nil(t, icekingHistory.Level)
 			},
 		},
+		{
+			name: "Can traverse from history to original entity using reverse edge",
+			runner: func(t *testing.T, client *ent.Client) {
+				ctx := context.Background()
+
+				// Create a character
+				finn, err := client.Character.Create().SetAge(14).SetTypedAge(models.Uint64(14)).SetName("Finn the Human").Save(ctx)
+				assert.NoError(t, err)
+
+				// Get the history record
+				historyRecord, err := finn.History().Earliest(ctx)
+				assert.NoError(t, err)
+
+				// Traverse from history back to the original character using QueryCharacter()
+				originalCharacter, err := historyRecord.QueryCharacter().Only(ctx)
+				assert.NoError(t, err)
+
+				// Verify we got the correct character
+				assert.Equal(t, finn.ID, originalCharacter.ID)
+				assert.Equal(t, finn.Name, originalCharacter.Name)
+				assert.Equal(t, finn.Age, originalCharacter.Age)
+			},
+		},
+		{
+			name: "Can query history with character edge using WithCharacter",
+			runner: func(t *testing.T, client *ent.Client) {
+				ctx := context.Background()
+
+				// Create a character
+				jake, err := client.Character.Create().SetAge(28).SetTypedAge(models.Uint64(28)).SetName("Jake the Dog").Save(ctx)
+				assert.NoError(t, err)
+
+				// Update to create more history
+				jake, err = jake.Update().SetName("Jake the Magical Dog").Save(ctx)
+				assert.NoError(t, err)
+
+				// Query history records with the character edge eager loaded
+				historyRecords, err := client.CharacterHistory.Query().
+					Where(characterhistory.RefEQ(jake.ID)).
+					WithCharacter().
+					All(ctx)
+				assert.NoError(t, err)
+				assert.Equal(t, 2, len(historyRecords))
+
+				// Verify each history record has the character edge loaded
+				for _, hr := range historyRecords {
+					edges := hr.Edges
+					assert.NotNil(t, edges.Character)
+					assert.Equal(t, jake.ID, edges.Character.ID)
+				}
+			},
+		},
+		{
+			name: "Reverse edge returns not found for deleted entities",
+			runner: func(t *testing.T, client *ent.Client) {
+				ctx := context.Background()
+
+				// Create a character
+				bmo, err := client.Character.Create().SetAge(1000).SetTypedAge(models.Uint64(1000)).SetName("BMO").Save(ctx)
+				assert.NoError(t, err)
+
+				// Get a history record before deletion
+				createHistory, err := bmo.History().Earliest(ctx)
+				assert.NoError(t, err)
+
+				// Delete the character
+				err = client.Character.DeleteOne(bmo).Exec(ctx)
+				assert.NoError(t, err)
+
+				// The character no longer exists, so querying the edge should return not found
+				_, err = createHistory.QueryCharacter().Only(ctx)
+				assert.True(t, ent.IsNotFound(err))
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

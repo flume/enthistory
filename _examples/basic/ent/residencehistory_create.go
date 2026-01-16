@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/basic/ent/residence"
 	"_examples/basic/ent/residencehistory"
 	"context"
 	"errors"
@@ -109,6 +110,25 @@ func (_c *ResidenceHistoryCreate) SetName(v string) *ResidenceHistoryCreate {
 func (_c *ResidenceHistoryCreate) SetID(v int) *ResidenceHistoryCreate {
 	_c.mutation.SetID(v)
 	return _c
+}
+
+// SetResidenceID sets the "residence" edge to the Residence entity by ID.
+func (_c *ResidenceHistoryCreate) SetResidenceID(id uuid.UUID) *ResidenceHistoryCreate {
+	_c.mutation.SetResidenceID(id)
+	return _c
+}
+
+// SetNillableResidenceID sets the "residence" edge to the Residence entity by ID if the given value is not nil.
+func (_c *ResidenceHistoryCreate) SetNillableResidenceID(id *uuid.UUID) *ResidenceHistoryCreate {
+	if id != nil {
+		_c = _c.SetResidenceID(*id)
+	}
+	return _c
+}
+
+// SetResidence sets the "residence" edge to the Residence entity.
+func (_c *ResidenceHistoryCreate) SetResidence(v *Residence) *ResidenceHistoryCreate {
+	return _c.SetResidenceID(v.ID)
 }
 
 // Mutation returns the ResidenceHistoryMutation object of the builder.
@@ -230,10 +250,6 @@ func (_c *ResidenceHistoryCreate) createSpec() (*ResidenceHistory, *sqlgraph.Cre
 		_spec.SetField(residencehistory.FieldOperation, field.TypeEnum, value)
 		_node.Operation = value
 	}
-	if value, ok := _c.mutation.Ref(); ok {
-		_spec.SetField(residencehistory.FieldRef, field.TypeUUID, value)
-		_node.Ref = value
-	}
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(residencehistory.FieldUpdatedBy, field.TypeInt, value)
 		_node.UpdatedBy = &value
@@ -241,6 +257,23 @@ func (_c *ResidenceHistoryCreate) createSpec() (*ResidenceHistory, *sqlgraph.Cre
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(residencehistory.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if nodes := _c.mutation.ResidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   residencehistory.ResidenceTable,
+			Columns: []string{residencehistory.ResidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(residence.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.Ref = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }
