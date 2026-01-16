@@ -36,6 +36,9 @@ func Edge(desc *edge.Descriptor) (*ast.CallExpr, error) {
 	if desc.Unique {
 		builder.method("Unique")
 	}
+	if desc.Immutable {
+		builder.method("Immutable")
+	}
 	if desc.Field != "" {
 		builder.method("Field", strLit(desc.Field))
 	}
