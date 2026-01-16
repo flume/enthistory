@@ -15,11 +15,11 @@
 package schemast
 
 import (
-	"errors"
 	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"os"
 	"reflect"
 	"runtime"
 	"strconv"
@@ -339,17 +339,126 @@ func defaultExpr(d any, hasDefaultFunc bool) (string, ast.Expr, error) {
 			f = pkg[len(pkg)-1]
 		}
 		parts := strings.Split(f, ".")
-		if len(parts) != 2 {
-			return "", nil, errors.New("schemast: only selector exprs are supported for default func")
+		if len(parts) == 2 {
+			// Named function like uuid.New
+			selector := selectorLit(parts[0], parts[1])
+			if !hasDefaultFunc {
+				return builderMethodDefault, selector, nil
+			}
+			return builderMethodDefaultFunc, selector, nil
 		}
-		selector := selectorLit(parts[0], parts[1])
+		// Anonymous function - try to extract from source
+		funcLit, err := extractFuncLitFromSource(v.Pointer())
+		if err != nil {
+			return "", nil, fmt.Errorf("schemast: failed to extract anonymous function: %w", err)
+		}
 		if !hasDefaultFunc {
-			return builderMethodDefault, selector, nil
+			return builderMethodDefault, funcLit, nil
 		}
-		return builderMethodDefaultFunc, selector, nil
+		return builderMethodDefaultFunc, funcLit, nil
 	default:
 		return "", nil, fmt.Errorf("schemast: unsupported default field kind: %q", v.Kind())
 	}
+}
+
+// extractFuncLitFromSource extracts an anonymous function literal from its source file
+// by using runtime information to locate the function definition.
+func extractFuncLitFromSource(ptr uintptr) (*ast.FuncLit, error) {
+	fn := runtime.FuncForPC(ptr)
+	if fn == nil {
+		return nil, fmt.Errorf("could not get function info")
+	}
+
+	file, line := fn.FileLine(ptr)
+	if file == "" {
+		return nil, fmt.Errorf("could not get source file location")
+	}
+
+	// Read and parse the source file
+	src, err := os.ReadFile(file)
+	if err != nil {
+		return nil, fmt.Errorf("could not read source file %s: %w", file, err)
+	}
+
+	fset := token.NewFileSet()
+	f, err := parser.ParseFile(fset, file, src, parser.ParseComments)
+	if err != nil {
+		return nil, fmt.Errorf("could not parse source file %s: %w", file, err)
+	}
+
+	// Find the function literal at or near the given line
+	var foundFuncLit *ast.FuncLit
+	ast.Inspect(f, func(n ast.Node) bool {
+		if n == nil {
+			return true
+		}
+		if funcLit, ok := n.(*ast.FuncLit); ok {
+			pos := fset.Position(funcLit.Pos())
+			// Check if this function literal is at or near our target line
+			// We check a range because the reported line might be the func keyword
+			// or the opening brace
+			if pos.Line >= line-1 && pos.Line <= line+1 {
+				foundFuncLit = funcLit
+				return false // Stop searching
+			}
+		}
+		return true
+	})
+
+	if foundFuncLit == nil {
+		return nil, fmt.Errorf("could not find function literal at %s:%d", file, line)
+	}
+
+	// Create a clean copy of the function literal without position information
+	// This ensures it can be properly printed in the generated code
+	return cleanFuncLit(foundFuncLit), nil
+}
+
+// cleanFuncLit creates a copy of a FuncLit with cleaned position information
+func cleanFuncLit(fl *ast.FuncLit) *ast.FuncLit {
+	return &ast.FuncLit{
+		Type: cleanFuncType(fl.Type),
+		Body: cleanBlockStmt(fl.Body),
+	}
+}
+
+func cleanFuncType(ft *ast.FuncType) *ast.FuncType {
+	return &ast.FuncType{
+		Params:  cleanFieldList(ft.Params),
+		Results: cleanFieldList(ft.Results),
+	}
+}
+
+func cleanFieldList(fl *ast.FieldList) *ast.FieldList {
+	if fl == nil {
+		return nil
+	}
+	newList := &ast.FieldList{}
+	for _, field := range fl.List {
+		newList.List = append(newList.List, cleanField(field))
+	}
+	return newList
+}
+
+func cleanField(f *ast.Field) *ast.Field {
+	newField := &ast.Field{
+		Type: f.Type, // Keep type as-is for now
+	}
+	for _, name := range f.Names {
+		newField.Names = append(newField.Names, ast.NewIdent(name.Name))
+	}
+	return newField
+}
+
+func cleanBlockStmt(bs *ast.BlockStmt) *ast.BlockStmt {
+	if bs == nil {
+		return nil
+	}
+	newBlock := &ast.BlockStmt{}
+	for _, stmt := range bs.List {
+		newBlock.List = append(newBlock.List, stmt) // Keep statements as-is
+	}
+	return newBlock
 }
 
 func extractFieldName(fd *ast.CallExpr) (string, error) {
