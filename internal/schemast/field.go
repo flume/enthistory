@@ -455,9 +455,7 @@ func cleanBlockStmt(bs *ast.BlockStmt) *ast.BlockStmt {
 		return nil
 	}
 	newBlock := &ast.BlockStmt{}
-	for _, stmt := range bs.List {
-		newBlock.List = append(newBlock.List, stmt) // Keep statements as-is
-	}
+	newBlock.List = append(newBlock.List, bs.List...)
 	return newBlock
 }
 
