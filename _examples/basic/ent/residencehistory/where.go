@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/google/uuid"
 
 	"github.com/flume/enthistory"
@@ -390,6 +391,29 @@ func NameEqualFold(v string) predicate.ResidenceHistory {
 // NameContainsFold applies the ContainsFold predicate on the "name" field.
 func NameContainsFold(v string) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldContainsFold(FieldName, v))
+}
+
+// HasResidence applies the HasEdge predicate on the "residence" edge.
+func HasResidence() predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ResidenceTable, ResidenceColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasResidenceWith applies the HasEdge predicate on the "residence" edge with a given conditions (other predicates).
+func HasResidenceWith(preds ...predicate.Residence) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(func(s *sql.Selector) {
+		step := newResidenceStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

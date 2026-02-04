@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/basic/ent/character"
 	"_examples/basic/ent/characterhistory"
 	"_examples/basic/ent/predicate"
 	"context"
@@ -34,9 +35,34 @@ func (_u *CharacterHistoryUpdate) SetUpdatedAt(v time.Time) *CharacterHistoryUpd
 	return _u
 }
 
+// SetCharacterID sets the "character" edge to the Character entity by ID.
+func (_u *CharacterHistoryUpdate) SetCharacterID(id int) *CharacterHistoryUpdate {
+	_u.mutation.SetCharacterID(id)
+	return _u
+}
+
+// SetNillableCharacterID sets the "character" edge to the Character entity by ID if the given value is not nil.
+func (_u *CharacterHistoryUpdate) SetNillableCharacterID(id *int) *CharacterHistoryUpdate {
+	if id != nil {
+		_u = _u.SetCharacterID(*id)
+	}
+	return _u
+}
+
+// SetCharacter sets the "character" edge to the Character entity.
+func (_u *CharacterHistoryUpdate) SetCharacter(v *Character) *CharacterHistoryUpdate {
+	return _u.SetCharacterID(v.ID)
+}
+
 // Mutation returns the CharacterHistoryMutation object of the builder.
 func (_u *CharacterHistoryUpdate) Mutation() *CharacterHistoryMutation {
 	return _u.mutation
+}
+
+// ClearCharacter clears the "character" edge to the Character entity.
+func (_u *CharacterHistoryUpdate) ClearCharacter() *CharacterHistoryUpdate {
+	_u.mutation.ClearCharacter()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -108,6 +134,35 @@ func (_u *CharacterHistoryUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if _u.mutation.SpeciesCleared() {
 		_spec.ClearField(characterhistory.FieldSpecies, field.TypeString)
 	}
+	if _u.mutation.CharacterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   characterhistory.CharacterTable,
+			Columns: []string{characterhistory.CharacterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CharacterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   characterhistory.CharacterTable,
+			Columns: []string{characterhistory.CharacterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{characterhistory.Label}
@@ -134,9 +189,34 @@ func (_u *CharacterHistoryUpdateOne) SetUpdatedAt(v time.Time) *CharacterHistory
 	return _u
 }
 
+// SetCharacterID sets the "character" edge to the Character entity by ID.
+func (_u *CharacterHistoryUpdateOne) SetCharacterID(id int) *CharacterHistoryUpdateOne {
+	_u.mutation.SetCharacterID(id)
+	return _u
+}
+
+// SetNillableCharacterID sets the "character" edge to the Character entity by ID if the given value is not nil.
+func (_u *CharacterHistoryUpdateOne) SetNillableCharacterID(id *int) *CharacterHistoryUpdateOne {
+	if id != nil {
+		_u = _u.SetCharacterID(*id)
+	}
+	return _u
+}
+
+// SetCharacter sets the "character" edge to the Character entity.
+func (_u *CharacterHistoryUpdateOne) SetCharacter(v *Character) *CharacterHistoryUpdateOne {
+	return _u.SetCharacterID(v.ID)
+}
+
 // Mutation returns the CharacterHistoryMutation object of the builder.
 func (_u *CharacterHistoryUpdateOne) Mutation() *CharacterHistoryMutation {
 	return _u.mutation
+}
+
+// ClearCharacter clears the "character" edge to the Character entity.
+func (_u *CharacterHistoryUpdateOne) ClearCharacter() *CharacterHistoryUpdateOne {
+	_u.mutation.ClearCharacter()
+	return _u
 }
 
 // Where appends a list predicates to the CharacterHistoryUpdate builder.
@@ -237,6 +317,35 @@ func (_u *CharacterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Charac
 	}
 	if _u.mutation.SpeciesCleared() {
 		_spec.ClearField(characterhistory.FieldSpecies, field.TypeString)
+	}
+	if _u.mutation.CharacterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   characterhistory.CharacterTable,
+			Columns: []string{characterhistory.CharacterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CharacterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   characterhistory.CharacterTable,
+			Columns: []string{characterhistory.CharacterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &CharacterHistory{config: _u.config}
 	_spec.Assign = _node.assignValues

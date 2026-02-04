@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 
 	"github.com/flume/enthistory"
 )
@@ -30,8 +31,17 @@ const (
 	FieldUpdatedBy = "updated_by"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// EdgeResidence holds the string denoting the residence edge name in mutations.
+	EdgeResidence = "residence"
 	// Table holds the table name of the residencehistory in the database.
 	Table = "residence_history"
+	// ResidenceTable is the table that holds the residence relation/edge.
+	ResidenceTable = "residence_history"
+	// ResidenceInverseTable is the table name for the Residence entity.
+	// It exists in this package in order to avoid circular dependency with the "residence" package.
+	ResidenceInverseTable = "residence"
+	// ResidenceColumn is the table column denoting the residence relation/edge.
+	ResidenceColumn = "residence_history_residence"
 )
 
 // Columns holds all SQL columns for residencehistory fields.
@@ -46,10 +56,21 @@ var Columns = []string{
 	FieldName,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "residence_history"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"residence_history_residence",
+}
+
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -118,4 +139,18 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByResidenceField orders the results by residence field.
+func ByResidenceField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newResidenceStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newResidenceStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ResidenceInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ResidenceTable, ResidenceColumn),
+	)
 }

@@ -4,6 +4,7 @@ package ent
 
 import (
 	"_examples/basic/ent/predicate"
+	"_examples/basic/ent/residence"
 	"_examples/basic/ent/residencehistory"
 	"context"
 	"errors"
@@ -13,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // ResidenceHistoryUpdate is the builder for updating ResidenceHistory entities.
@@ -34,9 +36,34 @@ func (_u *ResidenceHistoryUpdate) SetUpdatedAt(v time.Time) *ResidenceHistoryUpd
 	return _u
 }
 
+// SetResidenceID sets the "residence" edge to the Residence entity by ID.
+func (_u *ResidenceHistoryUpdate) SetResidenceID(id uuid.UUID) *ResidenceHistoryUpdate {
+	_u.mutation.SetResidenceID(id)
+	return _u
+}
+
+// SetNillableResidenceID sets the "residence" edge to the Residence entity by ID if the given value is not nil.
+func (_u *ResidenceHistoryUpdate) SetNillableResidenceID(id *uuid.UUID) *ResidenceHistoryUpdate {
+	if id != nil {
+		_u = _u.SetResidenceID(*id)
+	}
+	return _u
+}
+
+// SetResidence sets the "residence" edge to the Residence entity.
+func (_u *ResidenceHistoryUpdate) SetResidence(v *Residence) *ResidenceHistoryUpdate {
+	return _u.SetResidenceID(v.ID)
+}
+
 // Mutation returns the ResidenceHistoryMutation object of the builder.
 func (_u *ResidenceHistoryUpdate) Mutation() *ResidenceHistoryMutation {
 	return _u.mutation
+}
+
+// ClearResidence clears the "residence" edge to the Residence entity.
+func (_u *ResidenceHistoryUpdate) ClearResidence() *ResidenceHistoryUpdate {
+	_u.mutation.ClearResidence()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -93,6 +120,35 @@ func (_u *ResidenceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(residencehistory.FieldUpdatedBy, field.TypeInt)
 	}
+	if _u.mutation.ResidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   residencehistory.ResidenceTable,
+			Columns: []string{residencehistory.ResidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(residence.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   residencehistory.ResidenceTable,
+			Columns: []string{residencehistory.ResidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(residence.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{residencehistory.Label}
@@ -119,9 +175,34 @@ func (_u *ResidenceHistoryUpdateOne) SetUpdatedAt(v time.Time) *ResidenceHistory
 	return _u
 }
 
+// SetResidenceID sets the "residence" edge to the Residence entity by ID.
+func (_u *ResidenceHistoryUpdateOne) SetResidenceID(id uuid.UUID) *ResidenceHistoryUpdateOne {
+	_u.mutation.SetResidenceID(id)
+	return _u
+}
+
+// SetNillableResidenceID sets the "residence" edge to the Residence entity by ID if the given value is not nil.
+func (_u *ResidenceHistoryUpdateOne) SetNillableResidenceID(id *uuid.UUID) *ResidenceHistoryUpdateOne {
+	if id != nil {
+		_u = _u.SetResidenceID(*id)
+	}
+	return _u
+}
+
+// SetResidence sets the "residence" edge to the Residence entity.
+func (_u *ResidenceHistoryUpdateOne) SetResidence(v *Residence) *ResidenceHistoryUpdateOne {
+	return _u.SetResidenceID(v.ID)
+}
+
 // Mutation returns the ResidenceHistoryMutation object of the builder.
 func (_u *ResidenceHistoryUpdateOne) Mutation() *ResidenceHistoryMutation {
 	return _u.mutation
+}
+
+// ClearResidence clears the "residence" edge to the Residence entity.
+func (_u *ResidenceHistoryUpdateOne) ClearResidence() *ResidenceHistoryUpdateOne {
+	_u.mutation.ClearResidence()
+	return _u
 }
 
 // Where appends a list predicates to the ResidenceHistoryUpdate builder.
@@ -207,6 +288,35 @@ func (_u *ResidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Reside
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(residencehistory.FieldUpdatedBy, field.TypeInt)
+	}
+	if _u.mutation.ResidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   residencehistory.ResidenceTable,
+			Columns: []string{residencehistory.ResidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(residence.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   residencehistory.ResidenceTable,
+			Columns: []string{residencehistory.ResidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(residence.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &ResidenceHistory{config: _u.config}
 	_spec.Assign = _node.assignValues

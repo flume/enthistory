@@ -29,6 +29,7 @@ import (
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
 	"entgo.io/ent/entc/load"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/index"
 	"github.com/google/uuid"
 )
@@ -39,6 +40,7 @@ type HistoryOptions struct {
 	FieldProperties  *FieldProperties
 	HistoryTimeIndex bool
 	Triggers         []OpType
+	ReverseEdge      bool
 }
 
 var updatedBy *UpdatedBy
@@ -117,6 +119,19 @@ func WithTriggers(triggers ...OpType) Option {
 	}
 }
 
+// WithReverseEdge enables generation of reverse edges from history schemas back to their original entities.
+// When enabled, history schemas will include an edge like:
+//
+//	edge.From("character", Character.Type).Ref("history").Field("ref").Unique().Immutable()
+//
+// This allows traversal from history records back to the original entity.
+// Note: The original schema must define a matching edge.To("history", CharacterHistory.Type) for this to work.
+func WithReverseEdge() Option {
+	return func(config *HistoryOptions) {
+		config.ReverseEdge = true
+	}
+}
+
 func Generate(schemaPath string, schemas []ent.Interface, options ...Option) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -187,6 +202,10 @@ func Generate(schemaPath string, schemas []ent.Interface, options ...Option) (er
 
 			if opts.HistoryTimeIndex {
 				upsert.Indexes = append(upsert.Indexes, index.Fields("history_time"))
+			}
+
+			if opts.ReverseEdge {
+				upsert.Edges = append(upsert.Edges, reverseEdge(schemaName))
 			}
 
 			if len(s.Mixin()) > 0 {
@@ -528,6 +547,31 @@ func updatedByField(valueType ValueType, entgqlEnabled bool) (ent.Field, error) 
 		return f, nil
 	}
 	return nil, errors.New("unsupported updated_by type")
+}
+
+// historyEdge is a custom ent.Edge implementation for generating reverse edges.
+type historyEdge struct {
+	desc *edge.Descriptor
+}
+
+func (h *historyEdge) Descriptor() *edge.Descriptor {
+	return h.desc
+}
+
+// reverseEdge creates an edge from the history schema back to the original entity.
+// This enables traversal like historyRecord.QueryCharacter().
+// Note: We intentionally do NOT use Field("ref") because that would create a FK constraint,
+// which would prevent creating history records for DELETE operations (the original entity
+// no longer exists when the delete hook runs).
+func reverseEdge(schemaName string) ent.Edge {
+	edgeName := strings.ToLower(schemaName)
+	return &historyEdge{
+		desc: &edge.Descriptor{
+			Name:   edgeName,
+			Type:   schemaName,
+			Unique: true,
+		},
+	}
 }
 
 func removeOldGenerated(schemaPath string, schemas []*load.Schema) error {

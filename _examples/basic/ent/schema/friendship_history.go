@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
@@ -42,7 +43,9 @@ func (FriendshipHistory) Fields() []ent.Field {
 			Immutable()}
 }
 func (FriendshipHistory) Edges() []ent.Edge {
-	return nil
+	return []ent.Edge{
+		edge.To("friendship", Friendship.Type).
+			Unique()}
 }
 func (FriendshipHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{entsql.Annotation{Table: "friendship_history"}, enthistory.Annotations{IsHistory: true, Triggers: []enthistory.OpType{enthistory.OpTypeInsert, enthistory.OpTypeUpdate, enthistory.OpTypeDelete}}}

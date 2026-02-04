@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/basic/ent/residence"
 	"_examples/basic/ent/residencehistory"
 	"fmt"
 	"strings"
@@ -33,8 +34,32 @@ type ResidenceHistory struct {
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy *int `json:"updated_by,omitempty"`
 	// Name holds the value of the "name" field.
-	Name         string `json:"name,omitempty"`
-	selectValues sql.SelectValues
+	Name string `json:"name,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the ResidenceHistoryQuery when eager-loading is set.
+	Edges                       ResidenceHistoryEdges `json:"edges"`
+	residence_history_residence *uuid.UUID
+	selectValues                sql.SelectValues
+}
+
+// ResidenceHistoryEdges holds the relations/edges for other nodes in the graph.
+type ResidenceHistoryEdges struct {
+	// Residence holds the value of the residence edge.
+	Residence *Residence `json:"residence,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// ResidenceOrErr returns the Residence value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ResidenceHistoryEdges) ResidenceOrErr() (*Residence, error) {
+	if e.Residence != nil {
+		return e.Residence, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: residence.Label}
+	}
+	return nil, &NotLoadedError{edge: "residence"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -50,6 +75,8 @@ func (*ResidenceHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case residencehistory.FieldRef:
 			values[i] = new(uuid.UUID)
+		case residencehistory.ForeignKeys[0]: // residence_history_residence
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -114,6 +141,13 @@ func (_m *ResidenceHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Name = value.String
 			}
+		case residencehistory.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field residence_history_residence", values[i])
+			} else if value.Valid {
+				_m.residence_history_residence = new(uuid.UUID)
+				*_m.residence_history_residence = *value.S.(*uuid.UUID)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -125,6 +159,11 @@ func (_m *ResidenceHistory) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *ResidenceHistory) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryResidence queries the "residence" edge of the ResidenceHistory entity.
+func (_m *ResidenceHistory) QueryResidence() *ResidenceQuery {
+	return NewResidenceHistoryClient(_m.config).QueryResidence(_m)
 }
 
 // Update returns a builder for updating this ResidenceHistory.

@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/basic/ent/friendship"
 	"_examples/basic/ent/friendshiphistory"
 	"_examples/basic/ent/predicate"
 	"context"
@@ -18,10 +19,12 @@ import (
 // FriendshipHistoryQuery is the builder for querying FriendshipHistory entities.
 type FriendshipHistoryQuery struct {
 	config
-	ctx        *QueryContext
-	order      []friendshiphistory.OrderOption
-	inters     []Interceptor
-	predicates []predicate.FriendshipHistory
+	ctx            *QueryContext
+	order          []friendshiphistory.OrderOption
+	inters         []Interceptor
+	predicates     []predicate.FriendshipHistory
+	withFriendship *FriendshipQuery
+	withFKs        bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -56,6 +59,28 @@ func (_q *FriendshipHistoryQuery) Unique(unique bool) *FriendshipHistoryQuery {
 func (_q *FriendshipHistoryQuery) Order(o ...friendshiphistory.OrderOption) *FriendshipHistoryQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryFriendship chains the current query on the "friendship" edge.
+func (_q *FriendshipHistoryQuery) QueryFriendship() *FriendshipQuery {
+	query := (&FriendshipClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(friendshiphistory.Table, friendshiphistory.FieldID, selector),
+			sqlgraph.To(friendship.Table, friendship.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, friendshiphistory.FriendshipTable, friendshiphistory.FriendshipColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first FriendshipHistory entity from the query.
@@ -245,15 +270,27 @@ func (_q *FriendshipHistoryQuery) Clone() *FriendshipHistoryQuery {
 		return nil
 	}
 	return &FriendshipHistoryQuery{
-		config:     _q.config,
-		ctx:        _q.ctx.Clone(),
-		order:      append([]friendshiphistory.OrderOption{}, _q.order...),
-		inters:     append([]Interceptor{}, _q.inters...),
-		predicates: append([]predicate.FriendshipHistory{}, _q.predicates...),
+		config:         _q.config,
+		ctx:            _q.ctx.Clone(),
+		order:          append([]friendshiphistory.OrderOption{}, _q.order...),
+		inters:         append([]Interceptor{}, _q.inters...),
+		predicates:     append([]predicate.FriendshipHistory{}, _q.predicates...),
+		withFriendship: _q.withFriendship.Clone(),
 		// clone intermediate query.
 		sql:  _q.sql.Clone(),
 		path: _q.path,
 	}
+}
+
+// WithFriendship tells the query-builder to eager-load the nodes that are connected to
+// the "friendship" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FriendshipHistoryQuery) WithFriendship(opts ...func(*FriendshipQuery)) *FriendshipHistoryQuery {
+	query := (&FriendshipClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFriendship = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -332,15 +369,26 @@ func (_q *FriendshipHistoryQuery) prepareQuery(ctx context.Context) error {
 
 func (_q *FriendshipHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*FriendshipHistory, error) {
 	var (
-		nodes = []*FriendshipHistory{}
-		_spec = _q.querySpec()
+		nodes       = []*FriendshipHistory{}
+		withFKs     = _q.withFKs
+		_spec       = _q.querySpec()
+		loadedTypes = [1]bool{
+			_q.withFriendship != nil,
+		}
 	)
+	if _q.withFriendship != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, friendshiphistory.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*FriendshipHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &FriendshipHistory{config: _q.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -352,7 +400,46 @@ func (_q *FriendshipHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := _q.withFriendship; query != nil {
+		if err := _q.loadFriendship(ctx, query, nodes, nil,
+			func(n *FriendshipHistory, e *Friendship) { n.Edges.Friendship = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (_q *FriendshipHistoryQuery) loadFriendship(ctx context.Context, query *FriendshipQuery, nodes []*FriendshipHistory, init func(*FriendshipHistory), assign func(*FriendshipHistory, *Friendship)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*FriendshipHistory)
+	for i := range nodes {
+		if nodes[i].friendship_history_friendship == nil {
+			continue
+		}
+		fk := *nodes[i].friendship_history_friendship
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(friendship.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "friendship_history_friendship" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (_q *FriendshipHistoryQuery) sqlCount(ctx context.Context) (int, error) {

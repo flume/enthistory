@@ -68,6 +68,7 @@ func (m *CharacterMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	create = create.SetNillableCharacterID(&id)
 	if updatedBy != 0 {
 		create = create.SetUpdatedBy(updatedBy)
 	}
@@ -148,6 +149,7 @@ func (m *CharacterMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		create = create.SetNillableCharacterID(&id)
 		if updatedBy != 0 {
 			create = create.SetUpdatedBy(updatedBy)
 		}
@@ -248,6 +250,7 @@ func (m *CharacterMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		if updatedBy != 0 {
 			create = create.SetUpdatedBy(updatedBy)
 		}
+		create = create.SetNillableCharacterID(&id)
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -295,6 +298,7 @@ func (m *FriendshipMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	create = create.SetNillableFriendshipID(&id)
 	if updatedBy != 0 {
 		create = create.SetUpdatedBy(updatedBy)
 	}
@@ -351,6 +355,7 @@ func (m *FriendshipMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		create = create.SetNillableFriendshipID(&id)
 		if updatedBy != 0 {
 			create = create.SetUpdatedBy(updatedBy)
 		}
@@ -415,6 +420,7 @@ func (m *FriendshipMutation) CreateHistoryFromDelete(ctx context.Context) error 
 		if updatedBy != 0 {
 			create = create.SetUpdatedBy(updatedBy)
 		}
+		create = create.SetNillableFriendshipID(&id)
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -456,6 +462,7 @@ func (m *ResidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		SetOperation(EntOpToHistoryOp(m.Op())).
 		SetHistoryTime(time.Now()).
 		SetRef(id)
+	create = create.SetNillableResidenceID(&id)
 	if updatedBy != 0 {
 		create = create.SetUpdatedBy(updatedBy)
 	}
@@ -508,6 +515,7 @@ func (m *ResidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			SetOperation(EntOpToHistoryOp(m.Op())).
 			SetHistoryTime(time.Now()).
 			SetRef(id)
+		create = create.SetNillableResidenceID(&id)
 		if updatedBy != 0 {
 			create = create.SetUpdatedBy(updatedBy)
 		}
@@ -566,6 +574,7 @@ func (m *ResidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 		if updatedBy != 0 {
 			create = create.SetUpdatedBy(updatedBy)
 		}
+		create = create.SetNillableResidenceID(&id)
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).

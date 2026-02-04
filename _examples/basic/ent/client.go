@@ -567,6 +567,22 @@ func (c *CharacterHistoryClient) GetX(ctx context.Context, id int) *CharacterHis
 	return obj
 }
 
+// QueryCharacter queries the character edge of a CharacterHistory.
+func (c *CharacterHistoryClient) QueryCharacter(_m *CharacterHistory) *CharacterQuery {
+	query := (&CharacterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(characterhistory.Table, characterhistory.FieldID, id),
+			sqlgraph.To(character.Table, character.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, characterhistory.CharacterTable, characterhistory.CharacterColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *CharacterHistoryClient) Hooks() []Hook {
 	return c.hooks.CharacterHistory
@@ -865,6 +881,22 @@ func (c *FriendshipHistoryClient) GetX(ctx context.Context, id int) *FriendshipH
 	return obj
 }
 
+// QueryFriendship queries the friendship edge of a FriendshipHistory.
+func (c *FriendshipHistoryClient) QueryFriendship(_m *FriendshipHistory) *FriendshipQuery {
+	query := (&FriendshipClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(friendshiphistory.Table, friendshiphistory.FieldID, id),
+			sqlgraph.To(friendship.Table, friendship.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, friendshiphistory.FriendshipTable, friendshiphistory.FriendshipColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *FriendshipHistoryClient) Hooks() []Hook {
 	return c.hooks.FriendshipHistory
@@ -1145,6 +1177,22 @@ func (c *ResidenceHistoryClient) GetX(ctx context.Context, id int) *ResidenceHis
 		panic(err)
 	}
 	return obj
+}
+
+// QueryResidence queries the residence edge of a ResidenceHistory.
+func (c *ResidenceHistoryClient) QueryResidence(_m *ResidenceHistory) *ResidenceQuery {
+	query := (&ResidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(residencehistory.Table, residencehistory.FieldID, id),
+			sqlgraph.To(residence.Table, residence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, residencehistory.ResidenceTable, residencehistory.ResidenceColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.

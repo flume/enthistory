@@ -25,6 +25,7 @@ func main() {
 		enthistory.WithUpdatedBy("userId", enthistory.ValueTypeInt),
 		enthistory.WithHistoryTimeIndex(),
 		enthistory.WithImmutableFields(),
+		enthistory.WithReverseEdge(),
 	); err != nil {
 		log.Fatal(fmt.Sprintf("running enthistory codegen: %v", err))
 	}
@@ -34,7 +35,10 @@ func main() {
 			Features: []gen.Feature{gen.FeatureSnapshot},
 		},
 		entc.Extensions(
-			enthistory.NewHistoryExtension(enthistory.WithAuditing()),
+			enthistory.NewHistoryExtension(
+				enthistory.WithAuditing(),
+				enthistory.WithReverseEdgeExtension(),
+			),
 		),
 	); err != nil {
 		log.Fatal("running ent codegen:", err)

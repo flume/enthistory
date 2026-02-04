@@ -55,12 +55,21 @@ var (
 		{Name: "info_struct", Type: field.TypeJSON, Nullable: true},
 		{Name: "level", Type: field.TypeInt, Nullable: true},
 		{Name: "species", Type: field.TypeString, Nullable: true},
+		{Name: "character_history_character", Type: field.TypeInt, Nullable: true},
 	}
 	// CharacterHistoryTable holds the schema information for the "character_history" table.
 	CharacterHistoryTable = &schema.Table{
 		Name:       "character_history",
 		Columns:    CharacterHistoryColumns,
 		PrimaryKey: []*schema.Column{CharacterHistoryColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "character_history_character_character",
+				Columns:    []*schema.Column{CharacterHistoryColumns[15]},
+				RefColumns: []*schema.Column{CharacterColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 		Indexes: []*schema.Index{
 			{
 				Name:    "characterhistory_history_time",
@@ -115,12 +124,21 @@ var (
 		{Name: "updated_by", Type: field.TypeInt, Nullable: true},
 		{Name: "character_id", Type: field.TypeInt},
 		{Name: "friend_id", Type: field.TypeInt},
+		{Name: "friendship_history_friendship", Type: field.TypeString, Nullable: true},
 	}
 	// FriendshipHistoryTable holds the schema information for the "friendship_history" table.
 	FriendshipHistoryTable = &schema.Table{
 		Name:       "friendship_history",
 		Columns:    FriendshipHistoryColumns,
 		PrimaryKey: []*schema.Column{FriendshipHistoryColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "friendship_history_friendship_friendship",
+				Columns:    []*schema.Column{FriendshipHistoryColumns[9]},
+				RefColumns: []*schema.Column{FriendshipColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 		Indexes: []*schema.Index{
 			{
 				Name:    "friendshiphistory_history_time",
@@ -152,12 +170,21 @@ var (
 		{Name: "ref", Type: field.TypeUUID, Nullable: true},
 		{Name: "updated_by", Type: field.TypeInt, Nullable: true},
 		{Name: "name", Type: field.TypeString},
+		{Name: "residence_history_residence", Type: field.TypeUUID, Nullable: true},
 	}
 	// ResidenceHistoryTable holds the schema information for the "residence_history" table.
 	ResidenceHistoryTable = &schema.Table{
 		Name:       "residence_history",
 		Columns:    ResidenceHistoryColumns,
 		PrimaryKey: []*schema.Column{ResidenceHistoryColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "residence_history_residence_residence",
+				Columns:    []*schema.Column{ResidenceHistoryColumns[8]},
+				RefColumns: []*schema.Column{ResidenceColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 		Indexes: []*schema.Index{
 			{
 				Name:    "residencehistory_history_time",
@@ -182,6 +209,7 @@ func init() {
 	CharacterTable.Annotation = &entsql.Annotation{
 		Table: "character",
 	}
+	CharacterHistoryTable.ForeignKeys[0].RefTable = CharacterTable
 	CharacterHistoryTable.Annotation = &entsql.Annotation{
 		Table: "character_history",
 	}
@@ -190,12 +218,14 @@ func init() {
 	FriendshipTable.Annotation = &entsql.Annotation{
 		Table: "friendship",
 	}
+	FriendshipHistoryTable.ForeignKeys[0].RefTable = FriendshipTable
 	FriendshipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "friendship_history",
 	}
 	ResidenceTable.Annotation = &entsql.Annotation{
 		Table: "residence",
 	}
+	ResidenceHistoryTable.ForeignKeys[0].RefTable = ResidenceTable
 	ResidenceHistoryTable.Annotation = &entsql.Annotation{
 		Table: "residence_history",
 	}

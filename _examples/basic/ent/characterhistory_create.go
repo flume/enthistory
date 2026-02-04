@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"_examples/basic/ent/character"
 	"_examples/basic/ent/characterhistory"
 	"_examples/basic/ent/schema/models"
 	"context"
@@ -179,6 +180,25 @@ func (_c *CharacterHistoryCreate) SetNillableSpecies(v *models.SpeciesType) *Cha
 	return _c
 }
 
+// SetCharacterID sets the "character" edge to the Character entity by ID.
+func (_c *CharacterHistoryCreate) SetCharacterID(id int) *CharacterHistoryCreate {
+	_c.mutation.SetCharacterID(id)
+	return _c
+}
+
+// SetNillableCharacterID sets the "character" edge to the Character entity by ID if the given value is not nil.
+func (_c *CharacterHistoryCreate) SetNillableCharacterID(id *int) *CharacterHistoryCreate {
+	if id != nil {
+		_c = _c.SetCharacterID(*id)
+	}
+	return _c
+}
+
+// SetCharacter sets the "character" edge to the Character entity.
+func (_c *CharacterHistoryCreate) SetCharacter(v *Character) *CharacterHistoryCreate {
+	return _c.SetCharacterID(v.ID)
+}
+
 // Mutation returns the CharacterHistoryMutation object of the builder.
 func (_c *CharacterHistoryCreate) Mutation() *CharacterHistoryMutation {
 	return _c.mutation
@@ -349,6 +369,23 @@ func (_c *CharacterHistoryCreate) createSpec() (*CharacterHistory, *sqlgraph.Cre
 	if value, ok := _c.mutation.Species(); ok {
 		_spec.SetField(characterhistory.FieldSpecies, field.TypeString, value)
 		_node.Species = value
+	}
+	if nodes := _c.mutation.CharacterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   characterhistory.CharacterTable,
+			Columns: []string{characterhistory.CharacterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(character.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.character_history_character = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

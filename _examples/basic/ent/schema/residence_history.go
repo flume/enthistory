@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/google/uuid"
@@ -41,7 +42,9 @@ func (ResidenceHistory) Fields() []ent.Field {
 			Immutable()}
 }
 func (ResidenceHistory) Edges() []ent.Edge {
-	return nil
+	return []ent.Edge{
+		edge.To("residence", Residence.Type).
+			Unique()}
 }
 func (ResidenceHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{entsql.Annotation{Table: "residence_history"}, enthistory.Annotations{IsHistory: true, Triggers: []enthistory.OpType{enthistory.OpTypeInsert, enthistory.OpTypeUpdate, enthistory.OpTypeDelete}}}
