@@ -1,0 +1,238 @@
+version: v1.5.0
+ignore:
+  SNYK-GOLANG-GOTEMPORALIOSERVERCOMMONAUTHORIZATION-12705385:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOTEMPORALIOSERVERCOMMONAUTHORIZATION-14742484:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOTEMPORALIOSERVERSERVICEFRONTEND-14742480:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOTEMPORALIOSERVERSERVICEFRONTEND-14742483:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOTHETHINGSNETWORKLORAWANSTACKV3PKGWEBUIACCOUNTVIEWSLOGIN-7653732:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOOGLEGOLANGORGGRPC-5953328:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3WAL-1083967:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3WAL-1083968:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOGSIOGOGS-3043000:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOGSIOGOGS-6097269:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOGSIOGOGS-6097481:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOGSIOGOGS-6097496:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOGSIOGOGS-7897507:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOGSIOGOGSINTERNALROUTEREPO-8383162:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOMOZILLAORGSOPSV3CMDSOPS-1296103:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOOGLEGOLANGORGPROTOBUFENCODINGPROTOJSON-6137908:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOOGLEGOLANGORGPROTOBUFENCODINGPROTOJSON-6393703:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOOGLEGOLANGORGPROTOBUFINTERNALENCODINGJSON-6393704:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOOPENTELEMETRYIOOTELSDKRESOURCE-15182758:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOPKGINGOJOSEGOJOSEV2-6419235:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOPKGINSQUAREGOJOSEV2-6419232:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOPKGINSRCDGOGITV4PLUMBING-8602519:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOPKGINSRCDGOGITV4PLUMBINGTRANSPORT-8602521:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOPKGINYAMLV2-1083943:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOPKGINYAMLV2-1533594:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOPKGINYAMLV2-3315326:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOPKGINYAMLV3-2841557:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOPKGINYAMLV3-2952714:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOTEMPORALIOAPIPROXY-8720398:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOAUTHENTIKIOAUTHENTIKPROVIDERSOAUTH2VIEWS-6210000:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOAUTHENTIKIOINTERNALWEB-8400784:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOAUTHENTIKIOINTERNALWEB-8688136:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GODEDISCHKYBERV3-1083973:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3-6227572:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3-6241736:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3-7413615:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3AUTH-7438561:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3DISCOVERY-3040871:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3EMBED-1083944:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3EMBED-1083945:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3ETCDMAIN-1083901:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3ETCDMAIN-1083902:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3ETCDMAIN-1083903:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3ETCDSERVER-1083907:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3ETCDSERVER-1083908:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3PKGFILEUTIL-1083969:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3PKGHTTPUTIL-1083905:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3PKGHTTPUTIL-1083906:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3SERVERETCDSERVER-5534528:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3SERVERETCDSERVER-6124874:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOETCDIOETCDV3SERVERLEASE-6124873:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOADMIN-3050587:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOAUTHENTIKIO-3184330:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOAUTHENTIKIO-3184404:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOAUTHENTIKIO-3339622:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOAUTHENTIKIO-5759296:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOAUTHENTIKIO-6041974:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOAUTHENTIKIO-7856131:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
+  SNYK-GOLANG-GOAUTHENTIKIO-9572087:
+    - '*':
+        reason: No available patches from package maintainer requiring Golang 1.25.7
+        created: 2026-02-06T00:00:00.000Z
