@@ -1,0 +1,15 @@
+name: JIRA Sync
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - ready_for_review
+      - converted_to_draft
+      - closed
+
+jobs:
+  jira-sync:
+    uses: flume/github-actions/.github/workflows/jira-sync.yml@main
+    secrets: inherit
