@@ -66,7 +66,7 @@ func (_m *MenuItemHistory) Diff(history *MenuItemHistory) (*HistoryDiff[MenuItem
 	if _m.Ref != history.Ref {
 		return nil, MismatchedRefError
 	}
-	if _m.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() || (_m.HistoryTime.UnixMilli() == history.HistoryTime.UnixMilli() && _m.ID > history.ID) {
+	if _m.HistoryTime.UnixMilli() > history.HistoryTime.UnixMilli() {
 		return &HistoryDiff[MenuItemHistory]{
 			Old:     history,
 			New:     _m,
