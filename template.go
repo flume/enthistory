@@ -50,7 +50,14 @@ func in(str string, list []string) bool {
 }
 
 func isIdTypeUUID(node any) bool {
-	return node.(*gen.Type).IDType.Type == field.TypeUUID
+	t := node.(*gen.Type)
+	if t.IDType.Type == field.TypeUUID {
+		return true
+	}
+	if t.ID != nil && t.ID.IsUUID() {
+		return true
+	}
+	return false
 }
 
 func calculateHooks(original, history gen.Type) string {
