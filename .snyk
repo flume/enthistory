@@ -12,3 +12,7 @@ ignore:
     - '*':
         reason: Transitive dependency of ariga.io/atlas used by ent; cannot remove
         created: 2026-03-20T00:00:00.000Z
+  snyk:lic:golang:github.com/hashicorp/golang-lru/v2:MPL-2.0:
+    - '*':
+        reason: Transitive dependency of entgo.io/contrib and github.com/99designs/gqlgen; cannot remove without forking
+        created: 2026-03-25T00:00:00.000Z

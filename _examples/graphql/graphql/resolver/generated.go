@@ -4934,6 +4934,10 @@ func (ec *executionContext) fieldContext___Type_isOneOf(_ context.Context, field
 
 func (ec *executionContext) unmarshalInputCreateTodoInput(ctx context.Context, obj any) (ent.CreateTodoInput, error) {
 	var it ent.CreateTodoInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -4967,6 +4971,10 @@ func (ec *executionContext) unmarshalInputCreateTodoInput(ctx context.Context, o
 
 func (ec *executionContext) unmarshalInputCreateUserInput(ctx context.Context, obj any) (ent.CreateUserInput, error) {
 	var it ent.CreateUserInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -5000,6 +5008,10 @@ func (ec *executionContext) unmarshalInputCreateUserInput(ctx context.Context, o
 
 func (ec *executionContext) unmarshalInputTestExcludeOrder(ctx context.Context, obj any) (ent.TestExcludeOrder, error) {
 	var it ent.TestExcludeOrder
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -5037,6 +5049,10 @@ func (ec *executionContext) unmarshalInputTestExcludeOrder(ctx context.Context, 
 
 func (ec *executionContext) unmarshalInputTestExcludeWhereInput(ctx context.Context, obj any) (ent.TestExcludeWhereInput, error) {
 	var it ent.TestExcludeWhereInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -5294,6 +5310,10 @@ func (ec *executionContext) unmarshalInputTestExcludeWhereInput(ctx context.Cont
 
 func (ec *executionContext) unmarshalInputTodoHistoryOrder(ctx context.Context, obj any) (ent.TodoHistoryOrder, error) {
 	var it ent.TodoHistoryOrder
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -5331,6 +5351,10 @@ func (ec *executionContext) unmarshalInputTodoHistoryOrder(ctx context.Context, 
 
 func (ec *executionContext) unmarshalInputTodoHistoryWhereInput(ctx context.Context, obj any) (ent.TodoHistoryWhereInput, error) {
 	var it ent.TodoHistoryWhereInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -5812,6 +5836,10 @@ func (ec *executionContext) unmarshalInputTodoHistoryWhereInput(ctx context.Cont
 
 func (ec *executionContext) unmarshalInputTodoOrder(ctx context.Context, obj any) (ent.TodoOrder, error) {
 	var it ent.TodoOrder
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -5849,6 +5877,10 @@ func (ec *executionContext) unmarshalInputTodoOrder(ctx context.Context, obj any
 
 func (ec *executionContext) unmarshalInputTodoWhereInput(ctx context.Context, obj any) (ent.TodoWhereInput, error) {
 	var it ent.TodoWhereInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -6106,6 +6138,10 @@ func (ec *executionContext) unmarshalInputTodoWhereInput(ctx context.Context, ob
 
 func (ec *executionContext) unmarshalInputUpdateTodoInput(ctx context.Context, obj any) (ent.UpdateTodoInput, error) {
 	var it ent.UpdateTodoInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -6146,6 +6182,10 @@ func (ec *executionContext) unmarshalInputUpdateTodoInput(ctx context.Context, o
 
 func (ec *executionContext) unmarshalInputUpdateUserInput(ctx context.Context, obj any) (ent.UpdateUserInput, error) {
 	var it ent.UpdateUserInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -6186,6 +6226,10 @@ func (ec *executionContext) unmarshalInputUpdateUserInput(ctx context.Context, o
 
 func (ec *executionContext) unmarshalInputUserHistoryWhereInput(ctx context.Context, obj any) (ent.UserHistoryWhereInput, error) {
 	var it ent.UserHistoryWhereInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -6702,6 +6746,10 @@ func (ec *executionContext) unmarshalInputUserHistoryWhereInput(ctx context.Cont
 
 func (ec *executionContext) unmarshalInputUserWhereInput(ctx context.Context, obj any) (ent.UserWhereInput, error) {
 	var it ent.UserWhereInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
