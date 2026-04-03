@@ -22,4 +22,5 @@ ignore:
           No fix available; msgpack v5.4.1 is the latest version.
           Transitive dependency of hashicorp/hcl, ariga.io/atlas, entgo.io/ent,
           zclconf/go-cty, and zclconf/go-cty-yaml. Cannot remove without forking upstream.
+        expires: 2026-07-03T00:00:00.000Z
         created: 2026-04-03T00:00:00.000Z
