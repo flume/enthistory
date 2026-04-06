@@ -16,3 +16,11 @@ ignore:
     - '*':
         reason: Transitive dependency of entgo.io/contrib and github.com/99designs/gqlgen; cannot remove without forking
         created: 2026-03-25T00:00:00.000Z
+  SNYK-GOLANG-GITHUBCOMVMIHAILENCOMSGPACKV5-15702238:
+    - '*':
+        reason: >-
+          No fix available; msgpack v5.4.1 is the latest version.
+          Transitive dependency of hashicorp/hcl, ariga.io/atlas, entgo.io/ent,
+          zclconf/go-cty, and zclconf/go-cty-yaml. Cannot remove without forking upstream.
+        expires: 2026-07-03T00:00:00.000Z
+        created: 2026-04-03T00:00:00.000Z
