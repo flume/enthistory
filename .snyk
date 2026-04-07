@@ -1,5 +1,6 @@
 version: v1.5.0
 ignore:
+  # --- License issues (MPL-2.0 from HashiCorp transitive deps) ---
   snyk:lic:golang:github.com/hashicorp/go-multierror:MPL-2.0:
     - '*':
         reason: Generated code dependency from entgo.io/contrib entgql templates; cannot remove without forking
@@ -16,6 +17,7 @@ ignore:
     - '*':
         reason: Transitive dependency of entgo.io/contrib and github.com/99designs/gqlgen; cannot remove without forking
         created: 2026-03-25T00:00:00.000Z
+  # --- msgpack vulnerability (no fix available) ---
   SNYK-GOLANG-GITHUBCOMVMIHAILENCOMSGPACKV5-15702238:
     - '*':
         reason: >-
@@ -24,3 +26,22 @@ ignore:
           zclconf/go-cty, and zclconf/go-cty-yaml. Cannot remove without forking upstream.
         expires: 2026-07-03T00:00:00.000Z
         created: 2026-04-03T00:00:00.000Z
+  # --- golang.org/x/crypto vulnerabilities (no fix; transitive dep pinned by upstream) ---
+  SNYK-GOLANG-GOLANGORGXCRYPTOSSH-8747056:
+    - '*':
+        reason: >-
+          CVE-2025-22869 Allocation of Resources Without Limits (CWE-770, CVSS 6.9).
+          No fix available; golang.org/x/crypto v0.38.0 is pinned by upstream transitive
+          dependencies (hashicorp/hcl, ariga.io/atlas, entgo.io/ent). go mod tidy reverts
+          manual upgrades. Fixed in x/crypto v0.35.0+ but upstream deps constrain resolution.
+        expires: 2026-10-07T00:00:00.000Z
+        created: 2026-04-07T00:00:00.000Z
+  SNYK-GOLANG-GOLANGORGXCRYPTOSSHAGENT-12668891:
+    - '*':
+        reason: >-
+          CVE-2025-47913 Improper Handling of Unexpected Data Type (CWE-241, CVSS 7.1).
+          No fix available; golang.org/x/crypto v0.38.0 is pinned by upstream transitive
+          dependencies. Fixed in x/crypto v0.43.0 but upstream deps constrain resolution.
+          go mod tidy reverts manual upgrades to v0.49.0.
+        expires: 2026-10-07T00:00:00.000Z
+        created: 2026-04-07T00:00:00.000Z
