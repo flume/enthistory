@@ -26,6 +26,27 @@ ignore:
           zclconf/go-cty, and zclconf/go-cty-yaml. Cannot remove without forking upstream.
         expires: 2026-07-03T00:00:00.000Z
         created: 2026-04-03T00:00:00.000Z
+  SNYK-GOLANG-GITHUBCOMVMIHAILENCOMSGPACK-15702236:
+    - '*':
+        reason: >-
+          CVE-2026-2454 Improper Validation of Specified Type of Input (CWE-1287).
+          No fix available; msgpack v5.4.1 is the latest version.
+          Transitive dependency of hashicorp/hcl, ariga.io/atlas, entgo.io/ent,
+          zclconf/go-cty, and zclconf/go-cty-yaml. Cannot remove without forking upstream.
+          Duplicate Snyk entry for same CVE under alternate package path.
+        expires: 2026-07-03T00:00:00.000Z
+        created: 2026-04-07T00:00:00.000Z
+  # --- OpenTelemetry SDK vulnerability (not imported; transitive ghost dep via grpc) ---
+  SNYK-GOLANG-GOOPENTELEMETRYIOOTELSDKRESOURCE-15182758:
+    - '*':
+        reason: >-
+          CVE-2026-24051 Untrusted Search Path (CWE-426, CVSS High).
+          go.opentelemetry.io/otel/sdk v1.39.0 appears in the module graph as a transitive
+          dependency of google.golang.org/grpc v1.79.3, but is never imported by this project.
+          `go mod why` confirms: "main module does not need package go.opentelemetry.io/otel/sdk".
+          Not compiled into any binary. Cannot upgrade without forking grpc's go.mod.
+        expires: 2026-10-07T00:00:00.000Z
+        created: 2026-04-07T00:00:00.000Z
   # --- go-jose vulnerability (fixed via go.mod pin; ignore retained as safety net) ---
   SNYK-GOLANG-GITHUBCOMGOJOSEGOJOSE-15875219:
     - '*':
