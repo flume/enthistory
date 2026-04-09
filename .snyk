@@ -41,14 +41,14 @@ ignore:
     - '*':
         reason: >-
           CVE-2026-24051 Untrusted Search Path (CWE-426, CVSS High).
-          go.opentelemetry.io/otel/sdk v1.39.0 appears in the module graph as a transitive
-          dependency of google.golang.org/grpc v1.79.3, but is never imported by this project.
+          go.opentelemetry.io/otel/sdk appears in the module graph as a transitive
+          dependency of google.golang.org/grpc, but is never imported by this project.
           `go mod why` confirms: "main module does not need package go.opentelemetry.io/otel/sdk".
           Not compiled into any binary. Cannot upgrade without forking grpc's go.mod.
         expires: 2026-10-07T00:00:00.000Z
         created: 2026-04-07T00:00:00.000Z
   # --- OpenTelemetry CVE-2026-29181: Allocation of Resources Without Limits (CWE-770) ---
-  # Affects otel/baggage, otel/internal/global, otel/internal errorhandler, otel/propagation.
+  # Affects otel/baggage, otel/internal/global, otel/internal/errorhandler, otel/propagation.
   # All are ghost transitive deps of google.golang.org/grpc — never imported, not compiled.
   SNYK-GOLANG-GOOPENTELEMETRYIOOTELBAGGAGE-15928416:
     - '*':
@@ -72,7 +72,7 @@ ignore:
     - '*':
         reason: >-
           CVE-2026-29181 Allocation of Resources Without Limits (CWE-770, CVSS High).
-          go.opentelemetry.io/otel error handler appears in the module graph as a transitive
+          go.opentelemetry.io/otel/internal/errorhandler appears in the module graph as a transitive
           dependency of google.golang.org/grpc, but is never imported by this project.
           Not compiled into any binary.
         expires: 2026-10-09T00:00:00.000Z
@@ -122,7 +122,7 @@ ignore:
         reason: >-
           Improper Verification of Cryptographic Signature (CVSS 8.0).
           Fixed via go.mod pin to go-jose/v4 v4.1.4. Ignore retained as safety net —
-          go mod tidy reverts this pin because upstream deps (grpc v1.79.3) only require
+          go mod tidy reverts this pin because upstream deps (grpc) only require
           v4.1.3, and lazy module loading does not track the override in go.mod.
         expires: 2026-10-07T00:00:00.000Z
         created: 2026-04-07T00:00:00.000Z
