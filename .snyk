@@ -47,6 +47,75 @@ ignore:
           Not compiled into any binary. Cannot upgrade without forking grpc's go.mod.
         expires: 2026-10-07T00:00:00.000Z
         created: 2026-04-07T00:00:00.000Z
+  # --- OpenTelemetry CVE-2026-29181: Allocation of Resources Without Limits (CWE-770) ---
+  # Affects otel/baggage, otel/internal/global, otel/internal errorhandler, otel/propagation.
+  # All are ghost transitive deps of google.golang.org/grpc — never imported, not compiled.
+  SNYK-GOLANG-GOOPENTELEMETRYIOOTELBAGGAGE-15928416:
+    - '*':
+        reason: >-
+          CVE-2026-29181 Allocation of Resources Without Limits (CWE-770, CVSS High).
+          go.opentelemetry.io/otel/baggage appears in the module graph as a transitive
+          dependency of google.golang.org/grpc, but is never imported by this project.
+          Not compiled into any binary.
+        expires: 2026-10-09T00:00:00.000Z
+        created: 2026-04-09T00:00:00.000Z
+  SNYK-GOLANG-GOOPENTELEMETRYIOOTELINTERNALGLOBAL-15928418:
+    - '*':
+        reason: >-
+          CVE-2026-29181 Allocation of Resources Without Limits (CWE-770, CVSS High).
+          go.opentelemetry.io/otel/internal/global appears in the module graph as a transitive
+          dependency of google.golang.org/grpc, but is never imported by this project.
+          Not compiled into any binary.
+        expires: 2026-10-09T00:00:00.000Z
+        created: 2026-04-09T00:00:00.000Z
+  SNYK-GOLANG-GOOPENTELEMETRYIOOTELINTERNALERRORHANDLER-15928419:
+    - '*':
+        reason: >-
+          CVE-2026-29181 Allocation of Resources Without Limits (CWE-770, CVSS High).
+          go.opentelemetry.io/otel error handler appears in the module graph as a transitive
+          dependency of google.golang.org/grpc, but is never imported by this project.
+          Not compiled into any binary.
+        expires: 2026-10-09T00:00:00.000Z
+        created: 2026-04-09T00:00:00.000Z
+  SNYK-GOLANG-GOOPENTELEMETRYIOOTELPROPAGATION-15928420:
+    - '*':
+        reason: >-
+          CVE-2026-29181 Allocation of Resources Without Limits (CWE-770, CVSS High).
+          go.opentelemetry.io/otel/propagation appears in the module graph as a transitive
+          dependency of google.golang.org/grpc, but is never imported by this project.
+          Not compiled into any binary.
+        expires: 2026-10-09T00:00:00.000Z
+        created: 2026-04-09T00:00:00.000Z
+  # --- OpenTelemetry CVE-2026-39882: Memory Allocation with Excessive Size (CWE-789) ---
+  # Affects otel/exporters/otlp/otlpmetric/otlpmetrichttp and otlptrace/otlptracehttp.
+  SNYK-GOLANG-GOOPENTELEMETRYIOTELEXPORTERSOTLPOTLPMETRICOTLPMETRICHTTP-15954197:
+    - '*':
+        reason: >-
+          CVE-2026-39882 Memory Allocation with Excessive Size Value (CWE-789, CVSS High).
+          go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp appears in the
+          module graph as a transitive dependency of google.golang.org/grpc, but is never
+          imported by this project. Not compiled into any binary.
+        expires: 2026-10-09T00:00:00.000Z
+        created: 2026-04-09T00:00:00.000Z
+  SNYK-GOLANG-GOOPENTELEMETRYIOTELEXPORTERSOTLPOTLPTRACEOTLPTRACEHTTP-15954195:
+    - '*':
+        reason: >-
+          CVE-2026-39882 Memory Allocation with Excessive Size Value (CWE-789, CVSS High).
+          go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp appears in the
+          module graph as a transitive dependency of google.golang.org/grpc, but is never
+          imported by this project. Not compiled into any binary.
+        expires: 2026-10-09T00:00:00.000Z
+        created: 2026-04-09T00:00:00.000Z
+  # --- OpenTelemetry CVE-2026-39883: Untrusted Search Path (CWE-426) — new CVE on sdk/resource ---
+  SNYK-GOLANG-GOOPENTELEMETRYIOOTELSDKRESOURCE-15954212:
+    - '*':
+        reason: >-
+          CVE-2026-39883 Untrusted Search Path (CWE-426, CVSS High).
+          go.opentelemetry.io/otel/sdk/resource appears in the module graph as a transitive
+          dependency of google.golang.org/grpc, but is never imported by this project.
+          Not compiled into any binary. (Separate CVE from existing ignore -15182758.)
+        expires: 2026-10-09T00:00:00.000Z
+        created: 2026-04-09T00:00:00.000Z
   # --- go-jose vulnerability (fixed via go.mod pin; ignore retained as safety net) ---
   SNYK-GOLANG-GITHUBCOMGOJOSEGOJOSE-15875219:
     - '*':
