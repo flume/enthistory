@@ -41,9 +41,9 @@ ignore:
     - '*':
         reason: >-
           CVE-2026-24051 Untrusted Search Path (CWE-426, CVSS High).
-          go.opentelemetry.io/otel/sdk appears in the module graph as a transitive
+          go.opentelemetry.io/otel/sdk/resource appears in the module graph as a transitive
           dependency of google.golang.org/grpc, but is never imported by this project.
-          `go mod why` confirms: "main module does not need package go.opentelemetry.io/otel/sdk".
+          `go mod why` confirms: "main module does not need package go.opentelemetry.io/otel/sdk/resource".
           Not compiled into any binary. Cannot upgrade without forking grpc's go.mod.
         expires: 2026-10-07T00:00:00.000Z
         created: 2026-04-07T00:00:00.000Z
