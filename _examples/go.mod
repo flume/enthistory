@@ -1,6 +1,6 @@
 module _examples
 
-go 1.26.1
+go 1.26.2
 
 require (
 	entgo.io/contrib v0.7.0
