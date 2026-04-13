@@ -88,7 +88,7 @@ ignore:
         created: 2026-04-09T00:00:00.000Z
   # --- OpenTelemetry CVE-2026-39882: Memory Allocation with Excessive Size (CWE-789) ---
   # Affects otel/exporters/otlp/otlpmetric/otlpmetrichttp and otlptrace/otlptracehttp.
-  SNYK-GOLANG-GOOPENTELEMETRYIOTELEXPORTERSOTLPOTLPMETRICOTLPMETRICHTTP-15954197:
+  SNYK-GOLANG-GOOPENTELEMETRYIOOTELEXPORTERSOTLPOTLPMETRICOTLPMETRICHTTP-15954197:
     - '*':
         reason: >-
           CVE-2026-39882 Memory Allocation with Excessive Size Value (CWE-789, CVSS High).
@@ -97,7 +97,7 @@ ignore:
           imported by this project. Not compiled into any binary.
         expires: 2026-10-09T00:00:00.000Z
         created: 2026-04-09T00:00:00.000Z
-  SNYK-GOLANG-GOOPENTELEMETRYIOTELEXPORTERSOTLPOTLPTRACEOTLPTRACEHTTP-15954195:
+  SNYK-GOLANG-GOOPENTELEMETRYIOOTELEXPORTERSOTLPOTLPTRACEOTLPTRACEHTTP-15954196:
     - '*':
         reason: >-
           CVE-2026-39882 Memory Allocation with Excessive Size Value (CWE-789, CVSS High).
