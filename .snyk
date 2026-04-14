@@ -1,19 +1,19 @@
 version: v1.5.0
 ignore:
   # --- License issues (MPL-2.0 from HashiCorp transitive deps) ---
-  snyk:lic:golang:github.com/hashicorp/go-multierror:MPL-2.0:
+  snyk:lic:golang:github.com:hashicorp:go-multierror:MPL-2.0:
     - '*':
         reason: Generated code dependency from entgo.io/contrib entgql templates; cannot remove without forking
         created: 2026-03-20T00:00:00.000Z
-  snyk:lic:golang:github.com/hashicorp/errwrap:MPL-2.0:
+  snyk:lic:golang:github.com:hashicorp:errwrap:MPL-2.0:
     - '*':
         reason: Transitive dependency of go-multierror; cannot remove without forking
         created: 2026-03-20T00:00:00.000Z
-  snyk:lic:golang:github.com/hashicorp/hcl/v2:MPL-2.0:
+  snyk:lic:golang:github.com:hashicorp:hcl:v2:MPL-2.0:
     - '*':
         reason: Transitive dependency of ariga.io/atlas used by ent; cannot remove
         created: 2026-03-20T00:00:00.000Z
-  snyk:lic:golang:github.com/hashicorp/golang-lru/v2:MPL-2.0:
+  snyk:lic:golang:github.com:hashicorp:golang-lru:v2:MPL-2.0:
     - '*':
         reason: Transitive dependency of entgo.io/contrib and github.com/99designs/gqlgen; cannot remove without forking
         created: 2026-03-25T00:00:00.000Z
@@ -88,7 +88,7 @@ ignore:
         created: 2026-04-09T00:00:00.000Z
   # --- OpenTelemetry CVE-2026-39882: Memory Allocation with Excessive Size (CWE-789) ---
   # Affects otel/exporters/otlp/otlpmetric/otlpmetrichttp and otlptrace/otlptracehttp.
-  SNYK-GOLANG-GOOPENTELEMETRYIOTELEXPORTERSOTLPOTLPMETRICOTLPMETRICHTTP-15954197:
+  SNYK-GOLANG-GOOPENTELEMETRYIOOTELEXPORTERSOTLPOTLPMETRICOTLPMETRICHTTP-15954197:
     - '*':
         reason: >-
           CVE-2026-39882 Memory Allocation with Excessive Size Value (CWE-789, CVSS High).
@@ -97,7 +97,7 @@ ignore:
           imported by this project. Not compiled into any binary.
         expires: 2026-10-09T00:00:00.000Z
         created: 2026-04-09T00:00:00.000Z
-  SNYK-GOLANG-GOOPENTELEMETRYIOTELEXPORTERSOTLPOTLPTRACEOTLPTRACEHTTP-15954195:
+  SNYK-GOLANG-GOOPENTELEMETRYIOOTELEXPORTERSOTLPOTLPTRACEOTLPTRACEHTTP-15954196:
     - '*':
         reason: >-
           CVE-2026-39882 Memory Allocation with Excessive Size Value (CWE-789, CVSS High).
@@ -116,57 +116,53 @@ ignore:
           Not compiled into any binary. (Separate CVE from existing ignore -15182758.)
         expires: 2026-10-09T00:00:00.000Z
         created: 2026-04-09T00:00:00.000Z
-  # --- go-jose vulnerabilities (fixed via go.mod pin; ignores retained as safety net) ---
-  # go mod tidy drops the pin because grpc only requires v4.1.3.
+  # --- go-jose vulnerabilities (transitive ghost dep via grpc; not in go.mod) ---
   SNYK-GOLANG-GITHUBCOMGOJOSEGOJOSE-15875219:
     - '*':
         reason: >-
           Improper Verification of Cryptographic Signature (CVSS 8.0).
-          Fixed via go.mod pin to go-jose/v4 v4.1.4. Ignore retained as safety net —
-          go mod tidy reverts this pin because upstream deps (grpc) only require
-          v4.1.3, and lazy module loading does not track the override in go.mod.
+          Transitive dependency of google.golang.org/grpc (requires v4.1.3);
+          not listed in go.mod and not compiled into any binary.
         expires: 2026-10-07T00:00:00.000Z
         created: 2026-04-07T00:00:00.000Z
   SNYK-GOLANG-GITHUBCOMGOJOSEGOJOSEV4-15875221:
     - '*':
         reason: >-
           CVE-2026-34986 Uncaught Exception (CWE-248, CVSS 8.7).
-          Fixed via go.mod pin to go-jose/v4 v4.1.4. Ignore retained as safety net —
-          go mod tidy reverts this pin because upstream deps (grpc) only require v4.1.3.
+          Transitive dependency of google.golang.org/grpc (requires v4.1.3);
+          not listed in go.mod and not compiled into any binary.
         expires: 2026-10-09T00:00:00.000Z
         created: 2026-04-09T00:00:00.000Z
   SNYK-GOLANG-GITHUBCOMGOJOSEGOJOSECIPHER-15875222:
     - '*':
         reason: >-
           CVE-2026-34986 Uncaught Exception (CWE-248, CVSS 8.7).
-          Fixed via go.mod pin to go-jose/v4 v4.1.4. Ignore retained as safety net —
-          go mod tidy reverts this pin because upstream deps (grpc) only require v4.1.3.
+          Transitive dependency of google.golang.org/grpc (requires v4.1.3);
+          not listed in go.mod and not compiled into any binary.
         expires: 2026-10-09T00:00:00.000Z
         created: 2026-04-09T00:00:00.000Z
   SNYK-GOLANG-GITHUBCOMGOJOSEGOJOSEV4CIPHER-15875234:
     - '*':
         reason: >-
           CVE-2026-34986 Uncaught Exception (CWE-248, CVSS 8.7).
-          Fixed via go.mod pin to go-jose/v4 v4.1.4. Ignore retained as safety net —
-          go mod tidy reverts this pin because upstream deps (grpc) only require v4.1.3.
+          Transitive dependency of google.golang.org/grpc (requires v4.1.3);
+          not listed in go.mod and not compiled into any binary.
         expires: 2026-10-09T00:00:00.000Z
         created: 2026-04-09T00:00:00.000Z
-  # --- golang.org/x/crypto vulnerabilities (fixed via go.mod pin; ignore retained as safety net) ---
+  # --- golang.org/x/crypto vulnerabilities (transitive ghost dep; not in go.mod) ---
   SNYK-GOLANG-GOLANGORGXCRYPTOSSH-8747056:
     - '*':
         reason: >-
           CVE-2025-22869 Allocation of Resources Without Limits (CWE-770, CVSS 6.9).
-          Fixed via go.mod pin to golang.org/x/crypto v0.49.0. Ignore retained as safety
-          net — go mod tidy reverts this pin because upstream deps (hashicorp/hcl v2.24.0)
-          only require v0.38.0, and lazy module loading does not track the override in go.mod.
+          Transitive dependency of hashicorp/hcl v2.24.0 (requires x/crypto v0.38.0);
+          not listed in go.mod and not compiled into any binary.
         expires: 2026-10-07T00:00:00.000Z
         created: 2026-04-07T00:00:00.000Z
   SNYK-GOLANG-GOLANGORGXCRYPTOSSHAGENT-12668891:
     - '*':
         reason: >-
           CVE-2025-47913 Improper Handling of Unexpected Data Type (CWE-241, CVSS 7.1).
-          Fixed via go.mod pin to golang.org/x/crypto v0.49.0. Ignore retained as safety
-          net — go mod tidy reverts this pin because upstream deps constrain resolution to
-          v0.38.0, and lazy module loading does not track the override in go.mod.
+          Transitive dependency of hashicorp/hcl v2.24.0 (requires x/crypto v0.38.0);
+          not listed in go.mod and not compiled into any binary.
         expires: 2026-10-07T00:00:00.000Z
         created: 2026-04-07T00:00:00.000Z
