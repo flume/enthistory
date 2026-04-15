@@ -149,6 +149,16 @@ ignore:
           not listed in go.mod and not compiled into any binary.
         expires: 2026-10-09T00:00:00.000Z
         created: 2026-04-09T00:00:00.000Z
+  # --- goldmark XSS vulnerability (transitive ghost dep; not compiled) ---
+  SNYK-GOLANG-GITHUBCOMYUINGOLDMARKRENDERHTML-15838406:
+    - '*':
+        reason: >-
+          CVE-2026-5160 Cross-site Scripting (CWE-79).
+          github.com/yuin/goldmark is a transitive dependency of golang.org/x/tools v0.44.0;
+          not listed in go.mod and not compiled into any binary.
+          `go mod why` confirms: "main module does not need package github.com/yuin/goldmark".
+        expires: 2026-10-15T00:00:00.000Z
+        created: 2026-04-15T00:00:00.000Z
   # --- golang.org/x/crypto vulnerabilities (transitive ghost dep; not in go.mod) ---
   SNYK-GOLANG-GOLANGORGXCRYPTOSSH-8747056:
     - '*':
