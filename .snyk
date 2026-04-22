@@ -24,7 +24,8 @@ ignore:
           No fix available; msgpack v5.4.1 is the latest version.
           Transitive dependency of hashicorp/hcl, ariga.io/atlas, entgo.io/ent,
           zclconf/go-cty, and zclconf/go-cty-yaml. Cannot remove without forking upstream.
-        expires: 2026-07-03T00:00:00.000Z
+          Last verified: 2026-04-22.
+        expires: 2027-01-03T00:00:00.000Z
         created: 2026-04-03T00:00:00.000Z
   SNYK-GOLANG-GITHUBCOMVMIHAILENCOMSGPACK-15702236:
     - '*':
@@ -34,7 +35,8 @@ ignore:
           Transitive dependency of hashicorp/hcl, ariga.io/atlas, entgo.io/ent,
           zclconf/go-cty, and zclconf/go-cty-yaml. Cannot remove without forking upstream.
           Duplicate Snyk entry for same CVE under alternate package path.
-        expires: 2026-07-03T00:00:00.000Z
+          Last verified: 2026-04-22.
+        expires: 2027-01-03T00:00:00.000Z
         created: 2026-04-07T00:00:00.000Z
   # --- OpenTelemetry SDK vulnerability (not imported; transitive ghost dep via grpc) ---
   SNYK-GOLANG-GOOPENTELEMETRYIOOTELSDKRESOURCE-15182758:
