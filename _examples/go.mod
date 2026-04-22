@@ -49,3 +49,9 @@ require (
 )
 
 replace github.com/flume/enthistory => ../.
+
+replace github.com/go-jose/go-jose/v4 => github.com/go-jose/go-jose/v4 v4.1.4
+
+replace golang.org/x/crypto => golang.org/x/crypto v0.50.0
+
+replace github.com/yuin/goldmark => github.com/yuin/goldmark v1.8.2
