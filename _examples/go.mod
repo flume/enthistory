@@ -35,7 +35,7 @@ require (
 	github.com/sosodev/duration v1.4.0 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
-	github.com/zclconf/go-cty v1.18.0 // indirect
+	github.com/zclconf/go-cty v1.18.1 // indirect
 	github.com/zclconf/go-cty-yaml v1.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f // indirect
@@ -49,3 +49,9 @@ require (
 )
 
 replace github.com/flume/enthistory => ../.
+
+replace github.com/go-jose/go-jose/v4 => github.com/go-jose/go-jose/v4 v4.1.4
+
+replace golang.org/x/crypto => golang.org/x/crypto v0.50.0
+
+replace github.com/yuin/goldmark => github.com/yuin/goldmark v1.8.2
