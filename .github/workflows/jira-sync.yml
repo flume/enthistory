@@ -9,6 +9,9 @@ on:
       - converted_to_draft
       - closed
 
+permissions:
+  contents: read
+
 jobs:
   jira-sync:
     uses: flume/github-actions/.github/workflows/jira-sync.yml@main
