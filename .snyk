@@ -161,8 +161,8 @@ ignore:
           `go mod why` confirms: "main module does not need package github.com/yuin/goldmark".
         expires: 2026-10-15T00:00:00.000Z
         created: 2026-04-15T00:00:00.000Z
-  # --- golang.org/x/crypto vulnerabilities (transitive ghost dep; not in go.mod) ---
-  # hashicorp/hcl v2.24.0 requires x/crypto v0.38.0; replace directive pins to v0.52.0.
+  # --- golang.org/x/crypto vulnerabilities (transitive ghost dep; not a direct require) ---
+  # hashicorp/hcl v2.24.0 requires x/crypto v0.38.0; replace directive in go.mod pins to v0.52.0.
   # Snyk may still flag the transitive dep at v0.38.0 despite the replace.
   # All CVEs below are fixed in x/crypto v0.52.0.
   SNYK-GOLANG-GOLANGORGXCRYPTOSSH-16795342:
