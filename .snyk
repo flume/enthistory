@@ -162,19 +162,94 @@ ignore:
         expires: 2026-10-15T00:00:00.000Z
         created: 2026-04-15T00:00:00.000Z
   # --- golang.org/x/crypto vulnerabilities (transitive ghost dep; not in go.mod) ---
-  SNYK-GOLANG-GOLANGORGXCRYPTOSSH-8747056:
+  # hashicorp/hcl v2.24.0 requires x/crypto v0.38.0; replace directive pins to v0.52.0.
+  # Snyk may still flag the transitive dep at v0.38.0 despite the replace.
+  # All CVEs below are fixed in x/crypto v0.52.0.
+  SNYK-GOLANG-GOLANGORGXCRYPTOSSH-16795342:
     - '*':
         reason: >-
-          CVE-2025-22869 Allocation of Resources Without Limits (CWE-770, CVSS 6.9).
-          Transitive dependency of hashicorp/hcl v2.24.0 (requires x/crypto v0.38.0);
-          not listed in go.mod and not compiled into any binary.
-        expires: 2026-10-07T00:00:00.000Z
-        created: 2026-04-07T00:00:00.000Z
-  SNYK-GOLANG-GOLANGORGXCRYPTOSSHAGENT-12668891:
+          CVE-2026-39827 (CVSS 7.1 High). golang.org/x/crypto/ssh.
+          Transitive ghost dep of hashicorp/hcl v2.24.0; pinned to v0.52.0 via replace directive.
+          Not compiled into any binary.
+        expires: 2027-01-26T00:00:00.000Z
+        created: 2026-05-26T00:00:00.000Z
+  SNYK-GOLANG-GOLANGORGXCRYPTOSSH-16795344:
     - '*':
         reason: >-
-          CVE-2025-47913 Improper Handling of Unexpected Data Type (CWE-241, CVSS 7.1).
-          Transitive dependency of hashicorp/hcl v2.24.0 (requires x/crypto v0.38.0);
-          not listed in go.mod and not compiled into any binary.
-        expires: 2026-10-07T00:00:00.000Z
-        created: 2026-04-07T00:00:00.000Z
+          CVE-2026-39831 (CVSS 8.6 High). golang.org/x/crypto/ssh.
+          Transitive ghost dep of hashicorp/hcl v2.24.0; pinned to v0.52.0 via replace directive.
+          Not compiled into any binary.
+        expires: 2027-01-26T00:00:00.000Z
+        created: 2026-05-26T00:00:00.000Z
+  SNYK-GOLANG-GOLANGORGXCRYPTOSSH-16796305:
+    - '*':
+        reason: >-
+          CVE-2026-39830 (CVSS 6.9 Medium). golang.org/x/crypto/ssh.
+          Transitive ghost dep of hashicorp/hcl v2.24.0; pinned to v0.52.0 via replace directive.
+          Not compiled into any binary.
+        expires: 2027-01-26T00:00:00.000Z
+        created: 2026-05-26T00:00:00.000Z
+  SNYK-GOLANG-GOLANGORGXCRYPTOSSH-16796309:
+    - '*':
+        reason: >-
+          CVE-2026-39828 (CVSS 5.3 Medium). golang.org/x/crypto/ssh.
+          Transitive ghost dep of hashicorp/hcl v2.24.0; pinned to v0.52.0 via replace directive.
+          Not compiled into any binary.
+        expires: 2027-01-26T00:00:00.000Z
+        created: 2026-05-26T00:00:00.000Z
+  SNYK-GOLANG-GOLANGORGXCRYPTOSSH-16796316:
+    - '*':
+        reason: >-
+          CVE-2026-46595 (CVSS 5.3 Medium). golang.org/x/crypto/ssh.
+          Transitive ghost dep of hashicorp/hcl v2.24.0; pinned to v0.52.0 via replace directive.
+          Not compiled into any binary.
+        expires: 2027-01-26T00:00:00.000Z
+        created: 2026-05-26T00:00:00.000Z
+  SNYK-GOLANG-GOLANGORGXCRYPTOSSH-16796326:
+    - '*':
+        reason: >-
+          CVE-2026-46597 (CVSS 8.7 High). golang.org/x/crypto/ssh.
+          Transitive ghost dep of hashicorp/hcl v2.24.0; pinned to v0.52.0 via replace directive.
+          Not compiled into any binary.
+        expires: 2027-01-26T00:00:00.000Z
+        created: 2026-05-26T00:00:00.000Z
+  SNYK-GOLANG-GOLANGORGXCRYPTOSSH-16796332:
+    - '*':
+        reason: >-
+          CVE-2026-39835 (CVSS 8.7 High). golang.org/x/crypto/ssh.
+          Transitive ghost dep of hashicorp/hcl v2.24.0; pinned to v0.52.0 via replace directive.
+          Not compiled into any binary.
+        expires: 2027-01-26T00:00:00.000Z
+        created: 2026-05-26T00:00:00.000Z
+  SNYK-GOLANG-GOLANGORGXCRYPTOSSHAGENT-16796334:
+    - '*':
+        reason: >-
+          CVE-2026-46598 (CVSS 8.7 High). golang.org/x/crypto/ssh/agent.
+          Transitive ghost dep of hashicorp/hcl v2.24.0; pinned to v0.52.0 via replace directive.
+          Not compiled into any binary.
+        expires: 2027-01-26T00:00:00.000Z
+        created: 2026-05-26T00:00:00.000Z
+  SNYK-GOLANG-GOLANGORGXCRYPTOSSHAGENT-16796343:
+    - '*':
+        reason: >-
+          CVE-2026-39832 (CVSS 5.3 Medium). golang.org/x/crypto/ssh/agent.
+          Transitive ghost dep of hashicorp/hcl v2.24.0; pinned to v0.52.0 via replace directive.
+          Not compiled into any binary.
+        expires: 2027-01-26T00:00:00.000Z
+        created: 2026-05-26T00:00:00.000Z
+  SNYK-GOLANG-GOLANGORGXCRYPTOSSHAGENT-16796347:
+    - '*':
+        reason: >-
+          CVE-2026-39833 (CVSS 5.3 Medium). golang.org/x/crypto/ssh/agent.
+          Transitive ghost dep of hashicorp/hcl v2.24.0; pinned to v0.52.0 via replace directive.
+          Not compiled into any binary.
+        expires: 2027-01-26T00:00:00.000Z
+        created: 2026-05-26T00:00:00.000Z
+  SNYK-GOLANG-GOLANGORGXCRYPTOSSHKNOWNHOSTS-16796449:
+    - '*':
+        reason: >-
+          CVE-2026-42508 (CVSS 8.7 High). golang.org/x/crypto/ssh/knownhosts.
+          Transitive ghost dep of hashicorp/hcl v2.24.0; pinned to v0.52.0 via replace directive.
+          Not compiled into any binary.
+        expires: 2027-01-26T00:00:00.000Z
+        created: 2026-05-26T00:00:00.000Z
