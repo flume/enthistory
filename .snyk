@@ -38,119 +38,6 @@ ignore:
           Last verified: 2026-04-22.
         expires: 2027-01-03T00:00:00.000Z
         created: 2026-04-07T00:00:00.000Z
-  # --- OpenTelemetry SDK vulnerability (not imported; transitive ghost dep via grpc) ---
-  SNYK-GOLANG-GOOPENTELEMETRYIOOTELSDKRESOURCE-15182758:
-    - '*':
-        reason: >-
-          CVE-2026-24051 Untrusted Search Path (CWE-426, CVSS High).
-          go.opentelemetry.io/otel/sdk/resource appears in the module graph as a transitive
-          dependency of google.golang.org/grpc, but is never imported by this project.
-          `go mod why` confirms: "main module does not need package go.opentelemetry.io/otel/sdk/resource".
-          Not compiled into any binary. Cannot upgrade without forking grpc's go.mod.
-        expires: 2026-10-07T00:00:00.000Z
-        created: 2026-04-07T00:00:00.000Z
-  # --- OpenTelemetry CVE-2026-29181: Allocation of Resources Without Limits (CWE-770) ---
-  # Affects otel/baggage, otel/internal/global, otel/internal/errorhandler, otel/propagation.
-  # All are ghost transitive deps of google.golang.org/grpc — never imported, not compiled.
-  SNYK-GOLANG-GOOPENTELEMETRYIOOTELBAGGAGE-15928416:
-    - '*':
-        reason: >-
-          CVE-2026-29181 Allocation of Resources Without Limits (CWE-770, CVSS High).
-          go.opentelemetry.io/otel/baggage appears in the module graph as a transitive
-          dependency of google.golang.org/grpc, but is never imported by this project.
-          Not compiled into any binary.
-        expires: 2026-10-09T00:00:00.000Z
-        created: 2026-04-09T00:00:00.000Z
-  SNYK-GOLANG-GOOPENTELEMETRYIOOTELINTERNALGLOBAL-15928418:
-    - '*':
-        reason: >-
-          CVE-2026-29181 Allocation of Resources Without Limits (CWE-770, CVSS High).
-          go.opentelemetry.io/otel/internal/global appears in the module graph as a transitive
-          dependency of google.golang.org/grpc, but is never imported by this project.
-          Not compiled into any binary.
-        expires: 2026-10-09T00:00:00.000Z
-        created: 2026-04-09T00:00:00.000Z
-  SNYK-GOLANG-GOOPENTELEMETRYIOOTELINTERNALERRORHANDLER-15928419:
-    - '*':
-        reason: >-
-          CVE-2026-29181 Allocation of Resources Without Limits (CWE-770, CVSS High).
-          go.opentelemetry.io/otel/internal/errorhandler appears in the module graph as a transitive
-          dependency of google.golang.org/grpc, but is never imported by this project.
-          Not compiled into any binary.
-        expires: 2026-10-09T00:00:00.000Z
-        created: 2026-04-09T00:00:00.000Z
-  SNYK-GOLANG-GOOPENTELEMETRYIOOTELPROPAGATION-15928420:
-    - '*':
-        reason: >-
-          CVE-2026-29181 Allocation of Resources Without Limits (CWE-770, CVSS High).
-          go.opentelemetry.io/otel/propagation appears in the module graph as a transitive
-          dependency of google.golang.org/grpc, but is never imported by this project.
-          Not compiled into any binary.
-        expires: 2026-10-09T00:00:00.000Z
-        created: 2026-04-09T00:00:00.000Z
-  # --- OpenTelemetry CVE-2026-39882: Memory Allocation with Excessive Size (CWE-789) ---
-  # Affects otel/exporters/otlp/otlpmetric/otlpmetrichttp and otlptrace/otlptracehttp.
-  SNYK-GOLANG-GOOPENTELEMETRYIOOTELEXPORTERSOTLPOTLPMETRICOTLPMETRICHTTP-15954197:
-    - '*':
-        reason: >-
-          CVE-2026-39882 Memory Allocation with Excessive Size Value (CWE-789, CVSS High).
-          go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp appears in the
-          module graph as a transitive dependency of google.golang.org/grpc, but is never
-          imported by this project. Not compiled into any binary.
-        expires: 2026-10-09T00:00:00.000Z
-        created: 2026-04-09T00:00:00.000Z
-  SNYK-GOLANG-GOOPENTELEMETRYIOOTELEXPORTERSOTLPOTLPTRACEOTLPTRACEHTTP-15954196:
-    - '*':
-        reason: >-
-          CVE-2026-39882 Memory Allocation with Excessive Size Value (CWE-789, CVSS High).
-          go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp appears in the
-          module graph as a transitive dependency of google.golang.org/grpc, but is never
-          imported by this project. Not compiled into any binary.
-        expires: 2026-10-09T00:00:00.000Z
-        created: 2026-04-09T00:00:00.000Z
-  # --- OpenTelemetry CVE-2026-39883: Untrusted Search Path (CWE-426) — new CVE on sdk/resource ---
-  SNYK-GOLANG-GOOPENTELEMETRYIOOTELSDKRESOURCE-15954212:
-    - '*':
-        reason: >-
-          CVE-2026-39883 Untrusted Search Path (CWE-426, CVSS High).
-          go.opentelemetry.io/otel/sdk/resource appears in the module graph as a transitive
-          dependency of google.golang.org/grpc, but is never imported by this project.
-          Not compiled into any binary. (Separate CVE from existing ignore -15182758.)
-        expires: 2026-10-09T00:00:00.000Z
-        created: 2026-04-09T00:00:00.000Z
-  # --- go-jose vulnerabilities (transitive ghost dep via grpc; not in go.mod) ---
-  SNYK-GOLANG-GITHUBCOMGOJOSEGOJOSE-15875219:
-    - '*':
-        reason: >-
-          Improper Verification of Cryptographic Signature (CVSS 8.0).
-          Transitive dependency of google.golang.org/grpc (requires v4.1.3);
-          not listed in go.mod and not compiled into any binary.
-        expires: 2026-10-07T00:00:00.000Z
-        created: 2026-04-07T00:00:00.000Z
-  SNYK-GOLANG-GITHUBCOMGOJOSEGOJOSEV4-15875221:
-    - '*':
-        reason: >-
-          CVE-2026-34986 Uncaught Exception (CWE-248, CVSS 8.7).
-          Transitive dependency of google.golang.org/grpc (requires v4.1.3);
-          not listed in go.mod and not compiled into any binary.
-        expires: 2026-10-09T00:00:00.000Z
-        created: 2026-04-09T00:00:00.000Z
-  SNYK-GOLANG-GITHUBCOMGOJOSEGOJOSECIPHER-15875222:
-    - '*':
-        reason: >-
-          CVE-2026-34986 Uncaught Exception (CWE-248, CVSS 8.7).
-          Transitive dependency of google.golang.org/grpc (requires v4.1.3);
-          not listed in go.mod and not compiled into any binary.
-        expires: 2026-10-09T00:00:00.000Z
-        created: 2026-04-09T00:00:00.000Z
-  SNYK-GOLANG-GITHUBCOMGOJOSEGOJOSEV4CIPHER-15875234:
-    - '*':
-        reason: >-
-          CVE-2026-34986 Uncaught Exception (CWE-248, CVSS 8.7).
-          Transitive dependency of google.golang.org/grpc (requires v4.1.3);
-          not listed in go.mod and not compiled into any binary.
-        expires: 2026-10-09T00:00:00.000Z
-        created: 2026-04-09T00:00:00.000Z
   # --- goldmark XSS vulnerability (transitive ghost dep; not compiled) ---
   SNYK-GOLANG-GITHUBCOMYUINGOLDMARKRENDERHTML-15838406:
     - '*':
@@ -253,3 +140,56 @@ ignore:
           Not compiled into any binary.
         expires: 2027-01-26T00:00:00.000Z
         created: 2026-05-26T00:00:00.000Z
+  # --- golang.org/x/net/html vulnerabilities (indirect dep; pinned via replace) ---
+  # Multiple upstreams require x/net (entgo.io/contrib, gqlgen, protoreflect, x/tools, grpc).
+  # MVS resolves to v0.53.0; replace directive pins to v0.55.0.
+  SNYK-GOLANG-GOLANGORGXNETHTML-16873672:
+    - '*':
+        reason: >-
+          CVE-2026-42506 (CVSS 5.3 Medium). golang.org/x/net/html.
+          Indirect dep pinned to v0.55.0 via replace directive.
+          x/net/html is not imported by this module; not compiled into any binary.
+        expires: 2027-01-27T00:00:00.000Z
+        created: 2026-05-27T00:00:00.000Z
+  SNYK-GOLANG-GOLANGORGXNETHTML-16873674:
+    - '*':
+        reason: >-
+          CVE-2026-27136 (CVSS 5.3 Medium). golang.org/x/net/html.
+          Indirect dep pinned to v0.55.0 via replace directive.
+          x/net/html is not imported by this module; not compiled into any binary.
+        expires: 2027-01-27T00:00:00.000Z
+        created: 2026-05-27T00:00:00.000Z
+  SNYK-GOLANG-GOLANGORGXNETHTML-16873676:
+    - '*':
+        reason: >-
+          CVE-2026-42502 (CVSS 5.3 Medium). golang.org/x/net/html.
+          Indirect dep pinned to v0.55.0 via replace directive.
+          x/net/html is not imported by this module; not compiled into any binary.
+        expires: 2027-01-27T00:00:00.000Z
+        created: 2026-05-27T00:00:00.000Z
+  SNYK-GOLANG-GOLANGORGXNETHTML-16873774:
+    - '*':
+        reason: >-
+          CVE-2026-25681 (CVSS 5.3 Medium). golang.org/x/net/html.
+          Indirect dep pinned to v0.55.0 via replace directive.
+          x/net/html is not imported by this module; not compiled into any binary.
+        expires: 2027-01-27T00:00:00.000Z
+        created: 2026-05-27T00:00:00.000Z
+  SNYK-GOLANG-GOLANGORGXNETHTML-16873779:
+    - '*':
+        reason: >-
+          CVE-2026-25680 (CVSS 5.3 Medium). golang.org/x/net/html.
+          Indirect dep pinned to v0.55.0 via replace directive.
+          x/net/html is not imported by this module; not compiled into any binary.
+        expires: 2027-01-27T00:00:00.000Z
+        created: 2026-05-27T00:00:00.000Z
+  # --- golang.org/x/sys/windows vulnerability (indirect dep; pinned via replace) ---
+  SNYK-GOLANG-GOLANGORGXSYSWINDOWS-16873670:
+    - '*':
+        reason: >-
+          CVE-2026-39824 (CVSS 4.8 Medium). golang.org/x/sys/windows.
+          In module graph via grpc chain but build-tag guarded (windows only);
+          not compiled on project target platforms (linux/darwin).
+          Pinned to v0.44.0 via replace directive.
+        expires: 2027-01-27T00:00:00.000Z
+        created: 2026-05-27T00:00:00.000Z
