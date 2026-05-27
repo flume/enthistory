@@ -14,7 +14,7 @@ require (
 	google.golang.org/protobuf v1.36.11
 )
 
-require google.golang.org/grpc v1.80.0 // indirect
+require google.golang.org/grpc v1.81.1 // indirect
 
 require (
 	ariga.io/atlas v1.2.0 // indirect
@@ -46,8 +46,6 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260413220744-3e5c5a5a0756 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-replace github.com/go-jose/go-jose/v4 => github.com/go-jose/go-jose/v4 v4.1.4
 
 replace golang.org/x/crypto => golang.org/x/crypto v0.52.0
 
