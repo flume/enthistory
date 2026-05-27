@@ -55,3 +55,7 @@ replace github.com/go-jose/go-jose/v4 => github.com/go-jose/go-jose/v4 v4.1.4
 replace golang.org/x/crypto => golang.org/x/crypto v0.52.0
 
 replace github.com/yuin/goldmark => github.com/yuin/goldmark v1.8.2
+
+replace golang.org/x/net => golang.org/x/net v0.55.0
+
+replace golang.org/x/sys => golang.org/x/sys v0.44.0
