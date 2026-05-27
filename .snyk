@@ -261,6 +261,7 @@ ignore:
         reason: >-
           CVE-2026-42506 (CVSS 5.3 Medium). golang.org/x/net/html.
           Indirect dep pinned to v0.55.0 via replace directive.
+          x/net/html is not imported by this module; not compiled into any binary.
         expires: 2027-01-27T00:00:00.000Z
         created: 2026-05-27T00:00:00.000Z
   SNYK-GOLANG-GOLANGORGXNETHTML-16873674:
@@ -268,6 +269,7 @@ ignore:
         reason: >-
           CVE-2026-27136 (CVSS 5.3 Medium). golang.org/x/net/html.
           Indirect dep pinned to v0.55.0 via replace directive.
+          x/net/html is not imported by this module; not compiled into any binary.
         expires: 2027-01-27T00:00:00.000Z
         created: 2026-05-27T00:00:00.000Z
   SNYK-GOLANG-GOLANGORGXNETHTML-16873676:
@@ -275,6 +277,7 @@ ignore:
         reason: >-
           CVE-2026-42502 (CVSS 5.3 Medium). golang.org/x/net/html.
           Indirect dep pinned to v0.55.0 via replace directive.
+          x/net/html is not imported by this module; not compiled into any binary.
         expires: 2027-01-27T00:00:00.000Z
         created: 2026-05-27T00:00:00.000Z
   SNYK-GOLANG-GOLANGORGXNETHTML-16873774:
@@ -282,6 +285,7 @@ ignore:
         reason: >-
           CVE-2026-25681 (CVSS 5.3 Medium). golang.org/x/net/html.
           Indirect dep pinned to v0.55.0 via replace directive.
+          x/net/html is not imported by this module; not compiled into any binary.
         expires: 2027-01-27T00:00:00.000Z
         created: 2026-05-27T00:00:00.000Z
   SNYK-GOLANG-GOLANGORGXNETHTML-16873779:
@@ -289,6 +293,7 @@ ignore:
         reason: >-
           CVE-2026-25680 (CVSS 5.3 Medium). golang.org/x/net/html.
           Indirect dep pinned to v0.55.0 via replace directive.
+          x/net/html is not imported by this module; not compiled into any binary.
         expires: 2027-01-27T00:00:00.000Z
         created: 2026-05-27T00:00:00.000Z
   # --- golang.org/x/sys/windows vulnerability (indirect dep; pinned via replace) ---
@@ -296,6 +301,8 @@ ignore:
     - '*':
         reason: >-
           CVE-2026-39824 (CVSS 4.8 Medium). golang.org/x/sys/windows.
-          Indirect dep pinned to v0.44.0 via replace directive.
+          In module graph via grpc chain but build-tag guarded (windows only);
+          not compiled on project target platforms (linux/darwin).
+          Pinned to v0.44.0 via replace directive.
         expires: 2027-01-27T00:00:00.000Z
         created: 2026-05-27T00:00:00.000Z
