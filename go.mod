@@ -54,3 +54,5 @@ replace github.com/yuin/goldmark => github.com/yuin/goldmark v1.8.2
 replace golang.org/x/net => golang.org/x/net v0.55.0
 
 replace golang.org/x/sys => golang.org/x/sys v0.44.0
+
+replace go.opentelemetry.io/otel => go.opentelemetry.io/otel v1.44.0
