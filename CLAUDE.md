@@ -24,7 +24,7 @@ go test -run TestHistoryFieldsWithAnonFuncDefault ./
 cd _examples && go test -run TestEntHistoryBasic ./.
 ```
 
-Go version: 1.25+ (see go.mod). CI uses golangci-lint v2.4.
+Go version: 1.26.7+ (see go.mod). CI uses golangci-lint v2.11.
 
 ## Architecture
 
