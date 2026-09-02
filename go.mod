@@ -1,6 +1,6 @@
 module github.com/flume/enthistory
 
-go 1.26.7
+go 1.26.8
 
 require (
 	entgo.io/contrib v0.7.0
@@ -9,12 +9,10 @@ require (
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/google/uuid v1.6.0
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/sync v0.20.0
-	golang.org/x/tools v0.44.0
+	golang.org/x/sync v0.22.0
+	golang.org/x/tools v0.48.0
 	google.golang.org/protobuf v1.36.11
 )
-
-require google.golang.org/grpc v1.82.1 // indirect
 
 require (
 	ariga.io/atlas v1.2.0 // indirect
@@ -27,6 +25,7 @@ require (
 	github.com/goccy/go-yaml v1.19.2 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
+	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/hashicorp/hcl/v2 v2.24.0 // indirect
 	github.com/jhump/protoreflect v1.18.0 // indirect
 	github.com/jhump/protoreflect/v2 v2.0.0-beta.2 // indirect
@@ -41,13 +40,19 @@ require (
 	github.com/zclconf/go-cty-yaml v1.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f // indirect
-	golang.org/x/mod v0.35.0 // indirect
-	golang.org/x/text v0.36.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260414002931-afd174a4e478 // indirect
+	golang.org/x/mod v0.38.0 // indirect
+	golang.org/x/text v0.41.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect
+	google.golang.org/grpc v1.83.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace golang.org/x/crypto => golang.org/x/crypto v0.52.0
+// x/crypto is a ghost dependency: zero go.sum entries in this module, nothing
+// builds from it. Without this line the module graph surfaces v0.38.0 from a
+// transitive go.mod and Snyk reports a HIGH (verified on PR #106). Pinned to the
+// current latest so it cannot downgrade anything today; re-check each sweep, as a
+// replace rewrites every version unconditionally and will cap a future requirement.
+replace golang.org/x/crypto => golang.org/x/crypto v0.56.0
 
 replace github.com/yuin/goldmark => github.com/yuin/goldmark v1.8.2
 
