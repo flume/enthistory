@@ -1,6 +1,6 @@
 module _examples
 
-go 1.26.7
+go 1.26.8
 
 require (
 	entgo.io/contrib v0.7.0
@@ -40,23 +40,16 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f // indirect
 	golang.org/x/mod v0.38.0 // indirect
+	golang.org/x/net v0.58.0 // indirect
 	golang.org/x/sync v0.22.0 // indirect
 	golang.org/x/text v0.41.0 // indirect
 	golang.org/x/tools v0.48.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260414002931-afd174a4e478 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 replace github.com/flume/enthistory => ../.
-
-replace github.com/yuin/goldmark => github.com/yuin/goldmark v1.8.2
-
-replace golang.org/x/net => golang.org/x/net v0.55.0
-
-replace golang.org/x/sys => golang.org/x/sys v0.44.0
-
-replace google.golang.org/grpc => google.golang.org/grpc v1.82.1
 
 // x/crypto is a ghost dependency: zero go.sum entries in this module, nothing
 // builds from it. Without this line the module graph surfaces v0.38.0 from a
@@ -64,3 +57,11 @@ replace google.golang.org/grpc => google.golang.org/grpc v1.82.1
 // current latest so it cannot downgrade anything today; re-check each sweep, as a
 // replace rewrites every version unconditionally and will cap a future requirement.
 replace golang.org/x/crypto => golang.org/x/crypto v0.56.0
+
+replace github.com/yuin/goldmark => github.com/yuin/goldmark v1.8.2
+
+replace golang.org/x/net => golang.org/x/net v0.55.0
+
+replace golang.org/x/sys => golang.org/x/sys v0.44.0
+
+replace google.golang.org/grpc => google.golang.org/grpc v1.83.2

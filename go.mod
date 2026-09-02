@@ -1,6 +1,6 @@
 module github.com/flume/enthistory
 
-go 1.26.7
+go 1.26.8
 
 require (
 	entgo.io/contrib v0.7.0
@@ -13,8 +13,6 @@ require (
 	golang.org/x/tools v0.48.0
 	google.golang.org/protobuf v1.36.11
 )
-
-require google.golang.org/grpc v1.82.1 // indirect
 
 require (
 	ariga.io/atlas v1.2.0 // indirect
@@ -44,9 +42,17 @@ require (
 	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f // indirect
 	golang.org/x/mod v0.38.0 // indirect
 	golang.org/x/text v0.41.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260414002931-afd174a4e478 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect
+	google.golang.org/grpc v1.83.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+// x/crypto is a ghost dependency: zero go.sum entries in this module, nothing
+// builds from it. Without this line the module graph surfaces v0.38.0 from a
+// transitive go.mod and Snyk reports a HIGH (verified on PR #106). Pinned to the
+// current latest so it cannot downgrade anything today; re-check each sweep, as a
+// replace rewrites every version unconditionally and will cap a future requirement.
+replace golang.org/x/crypto => golang.org/x/crypto v0.56.0
 
 replace github.com/yuin/goldmark => github.com/yuin/goldmark v1.8.2
 
@@ -55,10 +61,3 @@ replace golang.org/x/net => golang.org/x/net v0.55.0
 replace golang.org/x/sys => golang.org/x/sys v0.44.0
 
 replace go.opentelemetry.io/otel => go.opentelemetry.io/otel v1.44.0
-
-// x/crypto is a ghost dependency: zero go.sum entries in this module, nothing
-// builds from it. Without this line the module graph surfaces v0.38.0 from a
-// transitive go.mod and Snyk reports a HIGH (verified on PR #106). Pinned to the
-// current latest so it cannot downgrade anything today; re-check each sweep, as a
-// replace rewrites every version unconditionally and will cap a future requirement.
-replace golang.org/x/crypto => golang.org/x/crypto v0.56.0

@@ -185,7 +185,7 @@ func Generate(schemaPath string, schemas []ent.Interface, options ...Option) (er
 
 			typeof := reflect.TypeOf(s)
 			var schemaName string
-			if typeof.Kind() == reflect.Ptr {
+			if typeof.Kind() == reflect.Pointer {
 				schemaName = typeof.Elem().Name()
 			} else {
 				schemaName = typeof.Name()
