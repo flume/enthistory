@@ -26,6 +26,7 @@ require (
 	github.com/goccy/go-yaml v1.19.2 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
+	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/hcl/v2 v2.24.0 // indirect
 	github.com/jhump/protoreflect v1.18.0 // indirect
@@ -50,7 +51,7 @@ require (
 
 replace github.com/flume/enthistory => ../.
 
-replace golang.org/x/crypto => golang.org/x/crypto v0.52.0
+replace golang.org/x/crypto => golang.org/x/crypto v0.55.0
 
 replace github.com/yuin/goldmark => github.com/yuin/goldmark v1.8.2
 

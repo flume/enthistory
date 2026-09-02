@@ -47,7 +47,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace golang.org/x/crypto => golang.org/x/crypto v0.52.0
+replace golang.org/x/crypto => golang.org/x/crypto v0.55.0
 
 replace github.com/yuin/goldmark => github.com/yuin/goldmark v1.8.2
 
