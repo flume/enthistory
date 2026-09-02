@@ -47,7 +47,12 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace golang.org/x/crypto => golang.org/x/crypto v0.55.0
+// x/crypto is a ghost dependency: zero go.sum entries in this module, nothing
+// builds from it. Without this line the module graph surfaces v0.38.0 from a
+// transitive go.mod and Snyk reports a HIGH (verified on PR #106). Pinned to the
+// current latest so it cannot downgrade anything today; re-check each sweep, as a
+// replace rewrites every version unconditionally and will cap a future requirement.
+replace golang.org/x/crypto => golang.org/x/crypto v0.56.0
 
 replace github.com/yuin/goldmark => github.com/yuin/goldmark v1.8.2
 
