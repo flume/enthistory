@@ -1,6 +1,6 @@
 module github.com/flume/enthistory
 
-go 1.26.8
+go 1.27.1
 
 require (
 	entgo.io/contrib v0.7.0
