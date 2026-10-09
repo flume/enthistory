@@ -564,6 +564,28 @@ func TestEntHistoryBasic(t *testing.T) {
 				assert.True(t, ent.IsNotFound(err))
 			},
 		},
+		{
+			name: "Reverse edge keeps ref intact so history survives entity deletion",
+			runner: func(t *testing.T, client *ent.Client) {
+				ctx := context.Background()
+
+				bmo, err := client.Character.Create().SetAge(1000).SetTypedAge(models.Uint64(1000)).SetName("BMO").Save(ctx)
+				assert.NoError(t, err)
+				assert.NoError(t, client.Character.DeleteOne(bmo).Exec(ctx))
+
+				// ref must not be nulled by the FK, otherwise the DELETE record is unreachable.
+				records, err := client.CharacterHistory.Query().
+					Where(characterhistory.RefEQ(bmo.ID)).
+					All(ctx)
+				assert.NoError(t, err)
+				assert.Equal(t, 2, len(records))
+
+				deleteRecord, err := bmo.History().Latest(ctx)
+				assert.NoError(t, err)
+				assert.Equal(t, "DELETE", deleteRecord.Operation.String())
+				assert.Equal(t, bmo.ID, deleteRecord.Ref)
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
