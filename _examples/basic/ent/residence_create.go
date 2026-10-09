@@ -56,6 +56,12 @@ func (_c *ResidenceCreate) SetName(v string) *ResidenceCreate {
 	return _c
 }
 
+// SetAddress sets the "address" field.
+func (_c *ResidenceCreate) SetAddress(v string) *ResidenceCreate {
+	_c.mutation.SetAddress(v)
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ResidenceCreate) SetID(v uuid.UUID) *ResidenceCreate {
 	_c.mutation.SetID(v)
@@ -145,6 +151,9 @@ func (_c *ResidenceCreate) check() error {
 	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Residence.name"`)}
 	}
+	if _, ok := _c.mutation.Address(); !ok {
+		return &ValidationError{Name: "address", err: errors.New(`ent: missing required field "Residence.address"`)}
+	}
 	return nil
 }
 
@@ -191,6 +200,10 @@ func (_c *ResidenceCreate) createSpec() (*Residence, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(residence.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if value, ok := _c.mutation.Address(); ok {
+		_spec.SetField(residence.FieldAddress, field.TypeString, value)
+		_node.Address = value
 	}
 	if nodes := _c.mutation.OccupantsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

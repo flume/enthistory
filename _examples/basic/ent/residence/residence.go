@@ -21,6 +21,8 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldAddress holds the string denoting the address field in the database.
+	FieldAddress = "address"
 	// EdgeOccupants holds the string denoting the occupants edge name in mutations.
 	EdgeOccupants = "occupants"
 	// Table holds the table name of the residence in the database.
@@ -40,6 +42,7 @@ var Columns = []string{
 	FieldCreatedAt,
 	FieldUpdatedAt,
 	FieldName,
+	FieldAddress,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -84,6 +87,11 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByAddress orders the results by the address field.
+func ByAddress(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAddress, opts...).ToFunc()
 }
 
 // ByOccupantsCount orders the results by occupants count.

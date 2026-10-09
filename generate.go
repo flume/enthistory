@@ -483,14 +483,32 @@ func prepareField(opts HistoryOptions, f ent.Field) ent.Field {
 	descriptor.Validators = nil
 	descriptor.Unique = false
 
-	if descriptor.Info.Type != field.TypeJSON {
-		if opts.FieldProperties.Nillable {
-			descriptor.Nillable = true
-			descriptor.Optional = true
+	nillable := opts.FieldProperties.Nillable
+	immutable := opts.FieldProperties.Immutable
+	var override FieldAnnotations
+	// The override only configures generation, so it is not copied to the history schema.
+	descriptor.Annotations = slices.DeleteFunc(slices.Clone(descriptor.Annotations), func(a schema.Annotation) bool {
+		fa, ok := a.(FieldAnnotations)
+		if ok {
+			override = fa
+		}
+		return ok
+	})
+	if override.Nillable != nil {
+		nillable = *override.Nillable
+		if !nillable {
+			descriptor.Nillable = false
 		}
 	}
 
-	if opts.FieldProperties.Immutable {
+	if nillable && descriptor.Info.Type != field.TypeJSON {
+		descriptor.Nillable = true
+		descriptor.Optional = true
+	}
+
+	if override.Immutable != nil {
+		descriptor.Immutable = *override.Immutable
+	} else if immutable {
 		descriptor.Immutable = true
 	}
 

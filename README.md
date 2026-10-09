@@ -234,6 +234,23 @@ or `enthistory.WithImmutableFields()` to set them all as `Immutable`.
 history object. Setting all fields to `Nillable` causes the history tables to diverge from the original tables, and the
 unpredictability of that means the `Restore()` function cannot be generated.
 
+### Overriding Nillable and Immutable for a Single Field
+
+To change these properties for one field only (for example, a field that was optional and later became required, while
+older history rows still hold `NULL`), add an `enthistory.FieldAnnotations` annotation to the field in your original
+schema. A `nil` value falls back to the global option, and `Bool` returns a `*bool`.
+
+```go
+field.String("address").
+    Annotations(enthistory.FieldAnnotations{
+        Nillable:  enthistory.Bool(true),  // history column is nullable, original stays required
+        Immutable: enthistory.Bool(false), // overrides WithImmutableFields() for this field
+    }),
+```
+
+**Note:** JSON fields are never made nillable, and `Restore()` skips fields whose nillability differs from the
+original.
+
 ### History Time Indexing
 
 By default, an index is not placed on the `history_time` field. If you want to enable indexing on the `history_time`

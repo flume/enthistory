@@ -24,6 +24,8 @@ type Residence struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
+	// Address holds the value of the "address" field.
+	Address string `json:"address,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ResidenceQuery when eager-loading is set.
 	Edges        ResidenceEdges `json:"edges"`
@@ -53,7 +55,7 @@ func (*Residence) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case residence.FieldName:
+		case residence.FieldName, residence.FieldAddress:
 			values[i] = new(sql.NullString)
 		case residence.FieldCreatedAt, residence.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -97,6 +99,12 @@ func (_m *Residence) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
 				_m.Name = value.String
+			}
+		case residence.FieldAddress:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field address", values[i])
+			} else if value.Valid {
+				_m.Address = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -147,6 +155,9 @@ func (_m *Residence) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
+	builder.WriteString(", ")
+	builder.WriteString("address=")
+	builder.WriteString(_m.Address)
 	builder.WriteByte(')')
 	return builder.String()
 }

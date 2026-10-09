@@ -106,6 +106,20 @@ func (_c *ResidenceHistoryCreate) SetName(v string) *ResidenceHistoryCreate {
 	return _c
 }
 
+// SetAddress sets the "address" field.
+func (_c *ResidenceHistoryCreate) SetAddress(v string) *ResidenceHistoryCreate {
+	_c.mutation.SetAddress(v)
+	return _c
+}
+
+// SetNillableAddress sets the "address" field if the given value is not nil.
+func (_c *ResidenceHistoryCreate) SetNillableAddress(v *string) *ResidenceHistoryCreate {
+	if v != nil {
+		_c.SetAddress(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ResidenceHistoryCreate) SetID(v int) *ResidenceHistoryCreate {
 	_c.mutation.SetID(v)
@@ -261,6 +275,10 @@ func (_c *ResidenceHistoryCreate) createSpec() (*ResidenceHistory, *sqlgraph.Cre
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(residencehistory.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if value, ok := _c.mutation.Address(); ok {
+		_spec.SetField(residencehistory.FieldAddress, field.TypeString, value)
+		_node.Address = &value
 	}
 	if nodes := _c.mutation.ResidenceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

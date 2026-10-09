@@ -109,6 +109,22 @@ func optypeSliceLit(opTypes []OpType) ast.Expr {
 	return c
 }
 
+// FieldAnnotations overrides the history field properties for a single field of the original schema.
+// A nil value falls back to the global WithNillableFields / WithImmutableFields behavior.
+type FieldAnnotations struct {
+	Nillable  *bool `json:"nillable,omitempty"`
+	Immutable *bool `json:"immutable,omitempty"`
+}
+
+func (FieldAnnotations) Name() string {
+	return "HistoryField"
+}
+
+// Bool returns a pointer to v, for use with FieldAnnotations.
+func Bool(v bool) *bool {
+	return &v
+}
+
 func structAttr(name string, val ast.Expr) ast.Expr {
 	return &ast.KeyValueExpr{
 		Key: &ast.BasicLit{

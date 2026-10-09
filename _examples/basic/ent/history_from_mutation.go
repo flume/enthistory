@@ -479,6 +479,10 @@ func (m *ResidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetName(name)
 	}
 
+	if address, exists := m.Address(); exists {
+		create = create.SetAddress(address)
+	}
+
 	_, err = create.Save(ctx)
 	if err != nil {
 		rollback(tx, err)
@@ -538,6 +542,12 @@ func (m *ResidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetName(residence.Name)
 		}
 
+		if address, exists := m.Address(); exists {
+			create = create.SetAddress(address)
+		} else {
+			create = create.SetAddress(residence.Address)
+		}
+
 		_, err = create.Save(ctx)
 		if err != nil {
 			rollback(tx, err)
@@ -583,6 +593,7 @@ func (m *ResidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetCreatedAt(residence.CreatedAt).
 			SetUpdatedAt(residence.UpdatedAt).
 			SetName(residence.Name).
+			SetAddress(residence.Address).
 			Save(ctx)
 		if err != nil {
 			rollback(tx, err)

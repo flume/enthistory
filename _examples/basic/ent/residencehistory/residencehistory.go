@@ -31,6 +31,8 @@ const (
 	FieldUpdatedBy = "updated_by"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldAddress holds the string denoting the address field in the database.
+	FieldAddress = "address"
 	// EdgeResidence holds the string denoting the residence edge name in mutations.
 	EdgeResidence = "residence"
 	// Table holds the table name of the residencehistory in the database.
@@ -54,6 +56,7 @@ var Columns = []string{
 	FieldRef,
 	FieldUpdatedBy,
 	FieldName,
+	FieldAddress,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "residence_history"
@@ -139,6 +142,11 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByAddress orders the results by the address field.
+func ByAddress(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAddress, opts...).ToFunc()
 }
 
 // ByResidenceField orders the results by residence field.
