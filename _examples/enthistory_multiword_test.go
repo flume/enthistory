@@ -88,13 +88,30 @@ func TestEntHistoryMultiWordNames(t *testing.T) {
 	t.Run("acronym then word entity with edges", func(t *testing.T) {
 		owner, err := client.UserProfile.Create().SetDisplayName("Owner").Save(ctx)
 		require.NoError(t, err)
-		_, err = client.APIKey.Create().SetKeyValue("owned").SetOwner(owner).Save(ctx)
+		key, err := client.APIKey.Create().SetKeyValue("owned").SetOwner(owner).Save(ctx)
 		require.NoError(t, err)
+		keyHistory, err := key.History().Only(ctx)
+		require.NoError(t, err)
+		assert.Equal(t, key.ID, keyHistory.Ref)
+		gotKey, err := keyHistory.QueryApikey().Only(ctx)
+		require.NoError(t, err)
+		assert.Equal(t, key.ID, gotKey.ID)
 
 		log, err := client.HTTPLog.Create().SetRequestPath("/a").Save(ctx)
 		require.NoError(t, err)
 		log, err = log.Update().SetStatusCode(500).Save(ctx)
 		require.NoError(t, err)
+
+		// The HTTPLog reverse edge resolves while the entity exists.
+		first, err := client.HTTPLogHistory.Query().
+			Where(httploghistory.Ref(log.ID)).
+			Order(httploghistory.ByHistoryTime()).
+			First(ctx)
+		require.NoError(t, err)
+		gotLog, err := first.QueryHttplog().Only(ctx)
+		require.NoError(t, err)
+		assert.Equal(t, log.ID, gotLog.ID)
+
 		require.NoError(t, client.HTTPLog.DeleteOne(log).Exec(ctx))
 
 		history, err := client.HTTPLogHistory.Query().

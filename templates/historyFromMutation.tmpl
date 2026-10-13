@@ -84,6 +84,9 @@ import (
                 {{ if $sameNodeType }}
                     {{/* Setter name comes from ent's own edge naming, not from the entity name. */}}
                     {{ $revEdge := "" }}{{ range $e := $h.Edges }}{{ if eq $e.Type.Name $name }}{{ $revEdge = $e.StructField }}{{ end }}{{ end }}
+                    {{- if and $.Annotations.HistoryConfig.ReverseEdge (not $revEdge) }}
+                        {{- fail (printf "enthistory: WithReverseEdgeExtension is set but %sHistory has no edge to %s; add WithReverseEdge() to Generate" $name $name) }}
+                    {{- end }}
                     func (m *{{ $mutator }}) CreateHistoryFromCreate(ctx context.Context) error {
                         client := m.Client()
                         tx, err := m.Tx()
