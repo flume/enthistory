@@ -248,8 +248,16 @@ field.String("address").
     }),
 ```
 
-**Note:** JSON fields are never made nillable, and `Restore()` skips fields whose nillability differs from the
-original.
+The pointer form `&enthistory.FieldAnnotations{...}` works the same way.
+
+**Notes:**
+
+- JSON fields are never made nillable, and `Restore()` skips fields whose nillability differs from the original.
+- `Nillable: enthistory.Bool(false)` on a field that is `Optional()` in the original schema only changes the Go type of
+  the history field to a non-pointer. The history column stays `NULL`-able, so a `NULL` value reads back as the zero
+  value (for example `""`) and can no longer be told apart from it.
+- Like `WithNillableFields()` and `WithImmutableFields()`, the annotation only applies to fields declared in the
+  schema's own `Fields()`. It has no effect on fields that come from a mixin.
 
 ### History Time Indexing
 

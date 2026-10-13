@@ -27,6 +27,10 @@ func (TestFieldOverrideSchema) Fields() []ent.Field {
 			Annotations(FieldAnnotations{Nillable: Bool(true)}),
 		field.String("with_default").Default("x").
 			Annotations(FieldAnnotations{Nillable: Bool(true)}),
+		field.String("pointer_override").
+			Annotations(&FieldAnnotations{Nillable: Bool(true), Immutable: Bool(true)}),
+		field.String("nil_pointer").
+			Annotations((*FieldAnnotations)(nil)),
 	}
 }
 
@@ -66,4 +70,16 @@ func TestFieldAnnotationsOverrideGlobalOptions(t *testing.T) {
 	require.True(t, d["not_nillable"].Immutable, "unset override keeps the global value")
 	require.False(t, d["immutable_off"].Immutable)
 	require.True(t, d["immutable_off"].Nillable, "unset override keeps the global value")
+}
+
+func TestFieldAnnotationsPointerForm(t *testing.T) {
+	d := historyDescriptors(t, FieldProperties{})
+	require.True(t, d["pointer_override"].Nillable)
+	require.True(t, d["pointer_override"].Optional)
+	require.True(t, d["pointer_override"].Immutable)
+	require.False(t, d["nil_pointer"].Nillable, "a nil pointer does not override anything")
+	require.False(t, d["nil_pointer"].Immutable)
+	for _, name := range []string{"pointer_override", "nil_pointer"} {
+		require.Empty(t, d[name].Annotations, "override annotation must not leak into the history schema")
+	}
 }

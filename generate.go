@@ -487,12 +487,19 @@ func prepareField(opts HistoryOptions, f ent.Field) ent.Field {
 	immutable := opts.FieldProperties.Immutable
 	var override FieldAnnotations
 	// The override only configures generation, so it is not copied to the history schema.
+	// Both the value and the pointer form are accepted; a nil pointer is removed without overriding anything.
 	descriptor.Annotations = slices.DeleteFunc(slices.Clone(descriptor.Annotations), func(a schema.Annotation) bool {
-		fa, ok := a.(FieldAnnotations)
-		if ok {
+		switch fa := a.(type) {
+		case FieldAnnotations:
 			override = fa
+			return true
+		case *FieldAnnotations:
+			if fa != nil {
+				override = *fa
+			}
+			return true
 		}
-		return ok
+		return false
 	})
 	if override.Nillable != nil {
 		nillable = *override.Nillable
