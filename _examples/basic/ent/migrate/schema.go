@@ -153,6 +153,7 @@ var (
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "name", Type: field.TypeString},
+		{Name: "address", Type: field.TypeString},
 	}
 	// ResidenceTable holds the schema information for the "residence" table.
 	ResidenceTable = &schema.Table{
@@ -170,6 +171,7 @@ var (
 		{Name: "ref", Type: field.TypeUUID, Nullable: true},
 		{Name: "updated_by", Type: field.TypeInt, Nullable: true},
 		{Name: "name", Type: field.TypeString},
+		{Name: "address", Type: field.TypeString, Nullable: true},
 		{Name: "residence_history_residence", Type: field.TypeUUID, Nullable: true},
 	}
 	// ResidenceHistoryTable holds the schema information for the "residence_history" table.
@@ -180,7 +182,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "residence_history_residence_residence",
-				Columns:    []*schema.Column{ResidenceHistoryColumns[8]},
+				Columns:    []*schema.Column{ResidenceHistoryColumns[9]},
 				RefColumns: []*schema.Column{ResidenceColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

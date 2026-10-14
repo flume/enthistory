@@ -39,7 +39,10 @@ func (ResidenceHistory) Fields() []ent.Field {
 			Optional().
 			Immutable(),
 		field.String("name").
-			Immutable()}
+			Immutable(),
+		field.String("address").
+			Nillable().
+			Optional()}
 }
 func (ResidenceHistory) Edges() []ent.Edge {
 	return []ent.Edge{

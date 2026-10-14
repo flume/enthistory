@@ -5,12 +5,16 @@ import (
 	"context"
 	"os"
 	"strings"
+	"time"
 
 	entcharacter "_examples/basic/ent/character"
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/flume/enthistory"
+
 	"_examples/basic/ent/characterhistory"
+	"_examples/basic/ent/residencehistory"
 
 	"_examples/basic/ent"
 	"_examples/basic/ent/enttest"
@@ -162,7 +166,7 @@ func TestEntHistoryBasic(t *testing.T) {
 				assert.NoError(t, err)
 
 				// create friendship
-				residence, err := client.Residence.Create().SetName("Tree Fort").AddOccupants(finn, jake).Save(ctx)
+				residence, err := client.Residence.Create().SetName("Tree Fort").SetAddress("1 Main St").AddOccupants(finn, jake).Save(ctx)
 				assert.NoError(t, err)
 				residences, err := residence.History().All(ctx)
 				assert.NoError(t, err)
@@ -424,7 +428,7 @@ func TestEntHistoryBasic(t *testing.T) {
 				friendship, err := client.Friendship.Create().SetID("Ice Kingdom").SetCharacterID(gunter.ID).SetFriendID(simon.ID).Save(ctx)
 				assert.NoError(t, err)
 
-				residence, err := client.Residence.Create().SetName("Ice Kingdom").AddOccupants(gunter, simon).Save(ctx)
+				residence, err := client.Residence.Create().SetName("Ice Kingdom").SetAddress("1 Main St").AddOccupants(gunter, simon).Save(ctx)
 				assert.NoError(t, err)
 
 				gunter, err = gunter.Update().
@@ -488,6 +492,41 @@ func TestEntHistoryBasic(t *testing.T) {
 				assert.NoError(t, err)
 
 				assert.Nil(t, icekingHistory.Level)
+			},
+		},
+		{
+			name: "Field annotation overrides history field nillability and immutability",
+			runner: func(t *testing.T, client *ent.Client) {
+				ctx := context.Background()
+
+				// A history row written before the field existed holds NULL for it
+				legacy, err := client.ResidenceHistory.Create().
+					SetOperation(enthistory.OpTypeInsert).
+					SetHistoryTime(time.Now()).
+					SetName("Legacy").
+					Save(ctx)
+				assert.NoError(t, err)
+				assert.Nil(t, legacy.Address)
+
+				// Immutable(false) override keeps the history field updatable
+				legacy, err = legacy.Update().SetAddress("2 Side St").Save(ctx)
+				assert.NoError(t, err)
+				assert.Equal(t, "2 Side St", *legacy.Address)
+
+				residence, err := client.Residence.Create().SetName("Tree Fort").SetAddress("1 Main St").Save(ctx)
+				assert.NoError(t, err)
+				residence, err = residence.Update().SetName("Big Tree Fort").Save(ctx)
+				assert.NoError(t, err)
+				assert.NoError(t, client.Residence.DeleteOne(residence).Exec(ctx))
+
+				histories, err := client.ResidenceHistory.Query().Where(residencehistory.Ref(residence.ID)).All(ctx)
+				assert.NoError(t, err)
+				assert.Len(t, histories, 3)
+				for _, h := range histories {
+					if assert.NotNil(t, h.Address) {
+						assert.Equal(t, "1 Main St", *h.Address)
+					}
+				}
 			},
 		},
 		{

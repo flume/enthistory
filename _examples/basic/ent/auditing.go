@@ -143,6 +143,9 @@ func (_m *ResidenceHistory) changes(new *ResidenceHistory) []Change {
 	if !reflect.DeepEqual(_m.Name, new.Name) {
 		changes = append(changes, NewChange(residencehistory.FieldName, _m.Name, new.Name))
 	}
+	if !reflect.DeepEqual(_m.Address, new.Address) {
+		changes = append(changes, NewChange(residencehistory.FieldAddress, _m.Address, new.Address))
+	}
 	return changes
 }
 

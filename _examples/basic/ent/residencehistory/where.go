@@ -88,6 +88,11 @@ func Name(v string) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldEQ(FieldName, v))
 }
 
+// Address applies equality check predicate on the "address" field. It's identical to AddressEQ.
+func Address(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldEQ(FieldAddress, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldEQ(FieldCreatedAt, v))
@@ -391,6 +396,81 @@ func NameEqualFold(v string) predicate.ResidenceHistory {
 // NameContainsFold applies the ContainsFold predicate on the "name" field.
 func NameContainsFold(v string) predicate.ResidenceHistory {
 	return predicate.ResidenceHistory(sql.FieldContainsFold(FieldName, v))
+}
+
+// AddressEQ applies the EQ predicate on the "address" field.
+func AddressEQ(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldEQ(FieldAddress, v))
+}
+
+// AddressNEQ applies the NEQ predicate on the "address" field.
+func AddressNEQ(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldNEQ(FieldAddress, v))
+}
+
+// AddressIn applies the In predicate on the "address" field.
+func AddressIn(vs ...string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldIn(FieldAddress, vs...))
+}
+
+// AddressNotIn applies the NotIn predicate on the "address" field.
+func AddressNotIn(vs ...string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldNotIn(FieldAddress, vs...))
+}
+
+// AddressGT applies the GT predicate on the "address" field.
+func AddressGT(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldGT(FieldAddress, v))
+}
+
+// AddressGTE applies the GTE predicate on the "address" field.
+func AddressGTE(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldGTE(FieldAddress, v))
+}
+
+// AddressLT applies the LT predicate on the "address" field.
+func AddressLT(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldLT(FieldAddress, v))
+}
+
+// AddressLTE applies the LTE predicate on the "address" field.
+func AddressLTE(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldLTE(FieldAddress, v))
+}
+
+// AddressContains applies the Contains predicate on the "address" field.
+func AddressContains(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldContains(FieldAddress, v))
+}
+
+// AddressHasPrefix applies the HasPrefix predicate on the "address" field.
+func AddressHasPrefix(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldHasPrefix(FieldAddress, v))
+}
+
+// AddressHasSuffix applies the HasSuffix predicate on the "address" field.
+func AddressHasSuffix(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldHasSuffix(FieldAddress, v))
+}
+
+// AddressIsNil applies the IsNil predicate on the "address" field.
+func AddressIsNil() predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldIsNull(FieldAddress))
+}
+
+// AddressNotNil applies the NotNil predicate on the "address" field.
+func AddressNotNil() predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldNotNull(FieldAddress))
+}
+
+// AddressEqualFold applies the EqualFold predicate on the "address" field.
+func AddressEqualFold(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldEqualFold(FieldAddress, v))
+}
+
+// AddressContainsFold applies the ContainsFold predicate on the "address" field.
+func AddressContainsFold(v string) predicate.ResidenceHistory {
+	return predicate.ResidenceHistory(sql.FieldContainsFold(FieldAddress, v))
 }
 
 // HasResidence applies the HasEdge predicate on the "residence" edge.

@@ -49,6 +49,20 @@ func (_u *ResidenceUpdate) SetNillableName(v *string) *ResidenceUpdate {
 	return _u
 }
 
+// SetAddress sets the "address" field.
+func (_u *ResidenceUpdate) SetAddress(v string) *ResidenceUpdate {
+	_u.mutation.SetAddress(v)
+	return _u
+}
+
+// SetNillableAddress sets the "address" field if the given value is not nil.
+func (_u *ResidenceUpdate) SetNillableAddress(v *string) *ResidenceUpdate {
+	if v != nil {
+		_u.SetAddress(*v)
+	}
+	return _u
+}
+
 // AddOccupantIDs adds the "occupants" edge to the Character entity by IDs.
 func (_u *ResidenceUpdate) AddOccupantIDs(ids ...int) *ResidenceUpdate {
 	_u.mutation.AddOccupantIDs(ids...)
@@ -141,6 +155,9 @@ func (_u *ResidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(residence.FieldName, field.TypeString, value)
 	}
+	if value, ok := _u.mutation.Address(); ok {
+		_spec.SetField(residence.FieldAddress, field.TypeString, value)
+	}
 	if _u.mutation.OccupantsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -222,6 +239,20 @@ func (_u *ResidenceUpdateOne) SetName(v string) *ResidenceUpdateOne {
 func (_u *ResidenceUpdateOne) SetNillableName(v *string) *ResidenceUpdateOne {
 	if v != nil {
 		_u.SetName(*v)
+	}
+	return _u
+}
+
+// SetAddress sets the "address" field.
+func (_u *ResidenceUpdateOne) SetAddress(v string) *ResidenceUpdateOne {
+	_u.mutation.SetAddress(v)
+	return _u
+}
+
+// SetNillableAddress sets the "address" field if the given value is not nil.
+func (_u *ResidenceUpdateOne) SetNillableAddress(v *string) *ResidenceUpdateOne {
+	if v != nil {
+		_u.SetAddress(*v)
 	}
 	return _u
 }
@@ -347,6 +378,9 @@ func (_u *ResidenceUpdateOne) sqlSave(ctx context.Context) (_node *Residence, er
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(residence.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Address(); ok {
+		_spec.SetField(residence.FieldAddress, field.TypeString, value)
 	}
 	if _u.mutation.OccupantsCleared() {
 		edge := &sqlgraph.EdgeSpec{

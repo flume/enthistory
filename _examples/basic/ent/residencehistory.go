@@ -35,6 +35,8 @@ type ResidenceHistory struct {
 	UpdatedBy *int `json:"updated_by,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
+	// Address holds the value of the "address" field.
+	Address *string `json:"address,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ResidenceHistoryQuery when eager-loading is set.
 	Edges                       ResidenceHistoryEdges `json:"edges"`
@@ -69,7 +71,7 @@ func (*ResidenceHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case residencehistory.FieldID, residencehistory.FieldUpdatedBy:
 			values[i] = new(sql.NullInt64)
-		case residencehistory.FieldOperation, residencehistory.FieldName:
+		case residencehistory.FieldOperation, residencehistory.FieldName, residencehistory.FieldAddress:
 			values[i] = new(sql.NullString)
 		case residencehistory.FieldCreatedAt, residencehistory.FieldUpdatedAt, residencehistory.FieldHistoryTime:
 			values[i] = new(sql.NullTime)
@@ -141,6 +143,13 @@ func (_m *ResidenceHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Name = value.String
 			}
+		case residencehistory.FieldAddress:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field address", values[i])
+			} else if value.Valid {
+				_m.Address = new(string)
+				*_m.Address = value.String
+			}
 		case residencehistory.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field residence_history_residence", values[i])
@@ -211,6 +220,11 @@ func (_m *ResidenceHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
+	builder.WriteString(", ")
+	if v := _m.Address; v != nil {
+		builder.WriteString("address=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

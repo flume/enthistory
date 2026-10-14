@@ -36,6 +36,26 @@ func (_u *ResidenceHistoryUpdate) SetUpdatedAt(v time.Time) *ResidenceHistoryUpd
 	return _u
 }
 
+// SetAddress sets the "address" field.
+func (_u *ResidenceHistoryUpdate) SetAddress(v string) *ResidenceHistoryUpdate {
+	_u.mutation.SetAddress(v)
+	return _u
+}
+
+// SetNillableAddress sets the "address" field if the given value is not nil.
+func (_u *ResidenceHistoryUpdate) SetNillableAddress(v *string) *ResidenceHistoryUpdate {
+	if v != nil {
+		_u.SetAddress(*v)
+	}
+	return _u
+}
+
+// ClearAddress clears the value of the "address" field.
+func (_u *ResidenceHistoryUpdate) ClearAddress() *ResidenceHistoryUpdate {
+	_u.mutation.ClearAddress()
+	return _u
+}
+
 // SetResidenceID sets the "residence" edge to the Residence entity by ID.
 func (_u *ResidenceHistoryUpdate) SetResidenceID(id uuid.UUID) *ResidenceHistoryUpdate {
 	_u.mutation.SetResidenceID(id)
@@ -120,6 +140,12 @@ func (_u *ResidenceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(residencehistory.FieldUpdatedBy, field.TypeInt)
 	}
+	if value, ok := _u.mutation.Address(); ok {
+		_spec.SetField(residencehistory.FieldAddress, field.TypeString, value)
+	}
+	if _u.mutation.AddressCleared() {
+		_spec.ClearField(residencehistory.FieldAddress, field.TypeString)
+	}
 	if _u.mutation.ResidenceCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -172,6 +198,26 @@ type ResidenceHistoryUpdateOne struct {
 // SetUpdatedAt sets the "updated_at" field.
 func (_u *ResidenceHistoryUpdateOne) SetUpdatedAt(v time.Time) *ResidenceHistoryUpdateOne {
 	_u.mutation.SetUpdatedAt(v)
+	return _u
+}
+
+// SetAddress sets the "address" field.
+func (_u *ResidenceHistoryUpdateOne) SetAddress(v string) *ResidenceHistoryUpdateOne {
+	_u.mutation.SetAddress(v)
+	return _u
+}
+
+// SetNillableAddress sets the "address" field if the given value is not nil.
+func (_u *ResidenceHistoryUpdateOne) SetNillableAddress(v *string) *ResidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetAddress(*v)
+	}
+	return _u
+}
+
+// ClearAddress clears the value of the "address" field.
+func (_u *ResidenceHistoryUpdateOne) ClearAddress() *ResidenceHistoryUpdateOne {
+	_u.mutation.ClearAddress()
 	return _u
 }
 
@@ -288,6 +334,12 @@ func (_u *ResidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Reside
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(residencehistory.FieldUpdatedBy, field.TypeInt)
+	}
+	if value, ok := _u.mutation.Address(); ok {
+		_spec.SetField(residencehistory.FieldAddress, field.TypeString, value)
+	}
+	if _u.mutation.AddressCleared() {
+		_spec.ClearField(residencehistory.FieldAddress, field.TypeString)
 	}
 	if _u.mutation.ResidenceCleared() {
 		edge := &sqlgraph.EdgeSpec{

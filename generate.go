@@ -483,14 +483,39 @@ func prepareField(opts HistoryOptions, f ent.Field) ent.Field {
 	descriptor.Validators = nil
 	descriptor.Unique = false
 
-	if descriptor.Info.Type != field.TypeJSON {
-		if opts.FieldProperties.Nillable {
-			descriptor.Nillable = true
-			descriptor.Optional = true
+	nillable := opts.FieldProperties.Nillable
+	immutable := opts.FieldProperties.Immutable
+	var override FieldAnnotations
+	// The override only configures generation, so it is not copied to the history schema.
+	// Both the value and the pointer form are accepted; a nil pointer is removed without overriding anything.
+	descriptor.Annotations = slices.DeleteFunc(slices.Clone(descriptor.Annotations), func(a schema.Annotation) bool {
+		switch fa := a.(type) {
+		case FieldAnnotations:
+			override = fa
+			return true
+		case *FieldAnnotations:
+			if fa != nil {
+				override = *fa
+			}
+			return true
+		}
+		return false
+	})
+	if override.Nillable != nil {
+		nillable = *override.Nillable
+		if !nillable {
+			descriptor.Nillable = false
 		}
 	}
 
-	if opts.FieldProperties.Immutable {
+	if nillable && descriptor.Info.Type != field.TypeJSON {
+		descriptor.Nillable = true
+		descriptor.Optional = true
+	}
+
+	if override.Immutable != nil {
+		descriptor.Immutable = *override.Immutable
+	} else if immutable {
 		descriptor.Immutable = true
 	}
 

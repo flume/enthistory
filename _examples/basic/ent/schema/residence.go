@@ -8,6 +8,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
 
+	"github.com/flume/enthistory"
+
 	"_examples/basic/ent/schema/mixins"
 )
 
@@ -31,6 +33,12 @@ func (Residence) Fields() []ent.Field {
 		field.UUID("id", uuid.UUID{}).
 			Default(uuid.New),
 		field.String("name"),
+		// Required here, but history rows from before it was required may hold NULL.
+		field.String("address").
+			Annotations(enthistory.FieldAnnotations{
+				Nillable:  enthistory.Bool(true),
+				Immutable: enthistory.Bool(false),
+			}),
 	}
 }
 

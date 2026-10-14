@@ -4252,6 +4252,7 @@ type ResidenceMutation struct {
 	created_at       *time.Time
 	updated_at       *time.Time
 	name             *string
+	address          *string
 	clearedFields    map[string]struct{}
 	occupants        map[int]struct{}
 	removedoccupants map[int]struct{}
@@ -4473,6 +4474,42 @@ func (m *ResidenceMutation) ResetName() {
 	m.name = nil
 }
 
+// SetAddress sets the "address" field.
+func (m *ResidenceMutation) SetAddress(s string) {
+	m.address = &s
+}
+
+// Address returns the value of the "address" field in the mutation.
+func (m *ResidenceMutation) Address() (r string, exists bool) {
+	v := m.address
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAddress returns the old "address" field's value of the Residence entity.
+// If the Residence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ResidenceMutation) OldAddress(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAddress is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAddress requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAddress: %w", err)
+	}
+	return oldValue.Address, nil
+}
+
+// ResetAddress resets all changes to the "address" field.
+func (m *ResidenceMutation) ResetAddress() {
+	m.address = nil
+}
+
 // AddOccupantIDs adds the "occupants" edge to the Character entity by ids.
 func (m *ResidenceMutation) AddOccupantIDs(ids ...int) {
 	if m.occupants == nil {
@@ -4561,7 +4598,7 @@ func (m *ResidenceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ResidenceMutation) Fields() []string {
-	fields := make([]string, 0, 3)
+	fields := make([]string, 0, 4)
 	if m.created_at != nil {
 		fields = append(fields, residence.FieldCreatedAt)
 	}
@@ -4570,6 +4607,9 @@ func (m *ResidenceMutation) Fields() []string {
 	}
 	if m.name != nil {
 		fields = append(fields, residence.FieldName)
+	}
+	if m.address != nil {
+		fields = append(fields, residence.FieldAddress)
 	}
 	return fields
 }
@@ -4585,6 +4625,8 @@ func (m *ResidenceMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case residence.FieldName:
 		return m.Name()
+	case residence.FieldAddress:
+		return m.Address()
 	}
 	return nil, false
 }
@@ -4600,6 +4642,8 @@ func (m *ResidenceMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldUpdatedAt(ctx)
 	case residence.FieldName:
 		return m.OldName(ctx)
+	case residence.FieldAddress:
+		return m.OldAddress(ctx)
 	}
 	return nil, fmt.Errorf("unknown Residence field %s", name)
 }
@@ -4629,6 +4673,13 @@ func (m *ResidenceMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetName(v)
+		return nil
+	case residence.FieldAddress:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAddress(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Residence field %s", name)
@@ -4687,6 +4738,9 @@ func (m *ResidenceMutation) ResetField(name string) error {
 		return nil
 	case residence.FieldName:
 		m.ResetName()
+		return nil
+	case residence.FieldAddress:
+		m.ResetAddress()
 		return nil
 	}
 	return fmt.Errorf("unknown Residence field %s", name)
@@ -4790,6 +4844,7 @@ type ResidenceHistoryMutation struct {
 	updated_by       *int
 	addupdated_by    *int
 	name             *string
+	address          *string
 	clearedFields    map[string]struct{}
 	residence        *uuid.UUID
 	clearedresidence bool
@@ -5201,6 +5256,55 @@ func (m *ResidenceHistoryMutation) ResetName() {
 	m.name = nil
 }
 
+// SetAddress sets the "address" field.
+func (m *ResidenceHistoryMutation) SetAddress(s string) {
+	m.address = &s
+}
+
+// Address returns the value of the "address" field in the mutation.
+func (m *ResidenceHistoryMutation) Address() (r string, exists bool) {
+	v := m.address
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAddress returns the old "address" field's value of the ResidenceHistory entity.
+// If the ResidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ResidenceHistoryMutation) OldAddress(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAddress is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAddress requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAddress: %w", err)
+	}
+	return oldValue.Address, nil
+}
+
+// ClearAddress clears the value of the "address" field.
+func (m *ResidenceHistoryMutation) ClearAddress() {
+	m.address = nil
+	m.clearedFields[residencehistory.FieldAddress] = struct{}{}
+}
+
+// AddressCleared returns if the "address" field was cleared in this mutation.
+func (m *ResidenceHistoryMutation) AddressCleared() bool {
+	_, ok := m.clearedFields[residencehistory.FieldAddress]
+	return ok
+}
+
+// ResetAddress resets all changes to the "address" field.
+func (m *ResidenceHistoryMutation) ResetAddress() {
+	m.address = nil
+	delete(m.clearedFields, residencehistory.FieldAddress)
+}
+
 // SetResidenceID sets the "residence" edge to the Residence entity by id.
 func (m *ResidenceHistoryMutation) SetResidenceID(id uuid.UUID) {
 	m.residence = &id
@@ -5274,7 +5378,7 @@ func (m *ResidenceHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ResidenceHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.created_at != nil {
 		fields = append(fields, residencehistory.FieldCreatedAt)
 	}
@@ -5295,6 +5399,9 @@ func (m *ResidenceHistoryMutation) Fields() []string {
 	}
 	if m.name != nil {
 		fields = append(fields, residencehistory.FieldName)
+	}
+	if m.address != nil {
+		fields = append(fields, residencehistory.FieldAddress)
 	}
 	return fields
 }
@@ -5318,6 +5425,8 @@ func (m *ResidenceHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedBy()
 	case residencehistory.FieldName:
 		return m.Name()
+	case residencehistory.FieldAddress:
+		return m.Address()
 	}
 	return nil, false
 }
@@ -5341,6 +5450,8 @@ func (m *ResidenceHistoryMutation) OldField(ctx context.Context, name string) (e
 		return m.OldUpdatedBy(ctx)
 	case residencehistory.FieldName:
 		return m.OldName(ctx)
+	case residencehistory.FieldAddress:
+		return m.OldAddress(ctx)
 	}
 	return nil, fmt.Errorf("unknown ResidenceHistory field %s", name)
 }
@@ -5399,6 +5510,13 @@ func (m *ResidenceHistoryMutation) SetField(name string, value ent.Value) error 
 		}
 		m.SetName(v)
 		return nil
+	case residencehistory.FieldAddress:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAddress(v)
+		return nil
 	}
 	return fmt.Errorf("unknown ResidenceHistory field %s", name)
 }
@@ -5450,6 +5568,9 @@ func (m *ResidenceHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(residencehistory.FieldUpdatedBy) {
 		fields = append(fields, residencehistory.FieldUpdatedBy)
 	}
+	if m.FieldCleared(residencehistory.FieldAddress) {
+		fields = append(fields, residencehistory.FieldAddress)
+	}
 	return fields
 }
 
@@ -5469,6 +5590,9 @@ func (m *ResidenceHistoryMutation) ClearField(name string) error {
 		return nil
 	case residencehistory.FieldUpdatedBy:
 		m.ClearUpdatedBy()
+		return nil
+	case residencehistory.FieldAddress:
+		m.ClearAddress()
 		return nil
 	}
 	return fmt.Errorf("unknown ResidenceHistory nullable field %s", name)
@@ -5498,6 +5622,9 @@ func (m *ResidenceHistoryMutation) ResetField(name string) error {
 		return nil
 	case residencehistory.FieldName:
 		m.ResetName()
+		return nil
+	case residencehistory.FieldAddress:
+		m.ResetAddress()
 		return nil
 	}
 	return fmt.Errorf("unknown ResidenceHistory field %s", name)
