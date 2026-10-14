@@ -82,6 +82,11 @@ import (
             {{ range $h := $.Nodes }}
                 {{ $sameNodeType := hasPrefix $h.Name (printf "%sHistory" $name) }}
                 {{ if $sameNodeType }}
+                    {{/* Setter name comes from ent's own edge naming, not from the entity name. */}}
+                    {{ $revEdge := "" }}{{ range $e := $h.Edges }}{{ if eq $e.Type.Name $name }}{{ $revEdge = $e.StructField }}{{ end }}{{ end }}
+                    {{- if and $.Annotations.HistoryConfig.ReverseEdge (not $revEdge) }}
+                        {{- fail (printf "enthistory: WithReverseEdgeExtension is set but %sHistory has no edge to %s; add WithReverseEdge() to Generate" $name $name) }}
+                    {{- end }}
                     func (m *{{ $mutator }}) CreateHistoryFromCreate(ctx context.Context) error {
                         client := m.Client()
                         tx, err := m.Tx()
@@ -108,7 +113,7 @@ import (
                             SetHistoryTime(time.Now()).
                             SetRef(id)
                         {{- if $.Annotations.HistoryConfig.ReverseEdge }}
-                        create = create.SetNillable{{ $name }}ID(&id)
+                        create = create.SetNillable{{ $revEdge }}ID(&id)
                         {{- end }}
 
                         {{- if not (eq $updatedByKey "") }}
@@ -171,7 +176,7 @@ import (
                                 SetHistoryTime(time.Now()).
                                 SetRef(id)
                             {{- if $.Annotations.HistoryConfig.ReverseEdge }}
-                            create = create.SetNillable{{ $name }}ID(&id)
+                            create = create.SetNillable{{ $revEdge }}ID(&id)
                             {{- end }}
 
                             {{- if not (eq $updatedByKey "") }}
@@ -248,7 +253,7 @@ import (
                             {{- end }}
 
                             {{- if $.Annotations.HistoryConfig.ReverseEdge }}
-                            create = create.SetNillable{{ $name }}ID(&id)
+                            create = create.SetNillable{{ $revEdge }}ID(&id)
                             {{- end }}
 
                             _, err = create.
