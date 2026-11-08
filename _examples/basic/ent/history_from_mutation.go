@@ -31,16 +31,6 @@ func EntOpToHistoryOp(op ent.Op) enthistory.OpType {
 	}
 }
 
-func rollback(tx *Tx, err error) error {
-	if tx != nil {
-		if rerr := tx.Rollback(); rerr != nil {
-			err = fmt.Errorf("%w: %v", err, rerr)
-		}
-		return err
-	}
-	return err
-}
-
 func genHistoryId(id string, op ent.Op, now time.Time) string {
 	return fmt.Sprintf("%s-%s-%d", id, strings.ToLower(EntOpToHistoryOp(op).String()), time.Now().UnixNano())
 }
@@ -56,7 +46,7 @@ func (m *CharacterMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	id, ok := m.ID()
 	if !ok {
-		return rollback(tx, idNotFoundError)
+		return idNotFoundError
 	}
 
 	create := client.CharacterHistory.Create()
@@ -115,7 +105,7 @@ func (m *CharacterMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	_, err = create.Save(ctx)
 	if err != nil {
-		rollback(tx, err)
+		return err
 	}
 	return nil
 }
@@ -131,13 +121,13 @@ func (m *CharacterMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 	ids, err := m.IDs(ctx)
 	if err != nil {
-		return rollback(tx, fmt.Errorf("getting ids: %w", err))
+		return fmt.Errorf("getting ids: %w", err)
 	}
 
 	for _, id := range ids {
 		character, err := client.Character.Get(ctx, id)
 		if err != nil {
-			return rollback(tx, err)
+			return err
 		}
 
 		create := client.CharacterHistory.Create()
@@ -216,7 +206,7 @@ func (m *CharacterMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 		_, err = create.Save(ctx)
 		if err != nil {
-			rollback(tx, err)
+			return err
 		}
 	}
 
@@ -234,13 +224,13 @@ func (m *CharacterMutation) CreateHistoryFromDelete(ctx context.Context) error {
 
 	ids, err := m.IDs(ctx)
 	if err != nil {
-		return rollback(tx, fmt.Errorf("getting ids: %w", err))
+		return fmt.Errorf("getting ids: %w", err)
 	}
 
 	for _, id := range ids {
 		character, err := client.Character.Get(ctx, id)
 		if err != nil {
-			return rollback(tx, err)
+			return err
 		}
 
 		create := client.CharacterHistory.Create()
@@ -268,7 +258,7 @@ func (m *CharacterMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSpecies(character.Species).
 			Save(ctx)
 		if err != nil {
-			rollback(tx, err)
+			return err
 		}
 	}
 
@@ -286,7 +276,7 @@ func (m *FriendshipMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 	id, ok := m.ID()
 	if !ok {
-		return rollback(tx, idNotFoundError)
+		return idNotFoundError
 	}
 
 	create := client.FriendshipHistory.Create()
@@ -321,7 +311,7 @@ func (m *FriendshipMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 	_, err = create.Save(ctx)
 	if err != nil {
-		rollback(tx, err)
+		return err
 	}
 	return nil
 }
@@ -337,13 +327,13 @@ func (m *FriendshipMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 
 	ids, err := m.IDs(ctx)
 	if err != nil {
-		return rollback(tx, fmt.Errorf("getting ids: %w", err))
+		return fmt.Errorf("getting ids: %w", err)
 	}
 
 	for _, id := range ids {
 		friendship, err := client.Friendship.Get(ctx, id)
 		if err != nil {
-			return rollback(tx, err)
+			return err
 		}
 
 		create := client.FriendshipHistory.Create()
@@ -386,7 +376,7 @@ func (m *FriendshipMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 
 		_, err = create.Save(ctx)
 		if err != nil {
-			rollback(tx, err)
+			return err
 		}
 	}
 
@@ -404,13 +394,13 @@ func (m *FriendshipMutation) CreateHistoryFromDelete(ctx context.Context) error 
 
 	ids, err := m.IDs(ctx)
 	if err != nil {
-		return rollback(tx, fmt.Errorf("getting ids: %w", err))
+		return fmt.Errorf("getting ids: %w", err)
 	}
 
 	for _, id := range ids {
 		friendship, err := client.Friendship.Get(ctx, id)
 		if err != nil {
-			return rollback(tx, err)
+			return err
 		}
 
 		create := client.FriendshipHistory.Create()
@@ -432,7 +422,7 @@ func (m *FriendshipMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetFriendID(friendship.FriendID).
 			Save(ctx)
 		if err != nil {
-			rollback(tx, err)
+			return err
 		}
 	}
 
@@ -450,7 +440,7 @@ func (m *ResidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	id, ok := m.ID()
 	if !ok {
-		return rollback(tx, idNotFoundError)
+		return idNotFoundError
 	}
 
 	create := client.ResidenceHistory.Create()
@@ -485,7 +475,7 @@ func (m *ResidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	_, err = create.Save(ctx)
 	if err != nil {
-		rollback(tx, err)
+		return err
 	}
 	return nil
 }
@@ -501,13 +491,13 @@ func (m *ResidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 	ids, err := m.IDs(ctx)
 	if err != nil {
-		return rollback(tx, fmt.Errorf("getting ids: %w", err))
+		return fmt.Errorf("getting ids: %w", err)
 	}
 
 	for _, id := range ids {
 		residence, err := client.Residence.Get(ctx, id)
 		if err != nil {
-			return rollback(tx, err)
+			return err
 		}
 
 		create := client.ResidenceHistory.Create()
@@ -550,7 +540,7 @@ func (m *ResidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 		_, err = create.Save(ctx)
 		if err != nil {
-			rollback(tx, err)
+			return err
 		}
 	}
 
@@ -568,13 +558,13 @@ func (m *ResidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 
 	ids, err := m.IDs(ctx)
 	if err != nil {
-		return rollback(tx, fmt.Errorf("getting ids: %w", err))
+		return fmt.Errorf("getting ids: %w", err)
 	}
 
 	for _, id := range ids {
 		residence, err := client.Residence.Get(ctx, id)
 		if err != nil {
-			return rollback(tx, err)
+			return err
 		}
 
 		create := client.ResidenceHistory.Create()
@@ -596,7 +586,7 @@ func (m *ResidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetAddress(residence.Address).
 			Save(ctx)
 		if err != nil {
-			rollback(tx, err)
+			return err
 		}
 	}
 

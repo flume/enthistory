@@ -50,15 +50,6 @@ import (
     	}
     }
 
-    func rollback(tx *Tx, err error) error {
-    	if tx != nil {
-    		if rerr := tx.Rollback(); rerr != nil {
-    			err = fmt.Errorf("%w: %v", err, rerr)
-    		}
-    		return err
-    	}
-    	return err
-    }
 
 {{ range $n := $.Nodes }}
     {{- if and $n.ID (ne $n.ID.Type nil) }}
@@ -100,7 +91,7 @@ import (
 
                         id, ok := m.ID()
                         if !ok {
-                            return rollback(tx, idNotFoundError)
+                            return idNotFoundError
                         }
 
                         create := client.{{$h.Name}}.Create()
@@ -139,7 +130,7 @@ import (
                         {{ end }}
                         _, err = create.Save(ctx)
                         if err != nil {
-                            rollback(tx, err)
+                            return err
                         }
                         return nil
                     }
@@ -157,13 +148,13 @@ import (
 
                         ids, err := m.IDs(ctx)
                         if err != nil {
-                            return rollback(tx, fmt.Errorf("getting ids: %w", err))
+                            return fmt.Errorf("getting ids: %w", err)
                         }
 
                         for _, id := range ids {
                             {{ camel $name }}, err := client.{{ $name }}.Get(ctx, id)
                             if err != nil {
-                                return rollback(tx, err)
+                                return err
                             }
 
                             create := client.{{$h.Name}}.Create()
@@ -204,7 +195,7 @@ import (
                         {{ end }}
                             _, err = create.Save(ctx)
                             if err != nil {
-                                rollback(tx, err)
+                                return err
                             }
                         }
 
@@ -224,13 +215,13 @@ import (
 
                         ids, err := m.IDs(ctx)
                         if err != nil {
-                            return rollback(tx, fmt.Errorf("getting ids: %w", err))
+                            return fmt.Errorf("getting ids: %w", err)
                         }
 
                         for _, id := range ids {
                             {{ camel $name }}, err := client.{{ $name }}.Get(ctx, id)
                             if err != nil {
-                                return rollback(tx, err)
+                                return err
                             }
 
                             create := client.{{$h.Name}}.Create()
@@ -267,7 +258,7 @@ import (
                             {{- end }}
                                 Save(ctx)
                             if err != nil {
-                                rollback(tx, err)
+                                return err
                             }
                         }
 
