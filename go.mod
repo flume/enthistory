@@ -9,8 +9,8 @@ require (
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/google/uuid v1.6.0
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/sync v0.22.0
-	golang.org/x/tools v0.48.0
+	golang.org/x/sync v0.25.0
+	golang.org/x/tools v0.52.0
 	google.golang.org/protobuf v1.36.11
 )
 
@@ -40,8 +40,9 @@ require (
 	github.com/zclconf/go-cty-yaml v1.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f // indirect
-	golang.org/x/mod v0.38.0 // indirect
-	golang.org/x/text v0.41.0 // indirect
+	golang.org/x/mod v0.42.0 // indirect
+	golang.org/x/sys v0.50.0 // indirect
+	golang.org/x/text v0.44.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect
 	google.golang.org/grpc v1.83.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
@@ -52,12 +53,18 @@ require (
 // transitive go.mod and Snyk reports a HIGH (verified on PR #106). Pinned to the
 // current latest so it cannot downgrade anything today; re-check each sweep, as a
 // replace rewrites every version unconditionally and will cap a future requirement.
-replace golang.org/x/crypto => golang.org/x/crypto v0.56.0
+replace golang.org/x/crypto => golang.org/x/crypto v0.59.0
 
 replace github.com/yuin/goldmark => github.com/yuin/goldmark v1.8.2
 
-replace golang.org/x/net => golang.org/x/net v0.55.0
+replace golang.org/x/net => golang.org/x/net v0.63.0
 
-replace golang.org/x/sys => golang.org/x/sys v0.44.0
+replace golang.org/x/sys => golang.org/x/sys v0.50.0
 
 replace go.opentelemetry.io/otel => go.opentelemetry.io/otel v1.44.0
+
+// go-jose/v4 is a ghost dependency like x/crypto above: no go.sum entry, nothing
+// builds from it. grpc's go.mod (through v1.85.0) still requires v4.1.4, so the
+// module graph surfaces it and Snyk reports three HIGHs (FL-33754). Pinned to the
+// current latest; re-check each sweep.
+replace github.com/go-jose/go-jose/v4 => github.com/go-jose/go-jose/v4 v4.1.9
